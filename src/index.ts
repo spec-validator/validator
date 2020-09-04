@@ -6,7 +6,9 @@ type ValidatorSpec<T extends {}> = {
     readonly [P in keyof T]: ValidatorFunction<T[P]>;
 };
 
-const getTypeHint = <T extends {}> (validatorSpec: ValidatorSpec<T>): T => ({}) as T;
+type TypeHint<Spec extends ValidatorSpec<any>> = {
+    readonly [P in keyof Spec]: ReturnType<Spec[P]>;
+}
 
 const validate = <T extends {}> (validatorSpec: ValidatorSpec<T>, value: Unvalidated): T => 
     Object.fromEntries(
@@ -62,8 +64,7 @@ const myTypeSafeCallSpec = {
     three: stringField(),
 }
 
-const obj = getTypeHint(myTypeSafeCallSpec);
-type TType = typeof obj;
+type TType = TypeHint<typeof myTypeSafeCallSpec>;
 
 const runtimeCheckedCall = safeCall(myTypeSafeCallSpec, ({one, two, three}) => `${one} ${two} ${three}`);
 
