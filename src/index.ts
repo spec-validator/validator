@@ -58,27 +58,19 @@ const main = () => {
 
 }
 
-const safeCall = <T, R> (spec: ValidatorSpec<T>, call: (value: T) => R): (value: any) => R => {
-    const wrapped = (value: any): R => {
+const safeCall = <T, R> (spec: ValidatorSpec<T>, call: (value: T) => R): (value: any) => R => 
+    (value: any): R => {
         const valid = validate<T>(spec, value);
         return call(valid)
     }
-    return wrapped;
-} 
 
+const myTypeSafeCall = ({one, two, three}: { one: number, two: string, three: string }): string =>
+    `${one} ${two} ${three}`
 
-
-/*
-type Validator = { [key: string]: ValidatorFunction<unknown> };
-
-type Valid = { [key: string]: unknown };
-
-const validate = (value: Unvalidated): Valid => {
-    if (typeof value === 'object') {
-        return 
-    }
+const myTypeSafeCallSpec = {
+    one: numberField(),
+    two: stringField(),
+    three: stringField(),
 }
-*/
 
-const server = express()
-
+const runtimeCheckedCall = safeCall(myTypeSafeCallSpec, myTypeSafeCall);
