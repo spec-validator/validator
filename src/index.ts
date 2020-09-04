@@ -6,17 +6,14 @@ type ValidatorSpec<T extends {}> = {
     readonly [P in keyof T]: ValidatorFunction<T[P]>;
 };
 
-const validate = <T extends {}> (validatorSpec: ValidatorSpec<T>, value: Unvalidated, skipValidation: boolean=false): T => {
-    if (skipValidation) {
-        return {} as T;
-    } else {
-        return Object.fromEntries(
-            Object.entries(validatorSpec).map(
-                ([key, validator]: [string, any]) => [key, validator(value[key])]
-            )
-        ) as T;
-    }
-}
+const getTypeHint = <T extends {}> (validatorSpec: ValidatorSpec<T>): T => ({}) as T;
+
+const validate = <T extends {}> (validatorSpec: ValidatorSpec<T>, value: Unvalidated): T => 
+    Object.fromEntries(
+        Object.entries(validatorSpec).map(
+            ([key, validator]: [string, any]) => [key, validator(value[key])]
+        )
+    ) as T;
 
 const optional = <T> (validate: (value: any) => T): ValidatorFunction<T | null>  => (value: any): T | null => {
     if (value === undefined || value === null) {
@@ -65,11 +62,7 @@ const myTypeSafeCallSpec = {
     three: stringField(),
 }
 
-const obtainObjectSpec = <T> (spec: ValidatorSpec<T>) : T => {
-    return validate(spec, {} as any, true);
-}
-
-const obj = obtainObjectSpec(myTypeSafeCallSpec);
+const obj = getTypeHint(myTypeSafeCallSpec);
 type TType = typeof obj;
 
 const runtimeCheckedCall = safeCall(myTypeSafeCallSpec, ({one, two, three}) => `${one} ${two} ${three}`);
