@@ -26,7 +26,7 @@ const validate = <T extends {}> (validatorSpec: ValidatorSpec<T>, value: Unvalid
         )
     ) as T;
 
-const optional = <T> (validate: (value: any) => T): ValidatorFunction<T | null>  => (value: any): T | null => {
+const optional = <T> (validate: (value: any) => T): ValidatorFunction<T | null | undefined>  => (value: any): T | null | undefined => {
     if (value === undefined || value === null) {
         return null
     }
@@ -70,6 +70,36 @@ const numberField = (): ValidatorFunction<number> => (value: any): any => {
     return value as any
 }
 
+const currencyField = (): ValidatorFunction<number> => (value: any): any => {
+    if (value === GEN_DOC) {
+        return {}
+    }
+    if (typeof value !== 'number') {
+        throw 'Not a number'
+    }
+    return value as any
+}
+
+const addressField = (): ValidatorFunction<number> => (value: any): any => {
+    if (value === GEN_DOC) {
+        return {}
+    }
+    if (typeof value !== 'number') {
+        throw 'Not a number'
+    }
+    return value as any
+}
+
+const timeField = (): ValidatorFunction<number> => (value: any): any => {
+    if (value === GEN_DOC) {
+        return {}
+    }
+    if (typeof value !== 'number') {
+        throw 'Not a number'
+    }
+    return value as any
+}
+
 const arrayField = <T> (itemValidator: ValidatorFunction<T>) => (value: any): T[] => {
     if (value === GEN_DOC) {
         return {
@@ -89,21 +119,28 @@ const safeCall = <T, R> (spec: ValidatorSpec<T>, call: (value: T) => R): (value:
         return call(valid)
     }
 
-const myTypeSafeCallSpec = {
+const listingSpec = {
     one: numberField(),
     two: stringField({
-        minLength: 11,
         description: 'Two'
     }),
     three: stringField(),
     four: arrayField(stringField({
-        maxLength: 42,
         description: 'BLa'
     }))
 }
 
-type TType = TypeHint<typeof myTypeSafeCallSpec>;
+type ListingType = TypeHint<typeof listingSpec>;
 
-const runtimeCheckedCall = safeCall(myTypeSafeCallSpec, ({one, two, three}) => `${one} ${two} ${three}`);
+const runtimeCheckedCall = safeCall(myTypeSafeCallSpec, ({one, two, three}) => {
+    one.toExponential();
+});
 
-console.log(genDoc(myTypeSafeCallSpec))
+console.log(runtimeCheckedCall({ two: 'dfdf', three: 'dfdf', four: []}))
+
+const server = express()
+
+
+server.post('/listings/#listing-id', listingSpec, (request: Request<ListingType>) => {
+
+})
