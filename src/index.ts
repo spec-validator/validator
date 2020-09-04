@@ -10,6 +10,15 @@ type TypeHint<Spec extends ValidatorSpec<any>> = {
     readonly [P in keyof Spec]: ReturnType<Spec[P]>;
 }
 
+const GEN_DOC = 'GEN_DOC'
+
+const genDoc = <T extends {}> (validatorSpec: ValidatorSpec<T>): any => Object.fromEntries(
+    Object.entries(validatorSpec).map(
+        ([key, validator]: [string, any]) => [key, validator(GEN_DOC)]
+    )
+) as T;
+    
+
 const validate = <T extends {}> (validatorSpec: ValidatorSpec<T>, value: Unvalidated): T => 
     Object.fromEntries(
         Object.entries(validatorSpec).map(
@@ -29,6 +38,12 @@ const stringField = (params?: {
     maxLength?: number,
     description?: string,
 }): ValidatorFunction<string> => (value: any): string => {
+    if (value === GEN_DOC) {
+        return {
+            ...(params || {})
+        } as any
+    }
+
     if (typeof value !== 'string') {
         throw 'Not a string'
     }
@@ -46,6 +61,9 @@ const stringField = (params?: {
 }
 
 const numberField = (): ValidatorFunction<number> => (value: any): any => {
+    if (value === GEN_DOC) {
+        return {}
+    }
     if (typeof value !== 'number') {
         throw 'Not a number'
     }
@@ -53,6 +71,12 @@ const numberField = (): ValidatorFunction<number> => (value: any): any => {
 }
 
 const arrayField = <T> (itemValidator: ValidatorFunction<T>) => (value: any): T[] => {
+    if (value === GEN_DOC) {
+        return {
+            itemSpec: itemValidator(GEN_DOC)
+        } as any
+    }
+
     if (!Array.isArray(value)) {
         throw 'Not an array'
     }
@@ -67,13 +91,19 @@ const safeCall = <T, R> (spec: ValidatorSpec<T>, call: (value: T) => R): (value:
 
 const myTypeSafeCallSpec = {
     one: numberField(),
-    two: stringField(),
+    two: stringField({
+        minLength: 11,
+        description: 'Two'
+    }),
     three: stringField(),
-    four: arrayField(stringField())
+    four: arrayField(stringField({
+        maxLength: 42,
+        description: 'BLa'
+    }))
 }
 
 type TType = TypeHint<typeof myTypeSafeCallSpec>;
 
 const runtimeCheckedCall = safeCall(myTypeSafeCallSpec, ({one, two, three}) => `${one} ${two} ${three}`);
 
-console.log(runtimeCheckedCall({one: 11, two: 'foo', three: 'bla', four: 111}))
+console.log(genDoc(myTypeSafeCallSpec))
