@@ -1,5 +1,5 @@
-type ValidatorFunction<ExpectedType> = (value: any) => ExpectedType
+type ValidatorFunction<ExpectedType> = (value: any) => ExpectedType;
 
-type ValidatorValue = ValidatorFunction<unknown> | Validator
+type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
 
-type Validator = Record<string, ValidatorValue>
+type Validator = | { [key: string]: ValidatorFunction<unknown> | Validator };
