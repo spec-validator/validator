@@ -52,6 +52,13 @@ const numberField = (): ValidatorFunction<number> => (value: any): any => {
     return value as any
 }
 
+const arrayField = <T> (itemValidator: ValidatorFunction<T>) => (value: any): T[] => {
+    if (!Array.isArray(value)) {
+        throw 'Not an array'
+    }
+    return value.map(itemValidator);
+}
+
 const safeCall = <T, R> (spec: ValidatorSpec<T>, call: (value: T) => R): (value: any) => R => 
     (value: any): R => {
         const valid = validate<T>(spec, value);
@@ -62,10 +69,11 @@ const myTypeSafeCallSpec = {
     one: numberField(),
     two: stringField(),
     three: stringField(),
+    four: arrayField(stringField())
 }
 
 type TType = TypeHint<typeof myTypeSafeCallSpec>;
 
 const runtimeCheckedCall = safeCall(myTypeSafeCallSpec, ({one, two, three}) => `${one} ${two} ${three}`);
 
-console.log(runtimeCheckedCall({one: 11, two: 'foo', three: 'bla'}))
+console.log(runtimeCheckedCall({one: 11, two: 'foo', three: 'bla', four: 111}))
