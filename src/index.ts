@@ -74,3 +74,5 @@ const myTypeSafeCallSpec = {
 }
 
 const runtimeCheckedCall = safeCall(myTypeSafeCallSpec, myTypeSafeCall);
+
+console.log(runtimeCheckedCall({one: 11, two: 'foo', three: 'bla'}))
