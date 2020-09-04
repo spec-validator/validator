@@ -48,16 +48,6 @@ const numberField = (): ValidatorFunction<number> => (value: any): any => {
     return value as any
 }
 
-const main = () => {
-    const spec = {
-        title: stringField(),
-        count2: numberField(),
-
-    }
-    const valid = validate(spec, {})
-
-}
-
 const safeCall = <T, R> (spec: ValidatorSpec<T>, call: (value: T) => R): (value: any) => R => 
     (value: any): R => {
         const valid = validate<T>(spec, value);
