@@ -1,6 +1,6 @@
 export type ValidatorFunction<ExpectedType> = (value: any) => ExpectedType;
 
-type ValidatorFunctionConstructor<Params, ExpectedType> = (params: Params) => ValidatorFunction<ExpectedType>
+type ValidatorFunctionConstructor<Params, ExpectedType> = (params?: Params) => ValidatorFunction<ExpectedType>
 
 export type ValidatorSpec<ExpectedType> = {
     readonly [P in keyof ExpectedType]: ValidatorFunction<ExpectedType[P]>;
@@ -39,9 +39,10 @@ export const validate = <T> (validatorSpec: ValidatorSpec<T>, value: any): T =>
 export type ValidatorFunctionWithSpec<Params, ExpectedType> = (params: Params, value: any) => ExpectedType
 
 export const declareField = <ExpectedType, Params> (
+    defaultParams: Params,
     validateWithSpec: ValidatorFunctionWithSpec<Params, ExpectedType>,
-    getParams: (params: Params) => any = (params: Params) => params
+    getParams: (params: Params) => any = (params: Params) => params,
 ): ValidatorFunctionConstructor<Params, ExpectedType> => 
-    (params: Params) => 
+    (params?: Params) => 
     (value: any) => 
-    value === GET_PARAMS ? getParams(params) : validateWithSpec(params, value);
+    value === GET_PARAMS ? getParams(params || defaultParams) : validateWithSpec(value, params || defaultParams);

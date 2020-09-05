@@ -1,10 +1,10 @@
-import { ValidatorFunction } from "./core"
+import { ValidatorFunction, declareField } from "./core"
 
-export const stringField = (params?: {
+export const stringField = declareField({}, (params: {
     minLength?: number,
     maxLength?: number,
     description?: string,
-}): ValidatorFunction<string> => (value: any): string => {
+}, value: any): string => {
     if (typeof value !== 'string') {
         throw 'Not a string'
     }
@@ -19,7 +19,7 @@ export const stringField = (params?: {
         }
     }
     return value;
-}
+})
 
 export const numberField = (): ValidatorFunction<number> => (value: any): any => {
     if (typeof value !== 'number') {
