@@ -27,7 +27,7 @@ export const validate = <T extends {}> (validatorSpec: ValidatorSpec<T>, value: 
 
 export type ValidatorFunctionWithSpec<Params, T> = (params: Params, value: any) => any
 
-const validateOrGenerateDoc = <T extends {}, Params> (
+const validateOrGetParams = <T extends {}, Params> (
     validatorFunctionWithSpec: ValidatorFunctionWithSpec<Params, T>, 
     params: Params, 
     value: any
