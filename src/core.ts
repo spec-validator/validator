@@ -16,7 +16,7 @@ export const getParams = <T extends {}> (validatorSpec: ValidatorSpec<T>): any =
     Object.entries(validatorSpec).map(
         ([key, validator]: [string, any]) => [key, validator(GET_PARAMS)]
     )
-) as T;
+);
     
 export const validate = <T extends {}> (validatorSpec: ValidatorSpec<T>, value: any): T => 
     Object.fromEntries(
