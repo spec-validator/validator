@@ -8,7 +8,9 @@ export type TypeHint<Spec extends ValidatorSpec<any>> = {
     readonly [P in keyof Spec]: ReturnType<Spec[P]>;
 }
 
-const GEN_DOC = 'GEN_DOC'
+class GenDoc {}
+
+const GEN_DOC = new GenDoc();
 
 export const genDoc = <T extends {}> (validatorSpec: ValidatorSpec<T>): any => Object.fromEntries(
     Object.entries(validatorSpec).map(
@@ -16,7 +18,6 @@ export const genDoc = <T extends {}> (validatorSpec: ValidatorSpec<T>): any => O
     )
 ) as T;
     
-
 export const validate = <T extends {}> (validatorSpec: ValidatorSpec<T>, value: any): T => 
     Object.fromEntries(
         Object.entries(validatorSpec).map(
@@ -34,17 +35,18 @@ export type Json =
 
 export type DocGeneratorFunction<Params> = (params: Params) => Json;
 
-export type ValidatorFunctionWitSpec<Params, T> = (params: Params, value: any) => T
+export type ValidatorFunctionWithSpec<Params, T> = (params: Params, value: any) => any
 
-const _declareField = <T extends {}, Params> (
-    validatorFunctionWitSpec: ValidatorFunctionWitSpec<Params, T>, 
+const validateOrGenerateDoc = <T extends {}, Params> (
+    validatorFunctionWithSpec: ValidatorFunctionWithSpec<Params, T>, 
     params: Params, 
     value: any
-) => {
+): T => {
     if (value === GEN_DOC) {
-        return value
+        // Doc generaton mode is possible only internally
+        return params as any
     } else {
-        return validatorFunctionWitSpec(params, any)
+        return validatorFunctionWithSpec(params, value)
     }
 }
 
@@ -59,10 +61,5 @@ export const optional = <T> (validate: (value: any) => T): ValidatorFunction<Opt
     return validate(value)
 }
 
-export const safeCall = <T, R> (spec: ValidatorSpec<T>, call: (value: T) => R): (value: any) => R => 
-    (value: any): R => {
-        const valid = validate<T>(spec, value);
-        return call(valid)
-    }
-
-
+export const withValidation = <T, R> (spec: ValidatorSpec<T>, rawCall: (value: T) => R): (value: any) => R => 
+    (value: any): R => rawCall(validate<T>(spec, value))
