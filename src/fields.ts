@@ -30,7 +30,7 @@ const numberField = (): ValidatorFunction<number> => (value: any): any => {
 
 const test = () => {
 
-    const spec = [
+    const spec: [ValidatorFunction<string>, ValidatorFunction<string>, ValidatorFunction<number>] = [
         stringField(),
         stringField(),
         numberField(),
