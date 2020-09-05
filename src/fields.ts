@@ -21,12 +21,12 @@ export const stringField = declareField({}, (params: {
     return value;
 })
 
-export const numberField = (): ValidatorFunction<number> => (value: any): any => {
+export const numberField = declareField({}, (_: {}, value: any): any => {
     if (typeof value !== 'number') {
         throw 'Not a number'
     }
     return value as any
-}
+})
 
 
 /** 
