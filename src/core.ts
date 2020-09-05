@@ -24,6 +24,32 @@ export const validate = <T extends {}> (validatorSpec: ValidatorSpec<T>, value: 
         )
     ) as T;
 
+export type Json =
+| string
+| number
+| boolean
+| null
+| { [property: string]: Json }
+| Json[];
+
+export type DocGeneratorFunction<Params> = (params: Params) => Json;
+
+export type ValidatorFunctionWitSpec<Params, T> = (params: Params, value: any) => T
+
+const _declareField = <T extends {}, Params> (
+    validatorFunctionWitSpec: ValidatorFunctionWitSpec<Params, T>, 
+    params: Params, 
+    value: any
+) => {
+    if (value === GEN_DOC) {
+        return value
+    } else {
+        return validatorFunctionWitSpec(params, any)
+    }
+}
+
+
+
 export type Optional<T> = T | null | undefined;
 
 export const optional = <T> (validate: (value: any) => T): ValidatorFunction<Optional<T>>  => (value: any): Optional<T> => {
