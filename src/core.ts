@@ -49,17 +49,3 @@ const validateOrGenerateDoc = <T extends {}, Params> (
         return validatorFunctionWithSpec(params, value)
     }
 }
-
-
-
-export type Optional<T> = T | null | undefined;
-
-export const optional = <T> (validate: (value: any) => T): ValidatorFunction<Optional<T>>  => (value: any): Optional<T> => {
-    if (value === undefined || value === null) {
-        return value
-    }
-    return validate(value)
-}
-
-export const withValidation = <T, R> (spec: ValidatorSpec<T>, rawCall: (value: T) => R): (value: any) => R => 
-    (value: any): R => rawCall(validate<T>(spec, value))
