@@ -34,15 +34,9 @@ export const validate = <T> (validatorSpec: ValidatorSpec<T>, value: any): T =>
 
 export type ValidatorFunctionWithSpec<Params, ExpectedType> = (params: Params, value: any) => ExpectedType
 
-const validateOrGetParams = <ExpectedType, Params> (
-    validatorFunctionWithSpec: ValidatorFunctionWithSpec<Params, ExpectedType>, 
-    params: Params, 
-    value: any
-): ExpectedType => value === GET_PARAMS ? params as any : validatorFunctionWithSpec(params, value)
-
 export const declareField = <ExpectedType, Params> (
     validatorFunctionWithSpec: ValidatorFunctionWithSpec<Params, ExpectedType>
 ): ValidatorFunctionConstructor<Params, ExpectedType> => 
     (params: Params) => 
     (value: any) => 
-    validateOrGetParams(validatorFunctionWithSpec, params, value);
+    value === GET_PARAMS ? params as any : validatorFunctionWithSpec(params, value);
