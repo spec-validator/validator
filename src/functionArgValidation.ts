@@ -14,3 +14,5 @@ const test = () => {
     ), (a, b, c) => `${a}${b}${c}`)
     console.log(wildCard('a', 'b', 1))
 }
+
+test();

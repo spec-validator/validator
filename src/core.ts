@@ -45,4 +45,4 @@ export const declareField = <ExpectedType, Params> (
 ): ValidatorFunctionConstructor<Params, ExpectedType> => 
     (params?: Params) => 
     (value: any) => 
-    value === GET_PARAMS ? getParams(params || defaultParams) : validateWithSpec(value, params || defaultParams);
+    value === GET_PARAMS ? getParams(params || defaultParams) : validateWithSpec(params || defaultParams, value);
