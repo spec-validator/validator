@@ -16,13 +16,19 @@ const mapSpec = <ExpectedType, R> (
     validatorSpec: ValidatorSpec<ExpectedType>, 
     transform: (
         validator: ValidatorFunction<ExpectedType>, 
-        key: string
+        key: any
     ) => R
-): any => Object.fromEntries(
-    Object.entries(validatorSpec).map(
-        ([key, validator]: [string, any]) => [key, transform(validator, key)]
-    )
-);
+): any => {
+    if (Array.isArray(validatorSpec)) {
+        return validatorSpec.map((validator, index) => transform(validator, index))
+    } else {
+        return Object.fromEntries(
+            Object.entries(validatorSpec).map(
+                ([key, validator]: [string, any]) => [key, transform(validator, key)]
+            )
+        );
+    }
+}
 
 export const getParams = <T> (validatorSpec: ValidatorSpec<T>): any => 
     mapSpec(validatorSpec, validator => validator(GET_PARAMS));
