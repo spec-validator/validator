@@ -1,6 +1,6 @@
-import { validate, ValidatorFunction } from "./core"
+import { ValidatorFunction } from "./core"
 
-const stringField = (params?: {
+export const stringField = (params?: {
     minLength?: number,
     maxLength?: number,
     description?: string,
@@ -21,29 +21,13 @@ const stringField = (params?: {
     return value;
 }
 
-const numberField = (): ValidatorFunction<number> => (value: any): any => {
+export const numberField = (): ValidatorFunction<number> => (value: any): any => {
     if (typeof value !== 'number') {
         throw 'Not a number'
     }
     return value as any
 }
 
-const tuple = <T extends any[]>(...args: T): T => args
-
-const test = () => {
-
-    // TODO: how to force a list to be interpreted as a
-    const spec = tuple(
-        stringField(),
-        stringField(),
-        numberField(),
-    )
-
-    const foo: any = null
-
-    const validated = validate(spec, foo)
-
-}
 
 /** 
 
