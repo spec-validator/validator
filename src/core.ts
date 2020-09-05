@@ -12,7 +12,7 @@ class GetParams {}
 
 const GET_PARAMS = new GetParams();
 
-const mapSpec = <T extends {}, R> (transform: (validator: ValidatorFunction<T>, key: string) => R, validatorSpec: ValidatorSpec<T>): any => Object.fromEntries(
+const mapSpec = <T extends {}, R> (validatorSpec: ValidatorSpec<T>, transform: (validator: ValidatorFunction<T>, key: string) => R): any => Object.fromEntries(
     Object.entries(validatorSpec).map(
         ([key, validator]: [string, any]) => [key, transform(validator, key)]
     )
