@@ -28,14 +28,16 @@ const numberField = (): ValidatorFunction<number> => (value: any): any => {
     return value as any
 }
 
+const tuple = <T extends any[]>(...args: T): T => args
+
 const test = () => {
 
-    // TODO: how to force a list to be interpreted as a tuple?
-    const spec: [ValidatorFunction<string>, ValidatorFunction<string>, ValidatorFunction<number>] = [
+    // TODO: how to force a list to be interpreted as a
+    const spec = tuple(
         stringField(),
         stringField(),
         numberField(),
-    ]
+    )
 
     const foo: any = null
 

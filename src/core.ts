@@ -39,3 +39,5 @@ export const declareField = <ExpectedType, Params> (
     (params: Params) => 
     (value: any) => 
     value === GET_PARAMS ? getParams(params) : validateWithSpec(params, value);
+
+export const tuple = <T extends any[]>(...args: T): T => args
