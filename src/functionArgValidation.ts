@@ -12,4 +12,4 @@ const wildCard = withValidation(tuple(
     numberField(),
 ), (a, b, c) => `${a}${b}${c}`)
 
-console.log(wildCard('a', 'b', 'a'))
+console.log(wildCard('a', 'b', 1))
