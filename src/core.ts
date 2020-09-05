@@ -8,13 +8,13 @@ export type TypeHint<Spec extends ValidatorSpec<any>> = {
     readonly [P in keyof Spec]: ReturnType<Spec[P]>;
 }
 
-class GenDoc {}
+class GetParams {}
 
-const GEN_DOC = new GenDoc();
+const GET_PARAMS = new GetParams();
 
-export const genDoc = <T extends {}> (validatorSpec: ValidatorSpec<T>): any => Object.fromEntries(
+export const getParams = <T extends {}> (validatorSpec: ValidatorSpec<T>): any => Object.fromEntries(
     Object.entries(validatorSpec).map(
-        ([key, validator]: [string, any]) => [key, validator(GEN_DOC)]
+        ([key, validator]: [string, any]) => [key, validator(GET_PARAMS)]
     )
 ) as T;
     
@@ -32,10 +32,12 @@ const validateOrGenerateDoc = <T extends {}, Params> (
     params: Params, 
     value: any
 ): T => {
-    if (value === GEN_DOC) {
+    if (value === GET_PARAMS) {
         // Doc generaton mode is possible only internally
         return params as any
     } else {
         return validatorFunctionWithSpec(params, value)
     }
 }
+
+const declareField = () => {}
