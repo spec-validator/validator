@@ -2,14 +2,6 @@ export type ValidatorFunction<ExpectedType> = (value: any) => ExpectedType;
 
 type ValidatorFunctionConstructor<Params, ExpectedType> = (params: Params) => ValidatorFunction<ExpectedType>
 
-type DictValidatorSpec<ExpectedType extends {}> = {
-    readonly [P in keyof ExpectedType]: ValidatorFunction<ExpectedType[P]>;
-};
-
-type TupleValidatorSpec<ET1> = [
-    ValidatorFunction<ET1>
-];
-
 export type ValidatorSpec<ExpectedType> = {
     readonly [P in keyof ExpectedType]: ValidatorFunction<ExpectedType[P]>;
 };
