@@ -1,16 +1,10 @@
-import { ValidatorFunction } from "./core"
+import { validate, ValidatorFunction } from "./core"
 
 const stringField = (params?: {
     minLength?: number,
     maxLength?: number,
     description?: string,
 }): ValidatorFunction<string> => (value: any): string => {
-    if (value === GEN_DOC) {
-        return {
-            ...(params || {})
-        } as any
-    }
-
     if (typeof value !== 'string') {
         throw 'Not a string'
     }
@@ -25,6 +19,27 @@ const stringField = (params?: {
         }
     }
     return value;
+}
+
+const numberField = (): ValidatorFunction<number> => (value: any): any => {
+    if (typeof value !== 'number') {
+        throw 'Not a number'
+    }
+    return value as any
+}
+
+const test = () => {
+
+    const spec = [
+        stringField(),
+        stringField(),
+        numberField(),
+    ]
+
+    const foo: any = null
+
+    const validated = validate(spec, foo)
+
 }
 
 /** 
