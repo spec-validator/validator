@@ -30,6 +30,7 @@ const numberField = (): ValidatorFunction<number> => (value: any): any => {
 
 const test = () => {
 
+    // TODO: how to force a list to be interpreted as a tuple?
     const spec: [ValidatorFunction<string>, ValidatorFunction<string>, ValidatorFunction<number>] = [
         stringField(),
         stringField(),

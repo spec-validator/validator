@@ -3,7 +3,7 @@ export type ValidatorFunction<ExpectedType> = (value: any) => ExpectedType;
 type ValidatorFunctionConstructor<Params, ExpectedType> = (params: Params) => ValidatorFunction<ExpectedType>
 
 export type ValidatorSpec<ExpectedType> = {
-    [P in keyof ExpectedType]: ValidatorFunction<ExpectedType[P]>;
+    readonly [P in keyof ExpectedType]: ValidatorFunction<ExpectedType[P]>;
 };
 
 export type TypeHint<Spec extends ValidatorSpec<any>> = {
