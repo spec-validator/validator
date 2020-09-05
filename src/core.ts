@@ -25,16 +25,6 @@ export const validate = <T extends {}> (validatorSpec: ValidatorSpec<T>, value: 
         )
     ) as T;
 
-export type Json =
-| string
-| number
-| boolean
-| null
-| { [property: string]: Json }
-| Json[];
-
-export type DocGeneratorFunction<Params> = (params: Params) => Json;
-
 export type ValidatorFunctionWithSpec<Params, T> = (params: Params, value: any) => any
 
 const validateOrGenerateDoc = <T extends {}, Params> (
