@@ -10,6 +10,7 @@ export type TypeHint<Spec extends ValidatorSpec<any>> = {
     readonly [P in keyof Spec]: ReturnType<Spec[P]>;
 }
 
+
 const GET_PARAMS = '~~GET~~PARAMS~~';
 
 const mapSpec = <ExpectedType, R> (
