@@ -1,7 +1,9 @@
 export type ValidatorFunction<ExpectedType> = (value: any) => ExpectedType;
 
-export type ValidatorSpec<T extends {}> = {
-    readonly [P in keyof T]: ValidatorFunction<T[P]>;
+type ValidatorFunctionConstructor<Params, ExpectedType> = (params: Params) => ValidatorFunction<ExpectedType>
+
+export type ValidatorSpec<ExpectedType> = {
+    readonly [P in keyof ExpectedType]: ValidatorFunction<ExpectedType[P]>;
 };
 
 export type TypeHint<Spec extends ValidatorSpec<any>> = {
@@ -12,31 +14,35 @@ class GetParams {}
 
 const GET_PARAMS = new GetParams();
 
-const mapSpec = <T extends {}, R> (validatorSpec: ValidatorSpec<T>, transform: (validator: ValidatorFunction<T>, key: string) => R): any => Object.fromEntries(
+const mapSpec = <ExpectedType, R> (
+    validatorSpec: ValidatorSpec<ExpectedType>, 
+    transform: (
+        validator: ValidatorFunction<ExpectedType>, 
+        key: string
+    ) => R
+): any => Object.fromEntries(
     Object.entries(validatorSpec).map(
         ([key, validator]: [string, any]) => [key, transform(validator, key)]
     )
 );
 
-export const getParams = <T extends {}> (validatorSpec: ValidatorSpec<T>): any => 
+export const getParams = <T> (validatorSpec: ValidatorSpec<T>): any => 
     mapSpec(validatorSpec, validator => validator(GET_PARAMS));
     
-export const validate = <T extends {}> (validatorSpec: ValidatorSpec<T>, value: any): T =>
+export const validate = <T> (validatorSpec: ValidatorSpec<T>, value: any): T =>
     mapSpec(validatorSpec, (validator, key) => validator(value[key]));
 
-export type ValidatorFunctionWithSpec<Params, T> = (params: Params, value: any) => any
+export type ValidatorFunctionWithSpec<Params, ExpectedType> = (params: Params, value: any) => ExpectedType
 
-const validateOrGetParams = <T extends {}, Params> (
-    validatorFunctionWithSpec: ValidatorFunctionWithSpec<Params, T>, 
+const validateOrGetParams = <ExpectedType, Params> (
+    validatorFunctionWithSpec: ValidatorFunctionWithSpec<Params, ExpectedType>, 
     params: Params, 
     value: any
-): T => {
-    if (value === GET_PARAMS) {
-        // Doc generaton mode is possible only internally
-        return params as any
-    } else {
-        return validatorFunctionWithSpec(params, value)
-    }
-}
+): ExpectedType => value === GET_PARAMS ? params as any : validatorFunctionWithSpec(params, value)
 
-const declareField = () => {}
+export const declareField = <ExpectedType, Params> (
+    validatorFunctionWithSpec: ValidatorFunctionWithSpec<Params, ExpectedType>
+): ValidatorFunctionConstructor<Params, ExpectedType> => 
+    (params: Params) => 
+    (value: any) => 
+    validateOrGetParams(validatorFunctionWithSpec, params, value);
