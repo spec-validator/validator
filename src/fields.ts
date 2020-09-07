@@ -1,4 +1,4 @@
-import { ValidatorFunction, declareField } from "./core"
+import { declareField } from "./core"
 
 export const stringField = declareField({}, (params: {
     minLength?: number,
@@ -29,7 +29,7 @@ export const numberField = declareField({}, (_: {}, value: any): number => {
 })
 
 
-/** 
+/**
 
 const numberField = (): ValidatorFunction<number> => (value: any): any => {
     if (value === GEN_DOC) {
