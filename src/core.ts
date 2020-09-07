@@ -16,9 +16,9 @@ const GET_PARAMS = '~~GET~~PARAMS~~';
 const SERIALIZE = '~~SERIALIZE~~';
 
 const mapSpec = <ExpectedType, R> (
-    validatorSpec: ValidatorSpec<ExpectedType>, 
+    validatorSpec: ValidatorSpec<ExpectedType>,
     transform: (
-        validator: ValidatorFunction<ExpectedType>, 
+        validator: ValidatorFunction<ExpectedType>,
         key: any
     ) => R
 ): any => {
@@ -33,9 +33,9 @@ const mapSpec = <ExpectedType, R> (
     }
 }
 
-export const getParams = <T> (validatorSpec: ValidatorSpec<T>): any => 
+export const getParams = <T> (validatorSpec: ValidatorSpec<T>): any =>
     mapSpec(validatorSpec, validator => validator(GET_PARAMS));
-    
+
 export const validate = <T> (validatorSpec: ValidatorSpec<T>, value: any): T =>
     mapSpec(validatorSpec, (validator, key) => validator(value[key]));
 
@@ -44,17 +44,17 @@ export type ValidatorFunctionWithSpec<Params, ExpectedType> = (params: Params, v
 export const declareField = <ExpectedType, Params> (
     defaultParams: Params,
     validateWithSpec: ValidatorFunctionWithSpec<Params, ExpectedType>,
-    getParams: (params: Params) => any = (params: Params) => params,
-    serialize: (params: Params, value: ExpectedType) => Json
-): ValidatorFunctionConstructor<Params, ExpectedType> => 
-    (params?: Params) => 
-    (value: any) => { 
+    serialize: (params: Params, value: ExpectedType) => Json,
+    getParams: (params: Params) => any = (params: Params) => params
+): ValidatorFunctionConstructor<Params, ExpectedType> =>
+    (params?: Params) =>
+    (value: any) => {
         switch(value) {
-        case GET_PARAMS:
-            return getParams(params || defaultParams);
-        case SERIALIZE:
-            return serialize(params || defaultParams, value);
-        default:
-            return validateWithSpec(params || defaultParams, value);
+            case GET_PARAMS:
+                return getParams(params || defaultParams);
+            case SERIALIZE:
+                return serialize(params || defaultParams, value);
+            default:
+                return validateWithSpec(params || defaultParams, value);
+        }
     }
-}
