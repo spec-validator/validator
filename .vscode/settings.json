@@ -1,3 +1,32 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "eslint.options": {
+        "configFile": ".eslintrc.json",
+    },
+    "eslint.validate": [ "javascript", "typescript", "vue", "html" ],
+    "deno.enable": false,
+    "[javascript]": {
+        "editor.tabSize": 2
+    },
+    "[typescript]": {
+        "editor.tabSize": 2
+    },
+    "[json]": {
+        "editor.tabSize": 2
+    },
+    "editor.rulers": [120],
+
+    "files.trimTrailingWhitespace": true,
+    "editor.renderWhitespace": "all",
+    "files.insertFinalNewline": true,
+    "files.watcherExclude": {
+        "**/.git/*/**": true,
+        "**/node_modules/*/**": true,
+        "**/cdk-out/*/**": true,
+        "**/dist/*/**": true,
+        "**/browser-tests/*/**": true,
+    }
 }
