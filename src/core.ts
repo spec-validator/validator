@@ -52,6 +52,13 @@ const mapSpec = <ExpectedType, R> (
     }
 }
 
+const mergeDefined = <T> (full: T, partial: Partial<T>): Partial<T> =>
+    Object.fromEntries(
+        Object.entries(
+            Object.assign({}, full, partial)
+        ).filter(([_, validator]) => validator !== undefined)
+    ) as Partial<T>;
+
 export const getParams = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>): any =>
     mapSpec(validatorSpec, validator => validator(undefined, Mode.GET_PARAMS));
 
@@ -69,12 +76,13 @@ export const declareField = <ExpectedType, Params> (
 ): ValidatorFunctionConstructor<Params, ExpectedType> =>
     (params?: Params) =>
     (value: any, mode: Mode) => {
+        const actualParams = mergeDefined(defaultParams, params || {});
         switch(mode) {
             case Mode.GET_PARAMS:
-                return getParams(params || defaultParams);
+                return getParams(actualParams);
             case Mode.SERIALIZE:
-                return serialize(params || defaultParams, value);
+                return serialize(actualParams, value);
             default:
-                return validate(params || defaultParams, value);
+                return validate(actualParams, value);
         }
     }
