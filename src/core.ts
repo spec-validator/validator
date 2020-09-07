@@ -86,9 +86,11 @@ export const declareParametrizedField = <ExpectedType, Params> (
   serialize: (params: Partial<Params>, value: ExpectedType) => any = (_, value) => value,
   getParams: (params: Partial<Params>) => any = (params: Partial<Params>) => params
 ): ValidatorFunctionConstructor<Params, ExpectedType> =>
-    (params?: Partial<Params>) =>
-      (value: any, mode: Mode) => ({
-        [Mode.GET_PARAMS]: getParams,
-        [Mode.SERIALIZE]: (actualParams: Partial<Params>) => serialize(actualParams, value),
-        [Mode.VALIDATE]: (actualParams: Partial<Params>) => validate(actualParams, value)
-      })[mode](mergeDefined(defaultParams, params))
+    (params?: Partial<Params>) => {
+      const actualParams = mergeDefined(defaultParams, params);
+      return declareField(
+        validate.bind(null, actualParams),
+        serialize.bind(null, actualParams),
+        getParams.bind(null, actualParams)
+      )
+    }
