@@ -4,7 +4,7 @@ export type Optional<T> = T | undefined;
 
 export const optionalOf = <T>(): Optional<T> => undefined
 
-export const optional = <T> (innerField: Field<T>): Field<Optional<T>> => declareField({
+const optional = <T> (innerField: Field<T>): Field<Optional<T>> => declareField({
   validate: (value: any): Optional<T> => {
     if (value === undefined) {
       return value
@@ -14,3 +14,5 @@ export const optional = <T> (innerField: Field<T>): Field<Optional<T>> => declar
   serialize: (value: Optional<T>) => value === undefined ? value : innerField(value, Mode.SERIALIZE),
   getParams: () => Object.assign({optional: true}, innerField(undefined, Mode.GET_PARAMS)),
 })
+
+export default optional;
