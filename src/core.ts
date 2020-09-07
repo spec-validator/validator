@@ -60,11 +60,9 @@ export const getParams = <T> (validatorSpec: ValidatorSpec<T>): any =>
 export const validate = <T> (validatorSpec: ValidatorSpec<T>, value: any): T =>
     mapSpec(validatorSpec, (validator, key) => validator(value[key]));
 
-export type ValidatorFunctionWithSpec<Params, ExpectedType> = (params: Params, value: any) => ExpectedType
-
 export const declareField = <ExpectedType, Params> (
     defaultParams: Params,
-    validateWithSpec: ValidatorFunctionWithSpec<Params, ExpectedType>,
+    validateWithSpec: (params: Params, value: any) => ExpectedType,
     serialize: (params: Params, value: ExpectedType) => Json,
     getParams: (params: Params) => any = (params: Params) => params
 ): ValidatorFunctionConstructor<Params, ExpectedType> =>
