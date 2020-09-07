@@ -18,7 +18,7 @@
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "@typescript-eslint/no-explicit-any": 0,
     "no-console": "off",
-    "prettier/prettier": ["error", { "singleQuote": true }],
+    "quotes": ["error", "single"],
     "max-len": ["error", 120],
     "func-style": ["error", "expression"],
     "arrow-body-style": ["error", "as-needed"]
