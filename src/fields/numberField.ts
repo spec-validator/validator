@@ -1,10 +1,13 @@
-import { declareField } from '../core'
+import { declareParametrizedField } from '../core'
 
-const numberField = declareField({}, (_, value: any): number => {
-  if (typeof value !== 'number') {
-    throw 'Not a number'
+const numberField = declareParametrizedField({
+  defaultParams: {},
+  validate: (_, value: any): number => {
+    if (typeof value !== 'number') {
+      throw 'Not a number'
+    }
+    return value
   }
-  return value
 })
 
 export default numberField;

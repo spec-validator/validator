@@ -71,26 +71,26 @@ export const validate = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedTyp
 export const serialize = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>, value: ExpectedType): any =>
   mapSpec(validatorSpec, (validator, key) => validator((value as any)[key], Mode.SERIALIZE));
 
-export const declareField = <ExpectedType> (
+export const declareField = <ExpectedType> (conf: {
   validate: (value: any) => ExpectedType,
   serialize: (value: ExpectedType) => any,
   getParams: () => any
-): Field<ExpectedType> => (value: any, mode: Mode) => ({
-    [Mode.GET_PARAMS]: getParams,
-    [Mode.SERIALIZE]: () => serialize(value),
-    [Mode.VALIDATE]: () => validate(value)
+}): Field<ExpectedType> => (value: any, mode: Mode) => ({
+    [Mode.GET_PARAMS]: conf.getParams,
+    [Mode.SERIALIZE]: () => conf.serialize(value),
+    [Mode.VALIDATE]: () => conf.validate(value)
   })[mode]()
 
-export const declareParametrizedField = <ExpectedType, Params> (
+export const declareParametrizedField = <ExpectedType, Params> (conf: {
   defaultParams: Params,
   validate: (params: Partial<Params>, value: any) => ExpectedType,
-  serialize: (params: Partial<Params>, value: ExpectedType) => any = (_, value) => value,
-  getParams: (params: Partial<Params>) => any = (params: Partial<Params>) => params
-): ValidatorFunctionConstructor<Params, ExpectedType> => (params?: Partial<Params>) => {
-    const actualParams = mergeDefined(defaultParams, params);
-    return declareField(
-      validate.bind(null, actualParams),
-      serialize.bind(null, actualParams),
-      getParams.bind(null, actualParams)
-    )
+  serialize?: (params: Partial<Params>, value: ExpectedType) => any,
+  getParams?: (params: Partial<Params>) => any
+}): ValidatorFunctionConstructor<Params, ExpectedType> => (params?: Partial<Params>) => {
+    const actualParams = mergeDefined(conf.defaultParams, params);
+    return declareField({
+      validate: conf.validate.bind(null, actualParams),
+      serialize: conf?.serialize?.bind(null, actualParams) || ((value: ExpectedType) => value),
+      getParams: conf?.getParams?.bind(null, actualParams) || (() => params)
+    })
   }
