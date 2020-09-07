@@ -16,7 +16,8 @@ export type TypeHint<Spec extends ValidatorSpec<any>> = {
   readonly [P in keyof Spec]: ReturnType<Spec[P]>;
 }
 
-const withErrorDecoration = <R> (key: any, call: () => R) => {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const withErrorDecoration = <R> (key: any, call: () => R): R => {
   try {
     return call()
   } catch (err) {
