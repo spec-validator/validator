@@ -10,7 +10,7 @@ import {
 
 const objectField = <ExpectedType> (objectSpec: ValidatorSpec<ExpectedType>): Field<ExpectedType> => declareField({
   validate: (value: any): ExpectedType => {
-    if (typeof value !== 'object') {
+    if (typeof value !== 'object' || value === null) {
       throw 'Not an object'
     }
     return rawValidate(objectSpec, value)
