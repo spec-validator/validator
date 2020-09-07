@@ -37,9 +37,9 @@ const withErrorDecoration = <R> (key: any, call: () => R) => {
 const mapSpec = <ExpectedType, R> (
   validatorSpec: ValidatorSpec<ExpectedType>,
   transform: (
-        validator: Field<ExpectedType>,
-        key: any
-    ) => R
+    validator: Field<ExpectedType>,
+    key: any
+  ) => R
 ): any => {
   if (Array.isArray(validatorSpec)) {
     return validatorSpec.map(transform)
