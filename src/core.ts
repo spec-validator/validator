@@ -68,21 +68,25 @@ export const validate = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedTyp
 export const serialize = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>, value: ExpectedType): any =>
     mapSpec(validatorSpec, (validator, key) => validator((value as any)[key], Mode.SERIALIZE));
 
-export const declareField = <ExpectedType, Params> (
+export const declareField = <ExpectedType> (
+    validate: (value: any) => ExpectedType,
+    serialize: (value: ExpectedType) => any,
+    getParams: () => any
+): ValidatorFunction<ExpectedType> => (value: any, mode: Mode) => ({
+    [Mode.GET_PARAMS]: getParams,
+    [Mode.SERIALIZE]: () => serialize(value),
+    [Mode.VALIDATE]: () => validate(value)
+})[mode]()
+
+export const declareParametrizedField = <ExpectedType, Params> (
     defaultParams: Params,
     validate: (params: Partial<Params>, value: any) => ExpectedType,
     serialize: (params: Partial<Params>, value: ExpectedType) => any = (_, value) => value,
     getParams: (params: Partial<Params>) => any = (params: Partial<Params>) => params
 ): ValidatorFunctionConstructor<Params, ExpectedType> =>
     (params?: Partial<Params>) =>
-    (value: any, mode: Mode) => {
-        const actualParams = mergeDefined(defaultParams, params);
-        switch(mode) {
-            case Mode.GET_PARAMS:
-                return getParams(actualParams);
-            case Mode.SERIALIZE:
-                return serialize(actualParams, value);
-            default:
-                return validate(actualParams, value);
-        }
-    }
+    (value: any, mode: Mode) => ({
+        [Mode.GET_PARAMS]: getParams,
+        [Mode.SERIALIZE]: (actualParams: Partial<Params>) => serialize(actualParams, value),
+        [Mode.VALIDATE]: (actualParams: Partial<Params>) => validate(actualParams, value)
+    })[mode](mergeDefined(defaultParams, params))
