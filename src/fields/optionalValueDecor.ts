@@ -1,7 +1,7 @@
 import { Field, declareField, Mode } from '../core';
 import { merge, Optional } from '../utils';
 
-const optionalField = <T> (innerField: Field<T>): Field<Optional<T>> => declareField({
+const optionalValueDecor = <T> (innerField: Field<T>): Field<Optional<T>> => declareField({
   validate: (value: any): Optional<T> => {
     if (value === undefined) {
       return value
@@ -12,4 +12,4 @@ const optionalField = <T> (innerField: Field<T>): Field<Optional<T>> => declareF
   getParams: () => merge(innerField(undefined, Mode.GET_PARAMS), {isOptional: true}),
 })
 
-export default optionalField;
+export default optionalValueDecor;
