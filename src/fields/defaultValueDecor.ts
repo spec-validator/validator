@@ -4,7 +4,7 @@ import { merge } from '../utils';
 const defaultValueDecor = <T> (params: { innerField: Field<T>, defaultValue: T}): Field<T> => declareField({
   validate: (value: any): T => {
     if (value === undefined) {
-      return params.defaultValue
+      value = params.defaultValue
     }
     return params.innerField(value, Mode.VALIDATE)
   },
