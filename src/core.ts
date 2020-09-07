@@ -12,8 +12,29 @@ export type TypeHint<Spec extends ValidatorSpec<any>> = {
     readonly [P in keyof Spec]: ReturnType<Spec[P]>;
 }
 
-const GET_PARAMS = '~~GET~~PARAMS~~';
-const SERIALIZE = '~~SERIALIZE~~';
+enum Mode {
+    GET_PARAMS = '~~GET~~PARAMS~~',
+    SERIALIZE = '~~SERIALIZE~~',
+    DESERIALIZE = '~~DESERIALIZE~~'
+}
+
+const withErrorDecoration = <R> (key: any, call: () => R) => {
+    try {
+        return call()
+    } catch (err) {
+        if (err.path && err.inner) {
+            throw {
+                path: [key, ...err.path],
+                inner: err.inner
+            }
+        } else {
+            throw {
+                path: [key],
+                inner: err
+            }
+        }
+    }
+}
 
 const mapSpec = <ExpectedType, R> (
     validatorSpec: ValidatorSpec<ExpectedType>,
@@ -23,18 +44,18 @@ const mapSpec = <ExpectedType, R> (
     ) => R
 ): any => {
     if (Array.isArray(validatorSpec)) {
-        return validatorSpec.map((validator, index) => transform(validator, index))
+        return validatorSpec.map(transform)
     } else {
         return Object.fromEntries(
             Object.entries(validatorSpec).map(
-                ([key, validator]: [string, any]) => [key, transform(validator, key)]
+                ([key, validator]: [string, any]) => [key, withErrorDecoration(key, () => transform(validator, key))]
             )
         );
     }
 }
 
 export const getParams = <T> (validatorSpec: ValidatorSpec<T>): any =>
-    mapSpec(validatorSpec, validator => validator(GET_PARAMS));
+    mapSpec(validatorSpec, validator => validator(Mode.GET_PARAMS));
 
 export const validate = <T> (validatorSpec: ValidatorSpec<T>, value: any): T =>
     mapSpec(validatorSpec, (validator, key) => validator(value[key]));
@@ -50,9 +71,9 @@ export const declareField = <ExpectedType, Params> (
     (params?: Params) =>
     (value: any) => {
         switch(value) {
-            case GET_PARAMS:
+            case Mode.GET_PARAMS:
                 return getParams(params || defaultParams);
-            case SERIALIZE:
+            case Mode.SERIALIZE:
                 return serialize(params || defaultParams, value);
             default:
                 return validateWithSpec(params || defaultParams, value);
