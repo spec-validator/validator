@@ -1,5 +1,5 @@
-import { declareField } from "../core";
-import { optionalOf } from "./optional";
+import { declareField } from '../core';
+import { optionalOf } from './optional';
 
 const stringField = declareField({
   minLength: optionalOf<number>(),
@@ -7,17 +7,17 @@ const stringField = declareField({
   description: optionalOf<string>()
 }, (params, value): string => {
   if (typeof value !== 'string') {
-      throw 'Not a string'
+    throw 'Not a string'
   }
   if (params?.minLength !== undefined) {
-      if (value.length < params.minLength) {
-          throw 'String is too short'
-      }
+    if (value.length < params.minLength) {
+      throw 'String is too short'
+    }
   }
   if (params?.maxLength !== undefined) {
-      if (value.length > params.maxLength) {
-          throw 'String is too long'
-      }
+    if (value.length > params.maxLength) {
+      throw 'String is too long'
+    }
   }
   return value;
 })
