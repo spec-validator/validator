@@ -1,6 +1,12 @@
 import { Json } from "./json";
 
-export type ValidatorFunction<ExpectedType> = (value: any) => ExpectedType;
+enum Mode {
+    GET_PARAMS = '~~GET_PARAMS~~',
+    SERIALIZE = '~~SERIALIZE~~',
+    VALIDATE = '~~VALIDATE~~'
+}
+
+export type ValidatorFunction<ExpectedType> = (value: any, mode: Mode) => ExpectedType;
 
 type ValidatorFunctionConstructor<Params, ExpectedType> = (params?: Params) => ValidatorFunction<ExpectedType>
 
@@ -10,12 +16,6 @@ export type ValidatorSpec<ExpectedType> = {
 
 export type TypeHint<Spec extends ValidatorSpec<any>> = {
     readonly [P in keyof Spec]: ReturnType<Spec[P]>;
-}
-
-enum Mode {
-    GET_PARAMS = '~~GET_PARAMS~~',
-    SERIALIZE = '~~SERIALIZE~~',
-    DESERIALIZE = '~~DESERIALIZE~~'
 }
 
 const withErrorDecoration = <R> (key: any, call: () => R) => {
@@ -54,26 +54,29 @@ const mapSpec = <ExpectedType, R> (
     }
 }
 
-export const getParams = <T> (validatorSpec: ValidatorSpec<T>): any =>
-    mapSpec(validatorSpec, validator => validator(Mode.GET_PARAMS));
+export const getParams = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>): any =>
+    mapSpec(validatorSpec, validator => validator(undefined, Mode.GET_PARAMS));
 
-export const validate = <T> (validatorSpec: ValidatorSpec<T>, value: any): T =>
-    mapSpec(validatorSpec, (validator, key) => validator(value[key]));
+export const validate = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>, value: any): ExpectedType =>
+    mapSpec(validatorSpec, (validator, key) => validator(value[key], Mode.VALIDATE));
+
+export const serialize = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>, value: ExpectedType): any =>
+    mapSpec(validatorSpec, (validator, key) => validator(value[key], Mode.SERIALIZE));
 
 export const declareField = <ExpectedType, Params> (
     defaultParams: Params,
-    validateWithSpec: (params: Params, value: any) => ExpectedType,
+    validate: (params: Params, value: any) => ExpectedType,
     serialize: (params: Params, value: ExpectedType) => Json,
     getParams: (params: Params) => any = (params: Params) => params
 ): ValidatorFunctionConstructor<Params, ExpectedType> =>
     (params?: Params) =>
-    (value: any) => {
-        switch(value) {
+    (value: any, mode: Mode) => {
+        switch(mode) {
             case Mode.GET_PARAMS:
                 return getParams(params || defaultParams);
             case Mode.SERIALIZE:
                 return serialize(params || defaultParams, value);
             default:
-                return validateWithSpec(params || defaultParams, value);
+                return validate(params || defaultParams, value);
         }
     }
