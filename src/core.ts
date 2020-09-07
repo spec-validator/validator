@@ -64,7 +64,7 @@ export const serialize = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedTy
 export const declareField = <ExpectedType, Params> (
     defaultParams: Params,
     validate: (params: Params, value: any) => ExpectedType,
-    serialize: (params: Params, value: ExpectedType) => any,
+    serialize: (params: Params, value: ExpectedType) => any = (_, value) => value,
     getParams: (params: Params) => any = (params: Params) => params
 ): ValidatorFunctionConstructor<Params, ExpectedType> =>
     (params?: Params) =>
