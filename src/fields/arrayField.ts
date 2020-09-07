@@ -1,6 +1,6 @@
-import { ValidatorFunction } from "../core";
+import { Field } from '../core';
 
-const arrayField = <T> (itemValidator: ValidatorFunction<T>) => (value: any): T[] => {
+const arrayField = <T> (itemValidator: Field<T>) => (value: any): T[] => {
 
 }
 

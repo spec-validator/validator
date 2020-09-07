@@ -4,12 +4,12 @@ enum Mode {
     VALIDATE = '~~VALIDATE~~'
 }
 
-export type ValidatorFunction<ExpectedType> = (value: any, mode: Mode) => ExpectedType;
+export type Field<ExpectedType> = (value: any, mode: Mode) => ExpectedType;
 
-type ValidatorFunctionConstructor<Params, ExpectedType> = (params?: Partial<Params>) => ValidatorFunction<ExpectedType>
+type ValidatorFunctionConstructor<Params, ExpectedType> = (params?: Partial<Params>) => Field<ExpectedType>
 
 export type ValidatorSpec<ExpectedType> = {
-    readonly [P in keyof ExpectedType]: ValidatorFunction<ExpectedType[P]>;
+    readonly [P in keyof ExpectedType]: Field<ExpectedType[P]>;
 };
 
 export type TypeHint<Spec extends ValidatorSpec<any>> = {
@@ -37,7 +37,7 @@ const withErrorDecoration = <R> (key: any, call: () => R) => {
 const mapSpec = <ExpectedType, R> (
   validatorSpec: ValidatorSpec<ExpectedType>,
   transform: (
-        validator: ValidatorFunction<ExpectedType>,
+        validator: Field<ExpectedType>,
         key: any
     ) => R
 ): any => {
@@ -74,7 +74,7 @@ export const declareField = <ExpectedType> (
   validate: (value: any) => ExpectedType,
   serialize: (value: ExpectedType) => any,
   getParams: () => any
-): ValidatorFunction<ExpectedType> => (value: any, mode: Mode) => ({
+): Field<ExpectedType> => (value: any, mode: Mode) => ({
     [Mode.GET_PARAMS]: getParams,
     [Mode.SERIALIZE]: () => serialize(value),
     [Mode.VALIDATE]: () => validate(value)
