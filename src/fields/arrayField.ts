@@ -12,7 +12,7 @@ const arrayField = <T> (itemField: Field<T>): Field<T[]> => declareField({
   serialize: (value: T[]) => value.map(
     (it, index) => withErrorDecoration(index, () => itemField(it, Mode.SERIALIZE))
   ),
-  getParams: () => Object.assign({item: itemField(undefined, Mode.GET_PARAMS)}),
+  getParams: () => ({item: itemField(undefined, Mode.GET_PARAMS)}),
 })
 
 export default arrayField;
