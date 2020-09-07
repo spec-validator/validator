@@ -3,7 +3,7 @@ import { numberField, stringField } from "./fields";
 
 export const tuple = <T extends any[]>(...args: T): T => args
 
-export const withValidation = <T extends any[], R> (spec: ValidatorSpec<T>, rawCall: (...values: T) => R) => 
+export const withValidation = <T extends any[], R> (spec: ValidatorSpec<T>, rawCall: (...values: T) => R) =>
     (...value: any[]): R => rawCall(...validate<T>(spec, value))
 
 const test = () => {

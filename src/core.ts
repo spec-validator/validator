@@ -6,7 +6,7 @@ enum Mode {
 
 export type ValidatorFunction<ExpectedType> = (value: any, mode: Mode) => ExpectedType;
 
-type ValidatorFunctionConstructor<Params, ExpectedType> = (params?: Params) => ValidatorFunction<ExpectedType>
+type ValidatorFunctionConstructor<Params, ExpectedType> = (params?: Partial<Params>) => ValidatorFunction<ExpectedType>
 
 export type ValidatorSpec<ExpectedType> = {
     readonly [P in keyof ExpectedType]: ValidatorFunction<ExpectedType[P]>;
@@ -52,7 +52,7 @@ const mapSpec = <ExpectedType, R> (
     }
 }
 
-const mergeDefined = <T> (full: T, partial: Partial<T>): Partial<T> =>
+const mergeDefined = <T> (full: T, partial?: Partial<T>): Partial<T> =>
     Object.fromEntries(
         Object.entries(
             Object.assign({}, full, partial)
@@ -70,13 +70,13 @@ export const serialize = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedTy
 
 export const declareField = <ExpectedType, Params> (
     defaultParams: Params,
-    validate: (params: Params, value: any) => ExpectedType,
-    serialize: (params: Params, value: ExpectedType) => any = (_, value) => value,
-    getParams: (params: Params) => any = (params: Params) => params
+    validate: (params: Partial<Params>, value: any) => ExpectedType,
+    serialize: (params: Partial<Params>, value: ExpectedType) => any = (_, value) => value,
+    getParams: (params: Partial<Params>) => any = (params: Partial<Params>) => params
 ): ValidatorFunctionConstructor<Params, ExpectedType> =>
-    (params?: Params) =>
+    (params?: Partial<Params>) =>
     (value: any, mode: Mode) => {
-        const actualParams = mergeDefined(defaultParams, params || {});
+        const actualParams = mergeDefined(defaultParams, params);
         switch(mode) {
             case Mode.GET_PARAMS:
                 return getParams(actualParams);
