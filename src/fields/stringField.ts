@@ -1,5 +1,5 @@
 import { declareParametrizedField } from '../core';
-import { optionalOf } from './optional';
+import { optionalOf } from '../utils';
 
 const stringField = declareParametrizedField({
   defaultParams: {
