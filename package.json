@@ -10,6 +10,7 @@
     "eslint": "^7.8.1",
     "eslint-plugin-jest-formatting": "^2.0.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.1",
     "ts-node": "^9.0.0",
     "typescript": "4.0.2"
   }
