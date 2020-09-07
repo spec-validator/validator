@@ -1,5 +1,3 @@
-import { Json } from "./json";
-
 enum Mode {
     GET_PARAMS = '~~GET_PARAMS~~',
     SERIALIZE = '~~SERIALIZE~~',
@@ -61,12 +59,12 @@ export const validate = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedTyp
     mapSpec(validatorSpec, (validator, key) => validator(value[key], Mode.VALIDATE));
 
 export const serialize = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>, value: ExpectedType): any =>
-    mapSpec(validatorSpec, (validator, key) => validator(value[key], Mode.SERIALIZE));
+    mapSpec(validatorSpec, (validator, key) => validator((value as any)[key], Mode.SERIALIZE));
 
 export const declareField = <ExpectedType, Params> (
     defaultParams: Params,
     validate: (params: Params, value: any) => ExpectedType,
-    serialize: (params: Params, value: ExpectedType) => Json,
+    serialize: (params: Params, value: ExpectedType) => any,
     getParams: (params: Params) => any = (params: Params) => params
 ): ValidatorFunctionConstructor<Params, ExpectedType> =>
     (params?: Params) =>
