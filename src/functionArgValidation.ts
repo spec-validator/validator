@@ -15,7 +15,6 @@ const test = () => {
         stringField(),
         numberField(),
     );
-    type TT = TypeHint<typeof spec>
     const wildCard = withValidation(spec, (a, b, c) => `${a}${b}${c}`)
     //console.log(wildCard('a', 'b', 1))
     console.log(getParams(spec))
