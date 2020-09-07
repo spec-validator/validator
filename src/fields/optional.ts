@@ -1,4 +1,4 @@
-import { ValidatorFunction } from "./core";
+import { ValidatorFunction } from "../core";
 
 export type Optional<T> = T | undefined;
 
