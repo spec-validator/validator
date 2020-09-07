@@ -1,3 +1,5 @@
+import { Json } from "./json";
+
 export type ValidatorFunction<ExpectedType> = (value: any) => ExpectedType;
 
 type ValidatorFunctionConstructor<Params, ExpectedType> = (params?: Params) => ValidatorFunction<ExpectedType>
@@ -10,8 +12,8 @@ export type TypeHint<Spec extends ValidatorSpec<any>> = {
     readonly [P in keyof Spec]: ReturnType<Spec[P]>;
 }
 
-
 const GET_PARAMS = '~~GET~~PARAMS~~';
+const SERIALIZE = '~~SERIALIZE~~';
 
 const mapSpec = <ExpectedType, R> (
     validatorSpec: ValidatorSpec<ExpectedType>, 
@@ -43,7 +45,16 @@ export const declareField = <ExpectedType, Params> (
     defaultParams: Params,
     validateWithSpec: ValidatorFunctionWithSpec<Params, ExpectedType>,
     getParams: (params: Params) => any = (params: Params) => params,
+    serialize: (params: Params, value: ExpectedType) => Json
 ): ValidatorFunctionConstructor<Params, ExpectedType> => 
     (params?: Params) => 
-    (value: any) => 
-    value === GET_PARAMS ? getParams(params || defaultParams) : validateWithSpec(params || defaultParams, value);
+    (value: any) => { 
+        switch(value) {
+        case GET_PARAMS:
+            return getParams(params || defaultParams);
+        case SERIALIZE:
+            return serialize(params || defaultParams, value);
+        default:
+            return validateWithSpec(params || defaultParams, value);
+    }
+}
