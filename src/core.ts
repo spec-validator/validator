@@ -9,11 +9,11 @@ export type Field<ExpectedType> = (value: any, mode: Mode) => ExpectedType;
 type ValidatorFunctionConstructor<Params, ExpectedType> = (params?: Partial<Params>) => Field<ExpectedType>
 
 export type ValidatorSpec<ExpectedType> = {
-    readonly [P in keyof ExpectedType]: Field<ExpectedType[P]>;
+  readonly [P in keyof ExpectedType]: Field<ExpectedType[P]>;
 };
 
 export type TypeHint<Spec extends ValidatorSpec<any>> = {
-    readonly [P in keyof Spec]: ReturnType<Spec[P]>;
+  readonly [P in keyof Spec]: ReturnType<Spec[P]>;
 }
 
 const withErrorDecoration = <R> (key: any, call: () => R) => {
@@ -53,11 +53,12 @@ const mapSpec = <ExpectedType, R> (
 }
 
 const mergeDefined = <T> (full: T, partial?: Partial<T>): Partial<T> =>
-    Object.fromEntries(
-      Object.entries(
-        Object.assign({}, full, partial)
-      ).filter(([_, validator]) => validator !== undefined)
-    ) as Partial<T>;
+  Object.fromEntries(
+    Object.entries(
+      Object.assign({}, full, partial)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ).filter(([_, validator]) => validator !== undefined)
+  ) as Partial<T>;
 
 export const getParams = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>): any =>
   mapSpec(validatorSpec, validator => validator(undefined, Mode.GET_PARAMS));
@@ -85,12 +86,11 @@ export const declareParametrizedField = <ExpectedType, Params> (
   validate: (params: Partial<Params>, value: any) => ExpectedType,
   serialize: (params: Partial<Params>, value: ExpectedType) => any = (_, value) => value,
   getParams: (params: Partial<Params>) => any = (params: Partial<Params>) => params
-): ValidatorFunctionConstructor<Params, ExpectedType> =>
-    (params?: Partial<Params>) => {
-      const actualParams = mergeDefined(defaultParams, params);
-      return declareField(
-        validate.bind(null, actualParams),
-        serialize.bind(null, actualParams),
-        getParams.bind(null, actualParams)
-      )
-    }
+): ValidatorFunctionConstructor<Params, ExpectedType> => (params?: Partial<Params>) => {
+    const actualParams = mergeDefined(defaultParams, params);
+    return declareField(
+      validate.bind(null, actualParams),
+      serialize.bind(null, actualParams),
+      getParams.bind(null, actualParams)
+    )
+  }
