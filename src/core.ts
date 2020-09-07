@@ -62,6 +62,8 @@ const mergeDefined = <T> (full: T, partial?: Partial<T>): Partial<T> =>
 export const getParams = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>): any =>
   mapSpec(validatorSpec, validator => validator(undefined, Mode.GET_PARAMS));
 
+// The whole point of the library is to validate wildcard objects
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const validate = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>, value: any): ExpectedType =>
   mapSpec(validatorSpec, (validator, key) => validator(value[key], Mode.VALIDATE));
 
