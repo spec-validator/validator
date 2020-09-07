@@ -1,3 +1,5 @@
+import { merge } from './utils';
+
 export enum Mode {
     GET_PARAMS = '~~GET_PARAMS~~',
     SERIALIZE = '~~SERIALIZE~~',
@@ -56,7 +58,7 @@ const mapSpec = <ExpectedType, R> (
 const mergeDefined = <T> (full: T, partial?: Partial<T>): Partial<T> =>
   Object.fromEntries(
     Object.entries(
-      Object.assign({}, full, partial)
+      merge(full, partial)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ).filter(([_, validator]) => validator !== undefined)
   ) as Partial<T>;
