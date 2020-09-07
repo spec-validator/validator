@@ -1,4 +1,4 @@
-enum Mode {
+export enum Mode {
     GET_PARAMS = '~~GET_PARAMS~~',
     SERIALIZE = '~~SERIALIZE~~',
     VALIDATE = '~~VALIDATE~~'
