@@ -13,7 +13,7 @@ export type TypeHint<Spec extends ValidatorSpec<any>> = {
 }
 
 enum Mode {
-    GET_PARAMS = '~~GET~~PARAMS~~',
+    GET_PARAMS = '~~GET_PARAMS~~',
     SERIALIZE = '~~SERIALIZE~~',
     DESERIALIZE = '~~DESERIALIZE~~'
 }
