@@ -1,4 +1,3 @@
-import { serialize } from 'v8';
 import {
   Field,
   declareField,
@@ -8,15 +7,21 @@ import {
   getParams as rawGetParams
 } from '../core';
 
-const objectField = <ExpectedType> (objectSpec: ValidatorSpec<ExpectedType>): Field<ExpectedType> => declareField({
-  validate: (value: any): ExpectedType => {
-    if (typeof value !== 'object' || value === null) {
-      throw 'Not an object'
-    }
-    return rawValidate(objectSpec, value)
-  },
-  serialize: (value: ExpectedType) => rawSerialize(objectSpec, value),
-  getParams: () => rawGetParams(objectSpec)
-})
+const objectField = <ExpectedType> (params: {
+  objectSpec: ValidatorSpec<ExpectedType>,
+  description?: string
+}): Field<ExpectedType> => declareField({
+    validate: (value: any): ExpectedType => {
+      if (typeof value !== 'object' || value === null) {
+        throw 'Not an object'
+      }
+      return rawValidate(params.objectSpec, value)
+    },
+    serialize: (value: ExpectedType) => rawSerialize(params.objectSpec, value),
+    getParams: () => ({
+      description: params.description,
+      spec: rawGetParams(params.objectSpec)
+    })
+  })
 
 export default objectField;
