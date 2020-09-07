@@ -1,10 +1,10 @@
 import { declareField } from "./core"
-import { undefinedOf } from "./optional"
+import { optionalOf } from "./optional"
 
 export const stringField = declareField({
-    minLength: undefinedOf<number>(),
-    maxLength: undefinedOf<number>(),
-    description: undefinedOf<string>()
+    minLength: optionalOf<number>(),
+    maxLength: optionalOf<number>(),
+    description: optionalOf<string>()
 }, (params, value): string => {
     if (typeof value !== 'string') {
         throw 'Not a string'

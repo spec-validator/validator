@@ -1,4 +1,4 @@
-import { validate, ValidatorSpec, getParams, TypeHint } from "./core";
+import { validate, ValidatorSpec, getParams } from "./core";
 import { numberField, stringField } from "./fields";
 
 export const tuple = <T extends any[]>(...args: T): T => args
