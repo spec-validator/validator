@@ -13,7 +13,7 @@ const optional = <T> (innerField: Field<T>): Field<Optional<T>> => declareField(
     return innerField(value, Mode.VALIDATE)
   },
   serialize: (value: Optional<T>) => value === undefined ? value : innerField(value, Mode.SERIALIZE),
-  getParams: () => merge({optional: true}, innerField(undefined, Mode.GET_PARAMS)),
+  getParams: () => merge(innerField(undefined, Mode.GET_PARAMS), {isOptional: true}),
 })
 
 export default optional;
