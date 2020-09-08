@@ -3,6 +3,7 @@ import { TypeHint, validate } from '../core';
 
 test('allows valid choices to get throw', () => {
   const spec = {
+    // NOTE: for proper type hints const assertion must be used
     field: choiceField({choices: [1, 2, 3] as const}),
   }
   type Spec = TypeHint<typeof spec>
@@ -11,7 +12,6 @@ test('allows valid choices to get throw', () => {
   });
   expect(valid.field).toEqual(1);
 });
-
 
 test('prevents invalid choices from getting through', () => {
   const spec = {
