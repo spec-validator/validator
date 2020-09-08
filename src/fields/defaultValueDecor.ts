@@ -8,7 +8,7 @@ const defaultValueDecor = <T> (params: { innerField: Field<T>, defaultValue: T})
     }
     return params.innerField(value, Mode.VALIDATE)
   },
-  serialize: (value: T) => value === undefined ? value : params.innerField(value, Mode.SERIALIZE),
+  serialize: (value: T) => params.innerField(value, Mode.SERIALIZE),
   getParams: () => merge(params.innerField(undefined, Mode.GET_PARAMS), {defaultValue: params.defaultValue}),
 })
 
