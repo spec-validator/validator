@@ -25,3 +25,16 @@ test('reports an error with full path leading to it if there are issues', () => 
     expect(err).toEqual({'inner': 'Not a number', 'path': ['field', 2]})
   }
 });
+
+test('reports an error if value is not an array', () => {
+  const spec = {
+    field: arrayField({itemField: numberField()}),
+  }
+  try {
+    validate(spec, {
+      field: 11
+    });
+  } catch (err) {
+    expect(err).toEqual({'inner': 'Not an array', 'path': ['field']})
+  }
+});
