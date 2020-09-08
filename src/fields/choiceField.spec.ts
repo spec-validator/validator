@@ -22,6 +22,6 @@ test('prevents invalid choices from getting through', () => {
       field: 4
     });
   } catch (err) {
-    expect(err).toEqual({"inner": "Invalid choice", "path": ["field"]})
+    expect(err).toEqual({'inner': 'Invalid choice', 'path': ['field']})
   }
 });
