@@ -1,6 +1,9 @@
 import { Field, declareField } from '../core';
 
-const choiceField = <T> (params: {choices: T[], description?: string}): Field<T> => {
+const choiceField = <Choices extends readonly unknown[], T=Choices[number]> (params: {
+  choices: Choices,
+  description?: string
+}): Field<T> => {
   const choicesSet = new Set(params.choices)
   return declareField({
     validate: (value: any): T => {
