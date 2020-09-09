@@ -4,9 +4,9 @@ import numberField from './numberField';
 
 test('allows valid array to get through', () => {
   const spec = {
-    field: arrayField({itemField: numberField()}),
-  }
-  type Spec = TypeHint<typeof spec>
+    field: arrayField(numberField())
+  };
+  type Spec = TypeHint<typeof spec>;
   const valid: Spec = validate(spec, {
     field: [1]
   });
@@ -15,8 +15,8 @@ test('allows valid array to get through', () => {
 
 test('reports an error with full path leading to it if there are issues', () => {
   const spec = {
-    field: arrayField({itemField: numberField()}),
-  }
+    field: arrayField(numberField())
+  };
   try {
     validate(spec, {
       field: [1, 2, false]
@@ -28,8 +28,8 @@ test('reports an error with full path leading to it if there are issues', () => 
 
 test('reports an error if value is not an array', () => {
   const spec = {
-    field: arrayField({itemField: numberField()}),
-  }
+    field: arrayField(numberField())
+  };
   try {
     validate(spec, {
       field: 11
