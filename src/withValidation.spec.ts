@@ -1,15 +1,14 @@
-const test = () => {
-  const spec = tuple(
-    stringField({
-      maxLength: 123,
-      description: 'FooBar'
-    }),
-    stringField(),
-    numberField(),
-  );
-  const wildCard = functionDecor(spec, (a, b, c) => `${a}${b}${c}`)
-  //console.log(wildCard('a', 'b', 1))
-  console.log(getParams(spec))
-}
+import { tuple, withValidation } from '.';
+import { numberField, stringField } from './fields';
 
-test();
+const spec = tuple(
+  numberField(),
+  numberField(),
+  numberField()
+);
+const wildCard = withValidation(spec, stringField(), (a, b, c) => `${a}${b}${c}`)
+
+test('filters out calls with wrong arguments', () => {
+  const result = wildCard(1, 2, 3)
+  expect(result).toEqual('123');
+});

@@ -1,8 +1,6 @@
 import { Field, Mode, validate, ValidatorSpec } from './core';
 
-export const tuple = <T extends any[]>(...args: T): T => args
-
-export const withValidation = <T extends any[], R> (
+const withValidation = <T extends any[], R> (
   argSpec: ValidatorSpec<T>,
   returnValueSpec: Field<R>,
   rawCall: (...values: T) => R
@@ -12,3 +10,4 @@ export const withValidation = <T extends any[], R> (
       Mode.SERIALIZE
     )
 
+export default withValidation;
