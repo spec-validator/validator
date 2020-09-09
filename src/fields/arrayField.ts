@@ -1,4 +1,4 @@
-import { Field, declareField, Mode, withErrorDecoration } from '../core';
+import { Field, declareField, Mode, withErrorDecoration, Json } from '../core';
 
 const arrayField = <T> (params: { itemField: Field<T>, description?: string}): Field<T[]> => declareField({
   validate: (value: any): T[] => {
@@ -10,11 +10,11 @@ const arrayField = <T> (params: { itemField: Field<T>, description?: string}): F
     );
   },
   serialize: (value: T[]) => value.map(
-    (it, index) => withErrorDecoration(index, () => params.itemField(it, Mode.SERIALIZE))
+    (it, index) => withErrorDecoration(index, () => params.itemField(it, Mode.SERIALIZE) as unknown as Json)
   ),
   getParams: () => ({
     description: params.description,
-    itemSpec: params.itemField(undefined, Mode.GET_PARAMS)
+    itemSpec: params.itemField(undefined, Mode.GET_PARAMS) as unknown as Json
   }),
 })
 

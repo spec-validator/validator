@@ -18,6 +18,14 @@ export type TypeHint<Spec extends ValidatorSpec<any>> = {
   readonly [P in keyof Spec]: ReturnType<Spec[P]>;
 }
 
+export type Json =
+| string
+| number
+| boolean
+| null
+| { [property: string]: Json }
+| Json[];
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const withErrorDecoration = <R> (key: any, call: () => R): R => {
   try {
@@ -76,24 +84,24 @@ export const serialize = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedTy
 
 export const declareField = <ExpectedType> (conf: {
   validate: (value: any) => ExpectedType,
-  serialize: (value: ExpectedType) => any,
-  getParams: () => any
+  serialize: (value: ExpectedType) => Json,
+  getParams: () => Json
 }): Field<ExpectedType> => (value: any, mode: Mode) => ({
     [Mode.GET_PARAMS]: conf.getParams,
-    [Mode.SERIALIZE]: () => conf.serialize(value),
-    [Mode.VALIDATE]: () => conf.validate(value)
+    [Mode.SERIALIZE]: () => conf.serialize(value) as any,
+    [Mode.VALIDATE]: () => conf.validate(value) as any
   })[mode]()
 
 export const declareParametrizedField = <ExpectedType, Params> (conf: {
   defaultParams: Params,
   validate: (params: Partial<Params>, value: any) => ExpectedType,
-  serialize?: (params: Partial<Params>, value: ExpectedType) => any,
-  getParams?: (params: Partial<Params>) => any
+  serialize: (params: Partial<Params>, value: ExpectedType) => Json,
+  getParams: (params: Partial<Params>) => Json
 }): ValidatorFunctionConstructor<Params, ExpectedType> => (params?: Partial<Params>) => {
     const actualParams = mergeDefined(conf.defaultParams, params);
     return declareField({
       validate: conf.validate.bind(null, actualParams),
-      serialize: conf?.serialize?.bind(null, actualParams) || ((value: ExpectedType) => value),
-      getParams: conf?.getParams?.bind(null, actualParams) || (() => params)
+      serialize: conf.serialize.bind(null, actualParams),
+      getParams: conf.getParams.bind(null, actualParams)
     })
   }
