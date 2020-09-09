@@ -11,7 +11,11 @@ test('placeholder', () => {
   }
   type Spec = TypeHint<typeof spec>
   const valid: Spec = validate(spec, {
-    field: [1]
+    field: {
+      subField: {
+        subSubField: 11
+      }
+    }
   });
-  expect(valid.field).toEqual([1]);
+  expect(valid.field.subField.subSubField).toEqual(11);
 });
