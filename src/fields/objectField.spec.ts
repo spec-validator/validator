@@ -4,6 +4,7 @@ import { TypeHint, validate } from '../core';
 test('placeholder', () => {
   const spec = {
     field: objectField({
+      num: numberField(),
       subField: objectField({
         subSubField: numberField()
       })
@@ -12,6 +13,7 @@ test('placeholder', () => {
   type Spec = TypeHint<typeof spec>
   const valid: Spec = validate(spec, {
     field: {
+      num: 42,
       subField: {
         subSubField: 11
       }
