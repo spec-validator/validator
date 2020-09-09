@@ -10,7 +10,9 @@ const numberField = declareParametrizedField({
       throw 'Not a number'
     }
     return value
-  }
+  },
+  serialize: (_, value: number) => value,
+  getParams: (params) => params
 })
 
 export default numberField;

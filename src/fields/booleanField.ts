@@ -10,7 +10,9 @@ const booleanField = declareParametrizedField({
       throw 'Not a boolean'
     }
     return value
-  }
+  },
+  serialize: (_, value: boolean) => value,
+  getParams: (params) => params
 })
 
 export default booleanField;

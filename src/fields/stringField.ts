@@ -22,7 +22,9 @@ const stringField = declareParametrizedField({
       }
     }
     return value;
-  }
+  },
+  serialize: (_, value: string) => value,
+  getParams: (params) => params
 })
 
 export default stringField;

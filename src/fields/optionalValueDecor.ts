@@ -8,7 +8,7 @@ const optionalValueDecor = <T> (innerField: Field<T>): Field<Optional<T>> => dec
     }
     return innerField(value, Mode.VALIDATE)
   },
-  serialize: (value: Optional<T>) => value === undefined ? value : innerField(value, Mode.SERIALIZE),
+  serialize: (value: Optional<T>) => (value === undefined ? value : innerField(value, Mode.SERIALIZE)) as any,
   getParams: () => merge(innerField(undefined, Mode.GET_PARAMS), {isOptional: true}),
 })
 

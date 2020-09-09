@@ -18,13 +18,20 @@ export type TypeHint<Spec extends ValidatorSpec<any>> = {
   readonly [P in keyof Spec]: ReturnType<Spec[P]>;
 }
 
-export type Json =
+export type Primitive =
 | string
 | number
-| boolean
+| boolean;
+
+export type Nothing =
 | null
+| undefined;
+
+export type Json =
+| Primitive
+| Nothing
 | { [property: string]: Json }
-| Json[];
+| readonly Json[];
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const withErrorDecoration = <R> (key: any, call: () => R): R => {

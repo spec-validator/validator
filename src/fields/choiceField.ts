@@ -1,6 +1,6 @@
-import { Field, declareField } from '../core';
+import { Field, declareField, Primitive } from '../core';
 
-const choiceField = <Choices extends readonly unknown[], T=Choices[number]> (params: {
+const choiceField = <Choices extends readonly Primitive[], T=Choices[number]> (params: {
   choices: Choices,
   description?: string
 }): Field<T> => {
@@ -12,7 +12,7 @@ const choiceField = <Choices extends readonly unknown[], T=Choices[number]> (par
       }
       return value as T
     },
-    serialize: (value: T) => value,
+    serialize: (value: T) => value as unknown as Primitive,
     getParams: () => params,
   })
 }
