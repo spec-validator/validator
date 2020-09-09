@@ -11,11 +11,11 @@ export type Field<ExpectedType> = (value: any, mode: Mode) => ExpectedType;
 type ValidatorFunctionConstructor<Params, ExpectedType> = (params?: Partial<Params>) => Field<ExpectedType>
 
 export type ValidatorSpec<ExpectedType> = {
-  readonly [P in keyof ExpectedType]: Field<ExpectedType[P]>;
+  [P in keyof ExpectedType]: Field<ExpectedType[P]>;
 };
 
 export type TypeHint<Spec extends ValidatorSpec<any>> = {
-  readonly [P in keyof Spec]: ReturnType<Spec[P]>;
+  [P in keyof Spec]: ReturnType<Spec[P]>;
 }
 
 export type Primitive =

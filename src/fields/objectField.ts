@@ -7,20 +7,20 @@ import {
   getParams as rawGetParams
 } from '../core';
 
-const objectField = <ExpectedType> (params: {
+const objectField = <ExpectedType> (
   objectSpec: ValidatorSpec<ExpectedType>,
   description?: string
-}): Field<ExpectedType> => declareField({
+): Field<ExpectedType> => declareField({
     validate: (value: any): ExpectedType => {
       if (typeof value !== 'object' || value === null) {
         throw 'Not an object'
       }
-      return rawValidate(params.objectSpec, value)
+      return rawValidate(objectSpec, value)
     },
-    serialize: (value: ExpectedType) => rawSerialize(params.objectSpec, value),
+    serialize: (value: ExpectedType) => rawSerialize(objectSpec, value),
     getParams: () => ({
-      description: params.description,
-      spec: rawGetParams(params.objectSpec)
+      description: description,
+      spec: rawGetParams(objectSpec)
     })
   })
 
