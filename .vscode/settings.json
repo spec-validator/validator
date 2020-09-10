@@ -28,5 +28,6 @@
         "**/cdk-out/*/**": true,
         "**/dist/*/**": true,
         "**/browser-tests/*/**": true,
-    }
+    },
+    "jest.pathToConfig": "./jest.conf.js"
 }
