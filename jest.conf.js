@@ -1,5 +1,5 @@
 module.exports = {
-  roots: ['<rootDir>/src'],
+  roots: ['<rootDir>/validator/src'],
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
@@ -15,13 +15,13 @@ module.exports = {
   },
 
   testEnvironment: 'node',
-  testMatch: ['<rootDir>/src/**/*.spec.ts'],
+  testMatch: ['<rootDir>/validator/src/**/*.spec.ts'],
   testURL: 'http://localhost/',
 
   collectCoverage: true,
   coverageReporters: ['json', 'json-summary', 'lcov'],
   coverageDirectory: 'coverage',
-  collectCoverageFrom: ['src/**/*.{ts}', '!src/**/*.{spec.ts}'],
+  collectCoverageFrom: ['validator/src/**/*.{ts}', '!validator/src/**/*.{spec.ts}'],
   coverageThreshold: {
     global: {
       branches: 80,
