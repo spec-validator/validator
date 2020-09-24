@@ -4,17 +4,17 @@ import stringField from './stringField';
 
 import numberField from './numberField';
 
-import segmentChainField, { segment as s } from './segmentChainField';
+import segmentChainField from './segmentChainField';
 
 test('basics', () => {
   const spec = {
     value: segmentChainField([
       '/',
-      s('username', stringField()),
+      ['username', stringField()],
       '/todos/',
-      s('uid', numberField()),
+      ['uid', numberField()],
       '/subtodos',
-      s('suid', numberField()),
+      ['suid', numberField()],
     ])
   }
 

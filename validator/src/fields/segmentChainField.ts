@@ -3,10 +3,10 @@ import {
   declareField,
 } from '../core';
 
-export type DynamicSegment<Title, ExpectedType> = {
-  title: Title,
-  validator: Field<ExpectedType>
-}
+export type DynamicSegment<Title, ExpectedType> = [
+  Title,
+  Field<ExpectedType>
+]
 
 export const segment = <Title extends string, ExpectedType>(
   title: Title,
