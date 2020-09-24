@@ -1,10 +1,6 @@
 import {
   Field,
   declareField,
-  ValidatorSpec,
-  validate as rawValidate,
-  serialize as rawSerialize,
-  getParams as rawGetParams
 } from '../core';
 
 export type DynamicSegment<ExpectedType, Title> = {
@@ -28,16 +24,16 @@ const segmentChainField = <ExpectedType> (
   description?: string
 ): Field<ExpectedType> => declareField({
     validate: (value: any): ExpectedType => {
-      if (typeof value !== 'object' || value === null) {
-        throw 'Not an object'
+      if (!Array.isArray(value)) {
+        throw 'Not an array'
       }
-      return rawValidate(objectSpec, value)
+      return null as any
     },
-    serialize: (value: ExpectedType) => rawSerialize(objectSpec, value),
+    serialize: (value: ExpectedType) => null as any,
     getParams: () => ({
       description: description,
-      spec: rawGetParams(objectSpec)
+      spec: {}
     })
   })
 
-export default objectField;
+export default segmentChainField;
