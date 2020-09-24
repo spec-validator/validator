@@ -34,33 +34,42 @@ const segmentChainField = <ExpectedType> (
 
 export default segmentChainField;
 
-type IntersectionOfValues<T> =
-  {[K in keyof T]: (p: T[K]) => void} extends
-    {[n: string]: (p: infer I) => void} ? I : never;
+// oh boy don't do this
+type UnionToIntersection<U> =
+  (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never
+type LastOf<T> =
+  UnionToIntersection<T extends any ? () => T : never> extends () => (infer R) ? R : never
 
-type IntersectionOfFunctionsToType<F, T> =
-    F extends {
-        (na: infer NA, a: infer A): void;
-        (nb: infer NB, b: infer B): void;
-        (nc: infer NC, c: infer C): void;
-    } ? [NA, A, NB, B, NC, C] :
-    F extends {
-        (na: infer NA, a: infer A): void;
-        (nb: infer NB, b: infer B): void;
-    } ? [NA, A, NB, B] :
-    F extends {
-        (na: infer NA, a: infer A): void
-    } ? [NA, A] :
-    never;
+// TS4.0+
+type Push<T extends any[], V> = [...T, V];
 
-type ToTuple<T> = IntersectionOfFunctionsToType<
-    IntersectionOfValues<{ [K in keyof T]: (k: K, v: T[K]) => void }>, T>;
-
+type TuplifyUnion<T, L=LastOf<T>, N=[T] extends [never] ? true : false> = true extends N ? [] :
+  Push<TuplifyUnion1<Exclude<T, L>>, L>
+type TuplifyUnion1<T, L=LastOf<T>, N=[T] extends [never] ? true : false> = true extends N ? [] :
+  Push<TuplifyUnion2<Exclude<T, L>>, L>
+type TuplifyUnion2<T, L=LastOf<T>, N=[T] extends [never] ? true : false> = true extends N ? [] :
+  Push<TuplifyUnion3<Exclude<T, L>>, L>
+type TuplifyUnion3<T, L=LastOf<T>, N=[T] extends [never] ? true : false> = true extends N ? [] :
+  Push<TuplifyUnion4<Exclude<T, L>>, L>
+type TuplifyUnion4<T, L=LastOf<T>, N=[T] extends [never] ? true : false> = true extends N ? [] :
+  Push<TuplifyUnion5<Exclude<T, L>>, L>
+type TuplifyUnion5<T, L=LastOf<T>, N=[T] extends [never] ? true : false> = true extends N ? [] :
+  Push<TuplifyUnion6<Exclude<T, L>>, L>
+type TuplifyUnion6<T, L=LastOf<T>, N=[T] extends [never] ? true : false> = true extends N ? [] :
+  Push<TuplifyUnion7<Exclude<T, L>>, L>
+type TuplifyUnion7<T, L=LastOf<T>, N=[T] extends [never] ? true : false> = true extends N ? [] :
+  Push<TuplifyUnion8<Exclude<T, L>>, L>
+type TuplifyUnion8<T, L=LastOf<T>, N=[T] extends [never] ? true : false> = true extends N ? [] :
+  Push<TuplifyUnion9<Exclude<T, L>>, L>
+type TuplifyUnion9<T, L=LastOf<T>, N=[T] extends [never] ? true : false> = true extends N ? [] :
+  Push<TuplifyUnionX<Exclude<T, L>>, L>
+type TuplifyUnionX<T> = never
 
 type foo = {
   one: 11,
   two: 22,
-  three: 33
+  three: 33,
+  four: 44
 }
 
-type tupo =  ToTuple<foo>
+type tupo = TuplifyUnion<keyof foo>
