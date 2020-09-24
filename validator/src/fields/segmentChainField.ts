@@ -3,18 +3,10 @@ import {
   declareField,
 } from '../core';
 
-export type DynamicSegment<Title, ExpectedType> = [
+export type DynamicSegment<Title extends PropertyKey, ExpectedType> = [
   Title,
   Field<ExpectedType>
 ]
-
-export const segment = <Title extends string, ExpectedType>(
-  title: Title,
-  validator: Field<ExpectedType>
-): DynamicSegment<Title, ExpectedType> => ({
-    title,
-    validator
-  });
 
 export type SegmentChainSpec<
   ExpectedType,
@@ -39,3 +31,4 @@ const segmentChainField = <ExpectedType> (
 
 export default segmentChainField;
 
+const fromEntries = <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T } =>
