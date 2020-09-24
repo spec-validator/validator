@@ -4,7 +4,7 @@ import stringField from './stringField';
 
 import numberField from './numberField';
 
-import segmentChainField, { segment as s, SegmentChainSpec } from './segmentChainField';
+import segmentChainField, { DynamicSegment, segment as s, SegmentChainSpec } from './segmentChainField';
 
 test('basics', () => {
   type FF = {
@@ -13,9 +13,11 @@ test('basics', () => {
     suid: string
   }
 
+  const ss = s('username', stringField())
+
   const segments: SegmentChainSpec<FF> = [
     '/',
-    s('username', stringField()),
+    ss,
     '/todos/',
     s('uid', numberField()),
     '/subtodos',
@@ -23,7 +25,14 @@ test('basics', () => {
   ]
 
   const spec = {
-    value: segmentChainField(segments)
+    value: segmentChainField([
+      '/',
+      s('username', stringField()),
+      '/todos/',
+      s('uid', numberField()),
+      '/subtodos',
+      s('suid', numberField()),
+    ])
   }
 
   type foo = TypeHint<typeof spec>

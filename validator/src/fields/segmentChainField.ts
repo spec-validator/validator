@@ -8,7 +8,7 @@ export type DynamicSegment<Title, ExpectedType> = {
   validator: Field<ExpectedType>
 }
 
-export const segment = <Title, ExpectedType>(
+export const segment = <Title extends string, ExpectedType>(
   title: Title,
   validator: Field<ExpectedType>
 ): DynamicSegment<Title, ExpectedType> => ({
