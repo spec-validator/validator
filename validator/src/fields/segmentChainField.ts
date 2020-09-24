@@ -10,7 +10,10 @@ export type DynamicSegment<Title extends PropertyKey, ExpectedType> = [
 
 export type SegmentChainSpec<
   ExpectedType,
-> = Array<DynamicSegment<keyof ExpectedType, ExpectedType[keyof ExpectedType]> | string>;
+> = {
+  [P in keyof ExpectedType]:
+  DynamicSegment<P, ExpectedType[P]>;
+};
 
 const segmentChainField = <ExpectedType> (
   segmentChainSpec: SegmentChainSpec<ExpectedType>,
@@ -31,4 +34,33 @@ const segmentChainField = <ExpectedType> (
 
 export default segmentChainField;
 
-const fromEntries = <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T } =>
+type IntersectionOfValues<T> =
+  {[K in keyof T]: (p: T[K]) => void} extends
+    {[n: string]: (p: infer I) => void} ? I : never;
+
+type IntersectionOfFunctionsToType<F, T> =
+    F extends {
+        (na: infer NA, a: infer A): void;
+        (nb: infer NB, b: infer B): void;
+        (nc: infer NC, c: infer C): void;
+    } ? [NA, A, NB, B, NC, C] :
+    F extends {
+        (na: infer NA, a: infer A): void;
+        (nb: infer NB, b: infer B): void;
+    } ? [NA, A, NB, B] :
+    F extends {
+        (na: infer NA, a: infer A): void
+    } ? [NA, A] :
+    never;
+
+type ToTuple<T> = IntersectionOfFunctionsToType<
+    IntersectionOfValues<{ [K in keyof T]: (k: K, v: T[K]) => void }>, T>;
+
+
+type foo = {
+  one: 11,
+  two: 22,
+  three: 33
+}
+
+type tupo =  ToTuple<foo>
