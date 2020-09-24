@@ -17,7 +17,7 @@ export const segment = <Title, ExpectedType>(
   });
 
 export type SegmentChainSpec<
-  ExpectedType
+  ExpectedType,
 > = Array<DynamicSegment<keyof ExpectedType, ExpectedType[keyof ExpectedType]> | string>;
 
 const segmentChainField = <ExpectedType> (
