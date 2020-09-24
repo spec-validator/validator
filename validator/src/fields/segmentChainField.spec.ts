@@ -2,6 +2,8 @@ import { TypeHint } from '../core';
 
 import stringField from './stringField';
 
+import numberField from './numberField';
+
 import segmentChainField, { segment as s } from './segmentChainField';
 
 test('basics', () => {
@@ -10,9 +12,9 @@ test('basics', () => {
       '/',
       s('username', stringField()),
       '/todos/',
-      s('uid', stringField()),
+      s('uid', numberField()),
       '/subtodos',
-      s('suid', stringField()),
+      s('suid', numberField()),
     ])
   }
 

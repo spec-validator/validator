@@ -8,7 +8,7 @@ export type DynamicSegment<Title, ExpectedType> = {
   validator: Field<ExpectedType>
 }
 
-export const segment = <ExpectedType, Title>(
+export const segment = <Title, ExpectedType>(
   title: Title,
   validator: Field<ExpectedType>
 ): DynamicSegment<Title, ExpectedType> => ({
@@ -26,8 +26,8 @@ const segmentChainField = <ExpectedType> (
   description?: string
 ): Field<ExpectedType> => declareField({
     validate: (value: any): ExpectedType => {
-      if (!Array.isArray(value)) {
-        throw 'Not an array'
+      if (typeof value !== 'string') {
+        throw 'Not a string'
       }
       return null as any
     },
