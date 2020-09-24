@@ -3,21 +3,23 @@ import {
   declareField,
 } from '../core';
 
-export type DynamicSegment<ExpectedType, Title> = {
+export type DynamicSegment<Title, ExpectedType> = {
   title: Title,
   validator: Field<ExpectedType>
 }
 
-type Segment = string | DynamicSegment<unknown, string>;
+export const segment = <ExpectedType, Title>(
+  title: Title,
+  validator: Field<ExpectedType>
+): DynamicSegment<Title, ExpectedType> => ({
+    title,
+    validator
+  });
 
-type DynamicSegmentSpec<ExpectedType> = {
-  [P in keyof ExpectedType]: DynamicSegment<ExpectedType[P], P>[]
-}
-
-type SegmentChainSpec<
+export type SegmentChainSpec<
   ExpectedType,
   P extends keyof ExpectedType,
-> = [...[DynamicSegment<ExpectedType[P], string> | string]];
+> = Array<DynamicSegment<P, ExpectedType[P]> | string>;
 
 const segmentChainField = <ExpectedType> (
   segmentChainSpec: SegmentChainSpec<ExpectedType, keyof ExpectedType>,
@@ -34,6 +36,7 @@ const segmentChainField = <ExpectedType> (
       description: description,
       spec: {}
     })
-  })
+  });
 
 export default segmentChainField;
+
