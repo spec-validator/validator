@@ -17,10 +17,10 @@ type DynamicSegmentSpec<ExpectedType> = {
 type SegmentChainSpec<
   ExpectedType,
   P extends keyof ExpectedType,
-> = [...[ExpectedType[P] | string]];
+> = [...[DynamicSegment<ExpectedType[P], string> | string]];
 
 const segmentChainField = <ExpectedType> (
-  segmentChainSpec: SegmentChainSpec<ExpectedType>,
+  segmentChainSpec: SegmentChainSpec<ExpectedType, keyof ExpectedType>,
   description?: string
 ): Field<ExpectedType> => declareField({
     validate: (value: any): ExpectedType => {
