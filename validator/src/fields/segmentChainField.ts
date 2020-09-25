@@ -6,9 +6,9 @@ class Segment<ExpectedType> {
   //  return null as any
   //}
 
-  parent?: Segment<unknown>
-  key?: string;
-  field?: Field<unknown>
+  private parent?: Segment<unknown>
+  private key?: string;
+  private field?: Field<unknown>
 
   constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown>) {
     this.parent = parent;
@@ -24,3 +24,5 @@ class Segment<ExpectedType> {
   }
 
 }
+
+export const root = new Segment();

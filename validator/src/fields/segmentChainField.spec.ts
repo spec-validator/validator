@@ -1,23 +1,16 @@
-import { TypeHint } from '../core';
-
 import stringField from './stringField';
 
 import numberField from './numberField';
 
-import segmentChainField from './segmentChainField';
+import { root } from './segmentChainField';
 
 test('basics', () => {
-  const spec = {
-    value: segmentChainField([
-      '/',
-      ['username', stringField()],
-      '/todos/',
-      ['uid', numberField()],
-      '/subtodos',
-      ['suid', numberField()],
-    ])
+  const spec = root
+    ._('/')
+    ._('username', stringField())
+    ._('/todos/')
+    ._('uid', numberField())
+    ._('/subtodos')
+    ._('suid', numberField());
   }
-
-  type foo = TypeHint<typeof spec>
-
-})
+});
