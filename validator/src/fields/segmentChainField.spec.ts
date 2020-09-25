@@ -14,10 +14,10 @@ test('basics', () => {
     ._('suid', numberField());
 
   const valid = segmentSpec.match('/john-sick/todos/11/subtodos/42')
+
   expect(valid).toEqual({
     username: 'john-sick',
-    uid: '11',
-    suid: '42'
+    uid: 11,
+    suid: 42
   })
-
 });

@@ -1,12 +1,8 @@
-import { Field } from '../core';
+import { Field, validate } from '../core';
 
 const REGEX_GROUP = '(.*)'
 
 class Segment<ExpectedType> {
-
-  //_(params: string): Segment<ExpectedType> {
-  //  return null as any
-  //}
 
   private parent?: Segment<unknown>
   private key?: string;
@@ -62,9 +58,10 @@ class Segment<ExpectedType> {
       throw 'Didn\'t match'
     }
     const segments = this.getFieldSegments();
-    return Object.fromEntries(matches.map((match, i) => [segments[i].key, match]))
+    const raw = Object.fromEntries(matches.map((match, i) => [segments[i].key, match]));
+    const spec = Object.fromEntries(segments.map(segment => [segment.key, segment.field]));
+    return validate(spec, raw);
   }
-
 }
 
 export const root = new Segment();

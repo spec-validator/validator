@@ -6,6 +6,7 @@ const numberField = declareParametrizedField({
     description: optionalOf<string>()
   },
   validate: (_, value: any): number => {
+    value = Number.parseInt(value);
     if (typeof value !== 'number') {
       throw 'Not a number'
     }
