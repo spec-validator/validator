@@ -1,5 +1,7 @@
 import { Field } from '../core';
 
+const REGEX_GROUP = '(.*)'
+
 class Segment<ExpectedType> {
 
   //_(params: string): Segment<ExpectedType> {
@@ -9,6 +11,8 @@ class Segment<ExpectedType> {
   private parent?: Segment<unknown>
   private key?: string;
   private field?: Field<unknown>
+
+  private regex?: string
 
   constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown>) {
     this.parent = parent;
@@ -25,8 +29,40 @@ class Segment<ExpectedType> {
     return new Segment(this, key as any, field) as any;
   }
 
-  validate(value: string): ExpectedType {
-    return null as any
+  private getSegments(): Segment<unknown>[] {
+    const segments: Segment<unknown>[] = []
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    let cursor: Segment<unknown> | undefined = this;
+    while(cursor) {
+      segments.push(cursor);
+      cursor = cursor.parent;
+    }
+    segments.reverse()
+    return segments;
+  }
+
+  private getFieldSegments(): Segment<unknown>[] {
+    return this.getSegments().filter(segment => segment.field)
+  }
+
+  private getRegex(): string {
+    if (!this.regex) {
+      this.regex = this.getSegments()
+        .map(segment => segment.field && segment.key
+          ? REGEX_GROUP
+          : (segment.key || '')
+        ).join('');
+    }
+    return this.regex;
+  }
+
+  match(value: string): ExpectedType {
+    const matches = value.match(this.getRegex())?.slice(1);
+    if (!matches) {
+      throw 'Didn\'t match'
+    }
+    const segments = this.getFieldSegments();
+    return Object.fromEntries(matches.map((match, i) => [segments[i].key, match]))
   }
 
 }
