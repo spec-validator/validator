@@ -19,14 +19,10 @@ class Segment<ExpectedType> {
   _<Key extends string, ExtraExpectedType>(
     key: Key,
     field?: Field<ExtraExpectedType>
-  ): Segment<ExpectedType & { Key: Field<ExtraExpectedType> }> {
+  ): Segment<ExpectedType & { [P in Key]: Field<ExtraExpectedType> }> {
     return new Segment(this, key as any, field);
   }
 
-  f<Key extends string>(key: Key): Key { return key }
 }
 
 export const root = new Segment();
-
-
-const a = root.f('abc')
