@@ -1,4 +1,4 @@
-import { Field, validate } from '../core';
+import { Field, validate } from './core';
 
 const REGEX_GROUP = '(.*)'
 

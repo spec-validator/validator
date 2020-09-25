@@ -1,8 +1,8 @@
-import stringField from './stringField';
+import stringField from './fields/stringField';
 
-import numberField from './numberField';
+import numberField from './fields/numberField';
 
-import { root } from './segmentChainField';
+import { root } from './segmentChain';
 
 test('basics', () => {
   const segmentSpec = root
