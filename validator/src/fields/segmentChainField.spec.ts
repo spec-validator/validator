@@ -6,11 +6,8 @@ import { root } from './segmentChainField';
 
 test('basics', () => {
   const spec = root
-    ._('/')
-    ._('username', stringField())
-    ._('/todos/')
-    ._('uid', numberField())
-    ._('/subtodos')
-    ._('suid', numberField());
+    ._<'username', string>('username', stringField())
+    ._<'uid', number>('uid', numberField())
+    ._<'suid', number>('suid', numberField());
   }
 });

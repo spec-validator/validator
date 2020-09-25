@@ -16,11 +16,11 @@ class Segment<ExpectedType> {
     this.field = field;
   }
 
-  _<Title extends string, ExtraExpectedType>(
-    key: Title,
+  _<Key extends string, ExtraExpectedType>(
+    key: Key,
     field?: Field<ExtraExpectedType>
-  ): Segment<ExpectedType & { Title: Field<ExtraExpectedType> }> {
-    return new Segment(this, key, field);
+  ): Segment<ExpectedType & { Key: Field<ExtraExpectedType> }> {
+    return new Segment(this, key as any, field);
   }
 
 }
