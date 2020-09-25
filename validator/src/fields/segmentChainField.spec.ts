@@ -2,7 +2,7 @@ import stringField from './stringField';
 
 import numberField from './numberField';
 
-import { root } from './segmentChainField';
+import { root, TypeHintSpec } from './segmentChainField';
 
 test('basics', () => {
   const spec = root
@@ -12,5 +12,5 @@ test('basics', () => {
     ._('uid', numberField())
     ._('/subtodos/')
     ._('suid', numberField());
-  }
+
 });

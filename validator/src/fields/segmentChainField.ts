@@ -20,7 +20,7 @@ class Segment<ExpectedType> {
     key: Key,
     field?: Field<ExtraExpectedType>
   ): ExtraExpectedType extends undefined ? Segment<ExpectedType> : Segment<ExpectedType & {
-    [P in Key]: Field<ExtraExpectedType>
+    [P in Key]: ExtraExpectedType
   }> {
     return new Segment(this, key as any, field) as any;
   }
