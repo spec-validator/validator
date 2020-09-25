@@ -2,7 +2,7 @@ import stringField from './stringField';
 
 import numberField from './numberField';
 
-import { root, TypeHintSpec } from './segmentChainField';
+import { root } from './segmentChainField';
 
 test('basics', () => {
   const segmentSpec = root
