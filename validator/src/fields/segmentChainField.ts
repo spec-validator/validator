@@ -25,6 +25,10 @@ class Segment<ExpectedType> {
     return new Segment(this, key as any, field) as any;
   }
 
+  validate(value: string): ExpectedType {
+    return null as any
+  }
+
 }
 
 export const root = new Segment();
