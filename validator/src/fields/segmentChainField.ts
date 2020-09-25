@@ -23,6 +23,10 @@ class Segment<ExpectedType> {
     return new Segment(this, key as any, field);
   }
 
+  f<Key extends string>(key: Key): Key { return key }
 }
 
 export const root = new Segment();
+
+
+const a = root.f('abc')
