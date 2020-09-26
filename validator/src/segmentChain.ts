@@ -1,16 +1,18 @@
 import { Field, validate } from './core';
 
-const REGEX_GROUP = '(.*)'
+export interface WithRegex {
+  regex: () => string
+}
 
 class Segment<ExpectedType> {
 
   private parent?: Segment<unknown>
   private key?: string;
-  private field?: Field<unknown>
+  private field?: Field<unknown> & WithRegex
 
   private regex?: string
 
-  constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown>) {
+  constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown> & WithRegex) {
     this.parent = parent;
     this.key = key;
     this.field = field;
@@ -18,7 +20,7 @@ class Segment<ExpectedType> {
 
   _<Key extends string, ExtraExpectedType=undefined>(
     key: Key,
-    field?: Field<ExtraExpectedType>
+    field?: Field<ExtraExpectedType> & WithRegex
   ): ExtraExpectedType extends undefined ? Segment<ExpectedType> : Segment<ExpectedType & {
     [P in Key]: ExtraExpectedType
   }> {
@@ -45,7 +47,7 @@ class Segment<ExpectedType> {
     if (!this.regex) {
       this.regex = this.getSegments()
         .map(segment => segment.field && segment.key
-          ? REGEX_GROUP
+          ? `(${segment.field.regex()})`
           : (segment.key || '')
         ).join('');
     }
