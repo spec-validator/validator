@@ -15,10 +15,10 @@ class BooleanField implements Field<boolean>, WithRegExp {
     return /true|false|1|0/
   }
   validate(value: any): boolean {
-    if (value === 'true' || value === '1') {
+    if (value === 'true' || value === '1' || value == 1) {
       value = true
     }
-    if (value === 'false' || value === '0') {
+    if (value === 'false' || value === '0' || value == 0) {
       value = false
     }
     if (value !== true && value !== false) {
