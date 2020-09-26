@@ -1,6 +1,7 @@
 import { choiceField } from '.';
 import { TypeHint, validate } from '../core';
 import { root, SegmentTypeHint } from '../segmentChain';
+import stringField from './stringField';
 
 describe('spec', () => {
 
@@ -35,9 +36,10 @@ describe('segmentChain', () => {
   it('allows valid choices to get throw', () => {
     const spec = root
       ._('/')
-      ._('title', choiceField([1, 2, 3] as const))
-  type Spec = SegmentTypeHint<typeof spec>
+      ._('title', stringField())
+      ._('/')
+      ._('choice', choiceField([1, 2] as const))
 
-  });
+    const parsed = spec.match('/sampe-foo/12')
 
 });

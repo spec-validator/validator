@@ -21,7 +21,7 @@ export class Segment<ExpectedType> {
   _<Key extends string, ExtraExpectedType=undefined>(
     key: Key,
     field?: Field<ExtraExpectedType> & WithRegExp
-  ): ExtraExpectedType extends undefined ? Segment<ExpectedType> : Segment<ExpectedType & {
+  ): Segment<[ExtraExpectedType] extends [undefined] ? ExpectedType : ExpectedType & {
     [P in Key]: ExtraExpectedType
   }> {
     return new Segment(this, key as any, field) as any;
