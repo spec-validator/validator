@@ -1,15 +1,31 @@
-import { Field, declareField, Mode } from '../core';
+import { Field, Json } from '../core';
 import { merge, Optional } from '../utils';
 
-const optionalValueDecor = <T> (innerField: Field<T>): Field<Optional<T>> => declareField({
-  validate: (value: any): Optional<T> => {
+class OptionalValueDecorator<T> implements Field<Optional<T>> {
+  private innerField: Field<T>;
+
+  constructor(innerField: Field<T>) {
+    this.innerField = innerField;
+  }
+
+  validate(value: any): Optional<T> {
     if (value === undefined) {
       return value
     }
-    return innerField(value, Mode.VALIDATE)
-  },
-  serialize: (value: Optional<T>) => (value === undefined ? value : innerField(value, Mode.SERIALIZE)) as any,
-  getParams: () => merge(innerField(undefined, Mode.GET_PARAMS), {isOptional: true}),
-})
+    return this.innerField.validate(value)
+  }
+  serialize(deserialized: Optional<T>): Json {
+    return deserialized === undefined ? deserialized : this.innerField.serialize(deserialized) as any
+  }
+  getParams() {
+    return merge(
+      { isOptional: true },
+      this.innerField.getParams()
+    )
+  }
+
+}
+
+const optionalValueDecor = <T> (innerField: Field<T>): Field<Optional<T>> => new OptionalValueDecorator(innerField);
 
 export default optionalValueDecor;
