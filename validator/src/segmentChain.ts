@@ -1,9 +1,5 @@
 import { Field, validate } from './core';
 
-export interface RegExpCanBeEnabled<T> {
-  enableRegExp(): Field<T> & WithRegExp
-}
-
 export interface WithRegExp {
   regex: () => RegExp
 }
@@ -16,15 +12,15 @@ class Segment<ExpectedType> {
 
   private regex?: string
 
-  constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown> & RegExpCanBeEnabled<unknown>) {
+  constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown> & WithRegExp) {
     this.parent = parent;
     this.key = key;
-    this.field = field?.enableRegExp();
+    this.field = field;
   }
 
   _<Key extends string, ExtraExpectedType=undefined>(
     key: Key,
-    field?: Field<unknown> & RegExpCanBeEnabled<unknown>
+    field?: Field<ExtraExpectedType> & WithRegExp
   ): ExtraExpectedType extends undefined ? Segment<ExpectedType> : Segment<ExpectedType & {
     [P in Key]: ExtraExpectedType
   }> {
