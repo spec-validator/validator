@@ -1,27 +1,48 @@
 import {
   Field,
-  declareField,
   ValidatorSpec,
-  validate as rawValidate,
-  serialize as rawSerialize,
-  getParams as rawGetParams
+  validate,
+  serialize,
+  getParams,
+  Json
 } from '../core';
+
+type Params<ExpectedType> = {
+  objectSpec: ValidatorSpec<ExpectedType>,
+  description?: string
+}
+
+class ObjectField<ExpectedType> implements Field<ExpectedType> {
+  private params: Params<ExpectedType>
+
+  constructor(params: Params<ExpectedType>) {
+    this.params = params
+  }
+
+  validate(value: any): ExpectedType {
+    if (typeof value !== 'object' || value === null) {
+      throw 'Not an object'
+    }
+    return validate(this.params.objectSpec, value)
+  }
+  serialize(deserialized: ExpectedType): Json {
+    return serialize(this.params.objectSpec, deserialized)
+  }
+  getParams() {
+    return {
+      description: this.params.description,
+      spec: getParams(this.params.objectSpec)
+    }
+  }
+
+}
 
 const objectField = <ExpectedType> (
   objectSpec: ValidatorSpec<ExpectedType>,
   description?: string
-): Field<ExpectedType> => declareField({
-    validate: (value: any): ExpectedType => {
-      if (typeof value !== 'object' || value === null) {
-        throw 'Not an object'
-      }
-      return rawValidate(objectSpec, value)
-    },
-    serialize: (value: ExpectedType) => rawSerialize(objectSpec, value),
-    getParams: () => ({
-      description: description,
-      spec: rawGetParams(objectSpec)
-    })
+): Field<ExpectedType> => new ObjectField({
+    objectSpec,
+    description
   })
 
 export default objectField;

@@ -1,21 +1,45 @@
-import { Field, declareField, Mode, withErrorDecoration, Json } from '../core';
+import { Field, withErrorDecoration, Json } from '../core';
 
-const arrayField = <T> (itemField: Field<T>, description?: string): Field<T[]> => declareField({
-  validate: (value: any): T[] => {
+type Params<T> = {
+  itemField: Field<T>,
+  description?: string
+}
+
+class ArrayField<T> implements Field<T[]> {
+  private params: Params<T>;
+
+  constructor(params: Params<T>) {
+    this.params = params
+  }
+
+  validate(value: any): T[] {
     if (!Array.isArray(value)) {
       throw 'Not an array'
     }
     return value.map(
-      (it, index) => withErrorDecoration(index, () => itemField(it, Mode.VALIDATE))
+      (it, index) => withErrorDecoration(index, () => this.params.itemField.validate(it))
     );
-  },
-  serialize: (value: T[]) => value.map(
-    (it, index) => withErrorDecoration(index, () => itemField(it, Mode.SERIALIZE) as unknown as Json)
-  ),
-  getParams: () => ({
-    description: description,
-    itemSpec: itemField(undefined, Mode.GET_PARAMS) as unknown as Json
-  }),
-})
+  }
+  serialize(deserialized: T[]): Json {
+    return deserialized.map(
+      (it, index) => withErrorDecoration(index, () => this.params.itemField.serialize(it) as unknown as Json)
+    )
+  }
+  getParams(): Json {
+    return {
+      description: this.params.description,
+      itemSpec: this.params.itemField.getParams()
+    };
+  }
+}
+
+const arrayField = <T> (
+  itemField: Field<T>,
+  description?: string
+): Field<T[]> =>
+    new ArrayField({
+      itemField,
+      description
+    });
 
 export default arrayField;

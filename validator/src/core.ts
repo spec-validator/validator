@@ -1,23 +1,15 @@
-import { merge } from './utils';
-
-export enum Mode {
-    GET_PARAMS = '~~GET_PARAMS~~',
-    SERIALIZE = '~~SERIALIZE~~',
-    VALIDATE = '~~VALIDATE~~'
-}
-
 export interface Field<ExpectedType> {
-  (value: any, mode: Mode): ExpectedType;
+  validate(value: any): ExpectedType;
+  serialize(deserialized: ExpectedType): Json
+  getParams: () => Json
 }
-
-type ValidatorFunctionConstructor<Params, ExpectedType> = (params?: Partial<Params>) => Field<ExpectedType>
 
 export type ValidatorSpec<ExpectedType> = {
   [P in keyof ExpectedType]: Field<ExpectedType[P]>;
 };
 
 export type TypeHint<Spec extends ValidatorSpec<any>> = {
-  [P in keyof Spec]: ReturnType<Spec[P]>;
+  [P in keyof Spec]: ReturnType<Spec[P]['validate']>;
 }
 
 export type Primitive =
@@ -72,45 +64,13 @@ const mapSpec = <ExpectedType, R> (
   }
 }
 
-const mergeDefined = <T> (full: T, partial?: Partial<T>): Partial<T> =>
-  Object.fromEntries(
-    Object.entries(
-      merge(full, partial)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ).filter(([_, validator]) => validator !== undefined)
-  ) as Partial<T>;
-
 export const getParams = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>): any =>
-  mapSpec(validatorSpec, validator => validator(undefined, Mode.GET_PARAMS));
+  mapSpec(validatorSpec, validator => validator.getParams());
 
 // The whole point of the library is to validate wildcard objects
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const validate = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>, value: any): ExpectedType =>
-  mapSpec(validatorSpec, (validator, key) => validator(value[key], Mode.VALIDATE));
+  mapSpec(validatorSpec, (validator, key) => validator.validate(value[key]));
 
 export const serialize = <ExpectedType> (validatorSpec: ValidatorSpec<ExpectedType>, value: ExpectedType): any =>
-  mapSpec(validatorSpec, (validator, key) => validator((value as any)[key], Mode.SERIALIZE));
-
-export const declareField = <ExpectedType> (conf: {
-  validate: (value: any) => ExpectedType,
-  serialize: (value: ExpectedType) => Json,
-  getParams: () => Json
-}): Field<ExpectedType> => (value: any, mode: Mode) => ({
-    [Mode.GET_PARAMS]: conf.getParams,
-    [Mode.SERIALIZE]: () => conf.serialize(value) as any,
-    [Mode.VALIDATE]: () => conf.validate(value) as any
-  })[mode]()
-
-export const declareParametrizedField = <ExpectedType, Params> (conf: {
-  defaultParams: Params,
-  validate: (params: Partial<Params>, value: any) => ExpectedType,
-  serialize: (params: Partial<Params>, value: ExpectedType) => Json,
-  getParams: (params: Partial<Params>) => Json
-}): ValidatorFunctionConstructor<Params, ExpectedType> => (params?: Partial<Params>) => {
-    const actualParams = mergeDefined(conf.defaultParams, params);
-    return declareField({
-      validate: conf.validate.bind(null, actualParams),
-      serialize: conf.serialize.bind(null, actualParams),
-      getParams: conf.getParams.bind(null, actualParams)
-    })
-  }
+  mapSpec(validatorSpec, (validator, key) => validator.serialize((value as any)[key]));

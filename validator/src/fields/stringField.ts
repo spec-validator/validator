@@ -1,30 +1,43 @@
-import { declareParametrizedField } from '../core';
-import { optionalOf } from '../utils';
+import { Field, Json } from '../core';
 
-const stringField = declareParametrizedField({
-  defaultParams: {
-    minLength: optionalOf<number>(),
-    maxLength: optionalOf<number>(),
-    description: optionalOf<string>()
-  },
-  validate: (params, value): string => {
+type Params = {
+  minLength?: number,
+  maxLength?: number,
+  description?: string
+}
+
+class StringField implements Field<string> {
+  private params?: Params;
+
+  constructor(params?: Params) {
+    this.params = params;
+  }
+
+  validate(value: any): string {
     if (typeof value !== 'string') {
       throw 'Not a string'
     }
-    if (params?.minLength !== undefined) {
-      if (value.length < params.minLength) {
+    if (this.params?.minLength !== undefined) {
+      if (value.length < this.params.minLength) {
         throw 'String is too short'
       }
     }
-    if (params?.maxLength !== undefined) {
-      if (value.length > params.maxLength) {
+    if (this.params?.maxLength !== undefined) {
+      if (value.length > this.params.maxLength) {
         throw 'String is too long'
       }
     }
     return value;
-  },
-  serialize: (_, value: string) => value,
-  getParams: (params) => params
-})
+  }
+  serialize(deserialized: string): Json {
+    return deserialized
+  }
+  getParams() {
+    return this.params
+  }
+
+}
+
+const stringField = (params: Params): Field<string> => new StringField(params);
 
 export default stringField;
