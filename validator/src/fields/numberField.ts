@@ -1,14 +1,19 @@
 import { Field, Json } from '../core'
+import { WithRegExp } from '../segmentChain';
 
 type Params = {
   description?: string
 }
 
-class NumberField implements Field<number> {
+class NumberField implements Field<number>, WithRegExp {
   private params?: Params
 
   constructor(params?: Params) {
     this.params = params;
+  }
+
+  regex() {
+    return /[+-]?\d+(\.\d+)/
   }
 
   validate(value: any): number {
@@ -28,6 +33,6 @@ class NumberField implements Field<number> {
   }
 }
 
-const numberField = (params?: Params): Field<number> => new NumberField(params);
+const numberField = (params?: Params): Field<number> & WithRegExp => new NumberField(params);
 
 export default numberField;

@@ -1,18 +1,18 @@
 import { Field, validate } from './core';
 
-export interface WithRegex {
-  regex: () => string
+export interface WithRegExp {
+  regex: () => RegExp
 }
 
 class Segment<ExpectedType> {
 
   private parent?: Segment<unknown>
   private key?: string;
-  private field?: Field<unknown> & WithRegex
+  private field?: Field<unknown> & WithRegExp
 
   private regex?: string
 
-  constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown> & WithRegex) {
+  constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown> & WithRegExp) {
     this.parent = parent;
     this.key = key;
     this.field = field;
@@ -20,7 +20,7 @@ class Segment<ExpectedType> {
 
   _<Key extends string, ExtraExpectedType=undefined>(
     key: Key,
-    field?: Field<ExtraExpectedType> & WithRegex
+    field?: Field<ExtraExpectedType> & WithRegExp
   ): ExtraExpectedType extends undefined ? Segment<ExpectedType> : Segment<ExpectedType & {
     [P in Key]: ExtraExpectedType
   }> {
@@ -47,7 +47,7 @@ class Segment<ExpectedType> {
     if (!this.regex) {
       this.regex = this.getSegments()
         .map(segment => segment.field && segment.key
-          ? `(${segment.field.regex()})`
+          ? `(${segment.field.regex().source})`
           : (segment.key || '')
         ).join('');
     }
@@ -63,6 +63,10 @@ class Segment<ExpectedType> {
     const raw = Object.fromEntries(matches.map((match, i) => [segments[i].key, match]));
     const spec = Object.fromEntries(segments.map(segment => [segment.key, segment.field]));
     return validate(spec, raw);
+  }
+
+  toString() {
+    return this.getRegex()
   }
 }
 

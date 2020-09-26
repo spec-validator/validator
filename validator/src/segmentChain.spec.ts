@@ -15,6 +15,8 @@ test('basics', () => {
 
   const valid = segmentSpec.match('/john-sick/todos/11/subtodos/42')
 
+  console.log(segmentSpec.toString())
+
   expect(valid).toEqual({
     username: 'john-sick',
     uid: 11,
