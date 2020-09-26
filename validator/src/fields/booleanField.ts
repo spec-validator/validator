@@ -15,6 +15,12 @@ class BooleanField implements Field<boolean>, WithRegExp {
     return /true|false|1|0/
   }
   validate(value: any): boolean {
+    if (value === 'true' || value === 1) {
+      value = true
+    }
+    if (value === 'false' || value === 0) {
+      value = false
+    }
     if (value !== true && value !== false) {
       throw 'Not a boolean'
     }
