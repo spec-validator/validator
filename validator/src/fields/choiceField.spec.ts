@@ -1,7 +1,6 @@
 import { choiceField } from '.';
 import { TypeHint, validate } from '../core';
 import { root, SegmentTypeHint } from '../segmentChain';
-import stringField from './stringField';
 
 describe('spec', () => {
 
@@ -40,6 +39,9 @@ describe('segmentChain', () => {
     const spec = root
       ._('/')
       ._('choice', choiceField([1, 2] as const))
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    type Spec = SegmentTypeHint<typeof spec>
 
     const parsed = spec.match('/1')
 
