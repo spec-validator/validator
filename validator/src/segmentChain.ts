@@ -45,11 +45,11 @@ export class Segment<ExpectedType> {
 
   private getRegex(): string {
     if (!this.regex) {
-      this.regex = this.getSegments()
+      this.regex = `^${this.getSegments()
         .map(segment => segment.field && segment.key
           ? `(${segment.field.regex().source})`
           : (segment.key || '')
-        ).join('');
+        ).join('')}$`;
     }
     return this.regex;
   }

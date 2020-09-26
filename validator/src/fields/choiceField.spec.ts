@@ -21,13 +21,16 @@ describe('spec', () => {
     const spec = {
       field: choiceField([1, 2, 3] as const),
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let error: any = null;
     try {
       validate(spec, {
         field: 4
       });
     } catch (err) {
-      expect(err).toEqual({'inner': 'Invalid choice', 'path': ['field']})
+      error = err;
     }
+    expect(error).toEqual({'inner': 'Invalid choice', 'path': ['field']})
   });
 
 });
@@ -36,10 +39,29 @@ describe('segmentChain', () => {
   it('allows valid choices to get throw', () => {
     const spec = root
       ._('/')
-      ._('title', stringField())
+      ._('choice', choiceField([1, 2] as const))
+
+    const parsed = spec.match('/1')
+
+    expect(parsed.choice).toEqual(1);
+
+  });
+
+  it('prevents invalid choices from getting through', () => {
+    const spec = root
       ._('/')
       ._('choice', choiceField([1, 2] as const))
 
-    const parsed = spec.match('/sampe-foo/12')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let error: any = null;
+    try {
+      const foo = spec.match('/12')
+      console.log(foo)
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toEqual('Didn\'t match')
+
+  });
 
 });
