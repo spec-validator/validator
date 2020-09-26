@@ -2,6 +2,7 @@ import { Field, Json } from '../core'
 import { WithRegExp } from '../segmentChain';
 
 type Params = {
+  canBeFloat?: boolean,
   description?: string
 }
 
@@ -17,9 +18,16 @@ class NumberField implements Field<number>, WithRegExp {
   }
 
   validate(value: any): number {
-    value = Number.parseInt(value);
-    if (typeof value !== 'number') {
-      throw 'Not a number'
+    if (this.params?.canBeFloat) {
+      value = Number.parseFloat(value);
+      if (typeof value !== 'number') {
+        throw 'Not a float'
+      }
+    } else {
+      value = Number.parseInt(value);
+      if (typeof value !== 'number') {
+        throw 'Not an int'
+      }
     }
     return value
   }
