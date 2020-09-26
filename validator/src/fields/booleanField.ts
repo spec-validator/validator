@@ -6,9 +6,9 @@ type Params = {
 }
 
 class BooleanField implements Field<boolean>, WithRegExp {
-  private params: Params;
+  private params?: Params;
 
-  constructor(params: Params) {
+  constructor(params?: Params) {
     this.params = params;
   }
   regex() {
@@ -31,12 +31,12 @@ class BooleanField implements Field<boolean>, WithRegExp {
   }
   getParams() {
     return {
-      description: this.params.description
+      description: this.params?.description
     }
   }
 
 }
 
-const booleanField = (params: Params): Field<boolean> => new BooleanField(params)
+const booleanField = (params?: Params): Field<boolean> => new BooleanField(params)
 
 export default booleanField;
