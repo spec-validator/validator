@@ -13,11 +13,7 @@ test('basics', () => {
     ._('/subtodos/')
     ._('suid', numberField());
 
-  console.log('FFF', segmentSpec.toString())
-
-
   const valid = segmentSpec.match('/john-sick/todos/11/subtodos/42')
-
 
   expect(valid).toEqual({
     username: 'john-sick',
