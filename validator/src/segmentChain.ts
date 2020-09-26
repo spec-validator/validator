@@ -1,19 +1,19 @@
 import { Field, validate } from './core';
 
+const REGEX_GROUP = '(.*)'
+
 class Segment<ExpectedType> {
 
   private parent?: Segment<unknown>
   private key?: string;
   private field?: Field<unknown>
 
-  private regex?: RegExp
-  private innerRegex: string
+  private regex?: string
 
   constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown>) {
     this.parent = parent;
     this.key = key;
     this.field = field;
-    this.innerRegex = `(${ field.regex || '.*' })`
   }
 
   _<Key extends string, ExtraExpectedType=undefined>(
@@ -41,13 +41,13 @@ class Segment<ExpectedType> {
     return this.getSegments().filter(segment => segment.field)
   }
 
-  private getRegex(): RegExp {
+  private getRegex(): string {
     if (!this.regex) {
-      this.regex = new RegExp(this.getSegments()
+      this.regex = this.getSegments()
         .map(segment => segment.field && segment.key
-          ? this.innerRegex
+          ? REGEX_GROUP
           : (segment.key || '')
-        ).join(''));
+        ).join('');
     }
     return this.regex;
   }
