@@ -40,7 +40,6 @@ class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> imple
 
 }
 
-
 const choiceField = <Choices extends readonly Primitive[], T=Choices[number]> (params: Params<Choices>): Field<T> =>
   new ChoiceField(params)
 
