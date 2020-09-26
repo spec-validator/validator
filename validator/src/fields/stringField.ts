@@ -1,5 +1,5 @@
 import { Field, Json } from '../core';
-import { RegExpCanBeEnabled, WithRegExp } from '../segmentChain';
+import { WithRegExp } from '../segmentChain';
 
 type Params = {
   minLength?: number,
@@ -7,14 +7,11 @@ type Params = {
   description?: string
 }
 
-class StringField implements Field<string>, RegExpCanBeEnabled<string> {
+class StringField implements Field<string>, WithRegExp {
   private params?: Params;
 
   constructor(params?: Params) {
     this.params = params;
-  }
-  enableRegExp(): Field<string> & WithRegExp {
-    return this;
   }
   regex() {
     return /.*/
