@@ -13,7 +13,7 @@ class NumberField implements Field<number>, WithRegExp {
   }
 
   regex() {
-    return /[+-]?\d+(\.\d+)/
+    return /[+-]?\d+(\.\d+)?/
   }
 
   validate(value: any): number {
