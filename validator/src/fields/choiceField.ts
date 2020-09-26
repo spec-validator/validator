@@ -1,5 +1,6 @@
 import { Field, Json, Primitive } from '../core';
 import { WithRegExp } from '../segmentChain';
+import { escapeRegex } from '../utils';
 
 type Params<Choices> = {
   choices: Choices,
@@ -19,7 +20,9 @@ class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> imple
     this.choicesSet = new Set(params.choices)
     this.stringChoiceMap = Object.fromEntries(params.choices.map(it => [it.toString(), it]))
   }
-  regex: () => RegExp;
+  regex() {
+    return new RegExp(Object.keys(this.stringChoiceMap).map(escapeRegex).join('|'));
+  }
 
   validate(value: any): T {
     if (this.choicesSet.has(value)) {
@@ -40,8 +43,14 @@ class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> imple
 
 }
 
-const choiceField = <Choices extends readonly Primitive[], T=Choices[number]> (params: Params<Choices>): Field<T> =>
-  new ChoiceField(params)
+const choiceField = <
+  Choices extends readonly Primitive[],
+  T=Choices[number]
+> (choices: Choices, description?: string): Field<T> & WithRegExp =>
+    new ChoiceField({
+      choices,
+      description
+    })
 
 export default choiceField;
 
