@@ -4,7 +4,7 @@ export interface WithRegExp {
   regex: () => RegExp
 }
 
-class Segment<ExpectedType> {
+export class Segment<ExpectedType> {
 
   private parent?: Segment<unknown>
   private key?: string;
@@ -65,9 +65,11 @@ class Segment<ExpectedType> {
     return validate(spec, raw);
   }
 
-  toString() {
+  toString(): string {
     return this.getRegex()
   }
 }
+
+export type SegmentTypeHint<Spec extends Segment<any>> = ReturnType<Spec['match']>
 
 export const root = new Segment();
