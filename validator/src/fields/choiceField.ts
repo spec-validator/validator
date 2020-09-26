@@ -1,11 +1,12 @@
 import { Field, Json, Primitive } from '../core';
+import { WithRegExp } from '../segmentChain';
 
 type Params<Choices> = {
   choices: Choices,
   description?: string
 }
 
-class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> implements Field<T> {
+class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> implements Field<T>, WithRegExp {
   private params: Params<Choices>
   private choicesSet: Set<Primitive>
 
@@ -16,6 +17,7 @@ class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> imple
     this.params = params
     this.choicesSet = new Set(params.choices)
   }
+  regex: () => RegExp;
 
   validate(value: any): T {
     if (!this.choicesSet.has(value)) {
