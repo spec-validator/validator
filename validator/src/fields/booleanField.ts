@@ -12,7 +12,7 @@ class BooleanField implements Field<boolean>, WithRegExp {
     this.params = params;
   }
   regex() {
-    return /[true|false|1|0]/
+    return /true|false|1|0/
   }
   validate(value: any): boolean {
     if (value !== true && value !== false) {
