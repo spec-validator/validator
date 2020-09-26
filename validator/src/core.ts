@@ -6,7 +6,9 @@ export enum Mode {
     VALIDATE = '~~VALIDATE~~'
 }
 
-export type Field<ExpectedType> = (value: any, mode: Mode) => ExpectedType;
+export interface Field<ExpectedType> {
+  (value: any, mode: Mode): ExpectedType;
+}
 
 type ValidatorFunctionConstructor<Params, ExpectedType> = (params?: Partial<Params>) => Field<ExpectedType>
 
