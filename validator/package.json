@@ -1,5 +1,8 @@
 {
   "name": "@validator/validator",
   "license": "Apache-2.0",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "scripts": {
+    "ts-node ../build.ts"
+  }
 }
