@@ -5,7 +5,7 @@ import {
   testValidateSegmentChainOK,
   testValidateSpecError,
   testValidateSpecOk
-} from './TestUtils.spec';
+} from '../TestUtils.spec';
 
 const field = stringField({
   regex: /[A-Z]+/
