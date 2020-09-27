@@ -1,4 +1,7 @@
 {
   "name": "rest-api-server",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "dependencies": {
+    "@validator/validator": "0.0.1"
+  }
 }
