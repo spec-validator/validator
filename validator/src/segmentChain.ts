@@ -4,6 +4,10 @@ export interface WithRegExp {
   regex: () => RegExp
 }
 
+export interface WithRegExpSupport {
+  getFieldWithRegExp(): Field<unknown> & WithRegExp
+}
+
 export class Segment<ExpectedType> {
 
   private parent?: Segment<unknown>
@@ -12,15 +16,15 @@ export class Segment<ExpectedType> {
 
   private regex?: string
 
-  constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown> & WithRegExp) {
+  constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown> & WithRegExpSupport) {
     this.parent = parent;
     this.key = key;
-    this.field = field;
+    this.field = field?.getFieldWithRegExp();
   }
 
   _<Key extends string, ExtraExpectedType=undefined>(
     key: Key,
-    field?: Field<ExtraExpectedType> & WithRegExp
+    field?: Field<ExtraExpectedType> & WithRegExpSupport
   ): Segment<[ExtraExpectedType] extends [undefined] ? ExpectedType : ExpectedType & {
     [P in Key]: ExtraExpectedType
   }> {

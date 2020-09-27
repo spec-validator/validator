@@ -1,15 +1,18 @@
 import { Field, Json } from '../core'
-import { WithRegExp } from '../segmentChain';
+import { WithRegExp, WithRegExpSupport } from '../segmentChain';
 
 type Params = {
   description?: string
 }
 
-class BooleanField implements Field<boolean>, WithRegExp {
+class BooleanField implements Field<boolean>, WithRegExpSupport {
   private params?: Params;
 
   constructor(params?: Params) {
     this.params = params;
+  }
+  getFieldWithRegExp(): Field<unknown> & WithRegExp {
+    return new BooleanFieldWithRegexp(this.params)
   }
   regex() {
     return /true|false|1|0/
@@ -34,9 +37,22 @@ class BooleanField implements Field<boolean>, WithRegExp {
       description: this.params?.description
     }
   }
+}
+
+class BooleanFieldWithRegexp extends BooleanField {
+
+  validate(value: any): boolean {
+    if (value === 'true' || value === '1' || value == 1) {
+      value = true
+    }
+    if (value === 'false' || value === '0' || value == 0) {
+      value = false
+    }
+    return super.validate(value)
+  }
 
 }
 
-const booleanField = (params?: Params): Field<boolean> => new BooleanField(params)
+const booleanField = (params?: Params): BooleanField => new BooleanField(params)
 
 export default booleanField;

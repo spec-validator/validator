@@ -6,11 +6,11 @@ describe('spec', () => {
 
   it('allows valid choices to get throw', () => {
     [true, 1, 'true'].forEach(it => {
-      expect(field.validate(it)).toEqual(true);
+      expect(field.getFieldWithRegExp().validate(it)).toEqual(true);
     });
 
     [false, 0, 'false'].forEach(it => {
-      expect(field.validate(it)).toEqual(false);
+      expect(field.getFieldWithRegExp().validate(it)).toEqual(false);
     });
   });
 
