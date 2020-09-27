@@ -13,22 +13,16 @@ class NumberField implements Field<number>, WithRegExpSupport {
     this.params = params;
   }
   getFieldWithRegExp(): Field<unknown> & WithRegExp {
-    throw new Error('Method not implemented.');
-  }
-
-  regex() {
-    return /\d+/
+    return new NumberFieldWithRegExp(this.params)
   }
 
   validate(value: any): number {
     if (this.params?.canBeFloat) {
-      value = Number.parseFloat(value);
       if (typeof value !== 'number') {
         throw 'Not a float'
       }
     } else {
-      value = Number.parseInt(value);
-      if (typeof value !== 'number') {
+      if (typeof value !== 'number' || value !== Math.floor(value)) {
         throw 'Not an int'
       }
     }
@@ -44,6 +38,18 @@ class NumberField implements Field<number>, WithRegExpSupport {
   }
 }
 
-const numberField = (params?: Params): Field<number> & WithRegExp => new NumberField(params);
+class NumberFieldWithRegExp extends NumberField implements WithRegExp {
+
+  regex() {
+    return /\d+/
+  }
+
+  validate(value: any) {
+    return super.validate(Number.parseFloat(value));
+  }
+
+}
+
+const numberField = (params?: Params): Field<number> & WithRegExpSupport => new NumberField(params);
 
 export default numberField;

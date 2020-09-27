@@ -12,7 +12,7 @@ class BooleanField implements Field<boolean>, WithRegExpSupport {
     this.params = params;
   }
   getFieldWithRegExp(): Field<unknown> & WithRegExp {
-    return new BooleanFieldWithRegexp(this.params)
+    return new BooleanFieldWithRegExp(this.params)
   }
   validate(value: any): boolean {
     if (value !== true && value !== false) {
@@ -30,7 +30,7 @@ class BooleanField implements Field<boolean>, WithRegExpSupport {
   }
 }
 
-class BooleanFieldWithRegexp extends BooleanField implements WithRegExp {
+class BooleanFieldWithRegExp extends BooleanField implements WithRegExp {
 
   regex() {
     return /true|false|1|0/

@@ -16,7 +16,7 @@ class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> imple
     this.choicesSet = new Set(params.choices)
   }
   getFieldWithRegExp(): Field<unknown> & WithRegExp {
-    return new ChoiceFieldWithRegexp(this.params);
+    return new ChoiceFieldWithRegExp(this.params);
   }
 
   validate(value: any): T {
@@ -34,7 +34,7 @@ class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> imple
 
 }
 
-class ChoiceFieldWithRegexp<
+class ChoiceFieldWithRegExp<
   Choices extends readonly Primitive[]
 > extends ChoiceField<Choices> implements WithRegExp {
 
