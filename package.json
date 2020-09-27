@@ -19,10 +19,6 @@
   },
   "private": true,
   "license": "Apache-2.0",
-  "workspaces": [
-    "packages/validator",
-    "packages/rest-api-server"
-  ],
   "nodemonConfig": {
     "ignore": ["*.spec.ts", "*.mkd", ".git", "node_modules/*", "dist/*", "jest.config.js"],
     "delay": "2500"

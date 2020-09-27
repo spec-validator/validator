@@ -4,8 +4,8 @@
   "compilerOptions": {
     "baseUrl": "./packages",
     "paths": {
-      "@validator/validator": ["validator/src"],
-      "@validator/rest-api-server": ["rest-api-server/src"],
+      "@validator/validator/*": ["validator/src/*"],
+      "@validator/rest-api-server/*": ["rest-api-server/src/*"],
     }
   }
 }

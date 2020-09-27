@@ -1,1 +1,1 @@
-import { root } from '@validator/validator';
+import { root } from '@validator/validator/segmentChain';
