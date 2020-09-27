@@ -1,16 +1,19 @@
 import { Field, Json } from '../core'
-import { WithRegExp } from '../segmentChain';
+import { WithRegExp, WithRegExpSupport } from '../segmentChain';
 
 type Params = {
   canBeFloat?: boolean,
   description?: string
 }
 
-class NumberField implements Field<number>, WithRegExp {
+class NumberField implements Field<number>, WithRegExpSupport {
   private params?: Params
 
   constructor(params?: Params) {
     this.params = params;
+  }
+  getFieldWithRegExp(): Field<unknown> & WithRegExp {
+    throw new Error('Method not implemented.');
   }
 
   regex() {

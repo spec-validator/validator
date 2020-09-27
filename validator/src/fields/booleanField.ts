@@ -14,16 +14,7 @@ class BooleanField implements Field<boolean>, WithRegExpSupport {
   getFieldWithRegExp(): Field<unknown> & WithRegExp {
     return new BooleanFieldWithRegexp(this.params)
   }
-  regex() {
-    return /true|false|1|0/
-  }
   validate(value: any): boolean {
-    if (value === 'true' || value === '1' || value == 1) {
-      value = true
-    }
-    if (value === 'false' || value === '0' || value == 0) {
-      value = false
-    }
     if (value !== true && value !== false) {
       throw 'Not a boolean'
     }
@@ -39,7 +30,11 @@ class BooleanField implements Field<boolean>, WithRegExpSupport {
   }
 }
 
-class BooleanFieldWithRegexp extends BooleanField {
+class BooleanFieldWithRegexp extends BooleanField implements WithRegExp {
+
+  regex() {
+    return /true|false|1|0/
+  }
 
   validate(value: any): boolean {
     if (value === 'true' || value === '1' || value == 1) {
