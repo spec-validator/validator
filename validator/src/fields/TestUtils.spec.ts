@@ -2,6 +2,8 @@
 import { Field, validate } from '../core';
 import { root, WithRegExpSupport } from '../segmentChain';
 
+test.skip('Workaround', () => 1)
+
 export const testValidateSpecOk = <T> (field: Field<T>, input: any, expected: T): void => {
   expect(validate({
     field
