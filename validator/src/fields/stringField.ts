@@ -1,5 +1,5 @@
-import { Field, Json } from '../../core';
-import { WithRegExp, WithRegExpSupport } from '../../segmentChain';
+import { Field, Json } from '../core';
+import { WithRegExp, WithRegExpSupport } from '../segmentChain';
 
 type Params = {
   regex?: RegExp,
