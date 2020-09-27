@@ -4,7 +4,8 @@
     "lint:fix": "yarn lint --fix",
     "test": "jest --config ./jest.conf.js --passWithNoTests",
     "build": "yarn workspaces run build",
-    "link-build": "yarn workspaces run link-build"
+    "link-build": "yarn workspaces run link-build",
+    "dev": "nodemon --exec \"yarn build && yarn link-build\""
   },
   "devDependencies": {
     "@types/jest": "^26.0.13",
@@ -14,11 +15,19 @@
     "eslint": "^7.8.1",
     "eslint-plugin-jest-formatting": "^2.0.0",
     "jest": "^26.4.2",
+    "nodemon": "^2.0.4",
     "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
     "typescript": "4.0.2"
   },
   "private": true,
   "license": "Apache-2.0",
-  "workspaces": ["validator", "rest-api-server"]
+  "workspaces": [
+    "validator",
+    "rest-api-server"
+  ],
+  "nodemonConfig": {
+    "ignore": ["*.spec.ts", "*.mkd", ".git", "node_modules/*", "dist/*", "jest.config.js"],
+    "delay": "2500"
+  }
 }
