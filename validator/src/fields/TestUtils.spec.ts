@@ -56,5 +56,9 @@ export const testValidateSegmentChainError = <T> (
   } catch (err) {
     error = err;
   }
-  expect(error).toEqual(expectedError)
+  if (expectedError === 'Didn\'t match') {
+    expect(error).toEqual(expectedError);
+  } else {
+    expect(error).toEqual({'inner': expectedError, 'path': ['field']})
+  }
 }

@@ -3,11 +3,12 @@ import { WithRegExp, WithRegExpSupport } from '../segmentChain';
 
 type Params = {
   canBeFloat?: boolean,
+  signed?: boolean,
   description?: string
 }
 
 class NumberField implements Field<number>, WithRegExpSupport {
-  private params?: Params
+  protected params?: Params
 
   constructor(params?: Params) {
     this.params = params;
@@ -26,6 +27,11 @@ class NumberField implements Field<number>, WithRegExpSupport {
         throw 'Not an int'
       }
     }
+    if (!this.params?.signed) {
+      if (value < 0) {
+        throw 'Must be unsigned'
+      }
+    }
     return value
   }
   serialize(deserialized: number): Json {
@@ -41,7 +47,15 @@ class NumberField implements Field<number>, WithRegExpSupport {
 class NumberFieldWithRegExp extends NumberField implements WithRegExp {
 
   regex() {
-    return /\d+/
+    const parts: string[] = []
+    if (this.params?.signed) {
+      parts.push('-?')
+    }
+    parts.push('\\d+')
+
+    return RegExp(parts.join(''))
+
+    //return /[+-]?\d+/
   }
 
   validate(value: any) {
