@@ -16,6 +16,11 @@ type Response<Data, Headers> = {
 }
 
 class Server {
+  private docsRoute: string;
+
+  constructor(docsRoute='/docs') {
+    this.docsRoute = docsRoute;
+  }
 
   route<PathParams, RequestData, ResponseData, QueryParams, RequestHeaders, ResponseHeaders>(config: {
     method: Method,
