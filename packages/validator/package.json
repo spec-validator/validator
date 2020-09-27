@@ -3,7 +3,6 @@
   "license": "Apache-2.0",
   "version": "0.0.1",
   "scripts": {
-    "build": "ts-node ../build.ts",
-    "link-build": "yarn --cwd=dist link"
+    "build": "ts-node ../build.ts"
   }
 }
