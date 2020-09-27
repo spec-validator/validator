@@ -51,7 +51,7 @@ export class Segment<ExpectedType> {
     if (!this.regex) {
       this.regex = `^${this.getSegments()
         .map(segment => segment.field && segment.key
-          ? `(${segment.field.regex().source})`
+          ? `(?<${segment.key}>${segment.field.regex().source})`
           : (segment.key || '')
         ).join('')}$`;
     }
@@ -59,14 +59,13 @@ export class Segment<ExpectedType> {
   }
 
   match(value: string): ExpectedType {
-    const matches = value.match(this.getRegex())?.slice(1);
+    const matches = value.match(this.getRegex())?.groups;
     if (!matches) {
       throw 'Didn\'t match'
     }
     const segments = this.getFieldSegments();
-    const raw = Object.fromEntries(matches.map((match, i) => [segments[i].key, match]));
     const spec = Object.fromEntries(segments.map(segment => [segment.key, segment.field]));
-    return validate(spec, raw);
+    return validate(spec, matches);
   }
 
   toString(): string {
