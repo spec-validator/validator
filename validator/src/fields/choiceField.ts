@@ -8,7 +8,7 @@ type Params<Choices> = {
 }
 
 class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> implements Field<T>, WithRegExpSupport {
-  private params: Params<Choices>
+  protected params: Params<Choices>
   private choicesSet: Set<Primitive>
 
   constructor(params: Params<Choices>) {
@@ -51,7 +51,11 @@ class ChoiceFieldWithRegExp<
   }
 
   regex() {
-    return new RegExp(Object.keys(this.fullChoiceMap).map(escapeRegex).join('|'));
+    return new RegExp(Object.keys(this.params.choices)
+      .map(it => it.toString())
+      .map(escapeRegex)
+      .join('|')
+    );
   }
 
   validate(value: any): Choices[number] {

@@ -1,4 +1,4 @@
-import { choiceField } from '.';
+import choiceField from './choiceField';
 import { TypeHint } from '../core';
 import { root, SegmentTypeHint } from '../segmentChain';
 
