@@ -53,12 +53,10 @@ class NumberFieldWithRegExp extends NumberField implements WithRegExp {
     }
     parts.push('\\d+')
     if (this.params?.canBeFloat) {
-      parts.push('\\.?\\d+')
+      parts.push('(\\.\\d+)?')
     }
 
     return RegExp(parts.join(''))
-
-    //return /[+-]?\d+/
   }
 
   validate(value: any) {

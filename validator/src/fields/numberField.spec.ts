@@ -87,13 +87,13 @@ describe('segmentChain', () => {
     });
     testValidateSegmentChainOK(field, '12', 12);
     testValidateSegmentChainOK(field, '0', 0);
+    testValidateSegmentChainOK(field, '1.2', 1.2);
 
     testValidateSegmentChainError(field, '-1.2', 'Didn\'t match');
-    testValidateSegmentChainOK(field, '1.2', 1.2);
     testValidateSegmentChainError(field, 'A', 'Didn\'t match');
   });
 
-  it('floatField unsigned', () => {
+  it('floatField signed', () => {
     const field = numberField({
       signed: true,
       canBeFloat: true
