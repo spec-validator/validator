@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Field, validate } from '../core';
-import { root, WithRegExp, WithRegExpSupport } from '../segmentChain';
+import { root, WithRegExpSupport } from '../segmentChain';
 
 export const testValidateSpecOk = <T> (field: Field<T>, input: any, expected: T): void => {
   expect(validate({
