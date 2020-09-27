@@ -1,21 +1,22 @@
 import booleanField from './booleanField';
+import {
+  testValidateSegmentChainError,
+  testValidateSegmentChainOK,
+  testValidateSpecError,
+  testValidateSpecOk
+} from './TestUtils.spec';
 
 const field = booleanField()
 
 describe('spec', () => {
 
   it('allows valid choices to get throw', () => {
-    [true, 1, 'true'].forEach(it => {
-      expect(field.getFieldWithRegExp().validate(it)).toEqual(true);
-    });
-
-    [false, 0, 'false'].forEach(it => {
-      expect(field.getFieldWithRegExp().validate(it)).toEqual(false);
-    });
+    testValidateSpecOk(field, true, true);
+    testValidateSpecOk(field, false, false);
   });
 
   it('prevents invalid choices from getting through', () => {
-    // TODO
+    testValidateSpecError(field, 'foo', 'Not a boolean')
   });
 
 })
@@ -23,11 +24,12 @@ describe('spec', () => {
 describe('segmentChain', () => {
 
   it('allows valid choices to get throw', () => {
-    // TODO
+    ['1', 'true'].forEach(it => testValidateSegmentChainOK(field, it, true));
+    ['0', 'false'].forEach(it => testValidateSegmentChainOK(field, it, false));
   });
 
   it('prevents invalid choices from getting through', () => {
-    // TODO
+    testValidateSegmentChainError(field, 'foo', 'Didn\'t match');
   });
 
 })
