@@ -1,5 +1,5 @@
 import { Field, Json, Primitive } from '../core';
-import { WithRegExp, WithRegExpSupport } from '../segmentChain';
+import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport';
 import { escapeRegex } from '../utils';
 
 type Params<Choices> = {
@@ -7,7 +7,7 @@ type Params<Choices> = {
   description?: string
 }
 
-class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> implements Field<T>, WithRegExpSupport {
+class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> implements Field<T>, WithStringInputSupport {
   protected params: Params<Choices>
   private choicesSet: Set<Primitive>
 
@@ -67,7 +67,7 @@ class ChoiceFieldWithRegExp<
 const choiceField = <
   Choices extends readonly Primitive[],
   T=Choices[number]
-> (choices: Choices, description?: string): Field<T> & WithRegExpSupport =>
+> (choices: Choices, description?: string): Field<T> & WithStringInputSupport =>
     new ChoiceField({
       choices,
       description

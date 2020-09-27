@@ -1,11 +1,11 @@
 import { Field, Json } from '../core'
-import { WithRegExp, WithRegExpSupport } from '../segmentChain';
+import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport';
 
 type Params = {
   description?: string
 }
 
-class BooleanField implements Field<boolean>, WithRegExpSupport {
+class BooleanField implements Field<boolean>, WithStringInputSupport {
   private params?: Params;
 
   constructor(params?: Params) {
@@ -48,6 +48,6 @@ class BooleanFieldWithRegExp extends BooleanField implements WithRegExp {
 
 }
 
-const booleanField = (params?: Params): BooleanField => new BooleanField(params)
+const booleanField = (params?: Params): Field<boolean> & WithStringInputSupport => new BooleanField(params)
 
 export default booleanField;

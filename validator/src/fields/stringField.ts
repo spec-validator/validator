@@ -1,12 +1,12 @@
 import { Field, Json } from '../core';
-import { WithRegExp, WithRegExpSupport } from '../segmentChain';
+import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport';
 
 type Params = {
   regex?: RegExp,
   description?: string
 }
 
-class StringField implements Field<string>, WithRegExpSupport, WithRegExp {
+class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
   private params?: Params;
 
   constructor(params?: Params) {
@@ -42,6 +42,6 @@ class StringField implements Field<string>, WithRegExpSupport, WithRegExp {
 
 }
 
-const stringField = (params?: Params): Field<string> & WithRegExpSupport => new StringField(params);
+const stringField = (params?: Params): Field<string> & WithStringInputSupport => new StringField(params);
 
 export default stringField;

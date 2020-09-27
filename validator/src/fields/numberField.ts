@@ -1,5 +1,5 @@
 import { Field, Json } from '../core'
-import { WithRegExp, WithRegExpSupport } from '../segmentChain';
+import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport';
 
 type Params = {
   canBeFloat?: boolean,
@@ -7,7 +7,7 @@ type Params = {
   description?: string
 }
 
-class NumberField implements Field<number>, WithRegExpSupport {
+class NumberField implements Field<number>, WithStringInputSupport {
   protected params?: Params
 
   constructor(params?: Params) {
@@ -65,6 +65,6 @@ class NumberFieldWithRegExp extends NumberField implements WithRegExp {
 
 }
 
-const numberField = (params?: Params): Field<number> & WithRegExpSupport => new NumberField(params);
+const numberField = (params?: Params): Field<number> & WithStringInputSupport => new NumberField(params);
 
 export default numberField;

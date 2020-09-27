@@ -1,12 +1,5 @@
 import { Field, validate } from './core';
-
-export interface WithRegExp {
-  regex: () => RegExp
-}
-
-export interface WithRegExpSupport {
-  getFieldWithRegExp(): Field<unknown> & WithRegExp
-}
+import { WithRegExp, WithStringInputSupport } from './WithStringInputSupport';
 
 export class Segment<ExpectedType> {
 
@@ -16,7 +9,7 @@ export class Segment<ExpectedType> {
 
   private regex?: string
 
-  constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown> & WithRegExpSupport) {
+  constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown> & WithStringInputSupport) {
     this.parent = parent;
     this.key = key;
     this.field = field?.getFieldWithRegExp();
@@ -24,7 +17,7 @@ export class Segment<ExpectedType> {
 
   _<Key extends string, ExtraExpectedType=undefined>(
     key: Key,
-    field?: Field<ExtraExpectedType> & WithRegExpSupport
+    field?: Field<ExtraExpectedType> & WithStringInputSupport
   ): Segment<[ExtraExpectedType] extends [undefined] ? ExpectedType : ExpectedType & {
     [P in Key]: ExtraExpectedType
   }> {
