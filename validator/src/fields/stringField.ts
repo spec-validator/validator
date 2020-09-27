@@ -6,7 +6,7 @@ type Params = {
   description?: string
 }
 
-class StringField implements Field<string>, WithRegExpSupport {
+class StringField implements Field<string>, WithRegExpSupport, WithRegExp {
   private params?: Params;
 
   constructor(params?: Params) {
@@ -22,6 +22,12 @@ class StringField implements Field<string>, WithRegExpSupport {
     if (typeof value !== 'string') {
       throw 'Not a string'
     }
+    if (this.params?.regex) {
+      const match = value.match(`^${this.params.regex.source}$`)
+      if (!match) {
+        throw 'Doesn\'t match a regex'
+      }
+    }
     return value;
   }
   serialize(deserialized: string): Json {
@@ -36,6 +42,6 @@ class StringField implements Field<string>, WithRegExpSupport {
 
 }
 
-const stringField = (params?: Params): Field<string> & WithRegExp => new StringField(params);
+const stringField = (params?: Params): Field<string> & WithRegExpSupport => new StringField(params);
 
 export default stringField;

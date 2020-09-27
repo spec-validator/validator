@@ -1,13 +1,25 @@
 import stringField from './stringField';
 
+import {
+  testValidateSegmentChainError,
+  testValidateSegmentChainOK,
+  testValidateSpecError,
+  testValidateSpecOk
+} from './TestUtils.spec';
+
+const field = stringField({
+  regex: /[A-Z]+/
+})
+
 describe('spec', () => {
 
   it('allows valid choices to get throw', () => {
-    // TODO
+    testValidateSpecOk(field, 'AA', 'AA');
   });
 
   it('prevents invalid choices from getting through', () => {
-    // TODO
+    testValidateSpecError(field, false, 'Not a string');
+    testValidateSpecError(field, '12', 'Doesn\'t match a regex');
   });
 
 })
@@ -15,11 +27,11 @@ describe('spec', () => {
 describe('segmentChain', () => {
 
   it('allows valid choices to get throw', () => {
-    // TODO
+    testValidateSegmentChainOK(field, 'AA', 'AA');
   });
 
   it('prevents invalid choices from getting through', () => {
-    // TODO
+    testValidateSegmentChainError(field, '12', 'Didn\'t match');
   });
 
 })
