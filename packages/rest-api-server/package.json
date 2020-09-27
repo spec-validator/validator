@@ -1,0 +1,12 @@
+{
+  "name": "@validator/rest-api-server",
+  "license": "Apache-2.0",
+  "version": "0.0.1",
+  "dependencies": {
+    "@validator/validator": "0.0.1"
+  },
+  "scripts": {
+    "build": "ts-node ../build.ts",
+    "link-build": "yarn --cwd=dist link"
+  }
+}
