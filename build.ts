@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as proc from 'child_process';
 
 const runTypeScriptBuild = () => {
-  proc.spawnSync('yarn', ['tsc']);
+  proc.spawnSync('yarn', ['tsc', '--config', 'tsconfig.build.json']);
 }
 
 // we don't want release package.json to contain dev related stuff
