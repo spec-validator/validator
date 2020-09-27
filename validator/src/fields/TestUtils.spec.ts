@@ -37,9 +37,7 @@ export const testValidateSegmentChainOK = <T> (
     ._('/suffix');
 
   const valid = spec.match('/' + input + '/suffix');
-  expect((valid as any).field).toEqual({
-    field: expected
-  })
+  expect((valid as any).field).toEqual(expected)
 }
 
 export const testValidateSegmentChainError = <T> (
