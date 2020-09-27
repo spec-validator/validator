@@ -22,7 +22,7 @@ test('reports an error with full path leading to it if there are issues', () => 
       field: [1, 2, false]
     });
   } catch (err) {
-    expect(err).toEqual({'inner': 'Not a number', 'path': ['field', 2]})
+    expect(err).toEqual({'inner': 'Not an int', 'path': ['field', 2]})
   }
 });
 
