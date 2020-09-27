@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
     "target": "es6",
     "module": "commonjs",
     "lib": ["esnext"],
@@ -19,11 +18,8 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
-    "rootDir": "src",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "typeRoots": ["./node_modules/@types"]
-  },
-  "exclude": ["src/**/*.spec.ts"],
-  "include": ["src/**/*"]
+  }
 }

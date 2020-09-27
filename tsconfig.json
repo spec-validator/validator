@@ -1,11 +1,11 @@
 {
-    "extends": "./tsconfig.build.json",
+  "extends": "./tsconfig.build.json",
 
-    "compilerOptions": {
-      "baseUrl": "./packages",
-      "paths": {
-        "@validator/validator": ["validator/src"],
-        "@validator/open-api-gen": ["open-api-gen/src"],
-      }
+  "compilerOptions": {
+    "baseUrl": "./packages",
+    "paths": {
+      "@validator/validator": ["validator/src"],
+      "@validator/rest-api-server": ["rest-api-server/src"],
     }
   }
+}
