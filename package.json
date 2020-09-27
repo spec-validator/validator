@@ -2,7 +2,9 @@
   "scripts": {
     "lint": "eslint --config .eslintrc.json --ignore-path .gitignore './**/*.{js,ts,vue}'",
     "lint:fix": "yarn lint --fix",
-    "test": "jest --config ./jest.conf.js --passWithNoTests"
+    "test": "jest --config ./jest.conf.js --passWithNoTests",
+    "build": "yarn workspaces run build",
+    "link-build": "yarn workspaces run link-build"
   },
   "devDependencies": {
     "@types/jest": "^26.0.13",

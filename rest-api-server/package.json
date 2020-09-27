@@ -6,6 +6,7 @@
     "@validator/validator": "0.0.1"
   },
   "scripts": {
-    "build": "ts-node ../build.ts"
+    "build": "ts-node ../build.ts",
+    "link-build": "yarn --cwd=dist link"
   }
 }
