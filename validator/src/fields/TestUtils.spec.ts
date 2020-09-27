@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Field, validate } from '../core';
-import { root, WithRegExpSupport } from '../segmentChain';
+import { WithStringInputSupport } from '../WithStringInputSupport';
+import { root } from '../segmentChain';
 
 test.skip('Workaround', () => 1)
 
@@ -29,7 +30,7 @@ export const testValidateSpecError = <T> (field: Field<T>, input: any, expectedE
 }
 
 export const testValidateSegmentChainOK = <T> (
-  field: Field<T> & WithRegExpSupport,
+  field: Field<T> & WithStringInputSupport,
   input: string,
   expected: T
 ): void => {
@@ -43,7 +44,7 @@ export const testValidateSegmentChainOK = <T> (
 }
 
 export const testValidateSegmentChainError = <T> (
-  field: Field<T> & WithRegExpSupport, input: any, expectedError: any
+  field: Field<T> & WithStringInputSupport, input: any, expectedError: any
 ) => {
   const spec = root
     ._('/')
