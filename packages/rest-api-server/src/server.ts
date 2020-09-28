@@ -1,17 +1,18 @@
-import { Json, ValidatorSpec } from '@validator/validator/core';
+import { ValidatorSpec } from '@validator/validator/core';
 import { stringField } from '@validator/validator/fields';
 import { root, Segment } from '@validator/validator/segmentChain';
 
 type Method = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
 
-type Request<PathParams, Data, QueryParams, Headers> = {
+type Request<PathParams=undefined, Data=undefined, QueryParams=undefined, Headers=undefined> = {
   pathParams: PathParams,
   queryParams: QueryParams
   data: Data,
   headers: Headers
 }
 
-type Response<Data extends Json, Headers> = {
+type Response<Data=undefined, Headers=undefined> = {
+  statusCode: number,
   data?: Data,
   headers?: Headers,
 }
@@ -28,7 +29,7 @@ class Server {
     RequestData=undefined,
     RequestQueryParams=undefined,
     RequestHeaders=undefined,
-    ResponseData extends Json=undefined,
+    ResponseData=undefined,
     ResponseHeaders=undefined,
   >(config: {
     method: Method,
@@ -48,6 +49,17 @@ class Server {
   }) {
     config
     // TODO
+  }
+
+  get<ResponseData, RequestParams=undefined>(
+    path: Segment<RequestParams>,
+    handler: (request: Request<RequestParams>) => Response<ResponseData>
+  ) {
+    return this.route({
+      method: 'GET',
+      path: path,
+      handler: handler
+    })
   }
 
 }
