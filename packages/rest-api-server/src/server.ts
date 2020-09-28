@@ -1,9 +1,12 @@
+import { request } from 'http';
+
 import { ValidatorSpec } from '@validator/validator/core';
 import { stringField } from '@validator/validator/fields';
 import { root, Segment } from '@validator/validator/segmentChain';
-import { request } from 'http';
 
 type Request<PathParams=undefined, Data=undefined, QueryParams=undefined, Headers=undefined> = {
+  path: string;
+  method: string,
   pathParams: PathParams,
   queryParams: QueryParams
   data: Data,
@@ -20,19 +23,35 @@ type WRequest = Request<any, any, any, any>
 type WResponse = Response<any, any>
 
 type Route = {
-  method: string,
+  method?: string,
   path: Segment<unknown>,
   handler: (request: WRequest) => Promise<WResponse>
+}
+
+const matchRoute = (request: WRequest, route: Route): boolean => {
+  if (route.method && request.method !== route.method) {
+    return false;
+  }
+  try {
+    route.path.match(request.path);
+  } catch (err) {
+    return false;
+  }
+  return true;
 }
 
 export const handle = (
   routes: Route[],
   request: WRequest
-): Promise<WResponse> =>
+): Promise<WResponse> => {
+  const route = routes.find(matchRoute.bind(null, request))
+  if (!route) {
+    return Promise.reject(404);
+  }
 
+}
 
-
-  class Server {
+class Server {
   private docsRoute: string;
 
   constructor(docsRoute='/docs') {
@@ -82,7 +101,7 @@ export const handle = (
     })
   }
 
-  }
+}
 
 const srv = new Server();
 
