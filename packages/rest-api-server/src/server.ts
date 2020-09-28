@@ -1,5 +1,6 @@
-import { ValidatorSpec } from '@validator/validator/core';
-import { Segment } from '@validator/validator/segmentChain';
+import { Json, ValidatorSpec } from '@validator/validator/core';
+import { stringField } from '@validator/validator/fields';
+import { root, Segment } from '@validator/validator/segmentChain';
 
 type Method = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
 
@@ -10,9 +11,9 @@ type Request<PathParams, Data, QueryParams, Headers> = {
   headers: Headers
 }
 
-type Response<Data, Headers> = {
-  data: Data,
-  headers: Headers,
+type Response<Data extends Json, Headers> = {
+  data?: Data,
+  headers?: Headers,
 }
 
 class Server {
@@ -23,27 +24,42 @@ class Server {
   }
 
   route<
-    TRequest extends Request<unknown, unknown, unknown, unknown>,
-    TResponse extends Response<unknown, unknown>
+    RequestParams=undefined,
+    RequestData=undefined,
+    RequestQueryParams=undefined,
+    RequestHeaders=undefined,
+    ResponseData extends Json=undefined,
+    ResponseHeaders=undefined,
   >(config: {
     method: Method,
-    path: Segment<TRequest['pathParams']>,
-    requestSpec: {
-      data: ValidatorSpec<TRequest['data']>,
-      query: ValidatorSpec<TRequest['queryParams']>,
-      headers: ValidatorSpec<TRequest['headers']>
+    path: Segment<RequestParams>,
+    requestSpec?: {
+      data?: ValidatorSpec<RequestData>,
+      query?: ValidatorSpec<RequestQueryParams>,
+      headers?: ValidatorSpec<RequestHeaders>
     },
-    responseSpec: {
-      data: ValidatorSpec<TResponse['data']>,
-      headers: ValidatorSpec<TResponse['headers']>
+    responseSpec?: {
+      data?: ValidatorSpec<ResponseData>,
+      headers?: ValidatorSpec<ResponseHeaders>
     }
     handler: (
-      request: TRequest
-    ) => TResponse
+      request: Request<RequestParams, RequestData, RequestQueryParams, RequestHeaders>
+    ) => Response<ResponseData, ResponseHeaders>
   }) {
     config
     // TODO
   }
 
-
 }
+
+const srv = new Server();
+
+srv.route({
+  method: 'GET',
+  path: root._('/')._('username', stringField()),
+  handler: (request) => ({
+    data: {
+      username: request.pathParams.username
+    }
+  })
+})
