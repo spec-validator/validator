@@ -15,16 +15,16 @@ type Request<PathParams=any, Data=any, QueryParams=any, Headers=any> = {
 type Response<Data=any, Headers=any> = {
   statusCode?: number,
   data?: Data,
-  headers?: Headers,
+  headers?: Headers
 }
 
 type Route<
-  RequestParams=undefined,
-  RequestData=undefined,
-  RequestQueryParams=undefined,
-  RequestHeaders=undefined,
-  ResponseData=undefined,
-  ResponseHeaders=undefined,
+  RequestParams=any,
+  RequestData=any,
+  RequestQueryParams=any,
+  RequestHeaders=any,
+  ResponseData=any,
+  ResponseHeaders=any,
 > = {
   method?: string,
   pathSpec: Segment<unknown>,
@@ -56,6 +56,17 @@ const matchRoute = (request: http.IncomingMessage, route: Route): boolean => {
 
 const splitUrl = (url: string): [string, Record<string, string>] => ['', {}]
 
+const getData = async (msg: http.IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
+  try {
+    const chunks: string[] = [];
+    msg.on('readable', () => chunks.push(msg.read()));
+    msg.on('error', reject);
+    msg.on('end', () => resolve(chunks.join('')));
+  } catch (err) {
+    reject(err);
+  }
+})
+
 const handleRoute = async (
   route: Route,
   request: http.IncomingMessage,
@@ -67,11 +78,17 @@ const handleRoute = async (
     method: request.method || '',
     pathParams: route.pathSpec.match(request.url || ''),
     queryParams: validate(route?.requestSpec?.query || {}, query),
-    data: validate(route?.requestSpec?.data || {}, request.read()),
+    data: validate(route?.requestSpec?.data || {}, getData(request)),
     headers: validate(route?.requestSpec?.headers || {}, request.headers),
   }
-  const resp = route.handler(req);
-
+  const resp = await route.handler(req);
+  if (resp.headers) {
+    Object.entries(resp.headers).forEach(([key, value]) => {
+      it
+      // TODO;
+    });
+  }
+  response.setHeader()
 };
 
 const handle = async (
