@@ -12,7 +12,7 @@ type Request<PathParams, Data, QueryParams, Headers> = {
 
 type Response<Data, Headers> = {
   data: Data,
-  headers: Headers
+  headers: Headers,
 }
 
 class Server {
@@ -22,21 +22,24 @@ class Server {
     this.docsRoute = docsRoute;
   }
 
-  route<PathParams, RequestData, ResponseData, QueryParams, RequestHeaders, ResponseHeaders>(config: {
+  route<
+    TRequest extends Request<unknown, unknown, unknown, unknown>,
+    TResponse extends Response<unknown, unknown>
+  >(config: {
     method: Method,
+    path: Segment<TRequest['pathParams']>,
     requestSpec: {
-      path: Segment<PathParams>,
-      data: ValidatorSpec<RequestData>,
-      query: ValidatorSpec<QueryParams>,
-      headers: ValidatorSpec<RequestHeaders>
+      data: ValidatorSpec<TRequest['data']>,
+      query: ValidatorSpec<TRequest['queryParams']>,
+      headers: ValidatorSpec<TRequest['headers']>
     },
     responseSpec: {
-      data: ValidatorSpec<ResponseData>,
-      headers: ValidatorSpec<ResponseHeaders>
+      data: ValidatorSpec<TResponse['data']>,
+      headers: ValidatorSpec<TResponse['headers']>
     }
     handler: (
-      request: Request<PathParams, RequestData, QueryParams, RequestHeaders>
-    ) => Response<ResponseData, ResponseHeaders>
+      request: TRequest
+    ) => TResponse
   }) {
     config
     // TODO
