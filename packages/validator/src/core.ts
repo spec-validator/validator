@@ -54,7 +54,7 @@ const mapSpec = <ExpectedType, R> (
   ) => R
 ): any => {
   if (Array.isArray(validatorSpec)) {
-    return validatorSpec.map(transform)
+    return validatorSpec.map(transform);
   } else {
     return Object.fromEntries(
       Object.entries(validatorSpec).map(

@@ -1,21 +1,9 @@
-import { request } from 'http';
+import http from 'http';
 
-import { ValidatorSpec } from '@validator/validator/core';
+import { ValidatorSpec, validate } from '@validator/validator/core';
 import { root, Segment } from '@validator/validator/segmentChain';
 
-type UnmatchedRequest = {
-  method: string;
-  path: string;
-  body: any;
-  headers: Record<string, string>
-}
-
-type UnmatchedResponse = {
-  body: any;
-  headers: Record<string, string>
-}
-
-type Request<PathParams=undefined, Data=undefined, QueryParams=undefined, Headers=undefined> = {
+type Request<PathParams=any, Data=any, QueryParams=any, Headers=any> = {
   path: string;
   method: string,
   pathParams: PathParams,
@@ -24,7 +12,7 @@ type Request<PathParams=undefined, Data=undefined, QueryParams=undefined, Header
   headers: Headers
 }
 
-type Response<Data=undefined, Headers=undefined> = {
+type Response<Data=any, Headers=any> = {
   statusCode?: number,
   data?: Data,
   headers?: Headers,
@@ -39,7 +27,7 @@ type Route<
   ResponseHeaders=undefined,
 > = {
   method?: string,
-  path: Segment<unknown>,
+  pathSpec: Segment<unknown>,
   requestSpec?: {
     data?: ValidatorSpec<RequestData>,
     query?: ValidatorSpec<RequestQueryParams>,
@@ -54,19 +42,35 @@ type Route<
   ) => Promise<Response<ResponseData, ResponseHeaders>>,
 }
 
-const matchRoute = (request: UnmatchedRequest, route: Route): boolean => {
+const matchRoute = (request: http.IncomingMessage, route: Route): boolean => {
   if (route.method && request.method !== route.method) {
     return false;
   }
   try {
-    route.path.match(request.path);
+    route.pathSpec.match(request.url || '');
   } catch (err) {
     return false;
   }
   return true;
 };
 
-const handleRoute = async (route: Route, request: UnmatchedRequest): Promise<UnmatchedResponse> => {
+const splitUrl = (url: string): [string, Record<string, string>] => ['', {}]
+
+const handleRoute = async (
+  route: Route,
+  request: http.IncomingMessage,
+  response: http.ServerResponse
+): Promise<void> => {
+  const [path, query] = splitUrl(request.url || '');
+  const req: Request = {
+    path: path,
+    method: request.method || '',
+    pathParams: route.pathSpec.match(request.url || ''),
+    queryParams: validate(route?.requestSpec?.query || {}, query),
+    data: validate(route?.requestSpec?.data || {}, request.read()),
+    headers: validate(route?.requestSpec?.headers || {}, request.headers),
+  }
+  const resp = route.handler(req);
 
 };
 
@@ -82,3 +86,8 @@ const handle = async (
 }
 
 
+const server = http.createServer((request, response) => {
+
+
+
+});
