@@ -1,6 +1,6 @@
 import http from 'http';
 
-import { ValidatorSpec, validate } from '@validator/validator/core';
+import { ValidatorSpec, validate, serialize } from '@validator/validator/core';
 import { root, Segment } from '@validator/validator/segmentChain';
 
 type Request<PathParams=any, Data=any, QueryParams=any, Headers=any> = {
@@ -84,11 +84,17 @@ const handleRoute = async (
   const resp = await route.handler(req);
   if (resp.headers) {
     Object.entries(resp.headers).forEach(([key, value]) => {
-      it
-      // TODO;
+      response.setHeader(key, value as any);
     });
   }
-  response.setHeader()
+
+  const data = serialize(route.responseSpec?.data || {}, resp.data)
+
+  response.statusCode = resp.statusCode || data ? 200 : 201;
+
+  response.write()
+
+  response.end();
 };
 
 const handle = async (
