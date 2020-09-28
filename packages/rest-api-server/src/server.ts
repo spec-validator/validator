@@ -1,8 +1,7 @@
 import { ValidatorSpec } from '@validator/validator/core';
 import { stringField } from '@validator/validator/fields';
 import { root, Segment } from '@validator/validator/segmentChain';
-
-type Method = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
+import { request } from 'http';
 
 type Request<PathParams=undefined, Data=undefined, QueryParams=undefined, Headers=undefined> = {
   pathParams: PathParams,
@@ -12,12 +11,28 @@ type Request<PathParams=undefined, Data=undefined, QueryParams=undefined, Header
 }
 
 type Response<Data=undefined, Headers=undefined> = {
-  statusCode: number,
+  statusCode?: number,
   data?: Data,
   headers?: Headers,
 }
 
-class Server {
+type WRequest = Request<any, any, any, any>
+type WResponse = Response<any, any>
+
+type Route = {
+  method: string,
+  path: Segment<unknown>,
+  handler: (request: WRequest) => Promise<WResponse>
+}
+
+export const handle = (
+  routes: Route[],
+  request: WRequest
+): Promise<WResponse> =>
+
+
+
+  class Server {
   private docsRoute: string;
 
   constructor(docsRoute='/docs') {
@@ -32,7 +47,7 @@ class Server {
     ResponseData=undefined,
     ResponseHeaders=undefined,
   >(config: {
-    method: Method,
+    method: string,
     path: Segment<RequestParams>,
     requestSpec?: {
       data?: ValidatorSpec<RequestData>,
@@ -45,24 +60,29 @@ class Server {
     }
     handler: (
       request: Request<RequestParams, RequestData, RequestQueryParams, RequestHeaders>
-    ) => Response<ResponseData, ResponseHeaders>
-  }) {
-    config
-    // TODO
+    ) => Promise<Response<ResponseData, ResponseHeaders>>
+  }): void {
+
   }
 
   get<ResponseData, RequestParams=undefined>(
     path: Segment<RequestParams>,
-    handler: (request: Request<RequestParams>) => Response<ResponseData>
+    handler: (request: Request<RequestParams>) => ResponseData
   ) {
     return this.route({
       method: 'GET',
       path: path,
-      handler: handler
+      handler: (request) => {
+        const resp = handler(request);
+        return {
+          statusCode: 200,
+          data: handler(request)
+        }
+      }
     })
   }
 
-}
+  }
 
 const srv = new Server();
 
