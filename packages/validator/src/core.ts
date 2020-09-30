@@ -1,3 +1,5 @@
+import { Json } from './Json';
+
 export interface Field<ExpectedType> {
   validate(value: any): ExpectedType;
   serialize(deserialized: ExpectedType): Json
@@ -11,21 +13,6 @@ export type ValidatorSpec<ExpectedType> = {
 export type TypeHint<Spec extends ValidatorSpec<any>> = {
   [P in keyof Spec]: ReturnType<Spec[P]['validate']>;
 }
-
-export type Primitive =
-| string
-| number
-| boolean;
-
-export type Nothing =
-| null
-| undefined;
-
-export type Json =
-| Primitive
-| Nothing
-| { [property: string]: Json }
-| readonly Json[];
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const withErrorDecoration = <R> (key: any, call: () => R): R => {
