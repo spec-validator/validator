@@ -1,4 +1,5 @@
-import { Field, Json } from '../core';
+import { Field } from '../core';
+import { Json } from '../Json';
 import { merge, Optional } from '../utils';
 
 class OptionalValueDecorator<T> implements Field<Optional<T>> {

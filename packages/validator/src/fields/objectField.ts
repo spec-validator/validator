@@ -4,8 +4,8 @@ import {
   validate,
   serialize,
   getParams,
-  Json
 } from '../core';
+import { Json } from '../Json';
 
 type Params<ExpectedType> = {
   objectSpec: ValidatorSpec<ExpectedType>,

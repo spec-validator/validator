@@ -1,4 +1,5 @@
-import { Field, Json } from '../core';
+import { Field } from '../core';
+import { Json } from '../Json';
 import { merge } from '../utils';
 
 class DefaultFieldDecorator<T> implements Field<T> {

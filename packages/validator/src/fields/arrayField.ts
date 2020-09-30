@@ -1,4 +1,5 @@
-import { Field, withErrorDecoration, Json } from '../core';
+import { Field, withErrorDecoration } from '../core';
+import { Json } from '../Json';
 
 type Params<T> = {
   itemField: Field<T>,

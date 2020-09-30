@@ -1,6 +1,7 @@
-import { Field, Json, Primitive } from '../core';
+import { Field } from '../core';
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport';
 import { escapeRegex } from '../utils';
+import { Primitive, Json } from '../Json';
 
 type Params<Choices> = {
   choices: Choices,
