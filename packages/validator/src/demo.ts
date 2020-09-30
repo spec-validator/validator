@@ -1,5 +1,6 @@
 import { TypeHint, validate } from './core'
-import { objectField, numberField } from './fields'
+import { objectField, numberField, stringField } from './fields'
+import { root } from './segmentChain'
 
 const spec = {
   field: objectField({
@@ -23,3 +24,17 @@ const valid = {
 console.log(validate(spec, valid));
 
 console.log(validate(spec, 'INVALID'));
+
+const segmentSpec = root
+  ._('/')
+  ._('username', stringField())
+  ._('/todos/')
+  ._('uid', numberField())
+  ._('/subtodos/')
+  ._('suid', numberField());
+
+console.log('****')
+
+console.log(segmentSpec.match('/john-sick/todos/11/subtodos/42'))
+
+console.log(segmentSpec.match('/bla'))
