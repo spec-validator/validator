@@ -25,9 +25,11 @@ const DEFAULT_SERVER_CONFIG: ServerConfig = {
   encoding: 'utf-8'
 }
 
-const mergeWithDefault = (config: Partial<ServerConfig>): ServerConfig => ({
+const mergeServerConfigs = (
+  serverConfig: Partial<ServerConfig>
+): ServerConfig => ({
   ...DEFAULT_SERVER_CONFIG,
-  ...config
+  ...serverConfig,
 })
 
 type Request<PathParams=any, Data=any, QueryParams=any, Headers=any> = {
@@ -134,15 +136,6 @@ const handle = async (
   await handleRoute(config, route, request, response);
 }
 
-const serve = (config: {
-  protocol?: MediaTypeProtocol,
-}, ...routes: Route[]) => {
-
-
-
+const serve = (config: Partial<ServerConfig>, ...routes: Route[]) => {
+  http.createServer(handle.bind(null, mergeServerConfigs(config), routes))
 }
-
-/*
-const server = http.createServer((request, response) => {
-});
-*/
