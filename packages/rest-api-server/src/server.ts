@@ -36,6 +36,7 @@ const mergeServerConfigs = (
 type HeadersType = Record<string, string | string[]>
 
 type Request<PathParams, Data, QueryParams, Headers extends HeadersType> = {
+  method: string,
   pathParams: PathParams,
   queryParams: QueryParams
   data: Data,
@@ -111,6 +112,7 @@ const handleRoute = async <R extends WildCardRoute>(
   const data = config.protocol.deserialize(await getData(request));
 
   const resp = await route.handler({
+    method: request.method?.toUpperCase() || 'GET',
     pathParams: route.pathSpec.match(url.pathname),
     queryParams: validate(route.requestSpec.query, Object.fromEntries(url.searchParams)),
     data: validate(route.requestSpec.data, data),
