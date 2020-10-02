@@ -2,6 +2,12 @@ import http from 'http';
 
 import { ValidatorSpec, validate, serialize } from '@validator/validator/core';
 import { root, Segment } from '@validator/validator/segmentChain';
+import { Json } from '@validator/validator/Json';
+
+interface MediaTypeProtocol {
+  serialize(deserialized: Json): Promise<string>
+  deserialize(serialized: string): Promise<Json>
+}
 
 type Request<PathParams=any, Data=any, QueryParams=any, Headers=any> = {
   path: string;
@@ -68,6 +74,7 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
 })
 
 const handleRoute = async (
+  protocol: MediaTypeProtocol,
   route: Route,
   request: http.IncomingMessage,
   response: http.ServerResponse
@@ -78,7 +85,7 @@ const handleRoute = async (
     method: request.method || '',
     pathParams: route.pathSpec.match(request.url || ''),
     queryParams: validate(route?.requestSpec?.query || {}, query),
-    data: validate(route?.requestSpec?.data || {}, getData(request)),
+    data: validate(route?.requestSpec?.data || {}, await protocol.deserialize(await getData(request))),
     headers: validate(route?.requestSpec?.headers || {}, request.headers),
   }
   const resp = await route.handler(req);
@@ -88,7 +95,7 @@ const handleRoute = async (
     });
   }
 
-  const data = serialize(route.responseSpec?.data || {}, resp.data)
+  const data = protocol.serialize(serialize(route.responseSpec?.data || {}, resp.data))
 
   response.statusCode = resp.statusCode || data ? 200 : 201;
 
