@@ -165,7 +165,7 @@ serve({}, [
       query: {}
     },
     handler: async (request) => {
-      console.log('foo');
+      console.log(request.pathParams);
       return {
         headers: {},
         statusCode: 200,
