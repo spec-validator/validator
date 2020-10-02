@@ -82,26 +82,26 @@ const handleRoute = async (
 ): Promise<void> => {
   const [path, query] = splitUrl(request.url || '');
   const data = await protocol.deserialize(await getData(request));
-  const req: Request = {
+
+  const resp = await route.handler({
     path: path,
     method: request.method || '',
     pathParams: route.pathSpec.match(path || ''),
     queryParams: validate(route?.requestSpec?.query || {}, query),
     data: validate(route?.requestSpec?.data || {}, data),
     headers: validate(route?.requestSpec?.headers || {}, request.headers),
-  }
-  const resp = await route.handler(req);
-  if (resp.headers) {
-    Object.entries(resp.headers).forEach(([key, value]) =>
-      response.setHeader(key, value as any)
-    );
-  }
+  });
 
-  const result = protocol.serialize(serialize(route.responseSpec?.data || {}, resp.data))
+  Object.entries(resp.headers || {}).forEach(([key, value]) =>
+    response.setHeader(key, value as any)
+  );
 
   response.statusCode = resp.statusCode || data ? 200 : 201;
 
-  response.write(result, protocol.encoding);
+  response.write(
+    protocol.serialize(serialize(route.responseSpec?.data || {}, resp.data)),
+    protocol.encoding
+  );
 
   response.end();
 };
