@@ -1,11 +1,4 @@
-type Composite<One, Two, Three> = {
-  one: One,
-  two: Two,
-  three: Three,
-  four?: string
-}
-
-const one = <T extends Composite<unknown, unknown, unknown>>(composite: T): {
+const one = <T>(composite: T): {
   key: string,
   comp: T
 } => ({
@@ -13,8 +6,8 @@ const one = <T extends Composite<unknown, unknown, unknown>>(composite: T): {
     comp: composite
   })
 
-const two = <T extends Composite<unknown, unknown, unknown>>(
-  composite: T,
+const two = <T>(
+  compositeH: () => T,
   handler: (resp: {
     key: string,
     rval: {
@@ -24,14 +17,14 @@ const two = <T extends Composite<unknown, unknown, unknown>>(
   }) => void
 ) => handler({
     key: 'foo',
-    rval: one(composite)
+    rval: one(compositeH())
   })
 
-const tt = two({
+const tt = two(() => ({
   one: 11,
   two: 42,
   four: 'true',
   three: 'foo'
-}, (resp) => {
+}), (resp) => {
   console.log(resp.rval.comp)
 })
