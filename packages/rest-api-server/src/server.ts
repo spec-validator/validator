@@ -42,43 +42,37 @@ type Request<PathParams, Data, QueryParams, Headers extends HeadersType> = {
   headers: Headers
 }
 
+type WildCardRequest = Request<unknown, unknown, unknown, HeadersType>
+
 type Response<Data, Headers extends HeadersType> = {
   statusCode: number,
   data: Data,
   headers: Headers
 }
 
+type WildCardResponse = Response<unknown, HeadersType>
+
 type Route<
-  RequestParams,
-  RequestData,
-  RequestQueryParams,
-  RequestHeaders extends HeadersType,
-  ResponseData,
-  ResponseHeaders extends HeadersType,
+  RequestType extends WildCardRequest,
+  ResponseType extends WildCardResponse
 > = {
-  method: string,
-  pathSpec: Segment<RequestParams>,
+  method?: string,
+  pathSpec: Segment<RequestType['pathParams']>,
   requestSpec: {
-    data: ValidatorSpec<RequestData>,
-    query: ValidatorSpec<RequestQueryParams>,
-    headers: ValidatorSpec<RequestHeaders>
+    data: ValidatorSpec<RequestType['data']>,
+    query: ValidatorSpec<RequestType['queryParams']>,
+    headers: ValidatorSpec<RequestType['headers']>
   },
   responseSpec: {
-    data: ValidatorSpec<ResponseData>,
-    headers: ValidatorSpec<ResponseHeaders>
+    data: ValidatorSpec<ResponseType['data']>,
+    headers: ValidatorSpec<ResponseType['headers']>
   }
   handler: (
-    request: Request<
-    RequestParams,
-    RequestData,
-    RequestQueryParams,
-    RequestHeaders
-  >
-  ) => Promise<
-  Response<ResponseData, ResponseHeaders>>,
+    request: RequestType
+  ) => Promise<ResponseType>,
 }
 
-type WildCardRoute = Route<unknown, unknown, unknown, HeadersType, unknown, HeadersType>
+type WildCardRoute = Route<WildCardRequest, WildCardResponse>
 
 const matchRoute = (
   request: http.IncomingMessage,
@@ -106,23 +100,9 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
   }
 })
 
-const handleRoute = async <
-  RequestParams,
-  RequestData,
-  RequestQueryParams,
-  RequestHeaders extends HeadersType,
-  ResponseData,
-  ResponseHeaders extends HeadersType,
->(
+const handleRoute = async <R extends WildCardRoute>(
   config: ServerConfig,
-  route: Route<
-    RequestParams,
-    RequestData,
-    RequestQueryParams,
-    RequestHeaders,
-    ResponseData,
-    ResponseHeaders
-  >,
+  route: R,
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
@@ -137,14 +117,14 @@ const handleRoute = async <
     headers: validate(route.requestSpec.headers, request.headers),
   });
 
-  Object.entries(resp.headers || {}).forEach(([key, value]) =>
+  Object.entries(resp.headers).forEach(([key, value]) =>
     response.setHeader(key, value as any)
   );
 
-  response.statusCode = resp.statusCode || data ? 200 : 201;
+  response.statusCode = resp.statusCode;
 
   response.write(
-    config.protocol.serialize(serialize(route.responseSpec?.data, resp.data)),
+    config.protocol.serialize(serialize(route.responseSpec.data, resp.data)),
     config.encoding
   );
 
@@ -168,28 +148,7 @@ const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]) => {
   http.createServer(handle.bind(null, mergeServerConfigs(config), routes))
 }
 
-const route = <
-  RequestParams,
-  RequestData,
-  RequestQueryParams,
-  RequestHeaders extends HeadersType,
-  ResponseData,
-  ResponseHeaders extends HeadersType,
-> (rt: Route<
-  RequestParams,
-  RequestData,
-  RequestQueryParams,
-  RequestHeaders,
-  ResponseData,
-  ResponseHeaders
->): Route<
-RequestParams,
-RequestData,
-RequestQueryParams,
-RequestHeaders,
-ResponseData,
-ResponseHeaders
-> => rt;
+const route = <T extends WildCardRoute> (route: T): T => route
 
 serve({}, [
   route({
@@ -205,14 +164,13 @@ serve({}, [
       headers: {},
       query: {}
     },
-    method: 'GET',
     handler: async (request) => {
       console.log('foo');
       return {
-        statusCode: 200,
         headers: {},
+        statusCode: 200,
         data: {
-          value: ''
+          value: 'test'
         }
       }
     }
