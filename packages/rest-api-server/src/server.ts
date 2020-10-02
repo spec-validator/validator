@@ -150,7 +150,7 @@ const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]) => {
 
 serve({}, [
   {
-    pathSpec: root._('/'),
+    pathSpec: root._('/')._('username', stringField()),
     responseSpec: {
       data: {
         value: stringField()
