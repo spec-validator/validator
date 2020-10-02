@@ -92,16 +92,16 @@ const handleRoute = async (
   }
   const resp = await route.handler(req);
   if (resp.headers) {
-    Object.entries(resp.headers).forEach(([key, value]) => {
-      response.setHeader(key, value as any);
-    });
+    Object.entries(resp.headers).forEach(([key, value]) =>
+      response.setHeader(key, value as any)
+    );
   }
 
   const result = protocol.serialize(serialize(route.responseSpec?.data || {}, resp.data))
 
   response.statusCode = resp.statusCode || data ? 200 : 201;
 
-  response.write(data, protocol.encoding)
+  response.write(result, protocol.encoding);
 
   response.end();
 };
