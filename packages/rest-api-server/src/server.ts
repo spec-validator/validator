@@ -6,9 +6,15 @@ import { Json } from '@validator/validator/Json';
 import { URL } from 'url';
 
 interface MediaTypeProtocol {
-  serialize(deserialized: Json): Promise<string>
-  deserialize(serialized: string): Promise<Json>
+  serialize(deserialized: Json): string
+  deserialize(serialized: string): Json
   encoding: BufferEncoding
+}
+
+class JsonProtocol implements MediaTypeProtocol {
+  serialize = JSON.stringify;
+  deserialize = JSON.parse;
+  encoding: 'utf-8';
 }
 
 type Request<PathParams=any, Data=any, QueryParams=any, Headers=any> = {
@@ -79,7 +85,7 @@ const handleRoute = async (
 ): Promise<void> => {
   const url = new URL(request.url || '')
 
-  const data = await protocol.deserialize(await getData(request));
+  const data = protocol.deserialize(await getData(request));
 
   const resp = await route.handler({
     pathParams: route.pathSpec.match(url.pathname),
