@@ -4,7 +4,7 @@ import { ValidatorSpec, validate, serialize } from '@validator/validator/core';
 import { root, Segment } from '@validator/validator/segmentChain';
 import { Json } from '@validator/validator/Json';
 import { URL } from 'url';
-import { stringField } from '@validator/validator/fields';
+import { numberField, stringField } from '@validator/validator/fields';
 
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
@@ -69,7 +69,7 @@ type Route<
   ) => Promise<Response<ResponseData, ResponseHeaders>>,
 }
 
-type WildCardRoute = Route<unknown, unknown, unknown, HeadersType, unknown, HeadersType>
+type WildCardRoute = Route<any, any, any, any, any, any>
 
 const matchRoute = (
   request: http.IncomingMessage,
@@ -160,31 +160,31 @@ const route = <
   ResponseData, ResponseHeaders
 >) => route
 
-const rr = route({
-  pathSpec: root._('/')._('username', stringField()),
-  responseSpec: {
-    headers: {},
-    data: {
-      value: stringField()
-    }
-  },
-  requestSpec: {
-    data: {},
-    headers: {},
-    query: {}
-  },
-  handler: async (request) => {
-    console.log(request.pathParams);
-    return {
+serve({}, [
+  route({
+    pathSpec: root._('/')._('username', stringField()),
+    responseSpec: {
       headers: {},
-      statusCode: 200,
       data: {
-        value: 'test'
+        value: stringField()
+      }
+    },
+    requestSpec: {
+      data: {
+        title: numberField()
+      },
+      headers: {},
+      query: {}
+    },
+    handler: async (request) => {
+      console.log(request.pathParams.username);
+      return {
+        headers: {},
+        statusCode: 200,
+        data: {
+          value: 'test'
+        }
       }
     }
-  }
-})
-
-serve({}, [
-  rr
+  })
 ])
