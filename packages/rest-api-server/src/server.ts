@@ -42,15 +42,11 @@ type Request<PathParams, Data, QueryParams, Headers extends HeadersType> = {
   headers: Headers
 }
 
-type WildCardRequest = Request<unknown, unknown, unknown, HeadersType>
-
 type Response<Data, Headers extends HeadersType> = {
-  statusCode?: number,
-  data?: Data,
-  headers?: Headers
+  statusCode: number,
+  data: Data,
+  headers: Headers
 }
-
-type WildCardResponse = Response<unknown, HeadersType>
 
 type Route<
   RequestParams,
@@ -60,16 +56,16 @@ type Route<
   ResponseData,
   ResponseHeaders extends HeadersType,
 > = {
-  method?: string,
+  method: string,
   pathSpec: Segment<RequestParams>,
-  requestSpec?: {
-    data?: ValidatorSpec<RequestData>,
-    query?: ValidatorSpec<RequestQueryParams>,
-    headers?: ValidatorSpec<RequestHeaders>
+  requestSpec: {
+    data: ValidatorSpec<RequestData>,
+    query: ValidatorSpec<RequestQueryParams>,
+    headers: ValidatorSpec<RequestHeaders>
   },
   responseSpec: {
-    data?: ValidatorSpec<ResponseData>,
-    headers?: ValidatorSpec<ResponseHeaders>
+    data: ValidatorSpec<ResponseData>,
+    headers: ValidatorSpec<ResponseHeaders>
   }
   handler: (
     request: Request<
@@ -82,9 +78,11 @@ type Route<
   Response<ResponseData, ResponseHeaders>>,
 }
 
+type WildCardRoute = Route<unknown, unknown, unknown, HeadersType, unknown, HeadersType>
+
 const matchRoute = (
   request: http.IncomingMessage,
-  route: Route<unknown, unknown, unknown, HeadersType, unknown, HeadersType>
+  route: WildCardRoute
 ): boolean => {
   if (route.method && request.method !== route.method) {
     return false;
@@ -107,14 +105,6 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
     reject(err);
   }
 })
-
-const validateNonEmpty = <T> (spec: ValidatorSpec<T> | undefined, value: any): T | undefined => {
-  if (spec) {
-    return validate(spec, value);
-  } else {
-    return undefined
-  }
-}
 
 const handleRoute = async <
   RequestParams,
@@ -142,9 +132,9 @@ const handleRoute = async <
 
   const resp = await route.handler({
     pathParams: route.pathSpec.match(url.pathname),
-    queryParams: validateNonEmpty(route?.requestSpec?.query, Object.fromEntries(url.searchParams)),
-    data: validateNonEmpty(route?.requestSpec?.data, data),
-    headers: validateNonEmpty(route?.requestSpec?.headers, request.headers),
+    queryParams: validate(route.requestSpec.query, Object.fromEntries(url.searchParams)),
+    data: validate(route.requestSpec.data, data),
+    headers: validate(route.requestSpec.headers, request.headers),
   });
 
   Object.entries(resp.headers || {}).forEach(([key, value]) =>
@@ -182,16 +172,24 @@ serve({}, [
   {
     pathSpec: root._('/')._('username', stringField()),
     responseSpec: {
+      headers: {},
       data: {
         value: stringField()
       }
     },
+    requestSpec: {
+      data: {},
+      headers: {},
+      query: {}
+    },
+    method: 'GET',
     handler: async (request) => {
       console.log('foo');
       return {
+        statusCode: 200,
+        headers: {},
         data: {
-
-          value222: request.pathParams.username
+          value: ''
         }
       }
     }
