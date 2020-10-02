@@ -4,6 +4,7 @@ import { ValidatorSpec, validate, serialize } from '@validator/validator/core';
 import { root, Segment } from '@validator/validator/segmentChain';
 import { Json } from '@validator/validator/Json';
 import { URL } from 'url';
+import { stringField } from '@validator/validator/fields';
 
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
@@ -32,26 +33,26 @@ const mergeServerConfigs = (
   ...serverConfig,
 })
 
-type Request<PathParams=any, Data=any, QueryParams=any, Headers=any> = {
+type Request<PathParams, Data, QueryParams, Headers> = {
   pathParams: PathParams,
   queryParams: QueryParams
   data: Data,
   headers: Headers
 }
 
-type Response<Data=any, Headers=any> = {
-  statusCode?: number,
-  data?: Data,
-  headers?: Headers
+type Response<Data, Headers> = {
+  statusCode: number,
+  data: Data,
+  headers: Headers
 }
 
 type Route<
-  RequestParams=any,
-  RequestData=any,
-  RequestQueryParams=any,
-  RequestHeaders=any,
-  ResponseData=any,
-  ResponseHeaders=any,
+  RequestParams,
+  RequestData,
+  RequestQueryParams,
+  RequestHeaders,
+  ResponseData,
+  ResponseHeaders,
 > = {
   method?: string,
   pathSpec: Segment<unknown>,
@@ -60,7 +61,7 @@ type Route<
     query?: ValidatorSpec<RequestQueryParams>,
     headers?: ValidatorSpec<RequestHeaders>
   },
-  responseSpec?: {
+  responseSpec: {
     data?: ValidatorSpec<ResponseData>,
     headers?: ValidatorSpec<ResponseHeaders>
   }
@@ -69,7 +70,12 @@ type Route<
   ) => Promise<Response<ResponseData, ResponseHeaders>>,
 }
 
-const matchRoute = (request: http.IncomingMessage, route: Route): boolean => {
+type WildCardRoute = Route<unknown, unknown, unknown, unknown, unknown, unknown>;
+
+const matchRoute = (
+  request: http.IncomingMessage,
+  route: WildCardRoute
+): boolean => {
   if (route.method && request.method !== route.method) {
     return false;
   }
@@ -94,7 +100,7 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
 
 const handleRoute = async (
   config: ServerConfig,
-  route: Route,
+  route: WildCardRoute,
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
@@ -140,4 +146,21 @@ const serve = (config: Partial<ServerConfig>, routes: Route[]) => {
   http.createServer(handle.bind(null, mergeServerConfigs(config), routes))
 }
 
-serve({}, [])
+serve({}, [
+  {
+    pathSpec: root._('/'),
+    responseSpec: {
+      data: {
+        value: stringField()
+      }
+    },
+    handler: async (request) => {
+      console.log('foo');
+      return {
+        data: {
+          value: 'test'
+        }
+      }
+    }
+  }
+])
