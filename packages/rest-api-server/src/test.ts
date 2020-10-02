@@ -1,4 +1,10 @@
-const one = <T>(composite: T): {
+type Composite<One, Two, Three> = {
+  one: One,
+  two: Two,
+  three: Three,
+}
+
+const one = <T extends Composite<unknown, unknown, unknown>>(composite: T): {
   key: string,
   comp: T
 } => ({
@@ -6,7 +12,7 @@ const one = <T>(composite: T): {
     comp: composite
   })
 
-const two = <T>(
+const two = <T extends Composite<unknown, unknown, unknown>>(
   compositeH: () => T,
   handler: (resp: {
     key: string,
