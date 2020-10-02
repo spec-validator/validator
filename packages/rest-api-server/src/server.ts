@@ -33,14 +33,16 @@ const mergeServerConfigs = (
   ...serverConfig,
 })
 
-type Request<PathParams, Data, QueryParams, Headers> = {
+type HeadersType = Record<string, string | string[]>
+
+type Request<PathParams, Data, QueryParams, Headers extends HeadersType> = {
   pathParams: PathParams,
   queryParams: QueryParams
   data: Data,
   headers: Headers
 }
 
-type Response<Data, Headers> = {
+type Response<Data, Headers extends HeadersType> = {
   statusCode: number,
   data: Data,
   headers: Headers
@@ -50,9 +52,9 @@ type Route<
   RequestParams,
   RequestData,
   RequestQueryParams,
-  RequestHeaders,
+  RequestHeaders extends HeadersType,
   ResponseData,
-  ResponseHeaders,
+  ResponseHeaders extends HeadersType,
 > = {
   method?: string,
   pathSpec: Segment<unknown>,
@@ -98,9 +100,9 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
   }
 })
 
-const handleRoute = async (
+const handleRoute = async <R extends WildCardRoute>(
   config: ServerConfig,
-  route: WildCardRoute,
+  route: R,
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
