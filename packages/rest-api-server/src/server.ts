@@ -3,6 +3,7 @@ import http from 'http';
 import { ValidatorSpec, validate, serialize } from '@validator/validator/core';
 import { root, Segment } from '@validator/validator/segmentChain';
 import { Json } from '@validator/validator/Json';
+import { URL } from 'url';
 
 interface MediaTypeProtocol {
   serialize(deserialized: Json): Promise<string>
@@ -11,8 +12,6 @@ interface MediaTypeProtocol {
 }
 
 type Request<PathParams=any, Data=any, QueryParams=any, Headers=any> = {
-  path: string;
-  method: string,
   pathParams: PathParams,
   queryParams: QueryParams
   data: Data,
@@ -61,8 +60,6 @@ const matchRoute = (request: http.IncomingMessage, route: Route): boolean => {
   return true;
 };
 
-const splitUrl = (url: string): [string, Record<string, string>] => ['', {}]
-
 const getData = async (msg: http.IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
   try {
     const chunks: string[] = [];
@@ -80,14 +77,13 @@ const handleRoute = async (
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const [path, query] = splitUrl(request.url || '');
+  const url = new URL(request.url || '')
+
   const data = await protocol.deserialize(await getData(request));
 
   const resp = await route.handler({
-    path: path,
-    method: request.method || '',
-    pathParams: route.pathSpec.match(path || ''),
-    queryParams: validate(route?.requestSpec?.query || {}, query),
+    pathParams: route.pathSpec.match(url.pathname),
+    queryParams: validate(route?.requestSpec?.query || {}, Object.fromEntries(url.searchParams)),
     data: validate(route?.requestSpec?.data || {}, data),
     headers: validate(route?.requestSpec?.headers || {}, request.headers),
   });
