@@ -37,7 +37,7 @@ class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
   getParams() {
     return {
       regex: this.params?.regex?.source,
-      descriotion: this.params?.description
+      description: this.params?.description
     }
   }
 
