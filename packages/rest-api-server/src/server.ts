@@ -42,37 +42,37 @@ type Request<PathParams, Data, QueryParams, Headers extends HeadersType> = {
   headers: Headers
 }
 
+type WildCardRequest = Request<unknown, unknown, unknown, HeadersType>
+
 type Response<Data, Headers extends HeadersType> = {
   statusCode: number,
   data: Data,
   headers: Headers
 }
 
+type WildCardResponse = Response<unknown, HeadersType>
+
 type Route<
-  RequestParams,
-  RequestData,
-  RequestQueryParams,
-  RequestHeaders extends HeadersType,
-  ResponseData,
-  ResponseHeaders extends HeadersType,
+  RequestType extends WildCardRequest,
+  ResponseType extends WildCardResponse
 > = {
   method?: string,
   pathSpec: Segment<unknown>,
   requestSpec?: {
-    data?: ValidatorSpec<RequestData>,
-    query?: ValidatorSpec<RequestQueryParams>,
-    headers?: ValidatorSpec<RequestHeaders>
+    data?: ValidatorSpec<RequestType['data']>,
+    query?: ValidatorSpec<RequestType['queryParams']>,
+    headers?: ValidatorSpec<RequestType['headers']>
   },
   responseSpec: {
-    data?: ValidatorSpec<ResponseData>,
-    headers?: ValidatorSpec<ResponseHeaders>
+    data?: ValidatorSpec<ResponseType['data']>,
+    headers?: ValidatorSpec<ResponseType['headers']>
   }
   handler: (
-    request: Request<RequestParams, RequestData, RequestQueryParams, RequestHeaders>
-  ) => Promise<Response<ResponseData, ResponseHeaders>>,
+    request: RequestType
+  ) => Promise<ResponseType>,
 }
 
-type WildCardRoute = Route<unknown, unknown, unknown, unknown, unknown, unknown>;
+type WildCardRoute = Route<WildCardRequest, WildCardResponse>
 
 const matchRoute = (
   request: http.IncomingMessage,
