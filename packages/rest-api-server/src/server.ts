@@ -133,7 +133,7 @@ const handleRoute = async <R extends WildCardRoute>(
 
 const handle = async (
   config: ServerConfig,
-  routes: Route[],
+  routes: WildCardRoute[],
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
@@ -144,7 +144,7 @@ const handle = async (
   await handleRoute(config, route, request, response);
 }
 
-const serve = (config: Partial<ServerConfig>, routes: Route[]) => {
+const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]) => {
   http.createServer(handle.bind(null, mergeServerConfigs(config), routes))
 }
 
