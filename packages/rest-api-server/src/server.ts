@@ -45,9 +45,9 @@ type Request<PathParams, Data, QueryParams, Headers extends HeadersType> = {
 type WildCardRequest = Request<unknown, unknown, unknown, HeadersType>
 
 type Response<Data, Headers extends HeadersType> = {
-  statusCode: number,
-  data: Data,
-  headers: Headers
+  statusCode?: number,
+  data?: Data,
+  headers?: Headers
 }
 
 type WildCardResponse = Response<unknown, HeadersType>
