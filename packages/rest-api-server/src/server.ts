@@ -133,11 +133,11 @@ const handleRoute = async <
     )
   });
 
-  Object.entries(resp.headers).forEach(([key, value]) =>
+  Object.entries(resp.headers || {}).forEach(([key, value]) =>
     response.setHeader(key, value as any)
   );
 
-  response.statusCode = resp.statusCode;
+  response.statusCode = resp.statusCode || data ? 200 : 201;
 
   response.write(
     processNonEmpty(
@@ -179,7 +179,9 @@ serve({}, [
   route({
     pathSpec: root._('/')._('username', stringField()),
     responseSpec: {
-      headers: {},
+      headers: {
+        foo: stringField()
+      },
       data: {
         value: stringField()
       }
