@@ -8,14 +8,27 @@ import { URL } from 'url';
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
   deserialize(serialized: string): Json
-  encoding: BufferEncoding
 }
 
 class JsonProtocol implements MediaTypeProtocol {
   serialize = JSON.stringify;
   deserialize = JSON.parse;
-  encoding: 'utf-8';
 }
+
+type ServerConfig = {
+  protocol: MediaTypeProtocol,
+  encoding: BufferEncoding
+}
+
+const DEFAULT_SERVER_CONFIG: ServerConfig = {
+  protocol: new JsonProtocol(),
+  encoding: 'utf-8'
+}
+
+const mergeWithDefault = (config: Partial<ServerConfig>): ServerConfig => ({
+  ...DEFAULT_SERVER_CONFIG,
+  ...config
+})
 
 type Request<PathParams=any, Data=any, QueryParams=any, Headers=any> = {
   pathParams: PathParams,
@@ -78,14 +91,14 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
 })
 
 const handleRoute = async (
-  protocol: MediaTypeProtocol,
+  config: ServerConfig,
   route: Route,
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
   const url = new URL(request.url || '')
 
-  const data = protocol.deserialize(await getData(request));
+  const data = config.protocol.deserialize(await getData(request));
 
   const resp = await route.handler({
     pathParams: route.pathSpec.match(url.pathname),
@@ -101,15 +114,15 @@ const handleRoute = async (
   response.statusCode = resp.statusCode || data ? 200 : 201;
 
   response.write(
-    protocol.serialize(serialize(route.responseSpec?.data || {}, resp.data)),
-    protocol.encoding
+    config.protocol.serialize(serialize(route.responseSpec?.data || {}, resp.data)),
+    config.encoding
   );
 
   response.end();
 };
 
 const handle = async (
-  protocol: MediaTypeProtocol,
+  config: ServerConfig,
   routes: Route[],
   request: http.IncomingMessage,
   response: http.ServerResponse
@@ -118,7 +131,15 @@ const handle = async (
   if (!route) {
     return Promise.reject(404);
   }
-  await handleRoute(protocol, route, request, response);
+  await handleRoute(config, route, request, response);
+}
+
+const serve = (config: {
+  protocol?: MediaTypeProtocol,
+}, ...routes: Route[]) => {
+
+
+
 }
 
 /*
