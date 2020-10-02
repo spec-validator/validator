@@ -7,6 +7,7 @@ import { Json } from '@validator/validator/Json';
 interface MediaTypeProtocol {
   serialize(deserialized: Json): Promise<string>
   deserialize(serialized: string): Promise<Json>
+  encoding: BufferEncoding
 }
 
 type Request<PathParams=any, Data=any, QueryParams=any, Headers=any> = {
@@ -99,25 +100,25 @@ const handleRoute = async (
 
   response.statusCode = resp.statusCode || data ? 200 : 201;
 
-  response.write()
+  response.write(data, protocol.encoding)
 
   response.end();
 };
 
 const handle = async (
+  protocol: MediaTypeProtocol,
   routes: Route[],
-  request: UnmatchedRequest
-): Promise<UnmatchedResponse> => {
+  request: http.IncomingMessage,
+  response: http.ServerResponse
+): Promise<void> => {
   const route = routes.find(matchRoute.bind(null, request));
   if (!route) {
     return Promise.reject(404);
   }
-  return handleRoute(route, request);
+  await handleRoute(protocol, route, request, response);
 }
 
-
+/*
 const server = http.createServer((request, response) => {
-
-
-
 });
+*/
