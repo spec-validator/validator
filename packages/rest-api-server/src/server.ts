@@ -55,14 +55,14 @@ type Route<
 > = {
   method?: string,
   pathSpec: Segment<RequestPathParams>,
-  requestSpec: {
-    data: ValidatorSpec<RequestData>,
-    query: ValidatorSpec<RequestQueryParams>,
-    headers: ValidatorSpec<RequestHeaders>
+  requestSpec?: {
+    data?: ValidatorSpec<RequestData>,
+    query?: ValidatorSpec<RequestQueryParams>,
+    headers?: ValidatorSpec<RequestHeaders>
   },
-  responseSpec: {
-    data: ValidatorSpec<ResponseData>
-    headers: ValidatorSpec<ResponseHeaders>
+  responseSpec?: {
+    data?: ValidatorSpec<ResponseData>
+    headers?: ValidatorSpec<ResponseHeaders>
   }
   handler: (
     request: Request<RequestPathParams, RequestData, RequestQueryParams, RequestHeaders>
@@ -97,6 +97,9 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
   }
 })
 
+const processNonEmpty = <T, R> (proc: (it: T) => R, value?: T): R | undefined =>
+  value ? proc(value) : undefined
+
 const handleRoute = async <
   RequestPathParams, RequestData, RequestQueryParams, RequestHeaders extends HeadersType,
   ResponseData, ResponseHeaders extends HeadersType
@@ -116,9 +119,18 @@ const handleRoute = async <
   const resp = await route.handler({
     method: request.method?.toUpperCase() || 'GET',
     pathParams: route.pathSpec.match(url.pathname),
-    queryParams: validate(route.requestSpec.query, Object.fromEntries(url.searchParams)),
-    data: validate(route.requestSpec.data, data),
-    headers: validate(route.requestSpec.headers, request.headers),
+    queryParams: processNonEmpty(
+      (it) => validate(it, Object.fromEntries(url.searchParams)),
+      route?.requestSpec?.query
+    ),
+    data: processNonEmpty(
+      (it) => validate(it, data),
+      route?.requestSpec?.data
+    ),
+    headers: processNonEmpty(
+      (it) => validate(it, request.headers),
+      route?.requestSpec?.headers
+    )
   });
 
   Object.entries(resp.headers).forEach(([key, value]) =>
@@ -128,7 +140,10 @@ const handleRoute = async <
   response.statusCode = resp.statusCode;
 
   response.write(
-    config.protocol.serialize(serialize(route.responseSpec.data, resp.data)),
+    processNonEmpty(
+      (it) => config.protocol.serialize(serialize(it, resp.data)),
+      route?.responseSpec?.data
+    ) || '',
     config.encoding
   );
 
@@ -173,11 +188,10 @@ serve({}, [
       data: {
         title: numberField()
       },
-      headers: {},
       query: {}
     },
     handler: async (request) => {
-      console.log(request.pathParams.username);
+      console.log(request.headers);
       return {
         headers: {},
         statusCode: 200,
