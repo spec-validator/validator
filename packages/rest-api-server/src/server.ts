@@ -160,7 +160,7 @@ serve({}, [
       console.log('foo');
       return {
         data: {
-          value: 'test'
+          value222: 'test'
         }
       }
     }
