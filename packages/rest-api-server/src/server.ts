@@ -168,8 +168,31 @@ const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]) => {
   http.createServer(handle.bind(null, mergeServerConfigs(config), routes))
 }
 
+const route = <
+  RequestParams,
+  RequestData,
+  RequestQueryParams,
+  RequestHeaders extends HeadersType,
+  ResponseData,
+  ResponseHeaders extends HeadersType,
+> (rt: Route<
+  RequestParams,
+  RequestData,
+  RequestQueryParams,
+  RequestHeaders,
+  ResponseData,
+  ResponseHeaders
+>): Route<
+RequestParams,
+RequestData,
+RequestQueryParams,
+RequestHeaders,
+ResponseData,
+ResponseHeaders
+> => rt;
+
 serve({}, [
-  {
+  route({
     pathSpec: root._('/')._('username', stringField()),
     responseSpec: {
       headers: {},
@@ -193,5 +216,5 @@ serve({}, [
         }
       }
     }
-  }
+  })
 ])
