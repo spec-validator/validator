@@ -124,7 +124,7 @@ const handleRoute = async <
   const data = config.protocol.deserialize(await getData(request));
 
   const resp = await route.handler({
-    method: request.method.toUpperCase(),
+    method: request.method?.toUpperCase(),
     pathParams: route.pathSpec.match(url.pathname),
     queryParams: validate(route.requestSpec.query, Object.fromEntries(url.searchParams)),
     data: validate(route.requestSpec.data, data),
@@ -135,7 +135,7 @@ const handleRoute = async <
     response.setHeader(key, value as any)
   );
 
-  response.statusCode = resp.statusCode;
+  response.statusCode = resp.statusCode || data ? 200 : 201;
 
   response.write(
     config.protocol.serialize(serialize(route.responseSpec.data, resp.data)),
