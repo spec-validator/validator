@@ -63,16 +63,16 @@ type Route<
   RequestPathParams, RequestData, RequestQueryParams, RequestHeaders extends HeadersType,
   ResponseData, ResponseHeaders extends HeadersType
 > = {
-  method: string,
+  method?: string,
   pathSpec: Segment<RequestPathParams>,
   requestSpec: {
-    data: ValidatorSpec<RequestData>,
-    query: ValidatorSpec<RequestQueryParams>,
-    headers: ValidatorSpec<RequestHeaders>
+    data?: ValidatorSpec<RequestData>,
+    query?: ValidatorSpec<RequestQueryParams>,
+    headers?: ValidatorSpec<RequestHeaders>
   },
   responseSpec: {
-    data: ValidatorSpec<ResponseData>
-    headers: ValidatorSpec<ResponseHeaders>
+    data?: ValidatorSpec<ResponseData>
+    headers?: ValidatorSpec<ResponseHeaders>
   }
   handler: (
     request: Request<RequestPathParams, RequestData, RequestQueryParams, RequestHeaders>
@@ -124,7 +124,7 @@ const handleRoute = async <
   const data = config.protocol.deserialize(await getData(request));
 
   const resp = await route.handler({
-    method: request.method?.toUpperCase(),
+    method: request.method.toUpperCase(),
     pathParams: route.pathSpec.match(url.pathname),
     queryParams: validate(route.requestSpec.query, Object.fromEntries(url.searchParams)),
     data: validate(route.requestSpec.data, data),
@@ -172,10 +172,8 @@ const route = <
 
 serve({}, [
   route({
-    method: 'GET',
     pathSpec: root._('/')._('username', stringField()),
     responseSpec: {
-      headers: {},
       data: {
         value: stringField()
       }
@@ -184,19 +182,13 @@ serve({}, [
       data: {
         title: numberField()
       },
-      query: {},
-      headers: {}
     },
-    handler: async (request) => {
-      console.log(request.headers);
-      return {
-        headers: {},
-        statusCode: 200,
-        data: {
-          value: 'test'
-        }
+    handler: async (request) => ({
+      statusCode: 300,
+      data: {
+        value: 'test'
       }
-    }
+    })
   })
 ])
 
