@@ -10,10 +10,10 @@ export const tuple = <T extends any[]>(...args: T): T => args
 // eslint-disable-next-line no-useless-escape
 export const escapeRegex = (value: string): string => value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 
-type Foo<TT = void> = {
-  bla: TT
-}
+type WithBar<Value=undefined> =
+  Value extends undefined ? undefined : Record<'bar', Value>
 
-const foo: Foo = {
-  bla: 11
-}
+type ff = DictType<{'key': 42}>
+
+
+type bb = DictType<undefined>

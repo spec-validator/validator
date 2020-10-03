@@ -35,13 +35,15 @@ const mergeServerConfigs = (
 
 type HeadersType = Record<string, string | string[]>
 
-type Request<PathParams, Data, QueryParams, Headers extends HeadersType> = {
+type Optional<T> = T | undefined;
+
+type Request<PathParams, Data, QueryParams, Headers extends Optional<HeadersType>> = {
   method?: string,
-  pathParams: PathParams,
-  queryParams: QueryParams
-  data: Data,
-  headers: Headers
 }
+& PathParams extends undefined ? undefined : { pathParams: PathParams }
+& Data extends undefined ? undefined : { data: Data }
+& Headers extends undefined ? undefined : { headers: HeadersType }
+& QueryParams extends undefined ? undefined : { queryParams: QueryParams }
 
 type Response<Data, Headers extends HeadersType> = {
   statusCode: number,
@@ -114,7 +116,7 @@ const handleRoute = async <
   const data = config.protocol.deserialize(await getData(request));
 
   const resp = await route.handler({
-    method: request.method?.toUpperCase() || 'GET',
+    method: request.method?.toUpperCase(),
     pathParams: route.pathSpec.match(url.pathname),
     queryParams: validate(route.requestSpec.query, Object.fromEntries(url.searchParams)),
     data: validate(route.requestSpec.data, data),
