@@ -35,15 +35,19 @@ const mergeServerConfigs = (
 
 type HeadersType = Record<string, string | string[]>
 
+type ff = Partial<HeadersType>
+
 type Optional<T> = T | undefined;
 
 type Request<PathParams, Data, QueryParams, Headers extends Optional<HeadersType>> = {
   method?: string,
 }
-& PathParams extends undefined ? undefined : { pathParams: PathParams }
-& Data extends undefined ? undefined : { data: Data }
-& Headers extends undefined ? undefined : { headers: HeadersType }
-& QueryParams extends undefined ? undefined : { queryParams: QueryParams }
+& PathParams extends undefined ? { pathParams?: undefined } : { pathParams: PathParams }
+& Data extends undefined ? { data?: undefined } : { data: Data }
+& Headers extends undefined ? { headers?: undefined } : { headers: HeadersType }
+& QueryParams extends undefined ? { queryParams?: undefined } : { queryParams: QueryParams }
+
+type rr = Request<{key: string}, {key: number}, {key: boolean}, {key: 'bb'}>
 
 type Response<Data, Headers extends HeadersType> = {
   statusCode: number,
@@ -191,3 +195,12 @@ serve({}, [
     }
   })
 ])
+
+type boo<T> = { key1: T }
+type bla<N> = { key2: N }
+type wuga = boo<number> & bla<string>;
+
+const t: wuga = {
+  key1: 12,
+  key2: 'ss'
+}
