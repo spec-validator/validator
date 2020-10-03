@@ -35,19 +35,30 @@ const mergeServerConfigs = (
 
 type HeadersType = Record<string, string | string[]>
 
-type ff = Partial<HeadersType>
-
 type Optional<T> = T | undefined;
 
-type Request<PathParams, Data, QueryParams, Headers extends Optional<HeadersType>> = {
-  method?: string,
-}
-& PathParams extends undefined ? { pathParams?: undefined } : { pathParams: PathParams }
-& Data extends undefined ? { data?: undefined } : { data: Data }
-& Headers extends undefined ? { headers?: undefined } : { headers: HeadersType }
-& QueryParams extends undefined ? { queryParams?: undefined } : { queryParams: QueryParams }
+type WithPathParams<PathParams> =
+  PathParams extends undefined ? { pathParams?: undefined } : { pathParams: PathParams }
 
-type rr = Request<{key: string}, {key: number}, {key: boolean}, {key: 'bb'}>
+type WithData<Data> =
+  Data extends undefined ? { data?: undefined } : { data: Data }
+
+type WithHeaders<Headers> =
+  Headers extends undefined ? { headers?: undefined } : { headers: HeadersType }
+
+type WithQueryParams<QueryParams> =
+  QueryParams extends undefined ? { queryParams?: undefined } : { queryParams: QueryParams }
+
+type Request<
+  PathParams = undefined,
+  Data = undefined,
+  QueryParams = undefined,
+  Headers extends Optional<HeadersType> = undefined
+> = {
+  method?: string,
+} & WithPathParams<PathParams> & WithData<Data> & WithHeaders<Headers> & WithQueryParams<QueryParams>
+
+type rr = Request<{key: string}, {key: number}, {key: boolean}>
 
 type Response<Data, Headers extends HeadersType> = {
   statusCode: number,
@@ -196,17 +207,3 @@ serve({}, [
   })
 ])
 
-type boo<T> = { key1: T }
-type bla<N> = { key2: N }
-type wuga = boo<number> & bla<string>;
-
-const t: wuga = {
-  key1: 12,
-  key2: 'ss'
-}
-
-type wuga2 = boo<undefined> & bla<string>;
-
-const tt: wuga2 = {
-  key2: 'ss'
-}
