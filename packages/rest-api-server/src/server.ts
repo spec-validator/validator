@@ -37,34 +37,27 @@ type HeadersType = Record<string, string | string[]>
 
 type Optional<T> = T | undefined;
 
-type WithPathParams<PathParams> =
-  PathParams extends undefined ? unknown : { pathParams: PathParams }
-
-type WithData<Data> =
-  Data extends undefined ? unknown : { data: Data }
-
-type WithHeaders<Headers> =
-  Headers extends undefined ? unknown : { headers: HeadersType }
-
-type WithQueryParams<QueryParams> =
-  QueryParams extends undefined ? unknown : { queryParams: QueryParams }
+type WithOptionalValue<Key extends string, Value> =
+  Value extends undefined ? unknown : Record<Key, Value>
 
 type Request<
   PathParams = undefined,
   Data = undefined,
   QueryParams = undefined,
   Headers extends Optional<HeadersType> = undefined
-> = {
-  method?: string,
-} & WithPathParams<PathParams> & WithData<Data> & WithHeaders<Headers> & WithQueryParams<QueryParams>
+> = { method?: string }
+  & WithOptionalValue<'pathParams', PathParams>
+  & WithOptionalValue<'data', Data>
+  & WithOptionalValue<'headers', Headers>
+  & WithOptionalValue<'queryParams', QueryParams>
 
-type rr = Request<{key: string}, {key: number}>
 
-type Response<Data, Headers extends HeadersType> = {
-  statusCode: number,
-  data: Data,
-  headers: Headers
-}
+type Response<
+  Data = undefined,
+  Headers extends Optional<HeadersType> = undefined
+> = { statusCode?: number }
+  & WithOptionalValue<'data', Data>
+  & WithOptionalValue<'headers', Headers>
 
 type Route<
   RequestPathParams, RequestData, RequestQueryParams, RequestHeaders extends HeadersType,
