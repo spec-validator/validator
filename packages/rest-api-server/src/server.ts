@@ -196,7 +196,6 @@ serve({}, [
       },
     },
     handler: async (request) => ({
-      statusCode: 300,
       data: {
         value: request.data.title
       }
