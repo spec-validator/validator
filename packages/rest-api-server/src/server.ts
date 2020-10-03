@@ -123,13 +123,25 @@ const handleRoute = async <
 
   const data = config.protocol.deserialize(await getData(request));
 
+  const queryParams = route.requestSpec.query
+    ? validate(route.requestSpec.query, Object.fromEntries(url.searchParams))
+    : undefined;
+  const pathParams = route.pathSpec.match(url.pathname);
+  const method = request.method?.toUpperCase();
+  const dataProc = route.requestSpec?.data
+    ? validate(route.requestSpec.data, data)
+    : undefined
+  const headers = route.requestSpec?.headers
+    ? validate(route.requestSpec?.headers, request.headers)
+    : undefined
+
   const resp = await route.handler({
-    method: request.method?.toUpperCase(),
-    pathParams: route.pathSpec.match(url.pathname),
-    queryParams: validate(route.requestSpec.query, Object.fromEntries(url.searchParams)),
-    data: validate(route.requestSpec.data, data),
-    headers: validate(route.requestSpec.headers, request.headers),
-  });
+    method: method,
+    pathParams: pathParams,
+    queryParams: queryParams,
+    data: dataProc,
+    headers: headers,
+  } as any);
 
   Object.entries(resp.headers || {}).forEach(([key, value]) =>
     response.setHeader(key, value as any)
@@ -180,13 +192,13 @@ serve({}, [
     },
     requestSpec: {
       data: {
-        title: numberField()
+        title: stringField()
       },
     },
     handler: async (request) => ({
       statusCode: 300,
       data: {
-        value: 'test'
+        value: request.data.title
       }
     })
   })
