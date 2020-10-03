@@ -38,16 +38,16 @@ type HeadersType = Record<string, string | string[]>
 type Optional<T> = T | undefined;
 
 type WithPathParams<PathParams> =
-  PathParams extends undefined ? { pathParams?: undefined } : { pathParams: PathParams }
+  PathParams extends undefined ? unknown : { pathParams: PathParams }
 
 type WithData<Data> =
-  Data extends undefined ? { data?: undefined } : { data: Data }
+  Data extends undefined ? unknown : { data: Data }
 
 type WithHeaders<Headers> =
-  Headers extends undefined ? { headers?: undefined } : { headers: HeadersType }
+  Headers extends undefined ? unknown : { headers: HeadersType }
 
 type WithQueryParams<QueryParams> =
-  QueryParams extends undefined ? { queryParams?: undefined } : { queryParams: QueryParams }
+  QueryParams extends undefined ? unknown : { queryParams: QueryParams }
 
 type Request<
   PathParams = undefined,
@@ -58,7 +58,7 @@ type Request<
   method?: string,
 } & WithPathParams<PathParams> & WithData<Data> & WithHeaders<Headers> & WithQueryParams<QueryParams>
 
-type rr = Request<{key: string}, {key: number}, {key: boolean}>
+type rr = Request<{key: string}, {key: number}>
 
 type Response<Data, Headers extends HeadersType> = {
   statusCode: number,
