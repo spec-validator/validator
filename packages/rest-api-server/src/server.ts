@@ -36,7 +36,7 @@ const mergeServerConfigs = (
 type HeadersType = Record<string, string | string[]>
 
 type Request<PathParams, Data, QueryParams, Headers extends HeadersType> = {
-  method: string,
+  method?: string,
   pathParams: PathParams,
   queryParams: QueryParams
   data: Data,
@@ -53,16 +53,16 @@ type Route<
   RequestPathParams, RequestData, RequestQueryParams, RequestHeaders extends HeadersType,
   ResponseData, ResponseHeaders extends HeadersType
 > = {
-  method?: string,
+  method: string,
   pathSpec: Segment<RequestPathParams>,
-  requestSpec?: {
-    data?: ValidatorSpec<RequestData>,
-    query?: ValidatorSpec<RequestQueryParams>,
-    headers?: ValidatorSpec<RequestHeaders>
+  requestSpec: {
+    data: ValidatorSpec<RequestData>,
+    query: ValidatorSpec<RequestQueryParams>,
+    headers: ValidatorSpec<RequestHeaders>
   },
-  responseSpec?: {
-    data?: ValidatorSpec<ResponseData>
-    headers?: ValidatorSpec<ResponseHeaders>
+  responseSpec: {
+    data: ValidatorSpec<ResponseData>
+    headers: ValidatorSpec<ResponseHeaders>
   }
   handler: (
     request: Request<RequestPathParams, RequestData, RequestQueryParams, RequestHeaders>
@@ -97,9 +97,6 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
   }
 })
 
-const processNonEmpty = <T, R> (proc: (it: T) => R, value?: T): R | undefined =>
-  value ? proc(value) : undefined
-
 const handleRoute = async <
   RequestPathParams, RequestData, RequestQueryParams, RequestHeaders extends HeadersType,
   ResponseData, ResponseHeaders extends HeadersType
@@ -119,31 +116,19 @@ const handleRoute = async <
   const resp = await route.handler({
     method: request.method?.toUpperCase() || 'GET',
     pathParams: route.pathSpec.match(url.pathname),
-    queryParams: processNonEmpty(
-      (it) => validate(it, Object.fromEntries(url.searchParams)),
-      route?.requestSpec?.query
-    ),
-    data: processNonEmpty(
-      (it) => validate(it, data),
-      route?.requestSpec?.data
-    ),
-    headers: processNonEmpty(
-      (it) => validate(it, request.headers),
-      route?.requestSpec?.headers
-    )
+    queryParams: validate(route.requestSpec.query, Object.fromEntries(url.searchParams)),
+    data: validate(route.requestSpec.data, data),
+    headers: validate(route.requestSpec.headers, request.headers),
   });
 
   Object.entries(resp.headers || {}).forEach(([key, value]) =>
     response.setHeader(key, value as any)
   );
 
-  response.statusCode = resp.statusCode || data ? 200 : 201;
+  response.statusCode = resp.statusCode;
 
   response.write(
-    processNonEmpty(
-      (it) => config.protocol.serialize(serialize(it, resp.data)),
-      route?.responseSpec?.data
-    ) || '',
+    config.protocol.serialize(serialize(route.responseSpec.data, resp.data)),
     config.encoding
   );
 
@@ -177,11 +162,10 @@ const route = <
 
 serve({}, [
   route({
+    method: 'GET',
     pathSpec: root._('/')._('username', stringField()),
     responseSpec: {
-      headers: {
-        foo: stringField()
-      },
+      headers: {},
       data: {
         value: stringField()
       }
@@ -190,7 +174,8 @@ serve({}, [
       data: {
         title: numberField()
       },
-      query: {}
+      query: {},
+      headers: {}
     },
     handler: async (request) => {
       console.log(request.headers);

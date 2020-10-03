@@ -9,3 +9,11 @@ export const tuple = <T extends any[]>(...args: T): T => args
 
 // eslint-disable-next-line no-useless-escape
 export const escapeRegex = (value: string): string => value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+type Foo<TT = void> = {
+  bla: TT
+}
+
+const foo: Foo = {
+  bla: 11
+}
