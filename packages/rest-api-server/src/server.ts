@@ -204,3 +204,9 @@ const t: wuga = {
   key1: 12,
   key2: 'ss'
 }
+
+type wuga2 = boo<undefined> & bla<string>;
+
+const tt: wuga2 = {
+  key2: 'ss'
+}
