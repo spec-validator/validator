@@ -169,7 +169,7 @@ const handleRoute = async <
     headers: headers,
   } as any);
 
-  Object.entries(resp.headers || {}).forEach(([key, value]) =>
+  Object.entries((resp as any).headers || {}).forEach(([key, value]) =>
     response.setHeader(key, value as any)
   );
 
@@ -177,7 +177,7 @@ const handleRoute = async <
 
   if (route.responseSpec?.data) {
     response.write(
-      config.protocol.serialize(serialize(route.responseSpec?.data, resp.data)),
+      config.protocol.serialize(serialize(route.responseSpec.data, (resp as any).data)),
       config.encoding
     );
   }
