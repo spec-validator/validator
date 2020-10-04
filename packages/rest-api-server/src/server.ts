@@ -1,6 +1,5 @@
 import {
-  createServer, IncomingHttpHeaders, IncomingMessage,
-  OutgoingHttpHeaders, ServerResponse
+  createServer, IncomingMessage, ServerResponse
 } from 'http';
 
 import { URL } from 'url';
@@ -36,6 +35,8 @@ const mergeServerConfigs = (
   ...serverConfig,
 })
 
+type HttpHeaders = Record<string, string | string[]>
+
 type DataType = Record<string, unknown>
 
 type Optional<T> = T | undefined;
@@ -47,7 +48,7 @@ type Request<
   PathParams extends Optional<DataType> = undefined,
   Data extends Optional<DataType> = undefined,
   QueryParams extends Optional<DataType> = undefined,
-  Headers extends Optional<IncomingHttpHeaders> = undefined
+  Headers extends Optional<HttpHeaders> = undefined
 > = { method?: string }
   & WithOptionalValue<'pathParams', PathParams>
   & WithOptionalValue<'data', Data>
@@ -56,7 +57,7 @@ type Request<
 
 type Response<
   Data extends Optional<DataType> = undefined,
-  Headers extends Optional<OutgoingHttpHeaders> = undefined
+  Headers extends Optional<HttpHeaders> = undefined
 > = { statusCode?: number }
   & WithOptionalValue<'data', Data>
   & WithOptionalValue<'headers', Headers>
@@ -64,24 +65,24 @@ type Response<
 type RequestSpec<
   RequestData extends DataType,
   RequestQueryParams extends DataType,
-  RequestHeaders extends IncomingHttpHeaders,
+  RequestHeaders extends HttpHeaders,
 > = {
   data?: ValidatorSpec<RequestData>,
   query?: ValidatorSpec<RequestQueryParams>,
   headers?: ValidatorSpec<RequestHeaders>
 }
 
-type WildCardRequestSpec = RequestSpec<DataType, DataType, IncomingHttpHeaders>;
+type WildCardRequestSpec = RequestSpec<DataType, DataType, HttpHeaders>;
 
 type ResponseSpec<
   ResponseData extends DataType,
-  ResponseHeaders extends OutgoingHttpHeaders
+  ResponseHeaders extends HttpHeaders
 > = {
   data?: ValidatorSpec<ResponseData>
   headers?: ValidatorSpec<ResponseHeaders>
 }
 
-type WildCardResponseSpec = ResponseSpec<DataType, OutgoingHttpHeaders>;
+type WildCardResponseSpec = ResponseSpec<DataType, HttpHeaders>;
 
 type Route<
   RequestPathParams extends DataType,
@@ -90,8 +91,8 @@ type Route<
 > = {
   method?: string,
   pathSpec: Segment<RequestPathParams>,
-  requestSpec: TRequestSpec,
-  responseSpec: TResponseSpec
+  requestSpec?: TRequestSpec,
+  responseSpec?: TResponseSpec
   handler: (
     request: Request<
       RequestPathParams,

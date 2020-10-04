@@ -1,4 +1,4 @@
-import { numberField, stringField } from '@validator/validator/fields';
+import { stringField } from '@validator/validator/fields';
 import { root } from '@validator/validator/segmentChain';
 import { GET, serve } from './server';
 
@@ -9,17 +9,11 @@ serve({}, [
       data: {
         value: stringField(),
       },
-      headers: {
-        foo: stringField()
-      }
     },
     requestSpec: {
       data: {
         title: stringField()
       },
-      headers: {
-        bla: stringField()
-      }
     },
     handler: async (request) => ({
       data: {
