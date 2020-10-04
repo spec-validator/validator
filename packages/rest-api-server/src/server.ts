@@ -32,7 +32,9 @@ const mergeServerConfigs = (
   ...serverConfig,
 })
 
-type HeadersType = Record<string, string | string[]>
+type HeadersType = {
+  [key: string]: string | string[]
+}
 
 type DataType = Record<string, unknown>
 
