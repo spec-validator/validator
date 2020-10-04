@@ -198,7 +198,6 @@ serve({}, [
     },
     handler: async (request) => ({
       data: {
-        value: 'ff'
       }
     })
   })
