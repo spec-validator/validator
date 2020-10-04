@@ -75,19 +75,25 @@ type RequestSpec<
 
 type WildCardRequestSpec = RequestSpec<DataType, DataType, HeadersType>;
 
+type ResponseSpec<
+  ResponseData extends DataType,
+  ResponseHeaders extends HeadersType
+> = {
+  data?: ValidatorSpec<ResponseData>
+  headers?: ValidatorSpec<ResponseHeaders>
+}
+
+type WildCardResponseSpec = ResponseSpec<DataType, HeadersType>;
+
 type Route<
   RequestPathParams extends DataType,
   TRequestSpec extends WildCardRequestSpec,
-  ResponseData extends DataType,
-  ResponseHeaders extends HeadersType
+  TResponseSpec extends WildCardResponseSpec
 > = {
   method?: string,
   pathSpec: Segment<RequestPathParams>,
   requestSpec: TRequestSpec,
-  responseSpec: {
-    data?: ValidatorSpec<ResponseData>
-    headers?: ValidatorSpec<ResponseHeaders>
-  }
+  responseSpec: TResponseSpec
   handler: (
     request: Request<
       RequestPathParams,
@@ -95,10 +101,13 @@ type Route<
       TypeHint<TRequestSpec['query']>,
       TypeHint<TRequestSpec['headers']>
     >
-  ) => Promise<Response<ResponseData, ResponseHeaders>>,
+  ) => Promise<Response<
+    TypeHint<TResponseSpec['data']>,
+    TypeHint<TResponseSpec['headers']>
+  >>,
 }
 
-type WildCardRoute = Route<any, any, any, any>
+type WildCardRoute = Route<any, any, any>
 
 const matchRoute = (
   request: http.IncomingMessage,
@@ -129,14 +138,10 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
 const handleRoute = async <
   RequestPathParams extends DataType,
   TRequestSpec extends WildCardRequestSpec,
-  ResponseData extends DataType,
-  ResponseHeaders extends HeadersType
+  TResponseSpec extends WildCardResponseSpec
 >(
   config: ServerConfig,
-  route: Route<
-    RequestPathParams, TRequestSpec,
-    ResponseData, ResponseHeaders
-  >,
+  route: Route<RequestPathParams, TRequestSpec, TResponseSpec>,
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
@@ -200,11 +205,9 @@ const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]) => {
 const route = <
   RequestPathParams extends DataType,
   TRequestSpec extends WildCardRequestSpec,
-  ResponseData extends DataType,
-  ResponseHeaders extends HeadersType
+  TResponseSpec extends WildCardResponseSpec
 > (route: Route<
-  RequestPathParams, TRequestSpec,
-  ResponseData, ResponseHeaders
+  RequestPathParams, TRequestSpec, TResponseSpec
 >) => route
 
 serve({}, [
