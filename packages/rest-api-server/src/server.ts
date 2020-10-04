@@ -90,6 +90,12 @@ type WithOptionalRequestSpec<
 > =
   TRequestSpec extends WildCardRequestSpec ? TypeHint<TRequestSpec[K]> : undefined
 
+type WithOptionalResponseSpec<
+  TResponseSpec extends Optional<WildCardResponseSpec>,
+  K extends keyof WildCardResponseSpec
+> =
+  TResponseSpec extends WildCardResponseSpec ? TypeHint<TResponseSpec[K]> : undefined
+
 type Route<
   RequestPathParams extends DataType,
   TRequestSpec extends Optional<WildCardRequestSpec>,
@@ -107,8 +113,8 @@ type Route<
       WithOptionalRequestSpec<TRequestSpec, 'headers'>
     >
   ) => Promise<Response<
-    TypeHint<TResponseSpec['data']>,
-    TypeHint<TResponseSpec['headers']>
+    WithOptionalResponseSpec<TResponseSpec, 'data'>,
+    WithOptionalResponseSpec<TResponseSpec, 'headers'>
   >>,
 }
 
