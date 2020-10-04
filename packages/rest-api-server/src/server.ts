@@ -216,7 +216,6 @@ serve({}, [
     responseSpec: {
       data: {
         value: stringField(),
-        foo: stringField()
       },
       headers: {
         foo: stringField()
@@ -229,6 +228,7 @@ serve({}, [
     },
     handler: async (request) => ({
       data: {
+        value: 'bla'
       },
       headers: {
         foo: 'dd'
