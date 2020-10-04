@@ -188,11 +188,11 @@ const handle = async (
   await handleRoute(config, route, request, response);
 }
 
-const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]) => {
+export const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]) => {
   http.createServer(handle.bind(null, mergeServerConfigs(config), routes))
 }
 
-const route = <
+export const route = <
   RequestPathParams extends DataType,
   TRequestSpec extends WildCardRequestSpec,
   TResponseSpec extends WildCardResponseSpec
@@ -212,44 +212,12 @@ const withMethod = (method: string): MethodRoute => (routeConfig) => ({
   ...routeConfig
 });
 
-const GET = withMethod('GET')
-const HEAD = withMethod('HEAD')
-const POST = withMethod('POST')
-const PUT = withMethod('PUT')
-const DELETE = withMethod('DELETE')
-const CONNECT = withMethod('CONNECT')
-const OPTIONS = withMethod('OPTIONS')
-const TRACE = withMethod('TRACE')
-const PATCH = withMethod('PATCH')
-
-import { numberField, stringField } from '@validator/validator/fields';
-
-serve({}, [
-  GET({
-    pathSpec: root._('/')._('username', stringField()),
-    responseSpec: {
-      data: {
-        value: stringField(),
-      },
-      headers: {
-        foo: stringField()
-      }
-    },
-    requestSpec: {
-      data: {
-        title: stringField()
-      },
-      headers: {
-        bla: stringField()
-      }
-    },
-    handler: async (request) => ({
-      data: {
-        value: 'bla' + request.pathParams.username
-      },
-      headers: {
-        foo: 'dd'
-      }
-    })
-  })
-])
+export const GET = withMethod('GET')
+export const HEAD = withMethod('HEAD')
+export const POST = withMethod('POST')
+export const PUT = withMethod('PUT')
+export const DELETE = withMethod('DELETE')
+export const CONNECT = withMethod('CONNECT')
+export const OPTIONS = withMethod('OPTIONS')
+export const TRACE = withMethod('TRACE')
+export const PATCH = withMethod('PATCH')

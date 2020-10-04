@@ -1,36 +1,33 @@
-type Composite<One, Two, Three> = {
-  one: One,
-  two: Two,
-  three: Three,
-}
+import { numberField, stringField } from '@validator/validator/fields';
+import { root } from '@validator/validator/segmentChain';
+import { GET, serve } from './server';
 
-const one = <T extends Composite<unknown, unknown, unknown>>(composite: T): {
-  key: string,
-  comp: T
-} => ({
-    key: 'foo',
-    comp: composite
-  })
-
-const two = <T extends Composite<unknown, unknown, unknown>>(
-  compositeH: () => T,
-  handler: (resp: {
-    key: string,
-    rval: {
-      key: string,
-      comp: T
+serve({}, [
+  GET({
+    pathSpec: root._('/')._('username', stringField()),
+    responseSpec: {
+      data: {
+        value: stringField(),
+      },
+      headers: {
+        foo: stringField()
+      }
     },
-  }) => void
-) => handler({
-    key: 'foo',
-    rval: one(compositeH())
+    requestSpec: {
+      data: {
+        title: stringField()
+      },
+      headers: {
+        bla: stringField()
+      }
+    },
+    handler: async (request) => ({
+      data: {
+        value: 'bla' + request.pathParams.username
+      },
+      headers: {
+        foo: 'dd'
+      }
+    })
   })
-
-const tt = two(() => ({
-  one: 11,
-  two: 42,
-  four: 'true',
-  three: 'foo'
-}), (resp) => {
-  console.log(resp.rval.comp)
-})
+])
