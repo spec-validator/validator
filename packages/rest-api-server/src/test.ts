@@ -10,11 +10,6 @@ serve({}, [
         value: stringField(),
       },
     },
-    requestSpec: {
-      data: {
-        title: stringField()
-      },
-    },
     handler: async (request) => ({
       data: {
         value: 'bla' + request.pathParams.username
