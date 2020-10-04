@@ -213,9 +213,14 @@ const withMethod = (method: string): MethodRoute => (routeConfig) => ({
 });
 
 const GET = withMethod('GET')
+const HEAD = withMethod('HEAD')
 const POST = withMethod('POST')
-const DELETE = withMethod('DELETE')
 const PUT = withMethod('PUT')
+const DELETE = withMethod('DELETE')
+const CONNECT = withMethod('CONNECT')
+const OPTIONS = withMethod('OPTIONS')
+const TRACE = withMethod('TRACE')
+const PATCH = withMethod('PATCH')
 
 import { numberField, stringField } from '@validator/validator/fields';
 
