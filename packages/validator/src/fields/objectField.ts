@@ -40,7 +40,7 @@ class ObjectField<ExpectedType> implements Field<ExpectedType> {
 const objectField = <ExpectedType> (
   objectSpec: ValidatorSpec<ExpectedType>,
   description?: string
-): Field<ExpectedType> => new ObjectField({
+): ObjectField<ExpectedType> => new ObjectField({
     objectSpec,
     description
   })

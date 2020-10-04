@@ -43,6 +43,6 @@ class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
 
 }
 
-const stringField = (params?: Params): Field<string> & WithStringInputSupport => new StringField(params);
+const stringField = (params?: Params): StringField => new StringField(params);
 
 export default stringField;

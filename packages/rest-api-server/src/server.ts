@@ -187,7 +187,8 @@ serve({}, [
     pathSpec: root._('/')._('username', stringField()),
     responseSpec: {
       data: {
-        value: stringField()
+        value: stringField(),
+        foo: stringField()
       }
     },
     requestSpec: {
@@ -197,7 +198,7 @@ serve({}, [
     },
     handler: async (request) => ({
       data: {
-        value: request.data.title
+        value: 'ff'
       }
     })
   })

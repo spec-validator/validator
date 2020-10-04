@@ -68,7 +68,7 @@ class ChoiceFieldWithRegExp<
 const choiceField = <
   Choices extends readonly Primitive[],
   T=Choices[number]
-> (choices: Choices, description?: string): Field<T> & WithStringInputSupport =>
+> (choices: Choices, description?: string): ChoiceField<Choices> =>
     new ChoiceField({
       choices,
       description

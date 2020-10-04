@@ -66,6 +66,6 @@ class NumberFieldWithRegExp extends NumberField implements WithRegExp {
 
 }
 
-const numberField = (params?: Params): Field<number> & WithStringInputSupport => new NumberField(params);
+const numberField = (params?: Params): NumberField => new NumberField(params);
 
 export default numberField;

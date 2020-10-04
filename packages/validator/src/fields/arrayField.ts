@@ -37,7 +37,7 @@ class ArrayField<T> implements Field<T[]> {
 const arrayField = <T> (
   itemField: Field<T>,
   description?: string
-): Field<T[]> =>
+): ArrayField<T> =>
     new ArrayField({
       itemField,
       description

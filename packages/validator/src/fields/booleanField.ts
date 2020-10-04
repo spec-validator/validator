@@ -49,6 +49,6 @@ class BooleanFieldWithRegExp extends BooleanField implements WithRegExp {
 
 }
 
-const booleanField = (params?: Params): Field<boolean> & WithStringInputSupport => new BooleanField(params)
+const booleanField = (params?: Params): BooleanField => new BooleanField(params)
 
 export default booleanField;
