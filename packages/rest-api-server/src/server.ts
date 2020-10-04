@@ -228,7 +228,7 @@ serve({}, [
     },
     handler: async (request) => ({
       data: {
-        value: 'bla'
+        value: 'bla' + request.data.title
       },
       headers: {
         foo: 'dd'
