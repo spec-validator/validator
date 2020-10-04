@@ -70,8 +70,8 @@ type RequestSpec<
 type WildCardRequestSpec = RequestSpec<DataType, DataType, HttpHeaders>;
 
 type ResponseSpec<
-  ResponseData extends DataType,
-  ResponseHeaders extends HttpHeaders
+  ResponseData extends Optional<DataType>,
+  ResponseHeaders extends Optional<HttpHeaders>
 > = {
   data?: ValidatorSpec<ResponseData>
   headers?: ValidatorSpec<ResponseHeaders>
@@ -180,14 +180,6 @@ const handle = async (
   await handleRoute(config, route, request, response);
 }
 
-export const route = <
-  RequestPathParams extends DataType,
-  TRequestSpec extends WildCardRequestSpec,
-  TResponseSpec extends WildCardResponseSpec
-> (routeConfig: Route<
-  RequestPathParams, TRequestSpec, TResponseSpec
->): Route<RequestPathParams, TRequestSpec, TResponseSpec> => routeConfig
-
 type MethodRoute = <
   RequestPathParams extends DataType,
   TRequestSpec extends WildCardRequestSpec,
@@ -197,11 +189,12 @@ type MethodRoute = <
   )
   => Route<RequestPathParams, TRequestSpec, TResponseSpec>
 
-const withMethod = (method: string): MethodRoute => (routeConfig) => ({
+export const withMethod = (method: string | undefined): MethodRoute => (routeConfig) => ({
   method,
   ...routeConfig
 });
 
+export const ANY_METHOD = withMethod(undefined)
 export const GET = withMethod('GET')
 export const HEAD = withMethod('HEAD')
 export const POST = withMethod('POST')
