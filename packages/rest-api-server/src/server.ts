@@ -44,12 +44,7 @@ type Optional<T> = T | undefined;
 type WithOptionalValue<Key extends string, Value> =
   Value extends undefined ? unknown : Record<Key, Value>
 
-export type Request<
-  PathParams extends Optional<DataType> = undefined,
-  Data extends Optional<DataType> = undefined,
-  QueryParams extends Optional<DataType> = undefined,
-  Headers extends Optional<HttpHeaders> = undefined
-> = { method?: string }
+export type Request<PathParams, Data, QueryParams, Headers> = { method?: string }
   & WithOptionalValue<'pathParams', PathParams>
   & WithOptionalValue<'data', Data>
   & WithOptionalValue<'headers', Headers>
