@@ -82,12 +82,13 @@ type WildCardResponseSpec = ResponseSpec<DataType, HttpHeaders>;
 type Route<
   RequestPathParams extends DataType,
   TRequestSpec extends WildCardRequestSpec,
-  TResponseSpec extends WildCardResponseSpec
+  ResponseData extends DataType,
+  ResponseHeaders extends HttpHeaders
 > = {
   method?: string,
   pathSpec: Segment<RequestPathParams>,
   requestSpec?: TRequestSpec,
-  responseSpec?: TResponseSpec
+  responseSpec?: ResponseSpec<ResponseData, ResponseHeaders>
   handler: (
     request: Request<
       RequestPathParams,
@@ -95,13 +96,10 @@ type Route<
       TypeHint<TRequestSpec['query']>,
       TypeHint<TRequestSpec['headers']>
     >
-  ) => Promise<Response<
-    TypeHint<TResponseSpec['data']>,
-    TypeHint<TResponseSpec['headers']>
-  >>,
+  ) => Promise<Response<ResponseData, ResponseHeaders>>
 }
 
-type WildCardRoute = Route<any, WildCardRequestSpec, WildCardResponseSpec>
+type WildCardRoute = Route<any, WildCardRequestSpec, DataType, HttpHeaders>
 
 const matchRoute = (
   request: IncomingMessage,
