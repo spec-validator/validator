@@ -4,7 +4,6 @@ import { ValidatorSpec, validate, serialize, TypeHint } from '@validator/validat
 import { root, Segment } from '@validator/validator/segmentChain';
 import { Json } from '@validator/validator/Json';
 import { URL } from 'url';
-import { numberField, stringField } from '@validator/validator/fields';
 
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
@@ -132,13 +131,9 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
   }
 })
 
-const handleRoute = async <
-  RequestPathParams extends DataType,
-  TRequestSpec extends WildCardRequestSpec,
-  TResponseSpec extends WildCardResponseSpec
->(
+const handleRoute = async (
   config: ServerConfig,
-  route: Route<RequestPathParams, TRequestSpec, TResponseSpec>,
+  route: WildCardRoute,
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
@@ -206,6 +201,9 @@ const route = <
 > (route: Route<
   RequestPathParams, TRequestSpec, TResponseSpec
 >) => route
+
+
+import { numberField, stringField } from '@validator/validator/fields';
 
 serve({}, [
   route({
