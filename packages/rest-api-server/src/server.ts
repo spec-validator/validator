@@ -42,7 +42,7 @@ type DataType = Record<string, unknown>
 type Optional<T> = T | undefined;
 
 type WithOptionalValue<Key extends string, Value> =
-  Value extends undefined ? unknown : Record<Key, Value>
+  Value extends undefined ? undefined : Record<Key, Value>
 
 export type Request<PathParams, Data, QueryParams, Headers> = { method?: string }
   & WithOptionalValue<'pathParams', PathParams>
@@ -77,13 +77,11 @@ type ResponseSpec<
   headers?: ValidatorSpec<ResponseHeaders>
 }
 
-type WildCardResponseSpec = ResponseSpec<DataType, HttpHeaders>;
-
 type Route<
   RequestPathParams extends DataType,
   TRequestSpec extends WildCardRequestSpec,
-  ResponseData extends DataType,
-  ResponseHeaders extends HttpHeaders
+  ResponseData extends Optional<DataType>,
+  ResponseHeaders extends Optional<HttpHeaders>
 > = {
   method?: string,
   pathSpec: Segment<RequestPathParams>,
@@ -181,8 +179,8 @@ const handle = async (
 type MethodRoute = <
   RequestPathParams extends DataType,
   TRequestSpec extends WildCardRequestSpec,
-  ResponseData extends DataType,
-  ResponseHeaders extends HttpHeaders
+  ResponseData extends Optional<DataType>,
+  ResponseHeaders extends Optional<HttpHeaders>
 > (routeConfig:
     Omit<Route<RequestPathParams, TRequestSpec, ResponseData, ResponseHeaders>, 'method'>
   )

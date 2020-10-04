@@ -14,6 +14,8 @@ serve({}, [
       data: {
         value: 'bla' + request.pathParams.username,
       },
+      headers: {
+      }
     })
   })
 ])
