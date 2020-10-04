@@ -91,8 +91,8 @@ type Route<
 > = {
   method?: string,
   pathSpec: Segment<RequestPathParams>,
-  requestSpec: TRequestSpec,
-  responseSpec: TResponseSpec
+  requestSpec?: TRequestSpec,
+  responseSpec?: TResponseSpec
   handler: (
     request: Request<
       RequestPathParams,

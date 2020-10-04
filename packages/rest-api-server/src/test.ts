@@ -10,16 +10,10 @@ serve({}, [
         value: stringField(),
       },
     },
-    requestSpec: {
-
-    },
     handler: async (request) => ({
       data: {
         value: 'bla' + request.pathParams.username
       },
-      headers: {
-        foo: 'dd'
-      }
     })
   })
 ])
