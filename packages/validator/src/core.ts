@@ -10,9 +10,9 @@ export type ValidatorSpec<ExpectedType> = {
   [P in keyof ExpectedType]: Field<ExpectedType[P]>;
 };
 
-export type TypeHint<Spec extends ValidatorSpec<any>> = {
+export type TypeHint<Spec extends ValidatorSpec<any> | undefined> = Spec extends ValidatorSpec<any> ? {
   [P in keyof Spec]: ReturnType<Spec[P]['validate']>;
-}
+} : undefined;
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const withErrorDecoration = <R> (key: any, call: () => R): R => {

@@ -1,6 +1,6 @@
 import http from 'http';
 
-import { ValidatorSpec, validate, serialize } from '@validator/validator/core';
+import { ValidatorSpec, validate, serialize, TypeHint } from '@validator/validator/core';
 import { root, Segment } from '@validator/validator/segmentChain';
 import { Json } from '@validator/validator/Json';
 import { URL } from 'url';
@@ -33,6 +33,9 @@ const mergeServerConfigs = (
   ...serverConfig,
 })
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface Blank {}
+
 type HeadersType = Record<string, string | string[]>
 
 type DataType = Record<string, unknown>
@@ -40,7 +43,7 @@ type DataType = Record<string, unknown>
 type Optional<T> = T | undefined;
 
 type WithOptionalValue<Key extends string, Value> =
-  Value extends undefined ? unknown : Record<Key, Value>
+  Value extends undefined ? Blank : Record<Key, Value>
 
 type Request<
   PathParams extends Optional<DataType> = undefined,
@@ -60,31 +63,42 @@ type Response<
   & WithOptionalValue<'data', Data>
   & WithOptionalValue<'headers', Headers>
 
-type Route<
-  RequestPathParams extends DataType,
+type RequestSpec<
   RequestData extends DataType,
   RequestQueryParams extends DataType,
   RequestHeaders extends HeadersType,
+> = {
+  data?: ValidatorSpec<RequestData>,
+  query?: ValidatorSpec<RequestQueryParams>,
+  headers?: ValidatorSpec<RequestHeaders>
+}
+
+type WildCardRequestSpec = RequestSpec<DataType, DataType, HeadersType>;
+
+type Route<
+  RequestPathParams extends DataType,
+  TRequestSpec extends WildCardRequestSpec,
   ResponseData extends DataType,
   ResponseHeaders extends HeadersType
 > = {
   method?: string,
   pathSpec: Segment<RequestPathParams>,
-  requestSpec: {
-    data?: ValidatorSpec<RequestData>,
-    query?: ValidatorSpec<RequestQueryParams>,
-    headers?: ValidatorSpec<RequestHeaders>
-  },
+  requestSpec: TRequestSpec,
   responseSpec: {
     data?: ValidatorSpec<ResponseData>
     headers?: ValidatorSpec<ResponseHeaders>
   }
   handler: (
-    request: Request<RequestPathParams, RequestData, RequestQueryParams, RequestHeaders>
+    request: Request<
+      RequestPathParams,
+      TypeHint<TRequestSpec['data']>,
+      TypeHint<TRequestSpec['query']>,
+      TypeHint<TRequestSpec['headers']>
+    >
   ) => Promise<Response<ResponseData, ResponseHeaders>>,
 }
 
-type WildCardRoute = Route<any, any, any, any, any, any>
+type WildCardRoute = Route<any, any, any, any>
 
 const matchRoute = (
   request: http.IncomingMessage,
@@ -114,15 +128,13 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
 
 const handleRoute = async <
   RequestPathParams extends DataType,
-  RequestData extends DataType,
-  RequestQueryParams extends DataType,
-  RequestHeaders extends HeadersType,
+  TRequestSpec extends WildCardRequestSpec,
   ResponseData extends DataType,
   ResponseHeaders extends HeadersType
 >(
   config: ServerConfig,
   route: Route<
-    RequestPathParams, RequestData, RequestQueryParams, RequestHeaders,
+    RequestPathParams, TRequestSpec,
     ResponseData, ResponseHeaders
   >,
   request: http.IncomingMessage,
@@ -132,7 +144,7 @@ const handleRoute = async <
 
   const data = config.protocol.deserialize(await getData(request));
 
-  const queryParams = route.requestSpec.query
+  const queryParams = route.requestSpec?.query
     ? validate(route.requestSpec.query, Object.fromEntries(url.searchParams))
     : undefined;
   const pathParams = route.pathSpec.match(url.pathname);
@@ -141,7 +153,7 @@ const handleRoute = async <
     ? validate(route.requestSpec.data, data)
     : undefined
   const headers = route.requestSpec?.headers
-    ? validate(route.requestSpec?.headers, request.headers)
+    ? validate(route.requestSpec.headers, request.headers)
     : undefined
 
   const resp = await route.handler({
@@ -187,13 +199,11 @@ const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]) => {
 
 const route = <
   RequestPathParams extends DataType,
-  RequestData extends DataType,
-  RequestQueryParams extends DataType,
-  RequestHeaders extends HeadersType,
+  TRequestSpec extends WildCardRequestSpec,
   ResponseData extends DataType,
   ResponseHeaders extends HeadersType
 > (route: Route<
-  RequestPathParams, RequestData, RequestQueryParams, RequestHeaders,
+  RequestPathParams, TRequestSpec,
   ResponseData, ResponseHeaders
 >) => route
 
@@ -223,7 +233,3 @@ serve({}, [
     })
   })
 ])
-
-const FF = {};
-
-type TT = WithOptionalValue<'field', typeof FF>
