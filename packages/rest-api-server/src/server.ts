@@ -35,15 +35,17 @@ const mergeServerConfigs = (
 
 type HeadersType = Record<string, string | string[]>
 
+type DataType = Record<string, unknown>
+
 type Optional<T> = T | undefined;
 
 type WithOptionalValue<Key extends string, Value> =
   Value extends undefined ? unknown : Record<Key, Value>
 
 type Request<
-  PathParams = undefined,
-  Data = undefined,
-  QueryParams = undefined,
+  PathParams extends Optional<DataType> = undefined,
+  Data extends Optional<DataType> = undefined,
+  QueryParams extends Optional<DataType> = undefined,
   Headers extends Optional<HeadersType> = undefined
 > = { method?: string }
   & WithOptionalValue<'pathParams', PathParams>
@@ -53,15 +55,19 @@ type Request<
 
 
 type Response<
-  Data = undefined,
+  Data extends Optional<DataType> = undefined,
   Headers extends Optional<HeadersType> = undefined
 > = { statusCode?: number }
   & WithOptionalValue<'data', Data>
   & WithOptionalValue<'headers', Headers>
 
 type Route<
-  RequestPathParams, RequestData, RequestQueryParams, RequestHeaders extends HeadersType,
-  ResponseData, ResponseHeaders extends HeadersType
+  RequestPathParams extends DataType,
+  RequestData extends DataType,
+  RequestQueryParams extends DataType,
+  RequestHeaders extends HeadersType,
+  ResponseData extends DataType,
+  ResponseHeaders extends HeadersType
 > = {
   method?: string,
   pathSpec: Segment<RequestPathParams>,
@@ -108,8 +114,12 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
 })
 
 const handleRoute = async <
-  RequestPathParams, RequestData, RequestQueryParams, RequestHeaders extends HeadersType,
-  ResponseData, ResponseHeaders extends HeadersType
+  RequestPathParams extends DataType,
+  RequestData extends DataType,
+  RequestQueryParams extends DataType,
+  RequestHeaders extends HeadersType,
+  ResponseData extends DataType,
+  ResponseHeaders extends HeadersType
 >(
   config: ServerConfig,
   route: Route<
@@ -149,10 +159,12 @@ const handleRoute = async <
 
   response.statusCode = resp.statusCode || data ? 200 : 201;
 
-  response.write(
-    config.protocol.serialize(serialize(route.responseSpec.data, resp.data)),
-    config.encoding
-  );
+  if (route.responseSpec?.data) {
+    response.write(
+      config.protocol.serialize(serialize(route.responseSpec?.data, resp.data)),
+      config.encoding
+    );
+  }
 
   response.end();
 };
@@ -175,8 +187,12 @@ const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]) => {
 }
 
 const route = <
-  RequestPathParams, RequestData, RequestQueryParams, RequestHeaders extends HeadersType,
-  ResponseData, ResponseHeaders extends HeadersType
+  RequestPathParams extends DataType,
+  RequestData extends DataType,
+  RequestQueryParams extends DataType,
+  RequestHeaders extends HeadersType,
+  ResponseData extends DataType,
+  ResponseHeaders extends HeadersType
 > (route: Route<
   RequestPathParams, RequestData, RequestQueryParams, RequestHeaders,
   ResponseData, ResponseHeaders
