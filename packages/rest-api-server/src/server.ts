@@ -204,6 +204,9 @@ serve({}, [
       data: {
         value: stringField(),
         foo: stringField()
+      },
+      headers: {
+        foo: stringField()
       }
     },
     requestSpec: {
@@ -213,8 +216,14 @@ serve({}, [
     },
     handler: async (request) => ({
       data: {
+      },
+      headers: {
+        foo: 'dd'
       }
     })
   })
 ])
 
+const FF = {};
+
+type TT = WithOptionalValue<'field', typeof FF>
