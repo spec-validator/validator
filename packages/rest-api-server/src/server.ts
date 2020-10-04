@@ -200,12 +200,23 @@ const route = <
   TResponseSpec extends WildCardResponseSpec
 > (routeConfig: Route<
   RequestPathParams, TRequestSpec, TResponseSpec
->): Route<RequestPathParams, TRequestSpec, TResponseSpec>  => routeConfig
+>): Route<RequestPathParams, TRequestSpec, TResponseSpec> => routeConfig
+
+const get = <
+  RequestPathParams extends DataType,
+  TRequestSpec extends WildCardRequestSpec,
+  TResponseSpec extends WildCardResponseSpec
+> (routeConfig: Omit<Route<
+  RequestPathParams, TRequestSpec, TResponseSpec
+>, 'method'>): Route<RequestPathParams, TRequestSpec, TResponseSpec> => ({
+    method: 'GET',
+    ...routeConfig
+  })
 
 import { numberField, stringField } from '@validator/validator/fields';
 
 serve({}, [
-  route({
+  get({
     pathSpec: root._('/')._('username', stringField()),
     responseSpec: {
       data: {
