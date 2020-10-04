@@ -202,17 +202,6 @@ const route = <
   RequestPathParams, TRequestSpec, TResponseSpec
 >): Route<RequestPathParams, TRequestSpec, TResponseSpec>  => routeConfig
 
-const get = <
-  RequestPathParams extends DataType,
-  TRequestSpec extends WildCardRequestSpec,
-  TResponseSpec extends WildCardResponseSpec
-> (routeConfig: Route<
-  RequestPathParams, TRequestSpec, TResponseSpec
->): Route<RequestPathParams, TRequestSpec, TResponseSpec> => ({
-    method: 'GET',
-    ...route(routeConfig)
-  })
-
 import { numberField, stringField } from '@validator/validator/fields';
 
 serve({}, [
