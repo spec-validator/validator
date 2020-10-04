@@ -12,6 +12,7 @@ serve({}, [
     },
     handler: async (request) => ({
       data: {
+        foo: 12,
         value: 'bla' + request.pathParams.username
       },
     })

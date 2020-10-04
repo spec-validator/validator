@@ -44,7 +44,7 @@ type Optional<T> = T | undefined;
 type WithOptionalValue<Key extends string, Value> =
   Value extends undefined ? unknown : Record<Key, Value>
 
-type Request<
+export type Request<
   PathParams extends Optional<DataType> = undefined,
   Data extends Optional<DataType> = undefined,
   QueryParams extends Optional<DataType> = undefined,
@@ -55,7 +55,7 @@ type Request<
   & WithOptionalValue<'headers', Headers>
   & WithOptionalValue<'queryParams', QueryParams>
 
-type Response<
+export type Response<
   Data extends Optional<DataType> = undefined,
   Headers extends Optional<HttpHeaders> = undefined
 > = { statusCode?: number }
@@ -142,27 +142,19 @@ const handleRoute = async (
 ): Promise<void> => {
   const url = new URL(request.url || '')
 
-  const data = config.protocol.deserialize(await getData(request));
-
   const queryParams = route.requestSpec?.query
     ? validate(route.requestSpec.query, Object.fromEntries(url.searchParams))
     : undefined;
   const pathParams = route.pathSpec.match(url.pathname);
   const method = request.method?.toUpperCase();
-  const dataProc = route.requestSpec?.data
-    ? validate(route.requestSpec.data, data)
+  const data = route.requestSpec?.data
+    ? validate(route.requestSpec.data, config.protocol.deserialize(await getData(request)))
     : undefined
   const headers = route.requestSpec?.headers
     ? validate(route.requestSpec.headers, request.headers)
     : undefined
 
-  const resp = await route.handler({
-    method: method,
-    pathParams: pathParams,
-    queryParams: queryParams,
-    data: dataProc,
-    headers: headers,
-  } as any);
+  const resp = await route.handler({ method, pathParams, queryParams, data, headers } as any);
 
   Object.entries((resp as any).headers || {}).forEach(([key, value]) =>
     response.setHeader(key, value as any)
