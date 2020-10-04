@@ -1,9 +1,13 @@
-import http, { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
+import {
+  createServer, IncomingHttpHeaders, IncomingMessage,
+  OutgoingHttpHeaders, ServerResponse
+} from 'http';
+
+import { URL } from 'url';
 
 import { ValidatorSpec, validate, serialize, TypeHint } from '@validator/validator/core';
-import { root, Segment } from '@validator/validator/segmentChain';
+import { Segment } from '@validator/validator/segmentChain';
 import { Json } from '@validator/validator/Json';
-import { URL } from 'url';
 
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
@@ -104,7 +108,7 @@ type Route<
 type WildCardRoute = Route<any, WildCardRequestSpec, WildCardResponseSpec>
 
 const matchRoute = (
-  request: http.IncomingMessage,
+  request: IncomingMessage,
   route: WildCardRoute
 ): boolean => {
   if (route.method && request.method !== route.method) {
@@ -118,7 +122,7 @@ const matchRoute = (
   return true;
 };
 
-const getData = async (msg: http.IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
+const getData = async (msg: IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
   try {
     const chunks: string[] = [];
     msg.on('readable', () => chunks.push(msg.read()));
@@ -132,8 +136,8 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
 const handleRoute = async (
   config: ServerConfig,
   route: WildCardRoute,
-  request: http.IncomingMessage,
-  response: http.ServerResponse
+  request: IncomingMessage,
+  response: ServerResponse
 ): Promise<void> => {
   const url = new URL(request.url || '')
 
@@ -178,8 +182,8 @@ const handleRoute = async (
 const handle = async (
   config: ServerConfig,
   routes: WildCardRoute[],
-  request: http.IncomingMessage,
-  response: http.ServerResponse
+  request: IncomingMessage,
+  response: ServerResponse
 ): Promise<void> => {
   const route = routes.find(matchRoute.bind(null, request));
   if (!route) {
@@ -188,8 +192,8 @@ const handle = async (
   await handleRoute(config, route, request, response);
 }
 
-export const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]) => {
-  http.createServer(handle.bind(null, mergeServerConfigs(config), routes))
+export const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]): void => {
+  createServer(handle.bind(null, mergeServerConfigs(config), routes))
 }
 
 export const route = <
