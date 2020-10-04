@@ -53,7 +53,6 @@ type Request<
   & WithOptionalValue<'headers', Headers>
   & WithOptionalValue<'queryParams', QueryParams>
 
-
 type Response<
   Data extends Optional<DataType> = undefined,
   Headers extends Optional<HeadersType> = undefined
