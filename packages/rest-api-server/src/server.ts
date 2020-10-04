@@ -192,10 +192,6 @@ const handle = async (
   await handleRoute(config, route, request, response);
 }
 
-export const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]): void => {
-  createServer(handle.bind(null, mergeServerConfigs(config), routes))
-}
-
 export const route = <
   RequestPathParams extends DataType,
   TRequestSpec extends WildCardRequestSpec,
@@ -225,3 +221,7 @@ export const CONNECT = withMethod('CONNECT')
 export const OPTIONS = withMethod('OPTIONS')
 export const TRACE = withMethod('TRACE')
 export const PATCH = withMethod('PATCH')
+
+export const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]): void => {
+  createServer(handle.bind(null, mergeServerConfigs(config), routes))
+}
