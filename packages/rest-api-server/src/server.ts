@@ -1,4 +1,4 @@
-import http from 'http';
+import http, { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 
 import { ValidatorSpec, validate, serialize, TypeHint } from '@validator/validator/core';
 import { root, Segment } from '@validator/validator/segmentChain';
@@ -32,10 +32,6 @@ const mergeServerConfigs = (
   ...serverConfig,
 })
 
-type HeadersType = {
-  [key: string]: string | string[]
-}
-
 type DataType = Record<string, unknown>
 
 type Optional<T> = T | undefined;
@@ -47,7 +43,7 @@ type Request<
   PathParams extends Optional<DataType> = undefined,
   Data extends Optional<DataType> = undefined,
   QueryParams extends Optional<DataType> = undefined,
-  Headers extends Optional<HeadersType> = undefined
+  Headers extends Optional<IncomingHttpHeaders> = undefined
 > = { method?: string }
   & WithOptionalValue<'pathParams', PathParams>
   & WithOptionalValue<'data', Data>
@@ -56,7 +52,7 @@ type Request<
 
 type Response<
   Data extends Optional<DataType> = undefined,
-  Headers extends Optional<HeadersType> = undefined
+  Headers extends Optional<OutgoingHttpHeaders> = undefined
 > = { statusCode?: number }
   & WithOptionalValue<'data', Data>
   & WithOptionalValue<'headers', Headers>
@@ -64,24 +60,24 @@ type Response<
 type RequestSpec<
   RequestData extends DataType,
   RequestQueryParams extends DataType,
-  RequestHeaders extends HeadersType,
+  RequestHeaders extends IncomingHttpHeaders,
 > = {
   data?: ValidatorSpec<RequestData>,
   query?: ValidatorSpec<RequestQueryParams>,
   headers?: ValidatorSpec<RequestHeaders>
 }
 
-type WildCardRequestSpec = RequestSpec<DataType, DataType, HeadersType>;
+type WildCardRequestSpec = RequestSpec<DataType, DataType, IncomingHttpHeaders>;
 
 type ResponseSpec<
   ResponseData extends DataType,
-  ResponseHeaders extends HeadersType
+  ResponseHeaders extends OutgoingHttpHeaders
 > = {
   data?: ValidatorSpec<ResponseData>
   headers?: ValidatorSpec<ResponseHeaders>
 }
 
-type WildCardResponseSpec = ResponseSpec<DataType, HeadersType>;
+type WildCardResponseSpec = ResponseSpec<DataType, OutgoingHttpHeaders>;
 
 type Route<
   RequestPathParams extends DataType,
