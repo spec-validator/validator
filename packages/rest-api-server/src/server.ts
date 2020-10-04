@@ -84,37 +84,25 @@ type ResponseSpec<
 
 type WildCardResponseSpec = ResponseSpec<DataType, HttpHeaders>;
 
-type WithOptionalRequestSpec<
-  TRequestSpec extends Optional<WildCardRequestSpec>,
-  K extends keyof WildCardRequestSpec
-> =
-  TRequestSpec extends WildCardRequestSpec ? TypeHint<TRequestSpec[K]> : undefined
-
-type WithOptionalResponseSpec<
-  TResponseSpec extends Optional<WildCardResponseSpec>,
-  K extends keyof WildCardResponseSpec
-> =
-  TResponseSpec extends WildCardResponseSpec ? TypeHint<TResponseSpec[K]> : undefined
-
 type Route<
   RequestPathParams extends DataType,
-  TRequestSpec extends Optional<WildCardRequestSpec>,
-  TResponseSpec extends Optional<WildCardResponseSpec>
+  TRequestSpec extends WildCardRequestSpec,
+  TResponseSpec extends WildCardResponseSpec
 > = {
   method?: string,
   pathSpec: Segment<RequestPathParams>,
-  requestSpec?: TRequestSpec,
-  responseSpec?: TResponseSpec
+  requestSpec: TRequestSpec,
+  responseSpec: TResponseSpec
   handler: (
     request: Request<
       RequestPathParams,
-      WithOptionalRequestSpec<TRequestSpec, 'data'>,
-      WithOptionalRequestSpec<TRequestSpec, 'query'>,
-      WithOptionalRequestSpec<TRequestSpec, 'headers'>
+      TypeHint<TRequestSpec['data']>,
+      TypeHint<TRequestSpec['query']>,
+      TypeHint<TRequestSpec['headers']>
     >
   ) => Promise<Response<
-    WithOptionalResponseSpec<TResponseSpec, 'data'>,
-    WithOptionalResponseSpec<TResponseSpec, 'headers'>
+    TypeHint<TResponseSpec['data']>,
+    TypeHint<TResponseSpec['headers']>
   >>,
 }
 
@@ -215,8 +203,8 @@ export const route = <
 
 type MethodRoute = <
   RequestPathParams extends DataType,
-  TRequestSpec extends Optional<WildCardRequestSpec>,
-  TResponseSpec extends Optional<WildCardResponseSpec>
+  TRequestSpec extends WildCardRequestSpec,
+  TResponseSpec extends WildCardResponseSpec
 > (routeConfig:
     Omit<Route<RequestPathParams, TRequestSpec, TResponseSpec>, 'method'>
   )
