@@ -183,11 +183,12 @@ const handle = async (
 type MethodRoute = <
   RequestPathParams extends DataType,
   TRequestSpec extends WildCardRequestSpec,
-  TResponseSpec extends WildCardResponseSpec
+  ResponseData extends DataType,
+  ResponseHeaders extends HttpHeaders
 > (routeConfig:
-    Omit<Route<RequestPathParams, TRequestSpec, TResponseSpec>, 'method'>
+    Omit<Route<RequestPathParams, TRequestSpec, ResponseData, ResponseHeaders>, 'method'>
   )
-  => Route<RequestPathParams, TRequestSpec, TResponseSpec>
+  => Route<RequestPathParams, TRequestSpec, ResponseData, ResponseHeaders>
 
 export const withMethod = (method: string | undefined): MethodRoute => (routeConfig) => ({
   method,
