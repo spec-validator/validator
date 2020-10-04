@@ -33,9 +33,6 @@ const mergeServerConfigs = (
   ...serverConfig,
 })
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface Blank {}
-
 type HeadersType = Record<string, string | string[]>
 
 type DataType = Record<string, unknown>
@@ -43,7 +40,7 @@ type DataType = Record<string, unknown>
 type Optional<T> = T | undefined;
 
 type WithOptionalValue<Key extends string, Value> =
-  Value extends undefined ? Blank : Record<Key, Value>
+  Value extends undefined ? unknown : Record<Key, Value>
 
 type Request<
   PathParams extends Optional<DataType> = undefined,
@@ -107,7 +104,7 @@ type Route<
   >>,
 }
 
-type WildCardRoute = Route<any, any, any>
+type WildCardRoute = Route<any, WildCardRequestSpec, WildCardResponseSpec>
 
 const matchRoute = (
   request: http.IncomingMessage,
@@ -228,7 +225,7 @@ serve({}, [
     },
     handler: async (request) => ({
       data: {
-        value: 'bla' + request.data.title
+        value: 'bla' + request.pathParams.username
       },
       headers: {
         foo: 'dd'
