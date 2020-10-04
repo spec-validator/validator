@@ -70,8 +70,8 @@ type RequestSpec<
 type WildCardRequestSpec = RequestSpec<DataType, DataType, HttpHeaders>;
 
 type ResponseSpec<
-  ResponseData extends Optional<DataType>,
-  ResponseHeaders extends Optional<HttpHeaders>
+  ResponseData extends Optional<DataType> = undefined,
+  ResponseHeaders extends Optional<HttpHeaders> = undefined
 > = {
   data?: ValidatorSpec<ResponseData>
   headers?: ValidatorSpec<ResponseHeaders>
@@ -80,8 +80,8 @@ type ResponseSpec<
 type Route<
   RequestPathParams extends DataType,
   TRequestSpec extends WildCardRequestSpec,
-  ResponseData extends Optional<DataType>,
-  ResponseHeaders extends Optional<HttpHeaders>
+  ResponseData extends Optional<DataType> = undefined,
+  ResponseHeaders extends Optional<HttpHeaders> = undefined
 > = {
   method?: string,
   pathSpec: Segment<RequestPathParams>,
@@ -97,7 +97,7 @@ type Route<
   ) => Promise<Response<ResponseData, ResponseHeaders>>
 }
 
-type WildCardRoute = Route<any, WildCardRequestSpec, DataType, HttpHeaders>
+type WildCardRoute = Route<any, WildCardRequestSpec, Optional<DataType>, Optional<HttpHeaders>>
 
 const matchRoute = (
   request: IncomingMessage,
@@ -179,8 +179,8 @@ const handle = async (
 type MethodRoute = <
   RequestPathParams extends DataType,
   TRequestSpec extends WildCardRequestSpec,
-  ResponseData extends Optional<DataType>,
-  ResponseHeaders extends Optional<HttpHeaders>
+  ResponseData extends Optional<DataType> = undefined,
+  ResponseHeaders extends Optional<HttpHeaders> = undefined
 > (routeConfig:
     Omit<Route<RequestPathParams, TRequestSpec, ResponseData, ResponseHeaders>, 'method'>
   )
