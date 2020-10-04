@@ -219,6 +219,9 @@ serve({}, [
       data: {
         title: stringField()
       },
+      headers: {
+        bla: stringField()
+      }
     },
     handler: async (request) => ({
       data: {
