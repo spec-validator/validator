@@ -100,7 +100,7 @@ export type Route<
       TypeHint<TRequestSpec['query']>,
       TypeHint<TRequestSpec['headers']>
     > : Request<RequestPathParams, never, never, never>
-  ) => Promise< Response<
+  ) => Promise<Response<
       TypeHint<TResponseSpec['data']>,
       TypeHint<TResponseSpec['headers']>
     >
