@@ -5,11 +5,7 @@ import { GET, serve } from './server';
 serve({}, [
   GET({
     pathSpec: root._('/')._('username', stringField()),
-    responseSpec: {
-      data: {
-        value: stringField(),
-      },
-    },
+
     handler: async (request) => ({
       data: {
         value: 'bla' + request.pathParams.username,
