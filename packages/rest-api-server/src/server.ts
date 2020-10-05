@@ -86,13 +86,13 @@ type WildCardResponseSpec = ResponseSpec<DataType, HttpHeaders>;
 
 export type Route<
   RequestPathParams extends DataType,
+  TResponseSpec extends WildCardResponseSpec,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
-  TResponseSpec extends Optional<WildCardResponseSpec> = undefined
 > = {
   method?: string,
   pathSpec: Segment<RequestPathParams>,
   requestSpec?: TRequestSpec,
-  responseSpec?: TResponseSpec
+  responseSpec: TResponseSpec
   handler: (
     request: TRequestSpec extends WildCardRequestSpec ? Request<
       RequestPathParams,
@@ -100,15 +100,14 @@ export type Route<
       TypeHint<TRequestSpec['query']>,
       TypeHint<TRequestSpec['headers']>
     > : Request<RequestPathParams, never, never, never>
-  ) => Promise<
-    TResponseSpec extends WildCardResponseSpec ? Response<
+  ) => Promise< Response<
       TypeHint<TResponseSpec['data']>,
       TypeHint<TResponseSpec['headers']>
-    > : Response<undefined, undefined>
+    >
   >
 }
 
-type WildCardRoute = Route<any, WildCardRequestSpec, WildCardResponseSpec>
+type WildCardRoute = Route<any, WildCardResponseSpec, WildCardRequestSpec>
 
 const matchRoute = (
   request: IncomingMessage,
@@ -189,12 +188,12 @@ const handle = async (
 
 type MethodRoute = <
   RequestPathParams extends DataType,
+  TResponseSpec extends WildCardResponseSpec,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
-  TResponseSpec extends Optional<WildCardResponseSpec> = undefined
 > (routeConfig:
-    Omit<Route<RequestPathParams, TRequestSpec, TResponseSpec>, 'method'>
+    Omit<Route<RequestPathParams, TResponseSpec, TRequestSpec>, 'method'>
   )
-  => Route<RequestPathParams, TRequestSpec, TResponseSpec>
+  => Route<RequestPathParams, TResponseSpec, TRequestSpec>
 
 export const withMethod = (method: string | undefined): MethodRoute => (routeConfig) => ({
   method,
