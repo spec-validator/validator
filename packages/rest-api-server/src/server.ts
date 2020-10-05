@@ -205,3 +205,26 @@ export const PATCH = withMethod('PATCH')
 export const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]): void => {
   createServer(handle.bind(null, mergeServerConfigs(config), routes))
 }
+
+type Foo = {
+  one?: string,
+  two: number,
+  three?: boolean,
+  four: number
+}
+
+type KeysOfType<T, U> = { [K in keyof T]: T[K] extends U ? K : never }[keyof T];
+type RequiredKeys<T> = Exclude<KeysOfType<T, Exclude<T[keyof T], undefined>>, undefined>;
+type WithoutOptional<T> = Pick<T, RequiredKeys<T>>;
+
+type Bla = WithoutOptional<Foo>
+
+/*
+type KeyOfDefined<Key, Value> = Value extends undefined ? never : Key;
+
+type WithoutUndefined<T , K extends keyof T> = Pick<T, KeyOfDefined<K, T[K]>>;
+
+
+
+type FooDelta = WithoutUndefined<Foo, keyof Foo>
+*/
