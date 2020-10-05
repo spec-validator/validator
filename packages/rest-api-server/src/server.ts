@@ -7,6 +7,7 @@ import { URL } from 'url';
 import { ValidatorSpec, validate, serialize, TypeHint } from '@validator/validator/core';
 import { Segment } from '@validator/validator/segmentChain';
 import { Json } from '@validator/validator/Json';
+import { WithoutOptional } from './utils';
 
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
@@ -45,10 +46,12 @@ type WithOptionalValue<Key extends string, Value> =
   Value extends undefined ? undefined : Record<Key, Value>
 
 export type Request<PathParams, Data, QueryParams, Headers> = { method?: string }
-  & WithOptionalValue<'pathParams', PathParams>
-  & WithOptionalValue<'data', Data>
-  & WithOptionalValue<'headers', Headers>
-  & WithOptionalValue<'queryParams', QueryParams>
+  & WithoutOptional<{
+    pathParams: PathParams,
+    data: Data,
+    headers: Headers,
+    queryParams: QueryParams
+  }>
 
 export type Response<
   Data extends Optional<DataType> = undefined,
@@ -58,9 +61,9 @@ export type Response<
   & WithOptionalValue<'headers', Headers>
 
 type RequestSpec<
-  RequestData extends DataType,
-  RequestQueryParams extends DataType,
-  RequestHeaders extends HttpHeaders,
+  RequestData extends Optional<DataType>,
+  RequestQueryParams extends Optional<DataType>,
+  RequestHeaders extends Optional<HttpHeaders>,
 > = {
   data?: ValidatorSpec<RequestData>,
   query?: ValidatorSpec<RequestQueryParams>,
