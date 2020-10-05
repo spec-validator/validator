@@ -7,7 +7,6 @@ import { URL } from 'url';
 import { ValidatorSpec, validate, serialize, TypeHint } from '@validator/validator/core';
 import { Segment } from '@validator/validator/segmentChain';
 import { Json } from '@validator/validator/Json';
-import { WithoutOptional } from './utils';
 
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
@@ -35,6 +34,10 @@ const mergeServerConfigs = (
   ...DEFAULT_SERVER_CONFIG,
   ...serverConfig,
 })
+
+type KeysOfType<T, U> = { [K in keyof T]: T[K] extends U ? K : never }[keyof T];
+type RequiredKeys<T> = Exclude<KeysOfType<T, Exclude<T[keyof T], undefined>>, undefined>;
+type WithoutOptional<T> = Pick<T, RequiredKeys<T>>;
 
 type HttpHeaders = Record<string, string | string[]>
 
