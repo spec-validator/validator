@@ -200,14 +200,29 @@ export const withMethod = (method: string | undefined): MethodRoute => (routeCon
   ...routeConfig
 });
 
+type NoBodyMethodRoute = <
+  RequestPathParams extends DataType,
+  TResponseSpec extends WildCardResponseSpec
+>  (routeConfig:
+  Omit<Omit<Route<RequestPathParams, TResponseSpec, undefined>, 'method'>, 'requestSpec'>
+) => Route<RequestPathParams, TResponseSpec, undefined>
+
+export const withMethodAndNoBody = (method: string | undefined): NoBodyMethodRoute => (routeConfig) => ({
+  method,
+  ...routeConfig
+});
+
+// No param
+
+
 export const ANY_METHOD = withMethod(undefined)
-export const GET = withMethod('GET')
-export const HEAD = withMethod('HEAD')
+export const GET = withMethodAndNoBody('GET')
+export const HEAD = withMethodAndNoBody('HEAD')
 export const POST = withMethod('POST')
 export const PUT = withMethod('PUT')
-export const DELETE = withMethod('DELETE')
+export const DELETE = withMethodAndNoBody('DELETE')
 export const CONNECT = withMethod('CONNECT')
-export const OPTIONS = withMethod('OPTIONS')
+export const OPTIONS = withMethodAndNoBody('OPTIONS')
 export const TRACE = withMethod('TRACE')
 export const PATCH = withMethod('PATCH')
 
