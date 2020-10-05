@@ -81,6 +81,9 @@ type ResponseSpec<
 
 type WildCardResponseSpec = ResponseSpec<DataType, HttpHeaders>;
 
+type SealedTypeHint<Spec extends ValidatorSpec<any> | undefined> =
+  Spec extends ValidatorSpec<any> ? TypeHint<Spec> : undefined
+
 type Route<
   RequestPathParams extends DataType,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
@@ -99,8 +102,8 @@ type Route<
     > : Request<RequestPathParams, never, never, never>
   ) => Promise<
     TResponseSpec extends WildCardResponseSpec ? Response<
-      TypeHint<TResponseSpec['data']>,
-      TypeHint<TResponseSpec['headers']>
+      SealedTypeHint<TResponseSpec['data']>,
+      SealedTypeHint<TResponseSpec['headers']>
     > : Response<never, never>
   >
 }
