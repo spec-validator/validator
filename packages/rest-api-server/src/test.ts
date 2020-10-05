@@ -1,4 +1,4 @@
-import { objectField, stringField } from '@validator/validator/fields';
+import { numberField, objectField, stringField } from '@validator/validator/fields';
 import { root } from '@validator/validator/segmentChain';
 import { GET, serve } from './server';
 

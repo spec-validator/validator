@@ -54,8 +54,8 @@ export type Request<PathParams, Data, QueryParams, Headers> = { method?: string 
   }>
 
 export type Response<
-  Data extends Optional<DataType> = undefined,
-  Headers extends Optional<HttpHeaders> = undefined
+  Data,
+  Headers
 > = { statusCode?: number }
   & WithOptionalValue<'data', Data>
   & WithOptionalValue<'headers', Headers>
