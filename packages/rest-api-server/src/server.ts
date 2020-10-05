@@ -82,7 +82,7 @@ type ResponseSpec<
 
 type Route<
   RequestPathParams extends DataType,
-  TRequestSpec extends WildCardRequestSpec,
+  TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
   ResponseData extends Optional<DataType> = undefined,
   ResponseHeaders extends Optional<HttpHeaders> = undefined
 > = {
@@ -91,12 +91,12 @@ type Route<
   requestSpec?: TRequestSpec,
   responseSpec?: ResponseSpec<ResponseData, ResponseHeaders>
   handler: (
-    request: Request<
+    request: TRequestSpec extends WildCardRequestSpec ? Request<
       RequestPathParams,
       TypeHint<TRequestSpec['data']>,
       TypeHint<TRequestSpec['query']>,
       TypeHint<TRequestSpec['headers']>
-    >
+    > : Request<RequestPathParams, never, never, never>
   ) => Promise<Response<ResponseData, ResponseHeaders>>
 }
 
@@ -181,7 +181,7 @@ const handle = async (
 
 type MethodRoute = <
   RequestPathParams extends DataType,
-  TRequestSpec extends WildCardRequestSpec,
+  TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
   ResponseData extends Optional<DataType> = undefined,
   ResponseHeaders extends Optional<HttpHeaders> = undefined
 > (routeConfig:
@@ -205,6 +205,6 @@ export const OPTIONS = withMethod('OPTIONS')
 export const TRACE = withMethod('TRACE')
 export const PATCH = withMethod('PATCH')
 
-export const serve = (config: Partial<ServerConfig>, routes: WildCardRoute[]): void => {
+export const serve = (config: Partial<ServerConfig>, routes: any[]): void => {
   createServer(handle.bind(null, mergeServerConfigs(config), routes))
 }
