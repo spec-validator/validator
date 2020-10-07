@@ -3,6 +3,7 @@
 
   "compilerOptions": {
     "baseUrl": "./packages",
+    "outDir": "./dist",
     "paths": {
       "@validator/validator/*": ["validator/src/*"],
       "@validator/rest-api-server/*": ["rest-api-server/src/*"],
