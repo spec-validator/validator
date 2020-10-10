@@ -2,12 +2,9 @@ import { numberField, objectField, stringField } from '@validator/validator/fiel
 import { root } from '@validator/validator/segmentChain';
 import { GET, serve } from './server';
 
-console.log('FOOOO');
-
-
 serve({}, [
   GET({
-    pathSpec: root._('/')._('username', stringField()),
+    pathSpec: root._('/foo')._('username', stringField()),
     responseSpec: {
       data: {
         value: stringField(),
@@ -15,7 +12,20 @@ serve({}, [
     },
     handler: async (request) => ({
       data: {
-        value: 'bla' + request.pathParams.username,
+        value: 'foo ' + request.pathParams.username,
+      },
+    })
+  }),
+  GET({
+    pathSpec: root._('/bla')._('username', stringField()),
+    responseSpec: {
+      data: {
+        value: stringField(),
+      },
+    },
+    handler: async (request) => ({
+      data: {
+        value: 'bla ' + request.pathParams.username,
       },
     })
   })
