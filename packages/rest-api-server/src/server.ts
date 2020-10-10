@@ -4,8 +4,6 @@ import {
 
 import qs from 'qs'
 
-import { URL } from 'url'
-
 import { ValidatorSpec, validate, serialize, TypeHint } from '@validator/validator/core'
 import { Segment } from '@validator/validator/segmentChain'
 import { Json } from '@validator/validator/Json'
@@ -25,7 +23,8 @@ type ServerConfig = {
   encoding: BufferEncoding,
   port: number,
   frameworkErrorStatusCode: number,
-  appErrorStatusCode: number
+  appErrorStatusCode: number,
+  reportError: (error: unknown) => Promise<void>
 }
 
 const DEFAULT_SERVER_CONFIG: ServerConfig = {
@@ -33,7 +32,11 @@ const DEFAULT_SERVER_CONFIG: ServerConfig = {
   encoding: 'utf-8',
   port: 8000,
   frameworkErrorStatusCode: 502,
-  appErrorStatusCode: 500
+  appErrorStatusCode: 500,
+  reportError: (error: unknown) => {
+    console.error(error)
+    return Promise.resolve(undefined)
+  }
 }
 
 const mergeServerConfigs = (
@@ -143,6 +146,17 @@ const getData = async (msg: IncomingMessage): Promise<string> => new Promise<str
   }
 })
 
+const withAppErrorStatusCode = async <T>(statusCode: number, inner: () => Promise<T>): Promise<T> => {
+  try {
+    return await inner()
+  } catch (error) {
+    throw {
+      statusCode: statusCode,
+      error: error
+    }
+  }
+}
+
 const handleRoute = async (
   config: ServerConfig,
   route: WildCardRoute,
@@ -163,16 +177,10 @@ const handleRoute = async (
     ? validate(route.requestSpec.headers, request.headers)
     : undefined
 
-
-  let resp = null as any
-  try {
-    resp = await route.handler({ method, pathParams, queryParams, data, headers } as any)
-  } catch (error) {
-    throw {
-      statusCode: config.appErrorStatusCode,
-      error: error
-    }
-  }
+  const resp = await withAppErrorStatusCode(
+    config.appErrorStatusCode,
+    route.handler.bind(null, { method, pathParams, queryParams, data, headers })
+  )
 
   Object.entries((resp as any).headers || {}).forEach(([key, value]) =>
     response.setHeader(key, value as any)
@@ -199,10 +207,13 @@ const handle = async (
     try {
       await handleRoute(config, route, request, response)
     } catch (error) {
-      console.error(error)
+      try {
+        await config.reportError(error)
+      } catch (reportingError) {
+        console.error(reportingError)
+      }
       response.statusCode = error.statusCode || config.frameworkErrorStatusCode
     }
-    return
   } else {
     response.statusCode = 404
   }
