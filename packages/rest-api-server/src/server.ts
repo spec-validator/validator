@@ -23,13 +23,17 @@ class JsonProtocol implements MediaTypeProtocol {
 type ServerConfig = {
   protocol: MediaTypeProtocol,
   encoding: BufferEncoding,
-  port: number
+  port: number,
+  frameworkErrorStatusCode: number,
+  appErrorStatusCode: number
 }
 
 const DEFAULT_SERVER_CONFIG: ServerConfig = {
   protocol: new JsonProtocol(),
   encoding: 'utf-8',
-  port: 8000
+  port: 8000,
+  frameworkErrorStatusCode: 502,
+  appErrorStatusCode: 500
 }
 
 const mergeServerConfigs = (
@@ -159,7 +163,16 @@ const handleRoute = async (
     ? validate(route.requestSpec.headers, request.headers)
     : undefined
 
-  const resp = await route.handler({ method, pathParams, queryParams, data, headers } as any);
+
+  let resp = null as any
+  try {
+    resp = await route.handler({ method, pathParams, queryParams, data, headers } as any);
+  } catch (error) {
+    throw {
+      statusCode: config.appErrorStatusCode,
+      error: error
+    }
+  }
 
   Object.entries((resp as any).headers || {}).forEach(([key, value]) =>
     response.setHeader(key, value as any)
@@ -192,7 +205,7 @@ const handle = async (
     response.end()
   } catch (error) {
     console.error(error);
-    response.statusCode = 500;
+    response.statusCode = error.statusCode || config.frameworkErrorStatusCode;
     response.end();
   }
 }
