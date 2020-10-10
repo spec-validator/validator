@@ -171,8 +171,6 @@ const handleRoute = async (
       config.encoding
     );
   }
-
-  response.end();
 };
 
 const handle = async (
@@ -183,9 +181,18 @@ const handle = async (
 ): Promise<void> => {
   const route = routes.find(matchRoute.bind(null, request));
   if (!route) {
-    return Promise.reject(404);
+    response.statusCode = 404
+    response.end()
+    return;
   }
-  await handleRoute(config, route, request, response);
+  try {
+    await handleRoute(config, route, request, response);
+    response.end()
+  } catch (error) {
+    console.error(error);
+    response.statusCode = 500;
+    response.end();
+  }
 }
 
 type MethodRoute = <
