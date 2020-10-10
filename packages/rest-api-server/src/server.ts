@@ -222,7 +222,10 @@ export const OPTIONS = withMethod('OPTIONS')
 export const TRACE = withMethod('TRACE')
 export const PATCH = withMethod('PATCH')
 
-export const serve = (config: Partial<ServerConfig>, routes: any[]): void => {
+export const serve = (
+  config: Partial<ServerConfig>,
+  routes: any[],
+): void => {
   const merged = mergeServerConfigs(config)
   createServer(handle.bind(null, merged, routes)).listen(merged.port)
 }
