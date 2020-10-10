@@ -2,16 +2,8 @@ import { numberField, objectField, stringField } from '@validator/validator/fiel
 import { root } from '@validator/validator/segmentChain';
 import { GET, serve } from './server';
 
-type Foo = {
-  one: number
-}
+console.log('FOOOO');
 
-const bla = () => ({
-  one: 11,
-  two: 12
-})
-
-const f: Foo = bla()
 
 serve({}, [
   GET({

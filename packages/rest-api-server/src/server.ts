@@ -20,12 +20,14 @@ class JsonProtocol implements MediaTypeProtocol {
 
 type ServerConfig = {
   protocol: MediaTypeProtocol,
-  encoding: BufferEncoding
+  encoding: BufferEncoding,
+  port: number
 }
 
 const DEFAULT_SERVER_CONFIG: ServerConfig = {
   protocol: new JsonProtocol(),
-  encoding: 'utf-8'
+  encoding: 'utf-8',
+  port: 8000
 }
 
 const mergeServerConfigs = (
@@ -212,5 +214,6 @@ export const TRACE = withMethod('TRACE')
 export const PATCH = withMethod('PATCH')
 
 export const serve = (config: Partial<ServerConfig>, routes: any[]): void => {
-  createServer(handle.bind(null, mergeServerConfigs(config), routes))
+  const merged = mergeServerConfigs(config)
+  createServer(handle.bind(null, merged, routes)).listen(merged.port)
 }

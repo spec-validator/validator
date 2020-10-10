@@ -2,7 +2,8 @@
   "scripts": {
     "lint": "eslint --config .eslintrc.json --ignore-path .gitignore './**/*.{js,ts,vue}'",
     "lint:fix": "yarn lint --fix",
-    "test": "jest --config ./jest.conf.js --passWithNoTests"
+    "test": "jest --config ./jest.conf.js --passWithNoTests",
+    "launch": "ts-node -r tsconfig-paths/register"
   },
   "devDependencies": {
     "@types/jest": "^26.0.13",
@@ -14,6 +15,7 @@
     "jest": "^26.4.2",
     "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "4.0.2"
   },
   "private": true,
