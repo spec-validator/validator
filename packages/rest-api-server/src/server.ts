@@ -1,14 +1,14 @@
 import {
   createServer, IncomingMessage, ServerResponse
-} from 'http';
+} from 'http'
 
-import qs from 'qs';
+import qs from 'qs'
 
-import { URL } from 'url';
+import { URL } from 'url'
 
-import { ValidatorSpec, validate, serialize, TypeHint } from '@validator/validator/core';
-import { Segment } from '@validator/validator/segmentChain';
-import { Json } from '@validator/validator/Json';
+import { ValidatorSpec, validate, serialize, TypeHint } from '@validator/validator/core'
+import { Segment } from '@validator/validator/segmentChain'
+import { Json } from '@validator/validator/Json'
 
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
@@ -122,24 +122,24 @@ const matchRoute = (
   route: WildCardRoute
 ): boolean => {
   if (route.method && request.method !== route.method) {
-    return false;
+    return false
   }
   try {
-    route.pathSpec.match(request.url || '');
+    route.pathSpec.match(request.url || '')
   } catch (err) {
-    return false;
+    return false
   }
-  return true;
-};
+  return true
+}
 
 const getData = async (msg: IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
   try {
-    const chunks: string[] = [];
-    msg.on('readable', () => chunks.push(msg.read()));
-    msg.on('error', reject);
-    msg.on('end', () => resolve(chunks.join('')));
+    const chunks: string[] = []
+    msg.on('readable', () => chunks.push(msg.read()))
+    msg.on('error', reject)
+    msg.on('end', () => resolve(chunks.join('')))
   } catch (err) {
-    reject(err);
+    reject(err)
   }
 })
 
@@ -149,13 +149,13 @@ const handleRoute = async (
   request: IncomingMessage,
   response: ServerResponse
 ): Promise<void> => {
-  const [path, queryString] = (request.url || '').split('?', 2);
+  const [path, queryString] = (request.url || '').split('?', 2)
 
   const queryParams = route.requestSpec?.query
     ? validate(route.requestSpec.query, qs.parse(queryString))
-    : undefined;
-  const pathParams = route.pathSpec.match(path);
-  const method = request.method?.toUpperCase();
+    : undefined
+  const pathParams = route.pathSpec.match(path)
+  const method = request.method?.toUpperCase()
   const data = route.requestSpec?.data
     ? validate(route.requestSpec.data, config.protocol.deserialize(await getData(request)))
     : undefined
@@ -166,7 +166,7 @@ const handleRoute = async (
 
   let resp = null as any
   try {
-    resp = await route.handler({ method, pathParams, queryParams, data, headers } as any);
+    resp = await route.handler({ method, pathParams, queryParams, data, headers } as any)
   } catch (error) {
     throw {
       statusCode: config.appErrorStatusCode,
@@ -176,17 +176,17 @@ const handleRoute = async (
 
   Object.entries((resp as any).headers || {}).forEach(([key, value]) =>
     response.setHeader(key, value as any)
-  );
+  )
 
-  response.statusCode = resp.statusCode || data ? 200 : 201;
+  response.statusCode = resp.statusCode || data ? 200 : 201
 
   if (route.responseSpec?.data) {
     response.write(
       config.protocol.serialize(serialize(route.responseSpec.data, (resp as any).data)),
       config.encoding
-    );
+    )
   }
-};
+}
 
 const handle = async (
   config: ServerConfig,
@@ -194,20 +194,19 @@ const handle = async (
   request: IncomingMessage,
   response: ServerResponse
 ): Promise<void> => {
-  const route = routes.find(matchRoute.bind(null, request));
-  if (!route) {
+  const route = routes.find(matchRoute.bind(null, request))
+  if (route) {
+    try {
+      await handleRoute(config, route, request, response)
+    } catch (error) {
+      console.error(error)
+      response.statusCode = error.statusCode || config.frameworkErrorStatusCode
+    }
+    return
+  } else {
     response.statusCode = 404
-    response.end()
-    return;
   }
-  try {
-    await handleRoute(config, route, request, response);
-    response.end()
-  } catch (error) {
-    console.error(error);
-    response.statusCode = error.statusCode || config.frameworkErrorStatusCode;
-    response.end();
-  }
+  response.end()
 }
 
 type MethodRoute = <
@@ -222,7 +221,7 @@ type MethodRoute = <
 export const withMethod = (method: string | undefined): MethodRoute => (routeConfig) => ({
   method,
   ...routeConfig
-});
+})
 
 export const ANY_METHOD = withMethod(undefined)
 export const GET = withMethod('GET')

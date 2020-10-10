@@ -1,14 +1,14 @@
-import { Field } from '../core';
-import { Json } from '../Json';
-import { merge } from '../utils';
+import { Field } from '../core'
+import { Json } from '../Json'
+import { merge } from '../utils'
 
 class DefaultFieldDecorator<T> implements Field<T> {
   private innerField: Field<T>;
   private defaultValue: T;
 
   constructor(innerField: Field<T>, defaultValue: T) {
-    this.innerField = innerField;
-    this.defaultValue = defaultValue;
+    this.innerField = innerField
+    this.defaultValue = defaultValue
   }
 
   validate(value: any): T {
@@ -28,6 +28,6 @@ class DefaultFieldDecorator<T> implements Field<T> {
 }
 
 const defaultValueDecor = <T> (innerField: Field<T>, defaultValue: T): Field<T> =>
-  new DefaultFieldDecorator(innerField, defaultValue);
+  new DefaultFieldDecorator(innerField, defaultValue)
 
-export default defaultValueDecor;
+export default defaultValueDecor

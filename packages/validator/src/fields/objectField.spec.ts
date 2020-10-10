@@ -1,5 +1,5 @@
-import { numberField, objectField } from '.';
-import { TypeHint, validate } from '../core';
+import { numberField, objectField } from '.'
+import { TypeHint, validate } from '../core'
 
 test('placeholder', () => {
   const spec = {
@@ -18,6 +18,6 @@ test('placeholder', () => {
         subSubField: 11
       }
     }
-  });
-  expect(valid.field.subField.subSubField).toEqual(11);
-});
+  })
+  expect(valid.field.subField.subSubField).toEqual(11)
+})

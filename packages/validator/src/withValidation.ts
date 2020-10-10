@@ -1,4 +1,4 @@
-import { Field, validate, ValidatorSpec } from './core';
+import { Field, validate, ValidatorSpec } from './core'
 
 const withValidation = <T extends any[], R> (
   argSpec: ValidatorSpec<T>,
@@ -9,4 +9,4 @@ const withValidation = <T extends any[], R> (
       rawCall(...validate<T>(argSpec, value)),
     )
 
-export default withValidation;
+export default withValidation

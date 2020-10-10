@@ -1,8 +1,8 @@
-import stringField from './fields/stringField';
+import stringField from './fields/stringField'
 
-import numberField from './fields/numberField';
+import numberField from './fields/numberField'
 
-import { root } from './segmentChain';
+import { root } from './segmentChain'
 
 test('basics', () => {
   const segmentSpec = root
@@ -11,7 +11,7 @@ test('basics', () => {
     ._('/todos/')
     ._('uid', numberField())
     ._('/subtodos/')
-    ._('suid', numberField());
+    ._('suid', numberField())
 
   const valid = segmentSpec.match('/john-sick/todos/11/subtodos/42')
 
@@ -20,4 +20,4 @@ test('basics', () => {
     uid: 11,
     suid: 42
   })
-});
+})

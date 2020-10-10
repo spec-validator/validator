@@ -1,12 +1,12 @@
-import { Field } from '../core';
-import { Json } from '../Json';
-import { merge, Optional } from '../utils';
+import { Field } from '../core'
+import { Json } from '../Json'
+import { merge, Optional } from '../utils'
 
 class OptionalValueDecorator<T> implements Field<Optional<T>> {
   private innerField: Field<T>;
 
   constructor(innerField: Field<T>) {
-    this.innerField = innerField;
+    this.innerField = innerField
   }
 
   validate(value: any): Optional<T> {
@@ -27,6 +27,6 @@ class OptionalValueDecorator<T> implements Field<Optional<T>> {
 
 }
 
-const optionalValueDecor = <T> (innerField: Field<T>): Field<Optional<T>> => new OptionalValueDecorator(innerField);
+const optionalValueDecor = <T> (innerField: Field<T>): Field<Optional<T>> => new OptionalValueDecorator(innerField)
 
-export default optionalValueDecor;
+export default optionalValueDecor

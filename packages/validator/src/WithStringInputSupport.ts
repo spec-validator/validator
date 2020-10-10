@@ -1,4 +1,4 @@
-import { Field } from './core';
+import { Field } from './core'
 
 export interface WithRegExp {
   regex: () => RegExp

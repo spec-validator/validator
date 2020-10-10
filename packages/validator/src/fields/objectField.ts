@@ -4,8 +4,8 @@ import {
   validate,
   serialize,
   getParams,
-} from '../core';
-import { Json } from '../Json';
+} from '../core'
+import { Json } from '../Json'
 
 type Params<ExpectedType> = {
   objectSpec: ValidatorSpec<ExpectedType>,
@@ -45,4 +45,4 @@ const objectField = <ExpectedType> (
     description
   })
 
-export default objectField;
+export default objectField

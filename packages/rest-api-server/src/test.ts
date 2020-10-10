@@ -1,6 +1,6 @@
-import { numberField, objectField, stringField } from '@validator/validator/fields';
-import { root } from '@validator/validator/segmentChain';
-import { ANY_METHOD, GET, serve } from './server';
+import { numberField, objectField, stringField } from '@validator/validator/fields'
+import { root } from '@validator/validator/segmentChain'
+import { ANY_METHOD, GET, serve } from './server'
 
 serve({}, [
   GET({

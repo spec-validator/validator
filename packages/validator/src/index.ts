@@ -1,5 +1,5 @@
-import { tuple } from './utils';
-import withValidation from './withValidation';
+import { tuple } from './utils'
+import withValidation from './withValidation'
 
 export {
   tuple,

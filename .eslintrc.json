@@ -21,7 +21,8 @@
     "quotes": ["error", "single"],
     "max-len": ["error", 120],
     "func-style": ["error", "expression"],
-    "arrow-body-style": ["error", "as-needed"]
+    "arrow-body-style": ["error", "as-needed"],
+    "semi": ["error", "never"]
   },
   "overrides": [
     {

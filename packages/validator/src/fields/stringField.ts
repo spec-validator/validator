@@ -1,6 +1,6 @@
-import { Field } from '../core';
-import { Json } from '../Json';
-import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport';
+import { Field } from '../core'
+import { Json } from '../Json'
+import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 
 type Params = {
   regex?: RegExp,
@@ -11,7 +11,7 @@ class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
   private params?: Params;
 
   constructor(params?: Params) {
-    this.params = params;
+    this.params = params
   }
   getFieldWithRegExp(): StringField & WithRegExp {
     return this
@@ -29,7 +29,7 @@ class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
         throw 'Doesn\'t match a regex'
       }
     }
-    return value;
+    return value
   }
   serialize(deserialized: string): Json {
     return deserialized
@@ -43,6 +43,6 @@ class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
 
 }
 
-const stringField = (params?: Params): StringField => new StringField(params);
+const stringField = (params?: Params): StringField => new StringField(params)
 
-export default stringField;
+export default stringField

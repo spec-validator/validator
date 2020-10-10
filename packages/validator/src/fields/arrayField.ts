@@ -1,5 +1,5 @@
-import { Field, withErrorDecoration } from '../core';
-import { Json } from '../Json';
+import { Field, withErrorDecoration } from '../core'
+import { Json } from '../Json'
 
 type Params<T> = {
   itemField: Field<T>,
@@ -19,7 +19,7 @@ class ArrayField<T> implements Field<T[]> {
     }
     return value.map(
       (it, index) => withErrorDecoration(index, () => this.params.itemField.validate(it))
-    );
+    )
   }
   serialize(deserialized: T[]): Json {
     return deserialized.map(
@@ -30,7 +30,7 @@ class ArrayField<T> implements Field<T[]> {
     return {
       description: this.params.description,
       itemSpec: this.params.itemField.getParams()
-    };
+    }
   }
 }
 
@@ -41,6 +41,6 @@ const arrayField = <T> (
     new ArrayField({
       itemField,
       description
-    });
+    })
 
-export default arrayField;
+export default arrayField

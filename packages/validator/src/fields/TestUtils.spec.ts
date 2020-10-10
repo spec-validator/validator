@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Field, validate } from '../core';
-import { WithStringInputSupport } from '../WithStringInputSupport';
-import { root } from '../segmentChain';
+import { Field, validate } from '../core'
+import { WithStringInputSupport } from '../WithStringInputSupport'
+import { root } from '../segmentChain'
 
 test.skip('Workaround', () => 1)
 
@@ -12,19 +12,19 @@ export const testValidateSpecOk = <T> (field: Field<T>, input: any, expected: T)
     field: input
   })).toEqual({
     field: expected
-  });
+  })
 }
 
 export const testValidateSpecError = <T> (field: Field<T>, input: any, expectedError: any) => {
-  let error: any = null;
+  let error: any = null
   try {
     validate({
       field
     }, {
       field: input
-    });
+    })
   } catch (err) {
-    error = err;
+    error = err
   }
   expect(error).toEqual({'inner': expectedError, 'path': ['field']})
 }
@@ -37,9 +37,9 @@ export const testValidateSegmentChainOK = <T> (
   const spec = root
     ._('/')
     ._('field', field)
-    ._('/suffix');
+    ._('/suffix')
 
-  const valid = spec.match('/' + input + '/suffix');
+  const valid = spec.match('/' + input + '/suffix')
   expect((valid as any).field).toEqual(expected)
 }
 
@@ -49,16 +49,16 @@ export const testValidateSegmentChainError = <T> (
   const spec = root
     ._('/')
     ._('field', field)
-    ._('/suffix');
+    ._('/suffix')
 
-  let error: any = null;
+  let error: any = null
   try {
     spec.match('/' + input + '/suffix')
   } catch (err) {
-    error = err;
+    error = err
   }
   if (expectedError === 'Didn\'t match') {
-    expect(error).toEqual(expectedError);
+    expect(error).toEqual(expectedError)
   } else {
     expect(error).toEqual({'inner': expectedError, 'path': ['field']})
   }

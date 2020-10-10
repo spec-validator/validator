@@ -1,7 +1,7 @@
-import { Field } from '../core';
-import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport';
-import { escapeRegex } from '../utils';
-import { Primitive, Json } from '../Json';
+import { Field } from '../core'
+import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
+import { escapeRegex } from '../utils'
+import { Primitive, Json } from '../Json'
 
 type Params<Choices> = {
   choices: Choices,
@@ -17,7 +17,7 @@ class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> imple
     this.choicesSet = new Set(params.choices)
   }
   getFieldWithRegExp(): Field<unknown> & WithRegExp {
-    return new ChoiceFieldWithRegExp(this.params);
+    return new ChoiceFieldWithRegExp(this.params)
   }
 
   validate(value: any): T {
@@ -42,11 +42,11 @@ class ChoiceFieldWithRegExp<
   private fullChoiceMap: Map<any, Primitive>
 
   constructor(params: Params<Choices>) {
-    super(params);
+    super(params)
     this.fullChoiceMap = new Map<any, Primitive>()
 
     params.choices.forEach(it => {
-      this.fullChoiceMap.set(it, it);
+      this.fullChoiceMap.set(it, it)
       this.fullChoiceMap.set(it.toString(), it)
     })
   }
@@ -56,11 +56,11 @@ class ChoiceFieldWithRegExp<
       .map(it => it.toString())
       .map(escapeRegex)
       .join('|')
-    );
+    )
   }
 
   validate(value: any): Choices[number] {
-    return super.validate(this.fullChoiceMap.get(value));
+    return super.validate(this.fullChoiceMap.get(value))
   }
 
 }
@@ -74,5 +74,5 @@ const choiceField = <
       description
     })
 
-export default choiceField;
+export default choiceField
 

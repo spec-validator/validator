@@ -1,6 +1,6 @@
 import { Field } from '../core'
-import { Json } from '../Json';
-import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport';
+import { Json } from '../Json'
+import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 
 type Params = {
   canBeFloat?: boolean,
@@ -12,7 +12,7 @@ class NumberField implements Field<number>, WithStringInputSupport {
   protected params?: Params
 
   constructor(params?: Params) {
-    this.params = params;
+    this.params = params
   }
   getFieldWithRegExp(): Field<unknown> & WithRegExp {
     return new NumberFieldWithRegExp(this.params)
@@ -36,7 +36,7 @@ class NumberField implements Field<number>, WithStringInputSupport {
     return value
   }
   serialize(deserialized: number): Json {
-    return deserialized;
+    return deserialized
   }
   getParams() {
     return {
@@ -61,11 +61,11 @@ class NumberFieldWithRegExp extends NumberField implements WithRegExp {
   }
 
   validate(value: any) {
-    return super.validate(Number.parseFloat(value));
+    return super.validate(Number.parseFloat(value))
   }
 
 }
 
-const numberField = (params?: Params): NumberField => new NumberField(params);
+const numberField = (params?: Params): NumberField => new NumberField(params)
 
-export default numberField;
+export default numberField

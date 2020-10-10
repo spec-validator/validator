@@ -1,4 +1,4 @@
-import { Json } from './Json';
+import { Json } from './Json'
 
 export interface Field<ExpectedType> {
   validate(value: any): ExpectedType;
@@ -36,7 +36,7 @@ export const withErrorDecoration = <R> (key: any, call: () => R): R => {
 type SpecUnion<ExpectedType> = ValidatorSpec<ExpectedType> | Field<ExpectedType> | undefined;
 
 const isField = <ExpectedType>(object: any): object is Field<ExpectedType> =>
-  'validate' in object && 'serialize' in object && 'getParams' in object;
+  'validate' in object && 'serialize' in object && 'getParams' in object
 
 const mapSpec = <ExpectedType, R> (
   validatorSpec: SpecUnion<ExpectedType>,
@@ -48,29 +48,29 @@ const mapSpec = <ExpectedType, R> (
   if (validatorSpec === undefined) {
     return undefined
   } else if (isField<ExpectedType>(validatorSpec)) {
-    return transform(validatorSpec, undefined);
+    return transform(validatorSpec, undefined)
   } else if (Array.isArray(validatorSpec)) {
-    return validatorSpec.map(transform);
+    return validatorSpec.map(transform)
   } else {
     return Object.fromEntries(
       Object.entries(validatorSpec).map(
         ([key, validator]: [string, any]) => [key, withErrorDecoration(key, () => transform(validator, key))]
       )
-    );
+    )
   }
 }
 
 export const getParams = <ExpectedType> (validatorSpec: SpecUnion<ExpectedType>): any =>
-  mapSpec(validatorSpec, validator => validator.getParams());
+  mapSpec(validatorSpec, validator => validator.getParams())
 
 // The whole point of the library is to validate wildcard objects
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const validate = <ExpectedType> (validatorSpec: SpecUnion<ExpectedType>, value: any): ExpectedType =>
   mapSpec(validatorSpec,
     (validator, key) => validator.validate(key === undefined ? value : value[key])
-  );
+  )
 
 export const serialize = <ExpectedType> (validatorSpec: SpecUnion<ExpectedType>, value: ExpectedType): any =>
   mapSpec(validatorSpec, (validator, key) =>
     validator.serialize(key === undefined ? value : (value as any)[key])
-  );
+  )
