@@ -4,7 +4,7 @@ import {
 
 import qs from 'qs'
 
-import { ValidatorSpec, validate, serialize, TypeHint } from '@validator/validator/core'
+import { ValidatorSpec, validate, serialize, TypeHint, SpecUnion } from '@validator/validator/core'
 import { Segment } from '@validator/validator/segmentChain'
 import { Json } from '@validator/validator/Json'
 
@@ -89,7 +89,7 @@ type ResponseSpec<
   ResponseData extends Optional<DataType> = undefined,
   ResponseHeaders extends Optional<HttpHeaders> = undefined
 > = {
-  data?: ValidatorSpec<ResponseData>
+  data?: SpecUnion<ResponseData>
   headers?: ValidatorSpec<ResponseHeaders>
 }
 

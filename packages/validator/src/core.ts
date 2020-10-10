@@ -10,7 +10,9 @@ export type ValidatorSpec<ExpectedType> = {
   [P in keyof ExpectedType]: Field<ExpectedType[P]>;
 };
 
-export type TypeHint<Spec extends ValidatorSpec<any> | undefined> = Spec extends ValidatorSpec<any> ? {
+export type SpecUnion<ExpectedType> = ValidatorSpec<ExpectedType> | Field<ExpectedType> | undefined;
+
+export type TypeHint<Spec extends SpecUnion<any> | undefined> = Spec extends ValidatorSpec<any> ? {
   [P in keyof Spec]: ReturnType<Spec[P]['validate']>;
 } : Spec extends Field<any> ? ReturnType<Spec['validate']> : undefined;
 
@@ -32,8 +34,6 @@ export const withErrorDecoration = <R> (key: any, call: () => R): R => {
     }
   }
 }
-
-type SpecUnion<ExpectedType> = ValidatorSpec<ExpectedType> | Field<ExpectedType> | undefined;
 
 const isField = <ExpectedType>(object: any): object is Field<ExpectedType> =>
   'validate' in object && 'serialize' in object && 'getParams' in object
