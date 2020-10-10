@@ -3,7 +3,10 @@
   "license": "Apache-2.0",
   "version": "0.0.1",
   "dependencies": {
-    "@validator/validator": "0.0.1"
+    "@validator/validator": "0.0.1",
+    "qs": "^6.9.4"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/qs": "^6.9.5"
+  }
 }

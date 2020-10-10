@@ -2,6 +2,8 @@ import {
   createServer, IncomingMessage, ServerResponse
 } from 'http';
 
+import qs from 'qs';
+
 import { URL } from 'url';
 
 import { ValidatorSpec, validate, serialize, TypeHint } from '@validator/validator/core';
@@ -143,12 +145,12 @@ const handleRoute = async (
   request: IncomingMessage,
   response: ServerResponse
 ): Promise<void> => {
-  const url = new URL(request.url || '')
+  const [path, queryString] = (request.url || '').split('?', 2);
 
   const queryParams = route.requestSpec?.query
-    ? validate(route.requestSpec.query, Object.fromEntries(url.searchParams))
+    ? validate(route.requestSpec.query, qs.parse(queryString))
     : undefined;
-  const pathParams = route.pathSpec.match(url.pathname);
+  const pathParams = route.pathSpec.match(path);
   const method = request.method?.toUpperCase();
   const data = route.requestSpec?.data
     ? validate(route.requestSpec.data, config.protocol.deserialize(await getData(request)))
