@@ -52,8 +52,6 @@ type WithoutOptional<T> = Pick<T, RequiredKeys<T>>;
 
 type HttpHeaders = Record<string, string | string[]>
 
-type DataType = Record<string, unknown>
-
 type Optional<T> = T | undefined;
 
 export type Request<PathParams, Data, QueryParams, Headers> = { method?: string }
@@ -74,8 +72,8 @@ export type Response<
   }>
 
 type RequestSpec<
-  RequestData extends Optional<DataType>,
-  RequestQueryParams extends Optional<DataType>,
+  RequestData extends Optional<unknown>,
+  RequestQueryParams extends Optional<unknown>,
   RequestHeaders extends Optional<HttpHeaders>,
 > = {
   data?: ValidatorSpec<RequestData>,
@@ -83,20 +81,20 @@ type RequestSpec<
   headers?: ValidatorSpec<RequestHeaders>
 }
 
-type WildCardRequestSpec = RequestSpec<DataType, DataType, HttpHeaders>;
+type WildCardRequestSpec = RequestSpec<any, any, HttpHeaders>;
 
 type ResponseSpec<
-  ResponseData extends Optional<DataType> = undefined,
+  ResponseData extends Optional<any> = undefined,
   ResponseHeaders extends Optional<HttpHeaders> = undefined
 > = {
   data?: SpecUnion<ResponseData>
   headers?: ValidatorSpec<ResponseHeaders>
 }
 
-type WildCardResponseSpec = ResponseSpec<DataType, HttpHeaders>;
+type WildCardResponseSpec = ResponseSpec<any, HttpHeaders>;
 
 export type Route<
-  RequestPathParams extends DataType,
+  RequestPathParams extends any,
   TResponseSpec extends WildCardResponseSpec,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
 > = {
@@ -221,7 +219,7 @@ const handle = async (
 }
 
 type MethodRoute = <
-  RequestPathParams extends DataType,
+  RequestPathParams extends any,
   TResponseSpec extends WildCardResponseSpec,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
 > (routeConfig:

@@ -58,7 +58,7 @@ const mapSpec = <DeserializedType, R> (
   }
 }
 
-export const getParams = <DeserializedType> (validatorSpec: SpecUnion<DeserializedType>): any =>
+export const getParams = <DeserializedType> (validatorSpec: SpecUnion<DeserializedType>): Json =>
   mapSpec(validatorSpec, validator => validator.getParams())
 
 // The whole point of the library is to validate wildcard objects
@@ -68,7 +68,10 @@ export const validate = <DeserializedType> (validatorSpec: SpecUnion<Deserialize
     (validator, key) => validator.validate(key === undefined ? value : value[key])
   )
 
-export const serialize = <DeserializedType> (validatorSpec: SpecUnion<DeserializedType>, value: DeserializedType): any =>
-  mapSpec(validatorSpec, (validator, key) =>
-    validator.serialize(key === undefined ? value : (value as any)[key])
-  )
+export const serialize = <DeserializedType> (
+  validatorSpec: SpecUnion<DeserializedType>,
+  value: DeserializedType
+): Json =>
+    mapSpec(validatorSpec, (validator, key) =>
+      validator.serialize(key === undefined ? value : (value as any)[key])
+    )

@@ -19,10 +19,10 @@ serve({}, [
   GET({
     pathSpec: root._('/bla/')._('username', stringField()),
     responseSpec: {
-      data: { value: stringField() },
+      data: stringField(),
     },
     handler: async (request) => ({
-      data: { value: 'bla ' + request.pathParams.username },
+      data: 'bla ' + request.pathParams.username,
     })
   }),
   ANY_METHOD({
