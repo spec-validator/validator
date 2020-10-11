@@ -1,3 +1,6 @@
+import { expectType } from 'tsd'
+import { TypeHint } from '../core'
+import { root, SegmentTypeHint } from '../segmentChain'
 import numberField from './numberField'
 
 import {
@@ -106,4 +109,21 @@ describe('segmentChain', () => {
     testValidateSegmentChainError(field, 'A', 'Didn\'t match')
   })
 
+})
+
+test('types', () => {
+  const field = numberField()
+
+  type Spec = TypeHint<typeof field>;
+
+  expectType<number>(1 as Spec)
+
+  const segmentSpec = root
+    ._('/')
+    ._('field', field)
+    ._('/suffix')
+
+  type SegmentSpec = SegmentTypeHint<typeof segmentSpec>
+
+  expectType<{field: number}>({ field: 1 } as SegmentSpec)
 })
