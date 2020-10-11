@@ -20,16 +20,12 @@ test('reports an error with full path leading to it if there are issues', () => 
 })
 
 test('reports an error if value is not an array', () => {
-  const spec = {
-    field: arrayField(numberField())
-  }
+  const spec = arrayField(numberField())
 
   try {
-    validate(spec, {
-      field: 11
-    })
+    validate(spec, 11)
   } catch (err) {
-    expect(err).toEqual({'inner': 'Not an array', 'path': ['field']})
+    expect(err).toEqual('Not an array')
   }
 })
 
