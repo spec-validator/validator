@@ -1,13 +1,14 @@
 import { arrayField } from '.'
 import { TypeHint, validate } from '../core'
 import numberField from './numberField'
+import { expectType, expectNotType } from 'tsd'
 
 test('allows valid array to get through', () => {
   const spec = {
     field: arrayField(numberField())
   }
-  type Spec = TypeHint<typeof spec>;
-  const valid: Spec = validate(spec, {
+
+  const valid = validate(spec, {
     field: [1]
   })
   expect(valid.field).toEqual([1])
@@ -30,6 +31,7 @@ test('reports an error if value is not an array', () => {
   const spec = {
     field: arrayField(numberField())
   }
+
   try {
     validate(spec, {
       field: 11
@@ -37,4 +39,20 @@ test('reports an error if value is not an array', () => {
   } catch (err) {
     expect(err).toEqual({'inner': 'Not an array', 'path': ['field']})
   }
+})
+
+test('types', () => {
+  const spec = {
+    field: arrayField(numberField())
+  }
+
+  type Spec = TypeHint<typeof spec>;
+
+  expectType<{
+    field: number[]
+  }>({} as Spec)
+
+  expectNotType<{
+    field: number[]
+  }>(42)
 })
