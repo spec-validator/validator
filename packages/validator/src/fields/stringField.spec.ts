@@ -1,3 +1,6 @@
+import { expectType } from 'tsd'
+import { TypeHint } from '../core'
+import { root, SegmentTypeHint } from '../segmentChain'
 import stringField from './stringField'
 
 import {
@@ -35,3 +38,19 @@ describe('segmentChain', () => {
   })
 
 })
+
+test('types', () => {
+  type Spec = TypeHint<typeof field>;
+
+  expectType<string>('' as Spec)
+
+  const segmentSpec = root
+    ._('/')
+    ._('field', field)
+    ._('/suffix')
+
+  type SegmentSpec = SegmentTypeHint<typeof segmentSpec>
+
+  expectType<{field: string}>({ field: '' } as SegmentSpec)
+})
+
