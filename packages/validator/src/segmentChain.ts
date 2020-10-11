@@ -1,7 +1,7 @@
 import { Field, validate } from './core'
 import { WithRegExp, WithStringInputSupport } from './WithStringInputSupport'
 
-export class Segment<ExpectedType> {
+export class Segment<DeserializedType> {
 
   private parent?: Segment<unknown>
   private key?: string;
@@ -15,11 +15,11 @@ export class Segment<ExpectedType> {
     this.field = field?.getFieldWithRegExp()
   }
 
-  _<Key extends string, ExtraExpectedType=undefined>(
+  _<Key extends string, ExtraDeserializedType=undefined>(
     key: Key,
-    field?: Field<ExtraExpectedType> & WithStringInputSupport
-  ): Segment<[ExtraExpectedType] extends [undefined] ? ExpectedType : ExpectedType & {
-    [P in Key]: ExtraExpectedType
+    field?: Field<ExtraDeserializedType> & WithStringInputSupport
+  ): Segment<[ExtraDeserializedType] extends [undefined] ? DeserializedType : DeserializedType & {
+    [P in Key]: ExtraDeserializedType
   }> {
     return new Segment(this, key as any, field) as any
   }
@@ -51,7 +51,7 @@ export class Segment<ExpectedType> {
     return this.regex
   }
 
-  match(value: string): ExpectedType {
+  match(value: string): DeserializedType {
     const matches = value.match(this.getRegex())?.groups
     if (!matches) {
       throw 'Didn\'t match'

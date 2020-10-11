@@ -1,16 +1,16 @@
 import { Json } from './Json'
 
-export interface Field<ExpectedType> {
-  validate(value: any): ExpectedType;
-  serialize(deserialized: ExpectedType): Json
+export interface Field<DeserializedType> {
+  validate(value: any): DeserializedType;
+  serialize(deserialized: DeserializedType): Json
   getParams: () => Json
 }
 
-export type ValidatorSpec<ExpectedType> = {
-  [P in keyof ExpectedType]: Field<ExpectedType[P]>;
+export type ValidatorSpec<DeserializedType> = {
+  [P in keyof DeserializedType]: Field<DeserializedType[P]>;
 };
 
-export type SpecUnion<ExpectedType> = ValidatorSpec<ExpectedType> | Field<ExpectedType> | undefined;
+export type SpecUnion<DeserializedType> = ValidatorSpec<DeserializedType> | Field<DeserializedType> | undefined;
 
 export type TypeHint<Spec extends SpecUnion<any> | undefined> = Spec extends ValidatorSpec<any> ? {
   [P in keyof Spec]: ReturnType<Spec[P]['validate']>;
@@ -35,19 +35,19 @@ export const withErrorDecoration = <R> (key: any, call: () => R): R => {
   }
 }
 
-const isField = <ExpectedType>(object: any): object is Field<ExpectedType> =>
+const isField = <DeserializedType>(object: any): object is Field<DeserializedType> =>
   'validate' in object && 'serialize' in object && 'getParams' in object
 
-const mapSpec = <ExpectedType, R> (
-  validatorSpec: SpecUnion<ExpectedType>,
+const mapSpec = <DeserializedType, R> (
+  validatorSpec: SpecUnion<DeserializedType>,
   transform: (
-    validator: Field<ExpectedType>,
+    validator: Field<DeserializedType>,
     key: any
   ) => R
 ): any => {
   if (validatorSpec === undefined) {
     return undefined
-  } else if (isField<ExpectedType>(validatorSpec)) {
+  } else if (isField<DeserializedType>(validatorSpec)) {
     return transform(validatorSpec, undefined)
   } else {
     return Object.fromEntries(
@@ -58,17 +58,17 @@ const mapSpec = <ExpectedType, R> (
   }
 }
 
-export const getParams = <ExpectedType> (validatorSpec: SpecUnion<ExpectedType>): any =>
+export const getParams = <DeserializedType> (validatorSpec: SpecUnion<DeserializedType>): any =>
   mapSpec(validatorSpec, validator => validator.getParams())
 
 // The whole point of the library is to validate wildcard objects
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const validate = <ExpectedType> (validatorSpec: SpecUnion<ExpectedType>, value: any): ExpectedType =>
+export const validate = <DeserializedType> (validatorSpec: SpecUnion<DeserializedType>, value: any): DeserializedType =>
   mapSpec(validatorSpec,
     (validator, key) => validator.validate(key === undefined ? value : value[key])
   )
 
-export const serialize = <ExpectedType> (validatorSpec: SpecUnion<ExpectedType>, value: ExpectedType): any =>
+export const serialize = <DeserializedType> (validatorSpec: SpecUnion<DeserializedType>, value: DeserializedType): any =>
   mapSpec(validatorSpec, (validator, key) =>
     validator.serialize(key === undefined ? value : (value as any)[key])
   )
