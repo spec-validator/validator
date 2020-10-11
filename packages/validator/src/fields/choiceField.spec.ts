@@ -12,19 +12,10 @@ import { expectType } from 'tsd'
 
 const field = choiceField([1, 2, 3])
 
-const spec = {
-  field
-}
-
 const segmentSpec = root
   ._('/')
   ._('field', field)
   ._('/suffix')
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type SegmentSpec = SegmentTypeHint<typeof segmentSpec>
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type Spec = TypeHint<typeof spec>
 
 describe('spec', () => {
 
@@ -53,4 +44,8 @@ test('types', () => {
   type Spec = TypeHint<typeof field>;
 
   expectType<1 | 2 | 3>(1 as Spec)
+
+  type SegmentSpec = SegmentTypeHint<typeof segmentSpec>
+
+  expectType<{field: 1 | 2 | 3}>({ field: 1 } as SegmentSpec)
 })
