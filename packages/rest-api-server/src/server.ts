@@ -93,9 +93,11 @@ type ResponseSpec<
 
 type WildCardResponseSpec = ResponseSpec<any, HttpHeaders>;
 
+type WildCardResponseSpecUnion = WildCardResponseSpec | SpecUnion<any>;
+
 export type Route<
   RequestPathParams extends any,
-  TResponseSpec extends WildCardResponseSpec,
+  TResponseSpec extends WildCardResponseSpecUnion,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
 > = {
   method?: string,
@@ -109,14 +111,14 @@ export type Route<
       TypeHint<TRequestSpec['query']>,
       TypeHint<TRequestSpec['headers']>
     > : Request<RequestPathParams, never, never, never>
-  ) => Promise<Response<
+  ) => TResponseSpec extends WildCardResponseSpec ? Promise<Response<
       TypeHint<TResponseSpec['data']>,
       TypeHint<TResponseSpec['headers']>
     >
-  >
+  > : TResponseSpec extends SpecUnion<any> ? Promise<TypeHint<TResponseSpec>> : Promise<undefined>
 }
 
-type WildCardRoute = Route<any, WildCardResponseSpec, WildCardRequestSpec>
+type WildCardRoute = Route<any, WildCardResponseSpecUnion, WildCardRequestSpec>
 
 const matchRoute = (
   request: IncomingMessage,
@@ -220,7 +222,7 @@ const handle = async (
 
 type MethodRoute = <
   RequestPathParams extends any,
-  TResponseSpec extends WildCardResponseSpec,
+  TResponseSpec extends WildCardResponseSpecUnion,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
 > (routeConfig:
     Omit<Route<RequestPathParams, TResponseSpec, TRequestSpec>, 'method'>
