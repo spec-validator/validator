@@ -49,8 +49,6 @@ const mapSpec = <ExpectedType, R> (
     return undefined
   } else if (isField<ExpectedType>(validatorSpec)) {
     return transform(validatorSpec, undefined)
-  } else if (Array.isArray(validatorSpec)) {
-    return validatorSpec.map(transform)
   } else {
     return Object.fromEntries(
       Object.entries(validatorSpec).map(
