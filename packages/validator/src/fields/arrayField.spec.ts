@@ -1,29 +1,21 @@
 import { arrayField } from '.'
 import { TypeHint, validate } from '../core'
 import numberField from './numberField'
-import { expectType, expectNotType } from 'tsd'
+import { expectType } from 'tsd'
 
 test('allows valid array to get through', () => {
-  const spec = {
-    field: arrayField(numberField())
-  }
+  const spec = arrayField(numberField())
 
-  const valid = validate(spec, {
-    field: [1]
-  })
-  expect(valid.field).toEqual([1])
+  const valid = validate(spec, [1])
+  expect(valid).toEqual([1])
 })
 
 test('reports an error with full path leading to it if there are issues', () => {
-  const spec = {
-    field: arrayField(numberField())
-  }
+  const spec = arrayField(numberField())
   try {
-    validate(spec, {
-      field: [1, 2, false]
-    })
+    validate(spec, [1, 2, false])
   } catch (err) {
-    expect(err).toEqual({'inner': 'Not an int', 'path': ['field', 2]})
+    expect(err).toEqual({'inner': 'Not an int', 'path': [2]})
   }
 })
 
@@ -51,8 +43,4 @@ test('types', () => {
   expectType<{
     field: number[]
   }>({} as Spec)
-
-  expectNotType<{
-    field: number[]
-  }>(undefined)
 })
