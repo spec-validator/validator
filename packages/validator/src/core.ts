@@ -50,6 +50,8 @@ const mapSpec = <DeserializedType, R> (
     return undefined
   } else if (isField<DeserializedType>(validatorSpec)) {
     return transform(validatorSpec, undefined)
+  } else if (Array.isArray(validatorSpec)) {
+    return (validatorSpec as any).map(transform)
   } else {
     return Object.fromEntries(
       Object.entries(validatorSpec).map(
