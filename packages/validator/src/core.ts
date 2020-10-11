@@ -35,7 +35,8 @@ export const withErrorDecoration = <R> (key: any, call: () => R): R => {
   }
 }
 
-const isField = <DeserializedType>(object: any): object is Field<DeserializedType> =>
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const isField = <DeserializedType>(object: any): object is Field<DeserializedType> =>
   'validate' in object && 'serialize' in object && 'getParams' in object
 
 const mapSpec = <DeserializedType, R> (
