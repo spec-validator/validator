@@ -1,4 +1,4 @@
-import { expectNotType, expectType } from 'tsd'
+import { expectType } from 'tsd'
 import { TypeHint } from '../core'
 import booleanField from './booleanField'
 import {
@@ -10,7 +10,7 @@ import {
 
 const field = booleanField()
 
-describe('spec', () => {
+describe('field', () => {
 
   it('allows valid choices to get throw', () => {
     testValidateSpecOk(field, true, true)
@@ -37,9 +37,7 @@ describe('segmentChain', () => {
 })
 
 test('types', () => {
-  const spec = booleanField()
-
-  type Spec = TypeHint<typeof spec>;
+  type Spec = TypeHint<typeof field>;
 
   expectType<boolean>(true as Spec)
 })

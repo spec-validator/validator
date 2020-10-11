@@ -8,6 +8,7 @@ import {
   testValidateSegmentChainOK,
   testValidateSegmentChainError
 } from './TestUtils.spec'
+import { expectType } from 'tsd'
 
 const field = choiceField([1, 2, 3])
 
@@ -46,4 +47,10 @@ describe('segmentChain', () => {
     testValidateSegmentChainError(field, '12', 'Didn\'t match')
   })
 
+})
+
+test('types', () => {
+  type Spec = TypeHint<typeof field>;
+
+  expectType<1 | 2 | 3>(1 as Spec)
 })

@@ -1,42 +1,31 @@
-import { arrayField } from '.'
-import { TypeHint, validate } from '../core'
-import numberField from './numberField'
 import { expectType } from 'tsd'
 
-test('allows valid array to get through', () => {
-  const spec = arrayField(numberField())
+import { arrayField } from '.'
+import { TypeHint } from '../core'
+import numberField from './numberField'
 
-  const valid = validate(spec, [1])
-  expect(valid).toEqual([1])
-})
+import {
+  testValidateSpecError,
+  testValidateSpecOk
+} from './TestUtils.spec'
 
-test('reports an error with full path leading to it if there are issues', () => {
-  const spec = arrayField(numberField())
-  try {
-    validate(spec, [1, 2, false])
-  } catch (err) {
-    expect(err).toEqual({'inner': 'Not an int', 'path': [2]})
-  }
-})
+const field = arrayField(numberField())
 
-test('reports an error if value is not an array', () => {
-  const spec = arrayField(numberField())
+describe('field', () => {
 
-  try {
-    validate(spec, 11)
-  } catch (err) {
-    expect(err).toEqual('Not an array')
-  }
+  it('allows valid choices to get throw', () => {
+    testValidateSpecOk(field, [1], [1])
+  })
+
+  it('prevents invalid choices from getting through', () => {
+    testValidateSpecError(field, [1, 2, false], {'inner': 'Not an int', 'path': [2]})
+    testValidateSpecError(field, 11, 'Not an array')
+  })
+
 })
 
 test('types', () => {
-  const spec = {
-    field: arrayField(numberField())
-  }
+  type Spec = TypeHint<typeof field>;
 
-  type Spec = TypeHint<typeof spec>;
-
-  expectType<{
-    field: number[]
-  }>({} as Spec)
+  expectType<number[]>([] as Spec)
 })

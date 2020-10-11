@@ -6,27 +6,17 @@ import { root } from '../segmentChain'
 test.skip('Workaround', () => 1)
 
 export const testValidateSpecOk = <T> (field: Field<T>, input: any, expected: T): void => {
-  expect(validate({
-    field
-  }, {
-    field: input
-  })).toEqual({
-    field: expected
-  })
+  expect(validate(field, input)).toEqual(expected)
 }
 
 export const testValidateSpecError = <T> (field: Field<T>, input: any, expectedError: any) => {
   let error: any = null
   try {
-    validate({
-      field
-    }, {
-      field: input
-    })
+    validate(field, input)
   } catch (err) {
     error = err
   }
-  expect(error).toEqual({'inner': expectedError, 'path': ['field']})
+  expect(error).toEqual(expectedError)
 }
 
 export const testValidateSegmentChainOK = <T> (
