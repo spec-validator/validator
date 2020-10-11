@@ -204,7 +204,7 @@ const handleRoute = async (
 
 }
 
-const handle = async (
+export const handle = async (
   config: ServerConfig,
   routes: WildCardRoute[],
   request: IncomingMessage,
