@@ -188,6 +188,12 @@ const handleRoute = async (
 
   response.statusCode = resp.statusCode || data ? 200 : 201
 
+  if (route.responseSpec instanceof Field<any>) {
+
+  } else if {
+
+  }
+
   if (route.responseSpec?.data) {
     response.write(
       config.protocol.serialize(serialize(route.responseSpec.data, (resp as any).data)),
