@@ -1,5 +1,6 @@
 import { expectType } from 'tsd'
 import { TypeHint } from '../core'
+import { root, SegmentTypeHint } from '../segmentChain'
 import booleanField from './booleanField'
 import {
   testValidateSegmentChainError,
@@ -9,6 +10,11 @@ import {
 } from './TestUtils.spec'
 
 const field = booleanField()
+
+const segmentSpec = root
+  ._('/')
+  ._('field', field)
+  ._('/suffix')
 
 describe('field', () => {
 
@@ -40,4 +46,8 @@ test('types', () => {
   type Spec = TypeHint<typeof field>;
 
   expectType<boolean>(true as Spec)
+
+  type SegmentSpec = SegmentTypeHint<typeof segmentSpec>
+
+  expectType<{field: boolean}>({ field: true } as SegmentSpec)
 })
