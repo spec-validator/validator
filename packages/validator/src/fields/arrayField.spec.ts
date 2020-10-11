@@ -54,5 +54,5 @@ test('types', () => {
 
   expectNotType<{
     field: number[]
-  }>(42)
+  }>(undefined)
 })
