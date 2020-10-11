@@ -9,7 +9,7 @@ import {
   testValidateSegmentChainError
 } from './TestUtils.spec'
 
-const field = choiceField([1, 2, 3] as const)
+const field = choiceField([1, 2, 3])
 
 const spec = {
   field

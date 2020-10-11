@@ -8,11 +8,13 @@ type Params<Choices> = {
   description?: string
 }
 
-class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> implements Field<T>, WithStringInputSupport {
-  protected params: Params<Choices>
+class ChoiceField<
+  Choice extends Primitive,
+> implements Field<Choice>, WithStringInputSupport {
+  protected params: Params<Choice[]>
   private choicesSet: Set<Primitive>
 
-  constructor(params: Params<Choices>) {
+  constructor(params: Params<Choice[]>) {
     this.params = params
     this.choicesSet = new Set(params.choices)
   }
@@ -20,13 +22,13 @@ class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> imple
     return new ChoiceFieldWithRegExp(this.params)
   }
 
-  validate(value: any): T {
+  validate(value: any): Choice {
     if (this.choicesSet.has(value)) {
-      return value as T
+      return value as Choice
     }
     throw 'Invalid choice'
   }
-  serialize(deserialized: T): Json {
+  serialize(deserialized: Choice): Json {
     return deserialized as unknown as Primitive
   }
   getParams() {
@@ -36,12 +38,12 @@ class ChoiceField<Choices extends readonly Primitive[], T=Choices[number]> imple
 }
 
 class ChoiceFieldWithRegExp<
-  Choices extends readonly Primitive[]
-> extends ChoiceField<Choices> implements WithRegExp {
+  Choice extends Primitive
+> extends ChoiceField<Choice> implements WithRegExp {
 
   private fullChoiceMap: Map<any, Primitive>
 
-  constructor(params: Params<Choices>) {
+  constructor(params: Params<Choice[]>) {
     super(params)
     this.fullChoiceMap = new Map<any, Primitive>()
 
@@ -59,16 +61,15 @@ class ChoiceFieldWithRegExp<
     )
   }
 
-  validate(value: any): Choices[number] {
+  validate(value: any): Choice {
     return super.validate(this.fullChoiceMap.get(value))
   }
 
 }
 
 const choiceField = <
-  Choices extends readonly Primitive[],
-  T=Choices[number]
-> (choices: Choices, description?: string): ChoiceField<Choices> =>
+  Choice extends Primitive,
+> (choices: Choice[], description?: string): ChoiceField<Choice> =>
     new ChoiceField({
       choices,
       description
