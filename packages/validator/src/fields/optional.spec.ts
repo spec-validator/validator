@@ -1,4 +1,4 @@
-import optional from './optionalValueDecor'
+import optional from './optional'
 import numberField from './numberField'
 import { TypeHint, validate } from '../core'
 import { expectType } from '../TypeTestUtils.test'
