@@ -1,4 +1,4 @@
-import { expectType } from 'tsd'
+import { expectType } from '../TypeTestUtils.test'
 import { TypeHint } from '../core'
 import { root, SegmentTypeHint } from '../segmentChain'
 import stringField from './stringField'

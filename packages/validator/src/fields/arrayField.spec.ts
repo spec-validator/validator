@@ -1,4 +1,4 @@
-import { expectType } from 'tsd'
+import { expectType } from '../TypeTestUtils.test'
 
 import { arrayField } from '.'
 import { TypeHint } from '../core'

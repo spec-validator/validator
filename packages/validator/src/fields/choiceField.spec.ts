@@ -8,7 +8,7 @@ import {
   testValidateSegmentChainOK,
   testValidateSegmentChainError
 } from './TestUtils.spec'
-import { expectType } from 'tsd'
+import { expectType } from '../TypeTestUtils.test'
 
 const field = choiceField([1, 2, 3])
 
