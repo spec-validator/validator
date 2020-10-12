@@ -7,7 +7,7 @@ import {
   testValidateSegmentChainOK,
   testValidateSpecError,
   testValidateSpecOk
-} from './TestUtils.spec'
+} from './TestUtils.test'
 
 const field = booleanField()
 

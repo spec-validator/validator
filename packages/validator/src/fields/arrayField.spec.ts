@@ -7,7 +7,7 @@ import numberField from './numberField'
 import {
   testValidateSpecError,
   testValidateSpecOk
-} from './TestUtils.spec'
+} from './TestUtils.test'
 
 const field = arrayField(numberField())
 

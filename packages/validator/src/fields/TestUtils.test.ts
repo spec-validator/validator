@@ -3,8 +3,6 @@ import { Field, validate } from '../core'
 import { WithStringInputSupport } from '../WithStringInputSupport'
 import { root } from '../segmentChain'
 
-test.skip('Workaround', () => 1)
-
 export const testValidateSpecOk = <T> (field: Field<T>, input: any, expected: T): void => {
   expect(validate(field, input)).toEqual(expected)
 }
