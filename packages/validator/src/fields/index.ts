@@ -5,8 +5,8 @@ import objectField from './objectField'
 import stringField from './stringField'
 import choiceField from './choiceField'
 
-import defaultValueDecor from './withDefault'
-import optionalValueDecor from './optional'
+import withDefault from './withDefault'
+import optional from './optional'
 
 export {
   arrayField,
@@ -15,6 +15,6 @@ export {
   objectField,
   stringField,
   choiceField,
-  optionalValueDecor,
-  defaultValueDecor
+  withDefault,
+  optional
 }
