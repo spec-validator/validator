@@ -1,6 +1,7 @@
 import { Field } from '../core'
 import { Json } from '../Json'
 import { merge } from '../utils'
+import booleanField from './booleanField'
 import objectField from './objectField'
 import stringField from './stringField'
 
@@ -11,4 +12,4 @@ type Unioned<T extends Field<unknown>[]> = {
 
 const bla = <T extends Field<unknown>[]>(alts: T): Unioned<T> => null as any
 
-const ff = bla([stringField(), objectField({ foo: stringField()})])
+const ff = bla([stringField(), objectField({ foo: stringField()}), booleanField()])
