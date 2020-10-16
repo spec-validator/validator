@@ -93,5 +93,5 @@ test('nested serialize', () => {
 })
 
 test('nested validate', () => {
-  // TODO
+  //validate()
 })
