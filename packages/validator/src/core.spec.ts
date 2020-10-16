@@ -1,9 +1,9 @@
 import { getParams, serialize, TypeHint, validate } from './core'
-import { arrayField, booleanField, numberField, objectField, optional, stringField, withDefault } from './fields'
+import { arrayField, booleanField, numberField, Field, optional, stringField, withDefault } from './fields'
 import { expectType } from './TypeTestUtils.test'
 
 const schema = {
-  innerSchema: objectField({
+  innerSchema: Field({
     str: stringField({
       description: 'A string'
     }),
@@ -11,7 +11,7 @@ const schema = {
       description: 'Some number'
     }), 42)
   }),
-  innerList: arrayField(objectField({
+  innerList: arrayField(Field({
     bool: optional(booleanField()),
     fl: numberField({
       canBeFloat: false,
@@ -36,7 +36,36 @@ test('nested expectType', () => {
 })
 
 test('nested getParams', () => {
-  expect(getParams(schema)).toEqual({})
+  expect(getParams(schema)).toEqual({
+    'innerList': {
+      'description': undefined,
+      'itemSpec': {
+        'description': undefined,
+        'spec': {
+          'bool': {
+            'description': undefined,
+            'isOptional': true,
+          },
+          'fl': {
+            'description': 'A float',
+          },
+        },
+      },
+    },
+    'innerSchema': {
+      'description': undefined,
+      'spec': {
+        'num': {
+          'defaultValue': 42,
+          'description': 'Some number',
+        },
+        'str': {
+          'description': 'A string',
+          'regex': undefined,
+        },
+      },
+    },
+  })
 })
 
 test('nested serialize', () => {
@@ -46,11 +75,23 @@ test('nested serialize', () => {
       num: 12
     },
     innerList: [{
+      bool: true,
       fl: 11,
     }]
-  })).toEqual({})
+  } as Schema)).toEqual({
+    'innerList': [
+      {
+        'bool': undefined,
+        'fl': 11,
+      },
+    ],
+    'innerSchema':  {
+      'num': 12,
+      'str': 'string',
+    },
+  })
 })
 
 test('nested validate', () => {
-
+  // TODO
 })
