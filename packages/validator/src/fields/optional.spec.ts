@@ -17,6 +17,15 @@ describe('field', () => {
     }, {})
     expect(value.inner).toEqual(undefined)
   })
+
+  it('should allow defined nested value go through', () => {
+    const value = validate({
+      inner: field
+    }, {
+      inner: 57
+    })
+    expect(value.inner).toEqual(57)
+  })
 })
 
 test('types', () => {
