@@ -93,5 +93,23 @@ test('nested serialize', () => {
 })
 
 test('nested validate', () => {
-  //validate()
+  expect(validate(schema, {
+    innerSchema: {
+      str: 'string',
+      num: 12
+    },
+    innerList: [{
+      fl: 11,
+    }]
+  })).toEqual({
+    'innerList': [
+      {
+        'fl': 11,
+      },
+    ],
+    'innerSchema':  {
+      'num': 12,
+      'str': 'string',
+    },
+  })
 })
