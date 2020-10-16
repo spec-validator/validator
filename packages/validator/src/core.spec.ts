@@ -1,9 +1,9 @@
 import { getParams, serialize, TypeHint, validate } from './core'
-import { arrayField, booleanField, numberField, Field, optional, stringField, withDefault } from './fields'
+import { arrayField, booleanField, numberField, objectField, optional, stringField, withDefault } from './fields'
 import { expectType } from './TypeTestUtils.test'
 
 const schema = {
-  innerSchema: Field({
+  innerSchema: objectField({
     str: stringField({
       description: 'A string'
     }),
@@ -11,7 +11,7 @@ const schema = {
       description: 'Some number'
     }), 42)
   }),
-  innerList: arrayField(Field({
+  innerList: arrayField(objectField({
     bool: optional(booleanField()),
     fl: numberField({
       canBeFloat: false,
@@ -78,10 +78,10 @@ test('nested serialize', () => {
       bool: true,
       fl: 11,
     }]
-  } as Schema)).toEqual({
+  })).toEqual({
     'innerList': [
       {
-        'bool': undefined,
+        'bool': true,
         'fl': 11,
       },
     ],
