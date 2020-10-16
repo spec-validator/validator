@@ -61,19 +61,19 @@ const mapSpec = <DeserializedType, R> (
   }
 }
 
-export const getParams = <DeserializedType> (validatorSpec: SpecUnion<DeserializedType>): Json =>
+export const getParams = (validatorSpec: SpecUnion<unknown>): Json =>
   mapSpec(validatorSpec, validator => validator.getParams())
 
 // The whole point of the library is to validate wildcard objects
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const validate = <DeserializedType> (validatorSpec: SpecUnion<DeserializedType>, value: any): DeserializedType =>
+export const validate = <TSpec extends SpecUnion<unknown>> (validatorSpec: TSpec, value: any): TypeHint<TSpec> =>
   mapSpec(validatorSpec,
     (validator, key) => validator.validate(key === undefined ? value : value[key])
   )
 
-export const serialize = <DeserializedType> (
-  validatorSpec: SpecUnion<DeserializedType>,
-  value: DeserializedType
+export const serialize = <TSpec extends SpecUnion<unknown>> (
+  validatorSpec: TSpec,
+  value: TypeHint<TSpec>
 ): Json =>
     mapSpec(validatorSpec, (validator, key) =>
       validator.serialize(key === undefined ? value : (value as any)[key])
