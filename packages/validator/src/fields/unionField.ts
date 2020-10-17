@@ -1,5 +1,5 @@
 import { Field, SpecUnion, TypeHint, getParams } from '../core'
-import { Primitive, Json } from '../Json'
+import { Json } from '../Json'
 
 type Unioned<T extends SpecUnion<any>[]> = {
   [P in keyof T]: T[P] extends SpecUnion<any> ? TypeHint<T[P]> : never
