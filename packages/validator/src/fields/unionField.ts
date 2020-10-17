@@ -1,43 +1,56 @@
-import { Field, SpecUnion, TypeHint, getParams } from '../core'
+import { Field, TypeHint } from '../core'
 import { Json } from '../Json'
 
-type Unioned<T extends SpecUnion<any>[]> = {
-  [P in keyof T]: T[P] extends SpecUnion<any> ? TypeHint<T[P]> : never
+type Unioned<T extends Field<any>[]> = {
+  [P in keyof T]: T[P] extends Field<any> ? TypeHint<T[P]> : never
 }[number];
 
-type Params<Variants extends readonly SpecUnion<any>[]> = {
+type Params<Variants extends readonly Field<any>[]> = {
   readonly variants: Variants,
   readonly description?: string
 }
 
 class UnionField<
-  Variants extends SpecUnion<any>[]
+  Variants extends Field<any>[]
 > implements Field<Variants> {
 
   constructor(readonly params: Params<Variants>) {}
 
   validate(value: any): Unioned<Variants> {
-    throw 'Invalid choice'
+    for (const variant of this.params.variants) {
+      try {
+        return variant.validate(value)
+      } catch {
+        // SKIP
+      }
+    }
+    throw 'Invalid variant'
   }
-  serialize(deserialized: Variants): Json {
-    return null
+  serialize(deserialized: Unioned<Variants>): Json {
+    for (const variant of this.params.variants) {
+      try {
+        return variant.serialize(variant.validate(deserialized))
+      } catch {
+        // SKIP
+      }
+    }
+    throw 'Invalid variant - should have matched'
   }
   getParams() {
     return {
       description: this.params.description,
-      innerSpecs: this.params.variants.map(getParams)
+      innerSpecs: this.params.variants.map(it => it.getParams())
     }
   }
 
 }
 
-
-const choiceField = <
-  Variants extends SpecUnion<any>[],
+const unionField = <
+  Variants extends Field<any>[],
 > (variants: Variants, description?: string): UnionField<Variants> =>
     new UnionField({
       variants,
       description
     })
 
-export default choiceField
+export default unionField
