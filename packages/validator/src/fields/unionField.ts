@@ -20,7 +20,7 @@ class UnionField<
     throw 'Invalid choice'
   }
   serialize(deserialized: Variants): Json {
-    return deserialized as unknown as Primitive
+    return null
   }
   getParams() {
     return {
