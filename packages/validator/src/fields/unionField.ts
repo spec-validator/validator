@@ -11,6 +11,6 @@ type Unioned<T extends SpecUnion<any>[]> = {
   [P in keyof T]: T[P] extends SpecUnion<any> ? TypeHint<T[P]> : never
 };
 
-const bla = <T extends Field<any>[]>(alts: T): Unioned<T> => null as any
+const bla = <T extends SpecUnion<any>[]>(alts: T): Unioned<T> => null as any
 
 const ff = bla([stringField(), choiceField([1, 2, 3] as const), booleanField(), objectField({foo: stringField()})])
