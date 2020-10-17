@@ -13,6 +13,4 @@ type Unioned<T extends SpecUnion<any>[]> = {
 
 const bla = <T extends Field<any>[]>(alts: T): Unioned<T> => null as any
 
-const choices = choiceField([1, 2, 3])
-
-const ff = bla([stringField(), choices, booleanField(), objectField({foo: stringField()})])
+const ff = bla([stringField(), choiceField([1, 2, 3] as const), booleanField(), objectField({foo: stringField()})])

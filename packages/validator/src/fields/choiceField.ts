@@ -4,18 +4,16 @@ import { escapeRegex } from '../utils'
 import { Primitive, Json } from '../Json'
 
 type Params<Choices> = {
-  choices: Choices,
-  description?: string
+  readonly choices: Choices,
+  readonly description?: string
 }
 
 class ChoiceField<
   Choice extends Primitive,
 > implements Field<Choice>, WithStringInputSupport {
-  protected params: Params<Choice[]>
   private choicesSet: Set<Primitive>
 
-  constructor(params: Params<Choice[]>) {
-    this.params = params
+  constructor(readonly params: Params<readonly Choice[]>) {
     this.choicesSet = new Set(params.choices)
   }
   getFieldWithRegExp(): Field<unknown> & WithRegExp {
@@ -43,7 +41,7 @@ class ChoiceFieldWithRegExp<
 
   private fullChoiceMap: Map<any, Primitive>
 
-  constructor(params: Params<Choice[]>) {
+  constructor(readonly params: Params<readonly Choice[]>) {
     super(params)
     this.fullChoiceMap = new Map<any, Primitive>()
 
@@ -69,7 +67,7 @@ class ChoiceFieldWithRegExp<
 
 const choiceField = <
   Choice extends Primitive,
-> (choices: Choice[], description?: string): ChoiceField<Choice> =>
+> (choices: readonly Choice[], description?: string): ChoiceField<Choice> =>
     new ChoiceField({
       choices,
       description
