@@ -30,9 +30,9 @@ test('serialization', () => {
 test('getParams', () => {
   expect(getParams(field)).toEqual({
     'innerSpecs':[
-      {'description':'Title'},
+      {},
       {'choices':[1,2,3]},
-      {'description':'Flag'}
+      {}
     ]})
 })
 
