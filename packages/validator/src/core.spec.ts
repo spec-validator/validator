@@ -39,6 +39,7 @@ test('nested getParams', () => {
             'isOptional': true,
           },
           'fl': {
+            'canBeFloat': false,
           },
         },
       },
