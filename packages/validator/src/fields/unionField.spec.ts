@@ -5,11 +5,9 @@ import booleanField from './booleanField'
 import choiceField from './choiceField'
 import stringField from './stringField'
 
-const choices = choiceField(1, 2, 3)
-
 const field = unionField(
   stringField(),
-  choices,
+  choiceField(1, 2, 3),
   booleanField()
 )
 
