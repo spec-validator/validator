@@ -2,10 +2,10 @@ import stringField from './fields/stringField'
 
 import numberField from './fields/numberField'
 
-import { root } from './segmentChain'
+import { $ } from './segmentChain'
 
 test('basics', () => {
-  const segmentSpec = root
+  const segmentSpec = $
     ._('/')
     ._('username', stringField())
     ._('/todos/')

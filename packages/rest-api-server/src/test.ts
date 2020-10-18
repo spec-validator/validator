@@ -1,10 +1,9 @@
 import { numberField, objectField, stringField } from '@validator/validator/fields'
-import { root } from '@validator/validator/segmentChain'
+import { $ } from '@validator/validator/segmentChain'
 import { ANY_METHOD, GET, serve } from './server'
 
 serve({}, [
-  GET({
-    pathSpec: root._('/foo/')._('username', stringField()),
+  GET($._('/foo/')._('username', stringField()), {
     responseSpec: {
       data: {
         value: stringField(),
@@ -16,13 +15,11 @@ serve({}, [
       },
     })
   }),
-  GET({
-    pathSpec: root._('/bla/')._('username', stringField()),
+  GET($._('/bla/')._('username', stringField()), {
     responseSpec: stringField(),
     handler: async (request) => 'bla ' + request.pathParams.username,
   }),
-  ANY_METHOD({
-    pathSpec: root._('anyPath', stringField()),
+  ANY_METHOD($._('anyPath', stringField()), {
     responseSpec: {
       data: {
         message: stringField()

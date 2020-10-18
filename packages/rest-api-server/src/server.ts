@@ -232,13 +232,15 @@ type MethodRoute = <
   RequestPathParams extends any,
   TResponseSpec extends WildCardResponseSpecUnion,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
-> (routeConfig:
-    Omit<Route<RequestPathParams, TResponseSpec, TRequestSpec>, 'method'>
+> (
+    pathSpec: Segment<RequestPathParams>,
+    routeConfig: Omit<Route<RequestPathParams, TResponseSpec, TRequestSpec>, 'method' | 'pathSpec'>
   )
   => Route<RequestPathParams, TResponseSpec, TRequestSpec>
 
-export const withMethod = (method: string | undefined): MethodRoute => (routeConfig) => ({
+export const withMethod = (method: string | undefined): MethodRoute => (pathSpec, routeConfig) => ({
   method,
+  pathSpec,
   ...routeConfig
 })
 

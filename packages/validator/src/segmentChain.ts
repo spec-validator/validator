@@ -68,4 +68,4 @@ export class Segment<DeserializedType> {
 
 export type SegmentTypeHint<Spec extends Segment<any>> = ReturnType<Spec['match']>
 
-export const root = new Segment()
+export const $ = new Segment()
