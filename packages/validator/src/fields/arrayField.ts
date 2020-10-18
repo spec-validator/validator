@@ -2,8 +2,7 @@ import { Field, withErrorDecoration } from '../core'
 import { Json } from '../Json'
 
 type Params<T> = {
-  itemField: Field<T>,
-  description?: string
+  itemField: Field<T>
 }
 
 class ArrayField<T> implements Field<T[]> {
@@ -28,7 +27,6 @@ class ArrayField<T> implements Field<T[]> {
   }
   getParams(): Json {
     return {
-      description: this.params.description,
       itemSpec: this.params.itemField.getParams()
     }
   }
@@ -36,11 +34,9 @@ class ArrayField<T> implements Field<T[]> {
 
 const arrayField = <T> (
   itemField: Field<T>,
-  description?: string
 ): ArrayField<T> =>
     new ArrayField({
       itemField,
-      description
     })
 
 export default arrayField

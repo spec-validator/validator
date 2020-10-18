@@ -5,18 +5,12 @@ import booleanField from './booleanField'
 import choiceField from './choiceField'
 import stringField from './stringField'
 
-const choices = choiceField([1, 2, 3])
+const choices = choiceField(1, 2, 3)
 
 const field = unionField(
-  [
-    stringField({
-      description: 'Title'
-    }),
-    choices,
-    booleanField({
-      description: 'Flag'
-    })
-  ],
+  stringField(),
+  choices,
+  booleanField()
 )
 
 test('validation', () => {

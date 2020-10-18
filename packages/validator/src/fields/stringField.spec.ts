@@ -1,6 +1,6 @@
 import { expectType } from '../TypeTestUtils.test'
 import { TypeHint } from '../core'
-import { root, SegmentTypeHint } from '../segmentChain'
+import { $, SegmentTypeHint } from '../segmentChain'
 import stringField from './stringField'
 
 import {
@@ -10,9 +10,7 @@ import {
   testValidateSpecOk
 } from './TestUtils.test'
 
-const field = stringField({
-  regex: /[A-Z]+/
-})
+const field = stringField(/[A-Z]+/)
 
 describe('spec', () => {
 
@@ -44,7 +42,7 @@ test('types', () => {
 
   expectType<string>('' as Spec)
 
-  const segmentSpec = root
+  const segmentSpec = $
     ._('/')
     ._('field', field)
     ._('/suffix')

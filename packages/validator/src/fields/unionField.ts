@@ -5,19 +5,17 @@ type Unioned<T extends Field<any>[]> = {
   [P in keyof T]: T[P] extends Field<any> ? TypeHint<T[P]> : never
 }[number];
 
-type Params<Variants extends readonly Field<any>[]> = {
-  readonly variants: Variants,
-  readonly description?: string
-}
-
 class UnionField<
   Variants extends Field<any>[]
 > implements Field<Variants> {
+  private variants: Variants;
 
-  constructor(readonly params: Params<Variants>) {}
+  constructor(variants: Variants) {
+    this.variants = variants
+  }
 
   validate(value: any): Unioned<Variants> {
-    for (const variant of this.params.variants) {
+    for (const variant of this.variants) {
       try {
         return variant.validate(value)
       } catch {
@@ -27,7 +25,7 @@ class UnionField<
     throw 'Invalid variant'
   }
   serialize(deserialized: Unioned<Variants>): Json {
-    for (const variant of this.params.variants) {
+    for (const variant of this.variants) {
       try {
         return variant.serialize(variant.validate(deserialized))
       } catch {
@@ -38,8 +36,7 @@ class UnionField<
   }
   getParams() {
     return {
-      description: this.params.description,
-      innerSpecs: this.params.variants.map(it => it.getParams())
+      innerSpecs: this.variants.map(it => it.getParams())
     }
   }
 
@@ -47,10 +44,7 @@ class UnionField<
 
 const unionField = <
   Variants extends Field<any>[],
-> (variants: Variants, description?: string): UnionField<Variants> =>
-    new UnionField({
-      variants,
-      description
-    })
+> (...variants: Variants): UnionField<Variants> =>
+    new UnionField(variants)
 
 export default unionField

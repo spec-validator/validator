@@ -2,29 +2,24 @@ import { Field } from '../core'
 import { Json } from '../Json'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 
-type Params = {
-  regex?: RegExp,
-  description?: string
-}
-
 class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
-  private params?: Params;
+  private regexV?: RegExp;
 
-  constructor(params?: Params) {
-    this.params = params
+  constructor(regex?: RegExp) {
+    this.regexV = regex
   }
   getFieldWithRegExp(): StringField & WithRegExp {
     return this
   }
   regex() {
-    return this?.params?.regex || /.*/
+    return this?.regexV || /.*/
   }
   validate(value: any): string {
     if (typeof value !== 'string') {
       throw 'Not a string'
     }
-    if (this.params?.regex) {
-      const match = value.match(`^${this.params.regex.source}$`)
+    if (this.regexV) {
+      const match = value.match(`^${this.regexV.source}$`)
       if (!match) {
         throw 'Doesn\'t match a regex'
       }
@@ -36,13 +31,12 @@ class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
   }
   getParams() {
     return {
-      regex: this.params?.regex?.source,
-      description: this.params?.description
+      regex: this.regexV?.source,
     }
   }
 
 }
 
-const stringField = (params?: Params): StringField => new StringField(params)
+const stringField = (regex?: RegExp): StringField => new StringField(regex)
 
 export default stringField

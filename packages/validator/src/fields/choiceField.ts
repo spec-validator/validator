@@ -4,8 +4,7 @@ import { escapeRegex } from '../utils'
 import { Primitive, Json } from '../Json'
 
 type Params<Choices> = {
-  readonly choices: Choices,
-  readonly description?: string
+  readonly choices: Choices
 }
 
 class ChoiceField<
@@ -67,10 +66,9 @@ class ChoiceFieldWithRegExp<
 
 const choiceField = <
   Choice extends Primitive,
-> (choices: readonly Choice[], description?: string): ChoiceField<Choice> =>
+> (...choices: readonly Choice[]): ChoiceField<Choice> =>
     new ChoiceField({
       choices,
-      description
     })
 
 export default choiceField

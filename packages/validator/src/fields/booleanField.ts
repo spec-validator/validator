@@ -2,18 +2,9 @@ import { Field } from '../core'
 import { Json } from '../Json'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 
-type Params = {
-  description?: string
-}
-
 class BooleanField implements Field<boolean>, WithStringInputSupport {
-  private params?: Params;
-
-  constructor(params?: Params) {
-    this.params = params
-  }
   getFieldWithRegExp(): Field<unknown> & WithRegExp {
-    return new BooleanFieldWithRegExp(this.params)
+    return new BooleanFieldWithRegExp()
   }
   validate(value: any): boolean {
     if (value !== true && value !== false) {
@@ -26,7 +17,6 @@ class BooleanField implements Field<boolean>, WithStringInputSupport {
   }
   getParams() {
     return {
-      description: this.params?.description
     }
   }
 }
@@ -49,6 +39,6 @@ class BooleanFieldWithRegExp extends BooleanField implements WithRegExp {
 
 }
 
-const booleanField = (params?: Params): BooleanField => new BooleanField(params)
+const booleanField = (): BooleanField => new BooleanField()
 
 export default booleanField

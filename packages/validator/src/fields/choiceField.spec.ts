@@ -1,6 +1,6 @@
 import choiceField from './choiceField'
 import { TypeHint } from '../core'
-import { root, SegmentTypeHint } from '../segmentChain'
+import { $, SegmentTypeHint } from '../segmentChain'
 
 import {
   testValidateSpecOk,
@@ -11,12 +11,7 @@ import {
 } from './TestUtils.test'
 import { expectType } from '../TypeTestUtils.test'
 
-const field = choiceField([1, 2, 3])
-
-const segmentSpec = root
-  ._('/')
-  ._('field', field)
-  ._('/suffix')
+const field = choiceField(1, 2, 3)
 
 describe('spec', () => {
 
@@ -60,6 +55,11 @@ test('types', () => {
   type Spec = TypeHint<typeof field>;
 
   expectType<1 | 2 | 3>(1 as Spec)
+
+  const segmentSpec = $
+    ._('/')
+    ._('field', field)
+    ._('/suffix')
 
   type SegmentSpec = SegmentTypeHint<typeof segmentSpec>
 

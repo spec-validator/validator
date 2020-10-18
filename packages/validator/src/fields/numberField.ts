@@ -4,8 +4,7 @@ import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 
 type Params = {
   canBeFloat?: boolean,
-  signed?: boolean,
-  description?: string
+  signed?: boolean
 }
 
 class NumberField implements Field<number>, WithStringInputSupport {
@@ -39,9 +38,7 @@ class NumberField implements Field<number>, WithStringInputSupport {
     return deserialized
   }
   getParams() {
-    return {
-      description: this.params?.description
-    }
+    return this.params
   }
 }
 

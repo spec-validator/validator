@@ -1,6 +1,6 @@
 import { expectType } from '../TypeTestUtils.test'
 import { TypeHint } from '../core'
-import { root, SegmentTypeHint } from '../segmentChain'
+import { $, SegmentTypeHint } from '../segmentChain'
 import numberField from './numberField'
 
 import {
@@ -118,7 +118,7 @@ test('types', () => {
 
   expectType<number>(1 as Spec)
 
-  const segmentSpec = root
+  const segmentSpec = $
     ._('/')
     ._('field', field)
     ._('/suffix')

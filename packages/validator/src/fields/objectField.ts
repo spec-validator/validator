@@ -7,31 +7,25 @@ import {
 } from '../core'
 import { Json } from '../Json'
 
-type Params<DeserializedType> = {
-  objectSpec: ValidatorSpec<DeserializedType>,
-  description?: string
-}
-
 class ObjectField<DeserializedType> implements Field<DeserializedType> {
-  private params: Params<DeserializedType>
+  private objectSpec: ValidatorSpec<DeserializedType>
 
-  constructor(params: Params<DeserializedType>) {
-    this.params = params
+  constructor(objectSpec: ValidatorSpec<DeserializedType>) {
+    this.objectSpec = objectSpec
   }
 
   validate(value: any): DeserializedType {
     if (typeof value !== 'object' || value === null) {
       throw 'Not an object'
     }
-    return validate(this.params.objectSpec, value)
+    return validate(this.objectSpec, value) as DeserializedType
   }
   serialize(deserialized: DeserializedType): Json {
-    return serialize(this.params.objectSpec, deserialized)
+    return serialize(this.objectSpec, deserialized as any)
   }
   getParams() {
     return {
-      description: this.params.description,
-      spec: getParams(this.params.objectSpec)
+      spec: getParams(this.objectSpec)
     }
   }
 
@@ -39,10 +33,6 @@ class ObjectField<DeserializedType> implements Field<DeserializedType> {
 
 const objectField = <DeserializedType> (
   objectSpec: ValidatorSpec<DeserializedType>,
-  description?: string
-): ObjectField<DeserializedType> => new ObjectField({
-    objectSpec,
-    description
-  })
+): ObjectField<DeserializedType> => new ObjectField(objectSpec)
 
 export default objectField
