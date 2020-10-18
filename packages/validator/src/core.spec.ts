@@ -4,18 +4,13 @@ import { expectType } from './TypeTestUtils.test'
 
 const schema = {
   innerSchema: objectField({
-    str: stringField({
-      description: 'A string'
-    }),
-    num: withDefault(numberField({
-      description: 'Some number'
-    }), 42)
+    str: stringField(),
+    num: withDefault(numberField(), 42)
   }),
   innerList: arrayField(objectField({
     bool: optional(booleanField()),
     fl: numberField({
-      canBeFloat: false,
-      description: 'A float'
+      canBeFloat: false
     })
   }))
 }
@@ -38,16 +33,12 @@ test('nested expectType', () => {
 test('nested getParams', () => {
   expect(getParams(schema)).toEqual({
     'innerList': {
-      'description': undefined,
       'itemSpec': {
-        'description': undefined,
         'spec': {
           'bool': {
-            'description': undefined,
             'isOptional': true,
           },
           'fl': {
-            'description': 'A float',
           },
         },
       },
@@ -57,10 +48,8 @@ test('nested getParams', () => {
       'spec': {
         'num': {
           'defaultValue': 42,
-          'description': 'Some number',
         },
         'str': {
-          'description': 'A string',
           'regex': undefined,
         },
       },
