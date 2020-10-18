@@ -87,7 +87,7 @@ type ResponseSpec<
   ResponseData extends Optional<any> = undefined,
   ResponseHeaders extends Optional<HttpHeaders> = undefined
 > = {
-  data?: SpecUnion<ResponseData>
+  data?: SpecUnion<ResponseData>,
   headers?: ValidatorSpec<ResponseHeaders>
 }
 
