@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Field, getParams, serialize, validate } from '../core'
 import { WithStringInputSupport } from '../WithStringInputSupport'
-import { root } from '../segmentChain'
+import { $ } from '../segmentChain'
 
 export const testValidateSpecOk = <T> (field: Field<T>, input: any, expected: T): void => {
   expect(validate(field, input)).toEqual(expected)
@@ -30,7 +30,7 @@ export const testValidateSegmentChainOK = <T> (
   input: string,
   expected: T
 ): void => {
-  const spec = root
+  const spec = $
     ._('/')
     ._('field', field)
     ._('/suffix')
@@ -42,7 +42,7 @@ export const testValidateSegmentChainOK = <T> (
 export const testValidateSegmentChainError = <T> (
   field: Field<T> & WithStringInputSupport, input: any, expectedError: any
 ) => {
-  const spec = root
+  const spec = $
     ._('/')
     ._('field', field)
     ._('/suffix')
