@@ -3,8 +3,7 @@ import { Json } from '../Json'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 
 type Params = {
-  canBeFloat?: boolean,
-  signed?: boolean
+  canBeFloat?: boolean
 }
 
 class NumberField implements Field<number>, WithStringInputSupport {
@@ -18,19 +17,11 @@ class NumberField implements Field<number>, WithStringInputSupport {
   }
 
   validate(value: any): number {
-    if (this.params?.canBeFloat) {
-      if (typeof value !== 'number') {
-        throw 'Not a float'
-      }
-    } else {
-      if (typeof value !== 'number' || value !== Math.floor(value)) {
-        throw 'Not an int'
-      }
+    if (typeof value !== 'number') {
+      throw 'Not a number'
     }
-    if (!this.params?.signed) {
-      if (value < 0) {
-        throw 'Must be unsigned'
-      }
+    if (!this.params?.canBeFloat && value !== Math.floor(value)) {
+      throw 'Not an int'
     }
     return value
   }
@@ -46,9 +37,7 @@ class NumberFieldWithRegExp extends NumberField implements WithRegExp {
 
   regex() {
     const parts: string[] = []
-    if (this.params?.signed) {
-      parts.push('-?')
-    }
+    parts.push('-?')
     parts.push('\\d+')
     if (this.params?.canBeFloat) {
       parts.push('(\\.\\d+)?')
