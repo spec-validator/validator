@@ -29,7 +29,9 @@ class NumberField implements Field<number>, WithStringInputSupport {
     return deserialized
   }
   getParams() {
-    return this.params
+    return {
+      ...this.params
+    }
   }
 }
 

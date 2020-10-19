@@ -18,7 +18,7 @@ describe('validate', () => {
   })
 
   it('prevents invalid choices from getting through', () => {
-    testValidateSpecError(field, [1, 2, false], {'inner': 'Not an int', 'path': [2]})
+    testValidateSpecError(field, [1, 2, false], {'inner': 'Not a number', 'path': [2]})
     testValidateSpecError(field, 11, 'Not an array')
   })
 
@@ -29,7 +29,9 @@ test('serialize', () => {
 })
 
 test('getParams', () => {
-  expect(getParams(field)).toEqual([1])
+  expect(getParams(field)).toEqual({
+    itemSpec: {}
+  })
 })
 
 test('types', () => {
