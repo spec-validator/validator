@@ -229,7 +229,7 @@ export const handle = async (
 }
 
 type MethodRoute = <
-  RequestPathParams extends any,
+  RequestPathParams,
   TResponseSpec extends WildCardResponseSpecUnion,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
 > (
@@ -257,7 +257,7 @@ export const PATCH = withMethod('PATCH')
 
 export const serve = (
   config: Partial<ServerConfig>,
-  routes: any[],
+  routes: WildCardRoute[],
 ): void => {
   const merged = mergeServerConfigs(config)
   createServer(handle.bind(null, merged, routes)).listen(merged.port)
