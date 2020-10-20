@@ -188,19 +188,16 @@ const handleRoute = async (
 
   response.statusCode = resp.statusCode || data ? 200 : 201
 
-  if (isField(route.responseSpec)) {
-    response.write(
-      config.protocol.serialize(serialize(route.responseSpec, (resp as any).data)),
-      config.encoding
-    )
-  } else if (route.responseSpec) {
-    if (route.responseSpec?.data) {
-      response.write(
-        config.protocol.serialize(serialize(route.responseSpec.data, (resp as any).data)),
-        config.encoding
-      )
-    }
+  const dataSpec = isField(route.responseSpec) ? route.requestSpec : route.requestSpec?.data
+
+  if (!dataSpec) {
+    return
   }
+
+  response.write(
+    config.protocol.serialize(serialize(dataSpec, (resp as any).data)),
+    config.encoding
+  )
 
 }
 
