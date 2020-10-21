@@ -241,6 +241,9 @@ export const withMethod = (method: string | undefined): MethodRoute => (pathSpec
   ...routeConfig
 })
 
+type Method =
+  'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH' | string
+
 export const ANY_METHOD = withMethod(undefined)
 export const GET = withMethod('GET')
 export const HEAD = withMethod('HEAD')
@@ -252,9 +255,38 @@ export const OPTIONS = withMethod('OPTIONS')
 export const TRACE = withMethod('TRACE')
 export const PATCH = withMethod('PATCH')
 
+type ResourceRoute<RequestPathParams> = Omit<
+  Route<RequestPathParams, WildCardResponseSpec, WildCardRequestSpec>,
+  'method' | 'pathSpec'
+>
+
+type Methods<RequestPathParams> =
+  Record<Method, ResourceRoute<RequestPathParams>> |
+  ResourceRoute<RequestPathParams>
+
+type Resource<RequestPathParams> = {
+  pathSpec: Segment<RequestPathParams>,
+  methods: Methods<RequestPathParams>
+}
+
+export const resource = <RequestPathParams> (
+  pathSpec: Segment<RequestPathParams>,
+  methods: Methods<RequestPathParams>
+): Resource<RequestPathParams> => ({
+    pathSpec, methods
+  })
+
+const toRoutes = (resources: Record<string, Resource<undefined>>): WildCardRoute[] => {
+  const routes: WildCardRoute[] = []
+  Object.values(resources).forEach(resource => {
+    resource.methods.forEach()
+  })
+  return routes
+}
+
 export const serve = (
   config: Partial<ServerConfig>,
-  routes: WildCardRoute[],
+  resources: Record<string, Resource<undefined>>,
 ): void => {
   const merged = mergeServerConfigs(config)
   createServer(handle.bind(null, merged, routes)).listen(merged.port)
