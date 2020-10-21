@@ -95,7 +95,7 @@ type WildCardResponseSpec = ResponseSpec<any, HttpHeaders>;
 
 type WildCardResponseSpecUnion = WildCardResponseSpec | NonNullable<SpecUnion<any>>;
 
-export type Route<
+type Route<
   RequestPathParams extends any,
   TResponseSpec extends WildCardResponseSpecUnion,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
@@ -225,35 +225,8 @@ export const handle = async (
   response.end()
 }
 
-type MethodRoute = <
-  RequestPathParams,
-  TResponseSpec extends WildCardResponseSpecUnion,
-  TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
-> (
-    pathSpec: Segment<RequestPathParams>,
-    routeConfig: Omit<Route<RequestPathParams, TResponseSpec, TRequestSpec>, 'method' | 'pathSpec'>
-  )
-  => Route<RequestPathParams, TResponseSpec, TRequestSpec>
-
-export const withMethod = (method: string | undefined): MethodRoute => (pathSpec, routeConfig) => ({
-  method,
-  pathSpec,
-  ...routeConfig
-})
-
-type Method =
+export type Method =
   'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH' | string
-
-export const ANY_METHOD = withMethod(undefined)
-export const GET = withMethod('GET')
-export const HEAD = withMethod('HEAD')
-export const POST = withMethod('POST')
-export const PUT = withMethod('PUT')
-export const DELETE = withMethod('DELETE')
-export const CONNECT = withMethod('CONNECT')
-export const OPTIONS = withMethod('OPTIONS')
-export const TRACE = withMethod('TRACE')
-export const PATCH = withMethod('PATCH')
 
 type ResourceRoute<RequestPathParams> = Omit<
   Route<RequestPathParams, WildCardResponseSpec, WildCardRequestSpec>,
@@ -264,7 +237,11 @@ type Methods<RequestPathParams> =
   Record<Method, ResourceRoute<RequestPathParams>> |
   ResourceRoute<RequestPathParams>
 
-type Resource<RequestPathParams> = {
+const isResourceRoute = <RequestPathParams> (
+  methods: Methods<RequestPathParams>
+): methods is ResourceRoute<RequestPathParams> => typeof methods.handler === 'function'
+
+export type Resource<RequestPathParams> = {
   pathSpec: Segment<RequestPathParams>,
   methods: Methods<RequestPathParams>
 }
@@ -279,7 +256,21 @@ export const resource = <RequestPathParams> (
 const toRoutes = (resources: Record<string, Resource<undefined>>): WildCardRoute[] => {
   const routes: WildCardRoute[] = []
   Object.values(resources).forEach(resource => {
-    resource.methods.forEach()
+    if (isResourceRoute(resource.methods)) {
+      routes.push({
+        method: undefined,
+        pathSpec: resource.pathSpec,
+        ...resource.methods
+      })
+    } else {
+      Object.entries(resource.methods).forEach(([method, route]) => {
+        routes.push({
+          method: method,
+          pathSpec: resource.pathSpec,
+          ...route
+        })
+      })
+    }
   })
   return routes
 }
@@ -289,5 +280,5 @@ export const serve = (
   resources: Record<string, Resource<undefined>>,
 ): void => {
   const merged = mergeServerConfigs(config)
-  createServer(handle.bind(null, merged, routes)).listen(merged.port)
+  createServer(handle.bind(null, merged, toRoutes(resources))).listen(merged.port)
 }
