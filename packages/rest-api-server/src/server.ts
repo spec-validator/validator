@@ -19,6 +19,7 @@ class _Route<DeserializedType> extends Segment<DeserializedType> {
   }
 
   __lookupGetter__(sprop: string) {
+    console.log('FOO')
     return (): Method => () => `${sprop} => 42`
   }
 
