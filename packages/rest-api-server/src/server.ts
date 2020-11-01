@@ -1,4 +1,4 @@
-import { Segment } from '@validator/validator/segmentChain'
+import { $, Segment } from '@validator/validator/segmentChain'
 import { Field } from '@validator/validator/core'
 
 import { WithStringInputSupport } from '@validator/validator/WithStringInputSupport'
@@ -13,16 +13,20 @@ const createProxy = (trg: any) => new Proxy(
     get(target, name, receiver) {
       const rv = Reflect.get(target, name, receiver)
       if (rv === undefined) {
-        console.log(target.root)
         return () => name
       } else {
+        console.log(222)
         return rv
       }
     }
   }
 ) as any
 
-class _Route<DeserializedType> extends Segment<DeserializedType> {
+class _Route<DeserializedType> {
+
+  constructor(readonly segment: Segment<DeserializedType>) {
+    this.segment = segment
+  }
 
   _<Key extends string, ExtraDeserializedType=undefined>(
     key: Key,
@@ -30,7 +34,7 @@ class _Route<DeserializedType> extends Segment<DeserializedType> {
   ): _Route<[ExtraDeserializedType] extends [undefined] ? DeserializedType : DeserializedType & {
     [P in Key]: ExtraDeserializedType
   }> {
-    return createProxy(new _Route(this, key as any, field))
+    return createProxy(new _Route(this.segment._(key, field)))
   }
 
 }
@@ -47,6 +51,10 @@ export type Route<DeserializedType, Methods extends string> = Handler<Methods> &
 }
 
 class _Server extends _Route<void> {
+
+  constructor() {
+    super($)
+  }
 
   serve(): void {
     // Nothing
