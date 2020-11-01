@@ -13,6 +13,7 @@ const createProxy = (trg: any) => new Proxy(
     get(target, name, receiver) {
       const rv = Reflect.get(target, name, receiver)
       if (rv === undefined) {
+        console.log(target.root)
         return () => name
       } else {
         return rv
