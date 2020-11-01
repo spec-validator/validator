@@ -2,6 +2,7 @@ import { $, Segment } from '@validator/validator/segmentChain'
 import { Field } from '@validator/validator/core'
 
 import { WithStringInputSupport } from '@validator/validator/WithStringInputSupport'
+import { serve, ServerConfig, WildCardRoute } from './raw-server'
 
 type Method = () => string
 
@@ -12,9 +13,19 @@ const createProxy = (trg: any) => new Proxy(
   {
     get(target, name, receiver) {
       const rv = Reflect.get(target, name, receiver)
-
-      if (rv === undefined) {
-        return () => name
+      if (rv === undefined && typeof name === 'string') {
+        const routes: WildCardRoute[] = target.root.routes
+        return (params: {
+          requestSpec: any,
+          responseSpec: any,
+          handler: any
+        }) => {
+          routes.push({
+            method: name,
+            pathSpec: (target as _Route<unknown>).segment,
+            ...params
+          })
+        }
       } else {
         return rv
       }
@@ -52,12 +63,16 @@ export type Route<DeserializedType, Methods extends string> = Handler<Methods> &
 
 class _Server extends _Route<void> {
 
-  constructor() {
+  routes: WildCardRoute[]
+
+  constructor(readonly config: Partial<ServerConfig>) {
     super($)
+    this.config = config
+    this.routes = []
   }
 
   serve(): void {
-    // Nothing
+    serve(this.config, this.routes)
   }
 
 }

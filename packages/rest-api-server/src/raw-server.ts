@@ -18,7 +18,7 @@ class JsonProtocol implements MediaTypeProtocol {
   deserialize = JSON.parse;
 }
 
-type ServerConfig = {
+export type ServerConfig = {
   protocol: MediaTypeProtocol,
   encoding: BufferEncoding,
   port: number,
@@ -118,7 +118,7 @@ type Route<
   > : TResponseSpec extends SpecUnion<any> ? Promise<TypeHint<TResponseSpec>> : Promise<undefined>
 }
 
-type WildCardRoute = Route<any, WildCardResponseSpecUnion, WildCardRequestSpec>
+export type WildCardRoute = Route<any, WildCardResponseSpecUnion, WildCardRequestSpec>
 
 const matchRoute = (
   request: IncomingMessage,
