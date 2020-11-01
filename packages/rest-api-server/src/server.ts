@@ -3,7 +3,7 @@ import { Field } from '@validator/validator/core'
 
 import { WithStringInputSupport } from '@validator/validator/WithStringInputSupport'
 
-type Method = () => number
+type Method = () => string
 
 type Handler<Methods extends string> = Record<Methods, Method>
 
@@ -19,7 +19,7 @@ class _Route<DeserializedType> extends Segment<DeserializedType> {
   }
 
   __lookupGetter__(sprop: string) {
-    return (): Method => () => 42
+    return (): Method => () => `${sprop} => 42`
   }
 
 }
@@ -47,4 +47,5 @@ export type CommonHttpMethods = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'o
 
 export type Server<Methods extends string = CommonHttpMethods> = _Server & Handler<Methods>
 
-const
+export const server = <Methods extends string = CommonHttpMethods>(): Server<Methods> =>
+  new _Server() as Server<Methods>
