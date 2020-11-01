@@ -18,6 +18,10 @@ class _Route<DeserializedType> extends Segment<DeserializedType> {
     return new _Route(this, key as any, field) as any
   }
 
+  __lookupGetter__(sprop: string) {
+    return (): Method => () => 42
+  }
+
 }
 
 export type Route<DeserializedType, Methods extends string> = _Route<DeserializedType> & Handler<Methods> & {
