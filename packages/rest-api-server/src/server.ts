@@ -7,6 +7,20 @@ type Method = () => string
 
 type Handler<Methods extends string> = Record<Methods, Method>
 
+const createProxy = (trg: any) => new Proxy(
+  trg,
+  {
+    get(target, name, receiver) {
+      const rv = Reflect.get(target, name, receiver)
+      if (rv === undefined) {
+        return () => name
+      } else {
+        return rv
+      }
+    }
+  }
+) as any
+
 class _Route<DeserializedType> extends Segment<DeserializedType> {
 
   _<Key extends string, ExtraDeserializedType=undefined>(
@@ -15,12 +29,7 @@ class _Route<DeserializedType> extends Segment<DeserializedType> {
   ): _Route<[ExtraDeserializedType] extends [undefined] ? DeserializedType : DeserializedType & {
     [P in Key]: ExtraDeserializedType
   }> {
-    return new _Route(this, key as any, field) as any
-  }
-
-  __lookupGetter__(sprop: string) {
-    console.log('FOO')
-    return (): Method => () => `${sprop} => 42`
+    return createProxy(new _Route(this, key as any, field))
   }
 
 }
@@ -50,7 +59,7 @@ export type Server<Methods extends string = CommonHttpMethods> = Route<void, Met
   serve(): void
 }
 
-export const server = <Methods extends string = CommonHttpMethods>(): Server<Methods> => new _Server() as any
+export const server = <Methods extends string = CommonHttpMethods>(): Server<Methods> => createProxy(new _Server())
 
 const s = server()
-console.log(s._('foo').get())
+console.log(s.get())
