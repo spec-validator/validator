@@ -24,7 +24,7 @@ class _Route<DeserializedType> extends Segment<DeserializedType> {
 
 }
 
-export type Route<DeserializedType, Methods extends string> = _Route<DeserializedType> & Handler<Methods> & {
+export type Route<DeserializedType, Methods extends string> = Handler<Methods> & {
 
   _<Key extends string, ExtraDeserializedType=undefined>(
     key: Key,
@@ -45,7 +45,11 @@ class _Server extends _Route<void> {
 
 export type CommonHttpMethods = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'trace';
 
-export type Server<Methods extends string = CommonHttpMethods> = _Server & Handler<Methods>
+export type Server<Methods extends string = CommonHttpMethods> = Route<void, Methods> & {
+  serve(): void
+}
 
-export const server = <Methods extends string = CommonHttpMethods>(): Server<Methods> =>
-  new _Server() as Server<Methods>
+export const server = <Methods extends string = CommonHttpMethods>(): Server<Methods> => new _Server() as any
+
+const s = server()
+console.log(s._('foo').get())
