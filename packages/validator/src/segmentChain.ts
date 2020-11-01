@@ -9,6 +9,15 @@ export class Segment<DeserializedType> {
 
   private regex?: string
 
+  private _root?: Segment<unknown>
+
+  get root(): Segment<unknown> {
+    if (!this._root) {
+      this._root = this.getSegments()[0]
+    }
+    return this._root as Segment<unknown>
+  }
+
   constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown> & WithStringInputSupport) {
     this.parent = parent
     this.key = key
@@ -23,6 +32,8 @@ export class Segment<DeserializedType> {
   }> {
     return new Segment(this, key as any, field) as any
   }
+
+  // TODO: make getSegments and getFieldSegments lazy props
 
   private getSegments(): Segment<unknown>[] {
     const segments: Segment<unknown>[] = []
