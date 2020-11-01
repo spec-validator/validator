@@ -62,4 +62,4 @@ export type Server<Methods extends string = CommonHttpMethods> = Route<void, Met
 export const server = <Methods extends string = CommonHttpMethods>(): Server<Methods> => createProxy(new _Server())
 
 const s = server()
-console.log(s.get())
+console.log(s._('foo').get())
