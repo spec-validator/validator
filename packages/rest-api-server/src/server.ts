@@ -1,7 +1,7 @@
 import { Segment } from '@validator/validator/segmentChain'
-import { Field, validate } from './core'
+import { Field } from '@validator/validator/core'
 
-import { WithRegExp, WithStringInputSupport } from './WithStringInputSupport'
+import { WithStringInputSupport } from '@validator/validator/WithStringInputSupport'
 
 type Method = () => number
 
@@ -46,3 +46,5 @@ class _Server extends _Route<void> {
 export type CommonHttpMethods = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'trace';
 
 export type Server<Methods extends string = CommonHttpMethods> = _Server & Handler<Methods>
+
+const
