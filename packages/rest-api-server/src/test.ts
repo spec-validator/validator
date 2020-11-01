@@ -1,7 +1,8 @@
 import { numberField, objectField, stringField } from '@validator/validator/fields'
 import { $ } from '@validator/validator/segmentChain'
-import { resource, serve } from './server'
+import { resource, serve } from './raw-server'
 
+/*
 serve({}, {
   foo: resource(
     $._('/foo/')._('username', stringField()),
@@ -22,7 +23,6 @@ serve({}, {
   )
 })
 
-/*
   GET($._('/bla/')._('username', stringField()), {
     responseSpec: stringField(),
     handler: async (request) => 'bla ' + request.pathParams.username,
