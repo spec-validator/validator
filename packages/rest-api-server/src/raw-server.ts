@@ -228,57 +228,10 @@ export const handle = async (
 export type Method =
   'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH' | string
 
-type ResourceRoute<RequestPathParams> = Omit<
-  Route<RequestPathParams, WildCardResponseSpec, WildCardRequestSpec>,
-  'method' | 'pathSpec'
->
-
-type Methods<RequestPathParams> =
-  Record<Method, ResourceRoute<RequestPathParams>> |
-  ResourceRoute<RequestPathParams>
-
-const isResourceRoute = <RequestPathParams> (
-  methods: Methods<RequestPathParams>
-): methods is ResourceRoute<RequestPathParams> => typeof methods.handler === 'function'
-
-export type Resource<RequestPathParams> = {
-  pathSpec: Segment<RequestPathParams>,
-  methods: Methods<RequestPathParams>
-}
-
-export const resource = <RequestPathParams> (
-  pathSpec: Segment<RequestPathParams>,
-  methods: Methods<RequestPathParams>
-): Resource<RequestPathParams> => ({
-    pathSpec, methods
-  })
-
-const toRoutes = (resources: Record<string, Resource<undefined>>): WildCardRoute[] => {
-  const routes: WildCardRoute[] = []
-  Object.values(resources).forEach(resource => {
-    if (isResourceRoute(resource.methods)) {
-      routes.push({
-        method: undefined,
-        pathSpec: resource.pathSpec,
-        ...resource.methods
-      })
-    } else {
-      Object.entries(resource.methods).forEach(([method, route]) => {
-        routes.push({
-          method: method,
-          pathSpec: resource.pathSpec,
-          ...route
-        })
-      })
-    }
-  })
-  return routes
-}
-
 export const serve = (
   config: Partial<ServerConfig>,
-  resources: Record<string, Resource<undefined>>,
+  routes: WildCardRoute[],
 ): void => {
   const merged = mergeServerConfigs(config)
-  createServer(handle.bind(null, merged, toRoutes(resources))).listen(merged.port)
+  createServer(handle.bind(null, merged, routes)).listen(merged.port)
 }

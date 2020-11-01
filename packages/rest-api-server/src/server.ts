@@ -12,10 +12,10 @@ const createProxy = (trg: any) => new Proxy(
   {
     get(target, name, receiver) {
       const rv = Reflect.get(target, name, receiver)
+
       if (rv === undefined) {
         return () => name
       } else {
-        console.log(222)
         return rv
       }
     }

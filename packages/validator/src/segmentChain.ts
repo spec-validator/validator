@@ -9,24 +9,6 @@ export class Segment<DeserializedType> {
 
   private regex?: string
 
-  private _root?: Segment<unknown>
-
-  private genRoot(): Segment<unknown> {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let cursor: Segment<unknown> = this
-    while(cursor.parent) {
-      cursor = cursor.parent
-    }
-    return cursor
-  }
-
-  get root(): Segment<unknown> {
-    if (!this._root) {
-      this._root = this.genRoot()
-    }
-    return this._root as Segment<unknown>
-  }
-
   constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown> & WithStringInputSupport) {
     this.parent = parent
     this.key = key
