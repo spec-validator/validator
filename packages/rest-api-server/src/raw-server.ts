@@ -97,7 +97,7 @@ export type WildCardResponseSpecUnion = WildCardResponseSpec | NonNullable<SpecU
 
 export type Route<
   RequestPathParams extends any,
-  TResponseSpec extends WildCardResponseSpecUnion,
+  TResponseSpec extends Optional<WildCardResponseSpecUnion> = undefined,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
 > = {
   method?: string,
@@ -227,6 +227,33 @@ export const handle = async (
 
 export type Method =
   'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH' | string
+
+export type MethodRoute = <
+  RequestPathParams,
+  TResponseSpec extends WildCardResponseSpecUnion,
+  TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
+> (
+    pathSpec: Segment<RequestPathParams>,
+    routeConfig: Omit<Route<RequestPathParams, TResponseSpec, TRequestSpec>, 'method' | 'pathSpec'>
+  )
+  => Route<RequestPathParams, TResponseSpec, TRequestSpec>
+
+const withMethod = (method: string | undefined): MethodRoute => (pathSpec, routeConfig) => ({
+  method,
+  pathSpec,
+  ...routeConfig
+})
+
+export const ANY_METHOD = withMethod(undefined)
+export const GET = withMethod('GET')
+export const HEAD = withMethod('HEAD')
+export const POST = withMethod('POST')
+export const PUT = withMethod('PUT')
+export const DELETE = withMethod('DELETE')
+export const CONNECT = withMethod('CONNECT')
+export const OPTIONS = withMethod('OPTIONS')
+export const TRACE = withMethod('TRACE')
+export const PATCH = withMethod('PATCH')
 
 export const serve = (
   config: Partial<ServerConfig>,
