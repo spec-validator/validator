@@ -5,11 +5,17 @@ import { WithStringInputSupport } from '@validator/validator/WithStringInputSupp
 import { serve, ServerConfig, WildCardRequestSpec, WildCardResponseSpecUnion, WildCardRoute } from './raw-server'
 import { Optional } from '@validator/validator/utils'
 
+import { Route as RawRoute } from './raw-server'
+
 type MethodSpec<
   RequestPathParams extends any,
   TResponseSpec extends WildCardResponseSpecUnion,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
-> = (config: ) => string
+  Config = Omit<
+    RawRoute<RequestPathParams, TResponseSpec, TRequestSpec>,
+    'method' | 'pathSpec'
+  >
+> = (config: Config, handler: Config[]) => string
 
 type Handler<Methods extends string> = Record<Methods, MethodSpec<any, any>>
 
@@ -92,5 +98,5 @@ export const server = <Methods extends string = CommonHttpMethods>(): Server<Met
 
 const s = server()
 s._('foo').get({
-
+  responseSpec: {}
 })
