@@ -81,7 +81,7 @@ type RequestSpec<
   headers?: ValidatorSpec<RequestHeaders>
 }
 
-type WildCardRequestSpec = RequestSpec<any, any, HttpHeaders>;
+export type WildCardRequestSpec = RequestSpec<any, any, HttpHeaders>;
 
 type ResponseSpec<
   ResponseData extends Optional<any> = undefined,
@@ -91,11 +91,11 @@ type ResponseSpec<
   headers?: ValidatorSpec<ResponseHeaders>
 }
 
-type WildCardResponseSpec = ResponseSpec<any, HttpHeaders>;
+export type WildCardResponseSpec = ResponseSpec<any, HttpHeaders>;
 
-type WildCardResponseSpecUnion = WildCardResponseSpec | NonNullable<SpecUnion<any>>;
+export type WildCardResponseSpecUnion = WildCardResponseSpec | NonNullable<SpecUnion<any>>;
 
-type Route<
+export type Route<
   RequestPathParams extends any,
   TResponseSpec extends WildCardResponseSpecUnion,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,

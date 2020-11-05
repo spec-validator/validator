@@ -2,11 +2,16 @@ import { $, Segment } from '@validator/validator/segmentChain'
 import { Field } from '@validator/validator/core'
 
 import { WithStringInputSupport } from '@validator/validator/WithStringInputSupport'
-import { serve, ServerConfig, WildCardRoute } from './raw-server'
+import { serve, ServerConfig, WildCardRequestSpec, WildCardResponseSpecUnion, WildCardRoute } from './raw-server'
+import { Optional } from '@validator/validator/utils'
 
-type Method = () => string
+type MethodSpec<
+  RequestPathParams extends any,
+  TResponseSpec extends WildCardResponseSpecUnion,
+  TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
+> = (config: ) => string
 
-type Handler<Methods extends string> = Record<Methods, Method>
+type Handler<Methods extends string> = Record<Methods, MethodSpec<>>
 
 const createProxy = (trg: any) => new Proxy(
   trg,
