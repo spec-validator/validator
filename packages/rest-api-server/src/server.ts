@@ -11,7 +11,7 @@ type MethodSpec<
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
 > = (config: ) => string
 
-type Handler<Methods extends string> = Record<Methods, MethodSpec<>>
+type Handler<Methods extends string> = Record<Methods, MethodSpec<any, any>>
 
 const createProxy = (trg: any) => new Proxy(
   trg,
@@ -70,7 +70,7 @@ class _Server extends _Route<void> {
 
   routes: WildCardRoute[]
 
-  constructor(readonly config: Partial<ServerConfig>) {
+  constructor(readonly config: Partial<ServerConfig> = {}) {
     super($)
     this.config = config
     this.routes = []
