@@ -81,7 +81,7 @@ type RequestSpec<
   headers?: ValidatorSpec<RequestHeaders>
 }
 
-export type WildCardRequestSpec = RequestSpec<any, any, HttpHeaders>;
+export type WildCardRequestSpec = RequestSpec<any, any, Optional<HttpHeaders>>;
 
 type ResponseSpec<
   ResponseData extends Optional<any> = undefined,
@@ -91,13 +91,11 @@ type ResponseSpec<
   headers?: ValidatorSpec<ResponseHeaders>
 }
 
-export type WildCardResponseSpec = ResponseSpec<any, HttpHeaders>;
-
-export type WildCardResponseSpecUnion = WildCardResponseSpec | NonNullable<SpecUnion<any>>;
+export type WildCardResponseSpec = ResponseSpec<any, Optional<HttpHeaders>>;
 
 export type Route<
   RequestPathParams extends any,
-  TResponseSpec extends Optional<WildCardResponseSpecUnion> = undefined,
+  TResponseSpec extends Optional<WildCardResponseSpec> = undefined,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
 > = {
   method?: string,
@@ -115,10 +113,10 @@ export type Route<
       TypeHint<TResponseSpec['data']>,
       TypeHint<TResponseSpec['headers']>
     >
-  > : TResponseSpec extends SpecUnion<any> ? Promise<TypeHint<TResponseSpec>> : Promise<undefined>
+  > : Promise<undefined>
 }
 
-export type WildCardRoute = Route<any, WildCardResponseSpecUnion, WildCardRequestSpec>
+export type WildCardRoute = Route<any, WildCardResponseSpec, WildCardRequestSpec>
 
 const matchRoute = (
   request: IncomingMessage,
@@ -230,7 +228,7 @@ export type Method =
 
 export type MethodRoute = <
   RequestPathParams,
-  TResponseSpec extends WildCardResponseSpecUnion,
+  TResponseSpec extends Optional<WildCardResponseSpec> = undefined,
   TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
 > (
     pathSpec: Segment<RequestPathParams>,
