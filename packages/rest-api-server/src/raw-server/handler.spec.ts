@@ -60,4 +60,9 @@ describe('Handler', () => {
     }) => undefined)>(true)
   })
 
+  it('in response always contains the fields that are defined', () => {
+    type H = Handler
+    expectType<H, ((request: {method: string}) => undefined)>(true)
+  })
+
 })
