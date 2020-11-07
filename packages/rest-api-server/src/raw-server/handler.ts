@@ -32,5 +32,5 @@ export type Response<
 
 export type Handler<
   Req extends Request = Request,
-  Resp extends Optional<Response> = Response
+  Resp extends Optional<Response> = undefined
 > = (request: Req) => Resp
