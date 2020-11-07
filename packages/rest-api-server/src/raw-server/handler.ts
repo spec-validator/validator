@@ -31,6 +31,6 @@ export type Response<
 }>
 
 export type Handler<
-  Req extends Request,
-  Resp extends Response
+  Req extends Request = Request,
+  Resp extends Optional<Response> = Response
 > = (request: Req) => Resp
