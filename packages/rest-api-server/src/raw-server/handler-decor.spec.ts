@@ -21,9 +21,7 @@ describe('Request', () => {
       headers: {
         headerKey: stringField()
       },
-      pathParams: {
-        pathKey: $._('pathKey', stringField())
-      }
+      pathParams: $._('pathKey', stringField())
     }
 
     type Req = RequestExt<typeof spec>
