@@ -33,11 +33,13 @@ test('RequiredKeys', () => {
   expectType<Keys,'numNonNull' | 'boolNonNull'>(true)
 })
 
-test('WithoutOptional', () => {
-  type Clean = WithoutOptional<Input>
+describe('WithoutOptional', () => {
+  it('filters out all optional keys', () => {
+    type Clean = WithoutOptional<Input>
 
-  expectType<Clean, {
-    boolNonNull: boolean;
-    numNonNull: number;
-  }>(true)
+    expectType<Clean, {
+      boolNonNull: boolean;
+      numNonNull: number;
+    }>(true)
+  })
 })

@@ -10,7 +10,6 @@ describe('Request', () => {
     type Req = RequestExt<typeof spec>
 
     expectType<{
-      method: string
     }, Req>(true)
   })
 
