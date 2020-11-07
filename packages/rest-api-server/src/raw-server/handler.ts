@@ -1,7 +1,7 @@
 import { Optional } from '@validator/validator/utils'
 import { WithoutOptional } from './util-types'
 
-type Unknown = unknown | unknown[]
+export type Unknown = unknown | unknown[]
 
 export type StringMapping = Record<string, Unknown>
 
@@ -33,4 +33,4 @@ export type Response<
 export type Handler<
   Req extends Request = Request,
   Resp extends Optional<Response> = undefined
-> = (request: Req) => Resp
+> = (request: Req) => Promise<Resp>
