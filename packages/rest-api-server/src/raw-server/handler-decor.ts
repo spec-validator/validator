@@ -35,7 +35,7 @@ export type HandlerSpec<
   response: Resp
 }
 
-export type RequestExt<Spec extends RequestSpec> = Request<
+export type RequestExt<Spec extends RequestSpec = RequestSpec> = Request<
   TypeHint<Spec['method']>,
   SegmentTypeHint<Spec['pathSpec']>,
   TypeHint<Spec['data']>,
@@ -43,7 +43,7 @@ export type RequestExt<Spec extends RequestSpec> = Request<
   TypeHint<Spec['headers']>
 >
 
-export type ResponseExt<Spec extends ResponseSpec> = Response<
+export type ResponseExt<Spec extends ResponseSpec = ResponseSpec> = Response<
   TypeHint<Spec['statusCode']>,
   TypeHint<Spec['data']>,
   TypeHint<Spec['headers']>
