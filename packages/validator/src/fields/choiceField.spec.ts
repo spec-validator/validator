@@ -7,7 +7,7 @@ import {
   testValidateSpecError,
   testValidateSegmentChainOK,
   testValidateSegmentChainError,
-  testGetParams
+  testGetParams,
 } from './TestUtils.test'
 import { expectType } from '../TypeTestUtils.test'
 

@@ -7,7 +7,7 @@ import {
   testValidateSegmentChainError,
   testValidateSegmentChainOK,
   testValidateSpecError,
-  testValidateSpecOk
+  testValidateSpecOk,
 } from './TestUtils.test'
 
 const field = stringField(/[A-Z]+/)

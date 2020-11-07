@@ -30,7 +30,7 @@ test('getParams', () => {
     'innerSpecs':[
       {},
       {'choices':[1,2,3]},
-      {}
+      {},
     ]})
 })
 

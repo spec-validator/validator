@@ -3,5 +3,5 @@ import withValidation from './withValidation'
 
 export {
   tuple,
-  withValidation
+  withValidation,
 }

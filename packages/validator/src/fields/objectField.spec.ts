@@ -6,8 +6,8 @@ test('placeholder', () => {
     field: objectField({
       num: numberField(),
       subField: objectField({
-        subSubField: numberField()
-      })
+        subSubField: numberField(),
+      }),
     }),
   }
   type Spec = TypeHint<typeof spec>
@@ -15,9 +15,9 @@ test('placeholder', () => {
     field: {
       num: 42,
       subField: {
-        subSubField: 11
-      }
-    }
+        subSubField: 11,
+      },
+    },
   })
   expect(valid.field.subField.subSubField).toEqual(11)
 })

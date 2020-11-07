@@ -36,7 +36,7 @@ class UnionField<
   }
   getParams() {
     return {
-      innerSpecs: this.variants.map(it => it.getParams())
+      innerSpecs: this.variants.map(it => it.getParams()),
     }
   }
 

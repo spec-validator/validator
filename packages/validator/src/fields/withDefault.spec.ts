@@ -13,16 +13,16 @@ describe('field', () => {
 
   it('should allow undefined nested value go through', () => {
     const value = validate({
-      inner: field
+      inner: field,
     }, {})
     expect(value.inner).toEqual(42)
   })
 
   it('should allow defined nested value go through', () => {
     const value = validate({
-      inner: field
+      inner: field,
     }, {
-      inner: 57
+      inner: 57,
     })
     expect(value.inner).toEqual(57)
   })

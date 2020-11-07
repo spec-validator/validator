@@ -24,12 +24,12 @@ export const withErrorDecoration = <R> (key: any, call: () => R): R => {
     if (err.path && err.inner) {
       throw {
         path: [key, ...err.path],
-        inner: err.inner
+        inner: err.inner,
       }
     } else {
       throw {
         path: [key],
-        inner: err
+        inner: err,
       }
     }
   }

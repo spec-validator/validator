@@ -22,7 +22,8 @@
     "max-len": ["error", 120],
     "func-style": ["error", "expression"],
     "arrow-body-style": ["error", "as-needed"],
-    "semi": ["error", "never"]
+    "semi": ["error", "never"],
+    "comma-dangle": ["error", "always-multiline"]
   },
   "overrides": [
     {

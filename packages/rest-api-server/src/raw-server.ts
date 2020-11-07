@@ -1,5 +1,5 @@
 import {
-  createServer, IncomingMessage, ServerResponse
+  createServer, IncomingMessage, ServerResponse,
 } from 'http'
 
 import qs from 'qs'
@@ -36,7 +36,7 @@ const DEFAULT_SERVER_CONFIG: ServerConfig = {
   reportError: (error: unknown) => {
     console.error(error)
     return Promise.resolve(undefined)
-  }
+  },
 }
 
 const mergeServerConfigs = (
@@ -150,7 +150,7 @@ const withAppErrorStatusCode = async <T>(statusCode: number, inner: () => Promis
   } catch (error) {
     throw {
       statusCode: statusCode,
-      error: error
+      error: error,
     }
   }
 }
@@ -239,7 +239,7 @@ export type MethodRoute = <
 const withMethod = (method: string | undefined): MethodRoute => (pathSpec, routeConfig) => ({
   method,
   pathSpec,
-  ...routeConfig
+  ...routeConfig,
 })
 
 export const ANY_METHOD = withMethod(undefined)

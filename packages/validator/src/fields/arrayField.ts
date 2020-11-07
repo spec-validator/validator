@@ -27,7 +27,7 @@ class ArrayField<T> implements Field<T[]> {
   }
   getParams(): Json {
     return {
-      itemSpec: this.params.itemField.getParams()
+      itemSpec: this.params.itemField.getParams(),
     }
   }
 }

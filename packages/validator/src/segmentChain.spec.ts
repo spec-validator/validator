@@ -18,6 +18,6 @@ test('basics', () => {
   expect(valid).toEqual({
     username: 'john-sick',
     uid: 11,
-    suid: 42
+    suid: 42,
   })
 })

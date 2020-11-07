@@ -7,7 +7,7 @@ import {
   testValidateSegmentChainError,
   testValidateSegmentChainOK,
   testValidateSpecError,
-  testValidateSpecOk
+  testValidateSpecOk,
 } from './TestUtils.test'
 
 describe('spec', () => {
@@ -25,7 +25,7 @@ describe('spec', () => {
 
   it('floatField signed', () => {
     const field = numberField({
-      canBeFloat: true
+      canBeFloat: true,
     })
     testValidateSpecOk(field, 12, 12)
     testValidateSpecOk(field, 0, 0)
@@ -52,7 +52,7 @@ describe('segmentChain', () => {
 
   it('floatField', () => {
     const field = numberField({
-      canBeFloat: true
+      canBeFloat: true,
     })
     testValidateSegmentChainOK(field, '12', 12)
     testValidateSegmentChainOK(field, '0', 0)

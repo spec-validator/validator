@@ -5,14 +5,14 @@ import { expectType } from './TypeTestUtils.test'
 const schema = {
   innerSchema: objectField({
     str: stringField(),
-    num: withDefault(numberField(), 42)
+    num: withDefault(numberField(), 42),
   }),
   innerList: arrayField(objectField({
     bool: optional(booleanField()),
     fl: numberField({
-      canBeFloat: false
-    })
-  }))
+      canBeFloat: false,
+    }),
+  })),
 }
 
 type Schema = TypeHint<typeof schema>
@@ -62,12 +62,12 @@ test('nested serialize', () => {
   expect(serialize(schema, {
     innerSchema: {
       str: 'string',
-      num: 12
+      num: 12,
     },
     innerList: [{
       bool: true,
       fl: 11,
-    }]
+    }],
   })).toEqual({
     'innerList': [
       {
@@ -86,11 +86,11 @@ test('nested validate', () => {
   expect(validate(schema, {
     innerSchema: {
       str: 'string',
-      num: 12
+      num: 12,
     },
     innerList: [{
       fl: 11,
-    }]
+    }],
   })).toEqual({
     'innerList': [
       {

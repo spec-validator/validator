@@ -30,7 +30,7 @@ class NumberField implements Field<number>, WithStringInputSupport {
   }
   getParams() {
     return {
-      ...this.params
+      ...this.params,
     }
   }
 }

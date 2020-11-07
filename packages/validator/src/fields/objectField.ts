@@ -25,7 +25,7 @@ class ObjectField<DeserializedType> implements Field<DeserializedType> {
   }
   getParams() {
     return {
-      spec: getParams(this.objectSpec)
+      spec: getParams(this.objectSpec),
     }
   }
 

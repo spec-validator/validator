@@ -6,7 +6,7 @@ import numberField from './numberField'
 
 import {
   testValidateSpecError,
-  testValidateSpecOk
+  testValidateSpecOk,
 } from './TestUtils.test'
 
 const field = arrayField(numberField())
@@ -30,7 +30,7 @@ test('serialize', () => {
 
 test('getParams', () => {
   expect(getParams(field)).toEqual({
-    itemSpec: {}
+    itemSpec: {},
   })
 })
 

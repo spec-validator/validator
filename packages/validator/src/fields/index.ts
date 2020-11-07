@@ -16,5 +16,5 @@ export {
   stringField,
   choiceField,
   withDefault,
-  optional
+  optional,
 }

@@ -22,7 +22,7 @@ class DefaultFieldDecorator<T> implements Field<T> {
   }
   getParams() {
     return merge({
-      defaultValue: this.defaultValue
+      defaultValue: this.defaultValue,
     }, this.innerField.getParams())
   }
 }

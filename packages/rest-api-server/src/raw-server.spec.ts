@@ -6,23 +6,23 @@ serve({}, [
   GET($._('/bla/')._('username', stringField()), {
     responseSpec: {
       data: stringField(),
-      headers: {}
+      headers: {},
     },
     handler: async (request) => ({
       data: 'bla ' + request.pathParams.username,
-      headers: {}
+      headers: {},
     }),
   }),
   ANY_METHOD($._('anyPath', stringField()), {
     responseSpec: {
       data: {
-        message: stringField()
-      }
+        message: stringField(),
+      },
     },
     handler: async () => ({
       data: {
         message: 'NOT FOUND',
       },
-    })
-  })
+    }),
+  }),
 ])
