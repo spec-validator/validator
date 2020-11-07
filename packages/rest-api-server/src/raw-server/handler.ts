@@ -23,8 +23,8 @@ export type Request<
 
 export type Response<
   StatusCode extends Optional<number> = undefined,
-  Headers extends Optional<StringMapping> = undefined,
   Data extends Optional<Unknown> = undefined,
+  Headers extends Optional<StringMapping> = undefined,
 > = WithoutOptional<{
   statusCode: StatusCode,
   data: Data,

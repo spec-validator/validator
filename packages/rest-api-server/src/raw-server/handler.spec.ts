@@ -33,7 +33,7 @@ describe('Response', () => {
   })
 
   it('always contains the fields that are defined', () => {
-    type Resp = Response<201 | 404, undefined, string>
+    type Resp = Response<201 | 404, string>
 
     expectType<{
       statusCode: 201 | 404,
@@ -61,7 +61,7 @@ describe('Handler', () => {
   })
 
   it('in response: always contains the fields that are defined', () => {
-    type H = Handler<Request, Response<201 | 404, undefined, string>>
+    type H = Handler<Request, Response<201 | 404, string>>
     expectType<H, ((request: {method: string}) => Promise<{
       statusCode: 201 | 404,
       data: string

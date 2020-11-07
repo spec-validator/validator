@@ -1,5 +1,5 @@
 import { Field } from '@validator/validator/core'
-import { stringField } from '@validator/validator/fields'
+import { choiceField, stringField } from '@validator/validator/fields'
 import { $ } from '@validator/validator/segmentChain'
 import { expectType } from '@validator/validator/TypeTestUtils.test'
 import { Request, Response } from './handler'
@@ -38,14 +38,19 @@ describe('Request', () => {
 describe('Response', () => {
 
   it('contains nothing by default', () => {
-    type Resp = Response
+    type Resp = ResponseExt
 
     expectType<{
     }, Resp>(true)
   })
 
   it('always contains the fields that are defined', () => {
-    type Resp = Response<201 | 404, undefined, string>
+    const spec = {
+      statusCode: choiceField(201, 404),
+      data: stringField()
+    }
+
+    type Resp = ResponseExt<typeof spec>
 
     expectType<{
       statusCode: 201 | 404,
