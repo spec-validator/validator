@@ -45,12 +45,12 @@ describe('Response', () => {
 
 describe('Handler', () => {
 
-  it('in request always contains a method', () => {
+  it('in request: always contains a method', () => {
     type H = Handler
     expectType<H, ((request: {method: string}) => undefined)>(true)
   })
 
-  it('in request always contains the fields that are defined', () => {
+  it('in request: always contains the fields that are defined', () => {
     type Req = Request<{key: string}, undefined, {key: string}>
     type H = Handler<Req>
     expectType<H, ((request: {
@@ -60,9 +60,12 @@ describe('Handler', () => {
     }) => undefined)>(true)
   })
 
-  it('in response always contains the fields that are defined', () => {
-    type H = Handler
-    expectType<H, ((request: {method: string}) => undefined)>(true)
+  it('in response: always contains the fields that are defined', () => {
+    type H = Handler<Request, Response<201 | 404, undefined, string>>
+    expectType<H, ((request: {method: string}) => {
+      statusCode: 201 | 404,
+      data: string
+    })>(true)
   })
 
 })
