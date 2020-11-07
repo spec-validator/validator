@@ -8,7 +8,7 @@ export type StringMapping = Record<string, Unknown>
 export type DataMapping = StringMapping | Unknown
 
 export type Request<
-  Method extends string = string,
+  Method extends Optional<string> = undefined,
   PathParams extends Optional<StringMapping> = undefined,
   Data extends Optional<Unknown> = undefined,
   QueryParams extends Optional<StringMapping> = undefined,

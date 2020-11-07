@@ -4,14 +4,14 @@ import { Optional } from '@validator/validator/utils'
 import { StringMapping, Unknown, Response, Request } from './handler'
 
 export type RequestSpec<
-  Method extends string = string,
+  Method extends Optional<string> = Optional<string>,
   PathParams extends Optional<StringMapping> = Optional<StringMapping>,
   Data extends Optional<Unknown> = Optional<Unknown> ,
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
   Headers extends Optional<StringMapping> = Optional<StringMapping>,
 > = {
-  method: Field<Method>,
-  pathParams: Segment<PathParams>,
+  method?: Field<Method>,
+  pathParams?: Segment<PathParams>,
   data?: ValidatorSpec<Data>,
   query?: ValidatorSpec<QueryParams>,
   headers?: ValidatorSpec<Headers>
@@ -35,7 +35,9 @@ export type HandlerSpec<
   response: Resp
 }
 
-export type RequestExt<Spec extends RequestSpec = RequestSpec> = Request<
+export type RequestExt<
+  Spec extends RequestSpec,
+> = Request<
   TypeHint<Spec['method']>,
   SegmentTypeHint<Spec['pathParams']>,
   TypeHint<Spec['data']>,
@@ -43,7 +45,7 @@ export type RequestExt<Spec extends RequestSpec = RequestSpec> = Request<
   TypeHint<Spec['headers']>
 >
 
-export type ResponseExt<Spec extends ResponseSpec = ResponseSpec> = Response<
+export type ResponseExt<Spec extends ResponseSpec> = Response<
   TypeHint<Spec['statusCode']>,
   TypeHint<Spec['data']>,
   TypeHint<Spec['headers']>

@@ -6,7 +6,8 @@ import { RequestExt, ResponseExt } from './handler-decor'
 describe('Request', () => {
 
   it('always contains a method', () => {
-    type Req = RequestExt
+    const spec = {}
+    type Req = RequestExt<typeof spec>
 
     expectType<{
       method: string

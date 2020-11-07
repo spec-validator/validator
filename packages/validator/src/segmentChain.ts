@@ -77,6 +77,7 @@ export class Segment<DeserializedType> {
   }
 }
 
-export type SegmentTypeHint<Spec extends Segment<any>> = ReturnType<Spec['match']>
+export type SegmentTypeHint<Spec extends Segment<unknown> | undefined> =
+  Spec extends Segment<unknown> ? ReturnType<Spec['match']> : undefined
 
 export const $ = new Segment()
