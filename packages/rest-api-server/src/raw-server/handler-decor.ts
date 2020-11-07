@@ -1,7 +1,7 @@
-import { SpecUnion, ValidatorSpec } from '@validator/validator/core'
-import { Segment } from '@validator/validator/segmentChain'
+import { Field, SpecUnion, TypeHint, ValidatorSpec } from '@validator/validator/core'
+import { Segment, SegmentTypeHint } from '@validator/validator/segmentChain'
 import { Optional } from '@validator/validator/utils'
-import { StringMapping, Unknown } from './handler'
+import { StringMapping, Unknown, Response, Request } from './handler'
 
 export type RequestSpec<
   Method extends string = string,
@@ -10,7 +10,7 @@ export type RequestSpec<
   QueryParams extends Optional<StringMapping> = undefined,
   Headers extends Optional<StringMapping> = undefined,
 > = {
-  method: ValidatorSpec<Method>,
+  method: Field<Method>,
   pathSpec: Segment<PathParams>,
   data?: ValidatorSpec<Data>,
   query?: ValidatorSpec<QueryParams>,
@@ -18,9 +18,11 @@ export type RequestSpec<
 }
 
 export type ResponseSpec<
+  StatusCode extends Optional<number> = undefined,
+  Headers extends Optional<StringMapping> = undefined,
   Data extends Optional<Unknown> = undefined,
-  Headers extends Optional<StringMapping> = undefined
 > = {
+  statusCode?: Field<StatusCode>
   data?: SpecUnion<Data>,
   headers?: ValidatorSpec<Headers>
 }
@@ -32,3 +34,9 @@ export type HandlerSpec<
   request: Req,
   response: Resp
 }
+
+export type RequestExt<Spec extends RequestSpec> = Request<
+  TypeHint<Spec['method']>,
+  SegmentTypeHint<Spec['pathSpec']>,
+
+>

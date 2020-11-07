@@ -12,12 +12,12 @@ describe('Request', () => {
   })
 
   it('always contains the fields that are defined', () => {
-    type Req = Request<{key: string}, undefined, {key: string}>
+    type Req = Request<string, {pathKey: string}, undefined, undefined, {headerKey: string}>
 
     expectType<{
       method: string,
-      headers: { key: string },
-      queryParams: {key: string},
+      headers: { headerKey: string },
+      pathParams: { pathKey: string },
     }, Req>(true)
   })
 
@@ -51,12 +51,12 @@ describe('Handler', () => {
   })
 
   it('in request: always contains the fields that are defined', () => {
-    type Req = Request<{key: string}, undefined, {key: string}>
+    type Req = Request<string, {pathKey: string}, undefined, undefined, {headerKey: string}>
     type H = Handler<Req>
     expectType<H, ((request: {
       method: string,
-      headers: { key: string },
-      queryParams: {key: string},
+      headers: { headerKey: string },
+      pathParams: { pathKey: string },
     }) => Promise<undefined>)>(true)
   })
 

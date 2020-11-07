@@ -9,10 +9,10 @@ export type DataMapping = StringMapping | Unknown
 
 export type Request<
   Method extends string = string,
-  Headers extends Optional<StringMapping> = undefined,
   PathParams extends Optional<StringMapping> = undefined,
-  QueryParams extends Optional<StringMapping> = undefined,
   Data extends Optional<Unknown> = undefined,
+  QueryParams extends Optional<StringMapping> = undefined,
+  Headers extends Optional<StringMapping> = undefined,
 > = WithoutOptional<{
   method: Method,
   pathParams: PathParams,
