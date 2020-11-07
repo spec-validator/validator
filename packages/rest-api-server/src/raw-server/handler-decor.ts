@@ -19,3 +19,4 @@ export type ResponseSpec<
   data?: SpecUnion<ResponseData>,
   headers?: ValidatorSpec<ResponseHeaders>
 }
+
