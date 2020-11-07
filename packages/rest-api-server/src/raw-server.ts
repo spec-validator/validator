@@ -68,7 +68,7 @@ export type Response<
 > = { statusCode?: number }
   & WithoutOptional<{
     data: Data,
-    headers: Headers,
+    headers?: Headers,
   }>
 
 type RequestSpec<

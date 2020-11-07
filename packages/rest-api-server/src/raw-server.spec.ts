@@ -5,10 +5,12 @@ import { GET, ANY_METHOD, serve } from './raw-server'
 serve({}, [
   GET($._('/bla/')._('username', stringField()), {
     responseSpec: {
-      data: stringField()
+      data: stringField(),
+      headers: {}
     },
     handler: async (request) => ({
-      data: 'bla ' + request.pathParams.username
+      data: 'bla ' + request.pathParams.username,
+      headers: {}
     }),
   }),
   ANY_METHOD($._('anyPath', stringField()), {
