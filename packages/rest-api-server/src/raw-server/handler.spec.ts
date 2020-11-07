@@ -11,13 +11,13 @@ describe('Request', () => {
     }, Req>(true)
   })
 
-  it('always contains the fields that', () => {
+  it('always contains the fields that are defined', () => {
     type Req = Request<{key: string}, undefined, {key: string}>
 
     expectType<{
       method: string,
       headers: { key: string },
-      queryParams: {key: string}
+      queryParams: {key: string},
     }, Req>(true)
   })
 
