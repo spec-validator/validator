@@ -1,14 +1,17 @@
-import { Primitive } from '@validator/validator/Json'
 import { Optional } from '@validator/validator/utils'
 import { WithoutOptional } from './util-types'
 
-export type HttpHeaders = Record<string, Primitive | Primitive[]>
+type Unknown = unknown | unknown[]
+
+export type StringMapping = Record<string, Unknown>
+
+export type DataMapping = StringMapping | Unknown
 
 export type Request<
-  Headers = undefined,
-  PathParams = undefined,
-  QueryParams = undefined,
-  Data = undefined,
+  Headers extends Optional<StringMapping> = undefined,
+  PathParams extends Optional<StringMapping> = undefined,
+  QueryParams extends Optional<StringMapping> = undefined,
+  Data extends Optional<Unknown> = undefined,
 > = WithoutOptional<{
   method: string,
   pathParams: PathParams,
@@ -19,8 +22,8 @@ export type Request<
 
 export type Response<
   StatusCode extends Optional<number> = undefined,
-  Headers = undefined,
-  Data = undefined,
+  Headers extends Optional<StringMapping> = undefined,
+  Data extends Optional<Unknown> = undefined,
 > = WithoutOptional<{
   statusCode: StatusCode,
   data: Data,
