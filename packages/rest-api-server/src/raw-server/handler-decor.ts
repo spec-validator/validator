@@ -5,10 +5,10 @@ import { StringMapping, Unknown, Response, Request } from './handler'
 
 export type RequestSpec<
   Method extends string = string,
-  PathParams extends Optional<StringMapping> = undefined,
-  Data extends Optional<Unknown> = undefined,
-  QueryParams extends Optional<StringMapping> = undefined,
-  Headers extends Optional<StringMapping> = undefined,
+  PathParams extends Optional<StringMapping> = Optional<StringMapping>,
+  Data extends Optional<Unknown> = Optional<Unknown> ,
+  QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
+  Headers extends Optional<StringMapping> = Optional<StringMapping>,
 > = {
   method: Field<Method>,
   pathParams: Segment<PathParams>,
@@ -18,9 +18,9 @@ export type RequestSpec<
 }
 
 export type ResponseSpec<
-  StatusCode extends Optional<number> = undefined,
-  Headers extends Optional<StringMapping> = undefined,
-  Data extends Optional<Unknown> = undefined,
+  StatusCode extends Optional<number> = Optional<number>,
+  Headers extends Optional<StringMapping> = Optional<StringMapping>,
+  Data extends Optional<Unknown> = Optional<Unknown>,
 > = {
   statusCode?: Field<StatusCode>
   data?: SpecUnion<Data>,

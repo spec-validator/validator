@@ -36,7 +36,8 @@ describe('Request', () => {
 describe('Response', () => {
 
   it('contains nothing by default', () => {
-    type Resp = ResponseExt
+    const spec = {}
+    type Resp = ResponseExt<typeof spec>
 
     expectType<{
     }, Resp>(true)
