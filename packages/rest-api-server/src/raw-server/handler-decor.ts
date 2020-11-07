@@ -25,3 +25,10 @@ export type ResponseSpec<
   headers?: ValidatorSpec<Headers>
 }
 
+export type HandlerSpec<
+  Req extends RequestSpec = RequestSpec,
+  Resp extends Optional<ResponseSpec> = ResponseSpec
+> = {
+  request: Req,
+  response: Resp
+}
