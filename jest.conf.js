@@ -18,6 +18,11 @@ module.exports = {
   testMatch: ['<rootDir>/packages/**/src/**/*.spec.ts'],
   testURL: 'http://localhost/',
 
+  moduleNameMapper: {
+    '@validator/validator/(.*)': '<rootDir>/packages/validator/src/$1',
+    '@validator/rest-api-server/(.*)': '<rootDir>/packages/rest-api-server/src/$1',
+  },
+
   collectCoverage: true,
   coverageReporters: ['json', 'json-summary', 'lcov'],
   coverageDirectory: 'coverage',
