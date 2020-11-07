@@ -1,10 +1,11 @@
+import { Optional } from '@validator/validator/utils'
 import { WithoutOptional } from './util-types'
 
 export type Request<
-  PathParams,
-  Data,
-  QueryParams,
-  Headers
+  PathParams = undefined,
+  Data = undefined,
+  QueryParams = undefined,
+  Headers = undefined
 > = WithoutOptional<{
   method: string,
   pathParams: PathParams,
@@ -14,11 +15,16 @@ export type Request<
 }>
 
 export type Response<
-  StatusCode,
-  Data,
-  Headers
+  StatusCode extends Optional<number> = undefined,
+  Data = undefined,
+  Headers = undefined
 > = WithoutOptional<{
   statusCode: StatusCode,
   data: Data,
   headers: Headers,
 }>
+
+export type Handler<
+  Req extends Request,
+  Resp extends Response
+> = (request: Req) => Resp
