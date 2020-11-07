@@ -1,6 +1,11 @@
 import { WithoutOptional } from './util-types'
 
-export type Request<PathParams, Data, QueryParams, Headers> = WithoutOptional<{
+export type Request<
+  PathParams,
+  Data,
+  QueryParams,
+  Headers
+> = WithoutOptional<{
   method: string,
   pathParams: PathParams,
   data: Data,
