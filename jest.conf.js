@@ -1,3 +1,21 @@
+const fs = require('fs')
+
+const readTsConfig = () => fs.readFileSync('./tsconfig.json')
+
+const mapKey = (key) => key.replace('*', '(.*)')
+
+const mapValue = (value) => value.replace('*', '$1')
+
+const getModuleNameMapper = () => {
+  const config = JSON.parse(readTsConfig())
+  const baseUrl = config.compilerOptions.baseUrl.replace('./', '<rootDir>/')
+  const result = {}
+  Object.entries(config.compilerOptions.paths).forEach(([key, value]) => {
+    result[mapKey(key)] = baseUrl + '/' + mapValue(value[0])
+  })
+  return result
+}
+
 module.exports = {
   roots: ['<rootDir>/packages'],
   transform: {
@@ -18,10 +36,7 @@ module.exports = {
   testMatch: ['<rootDir>/packages/**/src/**/*.spec.ts'],
   testURL: 'http://localhost/',
 
-  moduleNameMapper: {
-    '@validator/validator/(.*)': '<rootDir>/packages/validator/src/$1',
-    '@validator/rest-api-server/(.*)': '<rootDir>/packages/rest-api-server/src/$1',
-  },
+  moduleNameMapper: getModuleNameMapper(),
 
   collectCoverage: true,
   coverageReporters: ['json', 'json-summary', 'lcov'],
