@@ -1,5 +1,5 @@
 import { expectType } from '@validator/validator/TypeTestUtils.test'
-import { Request, Response } from './handler'
+import { Request, Response, Handler } from './handler'
 
 describe('Request', () => {
 
@@ -39,6 +39,25 @@ describe('Response', () => {
       statusCode: 201 | 404,
       data: string
     }, Resp>(true)
+  })
+
+})
+
+describe('Handler', () => {
+
+  it('in request always contains a method', () => {
+    type H = Handler
+    expectType<H, ((request: {method: string}) => undefined)>(true)
+  })
+
+  it('in request always contains the fields that are defined', () => {
+    type Req = Request<{key: string}, undefined, {key: string}>
+    type H = Handler<Req>
+    expectType<H, ((request: {
+      method: string,
+      headers: { key: string },
+      queryParams: {key: string},
+    }) => undefined)>(true)
   })
 
 })
