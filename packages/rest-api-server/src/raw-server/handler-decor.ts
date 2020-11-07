@@ -11,7 +11,7 @@ export type RequestSpec<
   Headers extends Optional<StringMapping> = undefined,
 > = {
   method: Field<Method>,
-  pathSpec: Segment<PathParams>,
+  pathParams: Segment<PathParams>,
   data?: ValidatorSpec<Data>,
   query?: ValidatorSpec<QueryParams>,
   headers?: ValidatorSpec<Headers>
@@ -37,7 +37,7 @@ export type HandlerSpec<
 
 export type RequestExt<Spec extends RequestSpec = RequestSpec> = Request<
   TypeHint<Spec['method']>,
-  SegmentTypeHint<Spec['pathSpec']>,
+  SegmentTypeHint<Spec['pathParams']>,
   TypeHint<Spec['data']>,
   TypeHint<Spec['query']>,
   TypeHint<Spec['headers']>

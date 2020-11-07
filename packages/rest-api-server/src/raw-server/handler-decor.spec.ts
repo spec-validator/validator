@@ -3,7 +3,7 @@ import { stringField } from '@validator/validator/fields'
 import { $ } from '@validator/validator/segmentChain'
 import { expectType } from '@validator/validator/TypeTestUtils.test'
 import { Request, Response } from './handler'
-import { RequestExt, requestSpec, ResponseExt } from './handler-decor'
+import { RequestExt, ResponseExt } from './handler-decor'
 
 describe('Request', () => {
 
