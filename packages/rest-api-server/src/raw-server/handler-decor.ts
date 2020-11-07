@@ -1,22 +1,27 @@
 import { SpecUnion, ValidatorSpec } from '@validator/validator/core'
+import { Segment } from '@validator/validator/segmentChain'
 import { Optional } from '@validator/validator/utils'
 import { StringMapping, Unknown } from './handler'
 
 export type RequestSpec<
+  Method extends string = string,
+  PathParams extends Optional<StringMapping> = undefined,
   Data extends Optional<Unknown> = undefined,
-  QueryParams extends Optional<StringMapping> ,
-  Headers extends Optional<StringMapping>,
+  QueryParams extends Optional<StringMapping> = undefined,
+  Headers extends Optional<StringMapping> = undefined,
 > = {
-  data?: ValidatorSpec<RequestData>,
-  query?: ValidatorSpec<RequestQueryParams>,
-  headers?: ValidatorSpec<RequestHeaders>
+  method: ValidatorSpec<Method>,
+  pathSpec: Segment<PathParams>,
+  data?: ValidatorSpec<Data>,
+  query?: ValidatorSpec<QueryParams>,
+  headers?: ValidatorSpec<Headers>
 }
 
 export type ResponseSpec<
-  ResponseData extends Optional<any> = undefined,
-  ResponseHeaders extends Optional<StringMapping> = undefined
+  Data extends Optional<Unknown> = undefined,
+  Headers extends Optional<StringMapping> = undefined
 > = {
-  data?: SpecUnion<ResponseData>,
-  headers?: ValidatorSpec<ResponseHeaders>
+  data?: SpecUnion<Data>,
+  headers?: ValidatorSpec<Headers>
 }
 
