@@ -23,18 +23,6 @@ describe('KeysOfType', () => {
     expectType<Keys1>('boolNonNull')
   })
 
-  it('filters any undefined clause', () => {
-    type Keys1 = KeysOfType<Input, undefined>
-    expectType<Keys1>('numNonNull')
-    expectType<Keys1>('boolNonNull')
-  })
-
-})
-
-describe('KeysOfNotType', () => {
-
-  it('filters out a specific type')
-
 })
 
 test('RequiredKeys', () => {
