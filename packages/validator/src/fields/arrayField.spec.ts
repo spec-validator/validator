@@ -37,5 +37,5 @@ test('getParams', () => {
 test('types', () => {
   type Spec = TypeHint<typeof field>;
 
-  expectType<number[]>([] as Spec)
+  expectType<Spec, number[]>(true)
 })

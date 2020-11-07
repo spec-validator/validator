@@ -18,16 +18,16 @@ const schema = {
 type Schema = TypeHint<typeof schema>
 
 test('nested expectType', () => {
-  expectType<{
+  expectType<Schema, {
     innerSchema: {
       str: string,
       num: number
     },
     innerList: {
-      bool?: boolean,
+      bool: boolean | undefined,
       fl: number
     }[]
-  }>({} as Schema)
+  }>(true)
 })
 
 test('nested getParams', () => {

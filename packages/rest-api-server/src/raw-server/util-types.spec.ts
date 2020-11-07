@@ -12,14 +12,12 @@ describe('KeysOfType', () => {
 
   it('filters type or undefined clause', () => {
     type Keys1 = KeysOfType<Input, number | undefined>
-    expectType<Keys1>('numNull')
-    expectType<Keys1>('numNonNull')
+    expectType<Keys1, 'numNull' | 'numNonNull'>(true)
   })
 
   it('filters only type clause', () => {
     type Keys1 = KeysOfType<Input, number | boolean>
-    expectType<Keys1>('numNonNull')
-    expectType<Keys1>('boolNonNull')
+    expectType<Keys1, 'numNonNull' | 'boolNonNull'>(true)
   })
 
 })
@@ -32,12 +30,14 @@ test('AllNonNullKeyTypes', () => {
 test('RequiredKeys', () => {
   type Keys = RequiredKeys<Input>
 
-  expectType<Keys>('boolNonNull')
-  expectType<Keys>('numNonNull')
+  expectType<Keys,'numNonNull' | 'boolNonNull'>(true)
 })
 
 test('WithoutOptional', () => {
   type Clean = WithoutOptional<Input>
 
-  expectType<Clean>({boolNonNull: true, numNonNull: 42})
+  expectType<Clean, {
+    boolNonNull: boolean;
+    numNonNull: number;
+  }>(true)
 })

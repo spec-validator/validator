@@ -37,5 +37,5 @@ test('getParams', () => {
 test('types', () => {
   type Spec = TypeHint<typeof field>
 
-  expectType<string | boolean | 1 | 2 | 3>('foo' as Spec)
+  expectType<Spec, string | boolean | 1 | 2 | 3>(true)
 })

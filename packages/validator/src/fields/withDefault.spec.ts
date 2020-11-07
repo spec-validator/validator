@@ -31,5 +31,5 @@ describe('field', () => {
 test('types', () => {
   type Spec = TypeHint<typeof field>
 
-  expectType<number>(42 as Spec)
+  expectType<Spec, number>(true)
 })

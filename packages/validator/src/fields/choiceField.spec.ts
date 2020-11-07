@@ -54,7 +54,7 @@ describe('segmentChain', () => {
 test('types', () => {
   type Spec = TypeHint<typeof field>;
 
-  expectType<1 | 2 | 3>(1 as Spec)
+  expectType<Spec, 1 | 2 | 3>(true)
 
   const segmentSpec = $
     ._('/')
@@ -63,5 +63,5 @@ test('types', () => {
 
   type SegmentSpec = SegmentTypeHint<typeof segmentSpec>
 
-  expectType<{field: 1 | 2 | 3}>({ field: 1 } as SegmentSpec)
+  expectType<SegmentSpec, {field: 1 | 2 | 3}>(true)
 })

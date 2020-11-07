@@ -69,7 +69,7 @@ test('types', () => {
 
   type Spec = TypeHint<typeof field>;
 
-  expectType<number>(1 as Spec)
+  expectType<Spec, number>(true)
 
   const segmentSpec = $
     ._('/')
@@ -78,5 +78,5 @@ test('types', () => {
 
   type SegmentSpec = SegmentTypeHint<typeof segmentSpec>
 
-  expectType<{field: number}>({ field: 1 } as SegmentSpec)
+  expectType<SegmentSpec, {field: number}>(true)
 })
