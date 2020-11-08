@@ -9,6 +9,7 @@ describe('Request', () => {
     const spec = {
       pathParams: $._('/')
     }
+
     type Req = RequestExt<typeof spec>
 
     expectType<Req, undefined>(true)

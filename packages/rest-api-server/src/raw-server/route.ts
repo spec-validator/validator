@@ -5,7 +5,7 @@ import { StringMapping, Unknown, Response, Request } from './handler'
 
 export type RequestSpec<
   Method extends Optional<string> = Optional<string>,
-  PathParams extends Optional<StringMapping> = Optional<StringMapping>,
+  PathParams extends Optional<StringMapping> | unknown = Optional<StringMapping> | unknown,
   Data extends Optional<Unknown> = Optional<Unknown> ,
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
   Headers extends Optional<StringMapping> = Optional<StringMapping>,

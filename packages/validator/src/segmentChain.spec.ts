@@ -2,7 +2,8 @@ import stringField from './fields/stringField'
 
 import numberField from './fields/numberField'
 
-import { $ } from './segmentChain'
+import { $, Segment, SegmentTypeHint } from './segmentChain'
+import { expectType } from './TypeTestUtils.test'
 
 test('basics', () => {
   const segmentSpec = $
@@ -20,4 +21,11 @@ test('basics', () => {
     uid: 11,
     suid: 42,
   })
+})
+
+test('type', () => {
+  type Seg = typeof $
+  expectType<Seg, Segment<unknown>>(true)
+  type Props = SegmentTypeHint<Seg>
+  expectType<Props, undefined>(true)
 })
