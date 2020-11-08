@@ -1,6 +1,6 @@
 import { expectType } from '@validator/validator/TypeTestUtils.test'
 import { Optional } from '@validator/validator/utils'
-import { AllNonNullKeyTypes, Foo, KeysOfType, RequiredKeys, WithoutOptional } from './util-types'
+import { AllNonNullKeyTypes, KeysOfType, RequiredKeys, WithoutOptional } from './util-types'
 
 type Input = {
   boolNUll?: boolean,
