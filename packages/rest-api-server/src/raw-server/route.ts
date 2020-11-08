@@ -43,7 +43,7 @@ export type ResponseExt<Spec extends ResponseSpec> = Response<
   TypeHint<Spec['headers']>
 >
 
-export type HandlerDecor<
+export type Route<
   Req extends Optional<RequestSpec> = undefined,
   Resp extends Optional<ResponseSpec> = undefined
 > = {

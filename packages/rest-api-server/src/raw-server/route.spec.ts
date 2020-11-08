@@ -1,7 +1,7 @@
 import { choiceField, stringField } from '@validator/validator/fields'
 import { $ } from '@validator/validator/segmentChain'
 import { expectType } from '@validator/validator/TypeTestUtils.test'
-import { HandlerDecor, RequestExt, ResponseExt } from './handler-decor'
+import { Route, RequestExt, ResponseExt } from './route'
 
 describe('Request', () => {
 
@@ -57,10 +57,10 @@ describe('Response', () => {
 
 })
 
-describe('HandlerDecor', () => {
+describe('Route', () => {
 
   it('expects undefined request and response', () => {
-    type Decor = HandlerDecor
+    type Decor = Route
 
     expectType<Decor, {
       request: undefined,
@@ -83,7 +83,7 @@ describe('HandlerDecor', () => {
       data: stringField()
     }
 
-    type Decor = HandlerDecor<typeof reqSpec, typeof respSpec>
+    type Decor = Route<typeof reqSpec, typeof respSpec>
 
     expectType<Decor, {
       request: typeof reqSpec,
