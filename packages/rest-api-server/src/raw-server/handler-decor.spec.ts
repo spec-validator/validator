@@ -62,11 +62,11 @@ describe('HandlerDecor', () => {
   it('expects undefined request and response', () => {
     type Decor = HandlerDecor
 
-    expectType<Decor, (spec: {
+    expectType<Decor, {
       request: undefined,
       response: undefined,
       handler: (request: undefined) => undefined
-    }) => (request: any) => any>(true)
+        }>(true)
   })
 
   it('works with defined request and response', () => {
@@ -85,7 +85,7 @@ describe('HandlerDecor', () => {
 
     type Decor = HandlerDecor<typeof reqSpec, typeof respSpec>
 
-    expectType<Decor, (spec: {
+    expectType<Decor, {
       request: typeof reqSpec,
       response: typeof respSpec,
       handler: (request: {
@@ -96,7 +96,7 @@ describe('HandlerDecor', () => {
         statusCode: 201 | 404,
         data: string
       })
-    }) => (request: any) => any>(true)
+        }>(true)
   })
 
 })

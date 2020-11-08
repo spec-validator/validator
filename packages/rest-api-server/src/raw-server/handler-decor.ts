@@ -46,9 +46,9 @@ export type ResponseExt<Spec extends ResponseSpec> = Response<
 export type HandlerDecor<
   Req extends Optional<RequestSpec> = undefined,
   Resp extends Optional<ResponseSpec> = undefined
-> = (spec: {
+> = {
   request: Req,
   response: Resp,
   handler: (request: Req extends RequestSpec ? RequestExt<Req> : undefined)
     => Resp extends ResponseSpec ? ResponseExt<Resp> : undefined
-}) => (request: any) => any
+}
