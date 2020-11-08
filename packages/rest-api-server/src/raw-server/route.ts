@@ -10,8 +10,8 @@ export type RequestSpec<
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
   Headers extends Optional<StringMapping> = Optional<StringMapping>,
 > = {
+  pathParams: Segment<PathParams>,
   method?: Field<Method>,
-  pathParams?: Segment<PathParams>,
   data?: ValidatorSpec<Data>,
   query?: ValidatorSpec<QueryParams>,
   headers?: ValidatorSpec<Headers>

@@ -7,6 +7,7 @@ import qs from 'qs'
 import { ValidatorSpec, validate, serialize, TypeHint, SpecUnion, isField } from '@validator/validator/core'
 import { Segment } from '@validator/validator/segmentChain'
 import { Json } from '@validator/validator/Json'
+import { Route } from './raw-server/route'
 
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
@@ -46,87 +47,16 @@ const mergeServerConfigs = (
   ...serverConfig,
 })
 
-type KeysOfType<T, U> = { [K in keyof T]: T[K] extends U ? K : never }[keyof T];
-type RequiredKeys<T> = Exclude<KeysOfType<T, Exclude<T[keyof T], undefined>>, undefined>;
-type WithoutOptional<T> = Pick<T, RequiredKeys<T>>;
-
-type HttpHeaders = Record<string, string | string[]>
-
-type Optional<T> = T | undefined;
-
-export type Request<PathParams, Data, QueryParams, Headers> = { method?: string }
-  & WithoutOptional<{
-    pathParams: PathParams,
-    data: Data,
-    headers: Headers,
-    queryParams: QueryParams
-  }>
-
-export type Response<
-  Data,
-  Headers
-> = { statusCode?: number }
-  & WithoutOptional<{
-    data: Data,
-    headers?: Headers,
-  }>
-
-type RequestSpec<
-  RequestData extends Optional<unknown>,
-  RequestQueryParams extends Optional<unknown>,
-  RequestHeaders extends Optional<HttpHeaders>,
-> = {
-  data?: ValidatorSpec<RequestData>,
-  query?: ValidatorSpec<RequestQueryParams>,
-  headers?: ValidatorSpec<RequestHeaders>
-}
-
-export type WildCardRequestSpec = RequestSpec<any, any, Optional<HttpHeaders>>;
-
-type ResponseSpec<
-  ResponseData extends Optional<any> = undefined,
-  ResponseHeaders extends Optional<HttpHeaders> = undefined
-> = {
-  data?: SpecUnion<ResponseData>,
-  headers?: ValidatorSpec<ResponseHeaders>
-}
-
-export type WildCardResponseSpec = ResponseSpec<any, Optional<HttpHeaders>>;
-
-export type Route<
-  RequestPathParams extends any,
-  TResponseSpec extends Optional<WildCardResponseSpec> = undefined,
-  TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
-> = {
-  method?: string,
-  pathSpec: Segment<RequestPathParams>,
-  requestSpec?: TRequestSpec,
-  responseSpec: TResponseSpec
-  handler: (
-    request: TRequestSpec extends WildCardRequestSpec ? Request<
-      RequestPathParams,
-      TypeHint<TRequestSpec['data']>,
-      TypeHint<TRequestSpec['query']>,
-      TypeHint<TRequestSpec['headers']>
-    > : Request<RequestPathParams, never, never, never>
-  ) => TResponseSpec extends WildCardResponseSpec ? Promise<Response<
-      TypeHint<TResponseSpec['data']>,
-      TypeHint<TResponseSpec['headers']>
-    >
-  > : Promise<undefined>
-}
-
-export type WildCardRoute = Route<any, WildCardResponseSpec, WildCardRequestSpec>
-
 const matchRoute = (
   request: IncomingMessage,
-  route: WildCardRoute
+  route: Route
 ): boolean => {
-  if (route.method && request.method !== route.method) {
+  const method = (route.request as any)?.method
+  if (method && request.method !== method) {
     return false
   }
   try {
-    route.pathSpec.match(request.url || '')
+    (route.pathParams as any).match(request.url || '')
   } catch (err) {
     return false
   }

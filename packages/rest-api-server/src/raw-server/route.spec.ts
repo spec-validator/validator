@@ -6,7 +6,9 @@ import { Route, RequestExt, ResponseExt } from './route'
 describe('Request', () => {
 
   it('always contains a method', () => {
-    const spec = {}
+    const spec = {
+      pathParams: $._('/')
+    }
     type Req = RequestExt<typeof spec>
 
     expectType<Req, undefined>(true)
