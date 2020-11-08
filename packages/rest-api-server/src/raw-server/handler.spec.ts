@@ -6,8 +6,7 @@ describe('Request', () => {
   it('contains nothing by default', () => {
     type Req = Request
 
-    expectType<{
-    }, Req>(true)
+    expectType<Req, undefined>(true)
   })
 
   it('always contains the fields that are defined', () => {
@@ -27,8 +26,7 @@ describe('Response', () => {
   it('contains nothing by default', () => {
     type Resp = Response
 
-    expectType<{
-    }, Resp>(true)
+    expectType<Resp, undefined>(true)
   })
 
   it('always contains the fields that are defined', () => {
