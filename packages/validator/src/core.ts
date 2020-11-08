@@ -15,7 +15,7 @@ export type SpecUnion<DeserializedType extends Any> =
   DeserializedType extends { [property: string]: Any } ?
   ValidatorSpec<DeserializedType> : Field<DeserializedType> | undefined;
 
-export type TypeHint<Spec extends SpecUnion<Record<string, Any>> | undefined> =
+export type TypeHint<Spec extends SpecUnion<Any> | undefined> =
   Spec extends ValidatorSpec<Record<string, Any>> ? {
   [P in keyof Spec]: ReturnType<Spec[P]['validate']>;
 } : Spec extends Field<Any> ? ReturnType<Spec['validate']> : undefined;
@@ -43,8 +43,8 @@ export const withErrorDecoration = <R> (key: any, call: () => R): R => {
 export const isField = <DeserializedType extends Any>(object: any): object is Field<DeserializedType> =>
   'validate' in object && 'serialize' in object && 'getParams' in object
 
-const mapSpec = <DeserializedType extends Any, R> (
-  validatorSpec: SpecUnion<DeserializedType>,
+const mapSpec = <DeserializedType extends Any, TSpec extends SpecUnion<DeserializedType>, R> (
+  validatorSpec: TSpec,
   transform: (
     validator: Field<DeserializedType>,
     key: any
@@ -58,20 +58,21 @@ const mapSpec = <DeserializedType extends Any, R> (
     return (validatorSpec as any).map(transform)
   } else {
     return Object.fromEntries(
-      Object.entries(validatorSpec).map(
+      Object.entries(validatorSpec as ValidatorSpec<{ [property: string]: Any }>).map(
         ([key, validator]: [string, any]) => [key, withErrorDecoration(key, () => transform(validator, key))]
       )
     )
   }
 }
 
-export const getParams = (validatorSpec: SpecUnion<Any>): Json =>
+export const getParams = <TSpec extends SpecUnion<Any>> (validatorSpec: TSpec): Json =>
   mapSpec(validatorSpec, validator => validator.getParams())
 
 // The whole point of the library is to validate wildcard objects
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const validate = <TSpec extends SpecUnion<Any>> (
   validatorSpec: TSpec,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   value: any
 ): TypeHint<TSpec> =>
     mapSpec(validatorSpec,

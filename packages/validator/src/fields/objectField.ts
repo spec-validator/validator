@@ -6,8 +6,9 @@ import {
   getParams,
 } from '../core'
 import { Json } from '../Json'
+import { Any } from '../util-types'
 
-class ObjectField<DeserializedType> implements Field<DeserializedType> {
+class ObjectField<DeserializedType extends Record<string, Any>> implements Field<DeserializedType> {
   private objectSpec: ValidatorSpec<DeserializedType>
 
   constructor(objectSpec: ValidatorSpec<DeserializedType>) {

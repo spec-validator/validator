@@ -1,8 +1,9 @@
 import { Field } from '../core'
 import { Json } from '../Json'
+import { Any } from '../util-types'
 import { merge } from '../utils'
 
-class DefaultFieldDecorator<T> implements Field<T> {
+class DefaultFieldDecorator<T extends Any> implements Field<T> {
   private innerField: Field<T>;
   private defaultValue: T;
 
@@ -27,7 +28,7 @@ class DefaultFieldDecorator<T> implements Field<T> {
   }
 }
 
-const defaultValueDecor = <T> (innerField: Field<T>, defaultValue: T): Field<T> =>
+const defaultValueDecor = <T extends Any> (innerField: Field<T>, defaultValue: T): Field<T> =>
   new DefaultFieldDecorator(innerField, defaultValue)
 
 export default defaultValueDecor

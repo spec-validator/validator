@@ -1,8 +1,9 @@
 import { Field } from '../core'
 import { Json } from '../Json'
-import { merge, Optional } from '../utils'
+import { Any, Optional } from '../util-types'
+import { merge } from '../utils'
 
-class OptionalValueDecorator<T> implements Field<Optional<T>> {
+class OptionalValueDecorator<T extends Any> implements Field<Optional<T>> {
   private innerField: Field<T>;
 
   constructor(innerField: Field<T>) {
@@ -27,6 +28,8 @@ class OptionalValueDecorator<T> implements Field<Optional<T>> {
 
 }
 
-const optionalValueDecor = <T> (innerField: Field<T>): Field<Optional<T>> => new OptionalValueDecorator(innerField)
+const optionalValueDecor = <T extends Any> (
+  innerField: Field<T>
+): Field<Optional<T>> => new OptionalValueDecorator(innerField)
 
 export default optionalValueDecor
