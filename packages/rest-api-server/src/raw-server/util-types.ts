@@ -7,4 +7,3 @@ export type AllNonNullKeyTypes<T> = Exclude<T[keyof T], undefined>
 export type RequiredKeys<T> = KeysOfType<T, AllNonNullKeyTypes<T>>;
 
 export type WithoutOptional<T, R=RequiredKeys<T>> = [R] extends [never] ? undefined : Pick<T, RequiredKeys<T>>;
-
