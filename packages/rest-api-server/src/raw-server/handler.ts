@@ -1,18 +1,15 @@
-import { Optional } from '@validator/validator/utils'
-import { WithoutOptional } from './util-types'
+import { Any, Optional, WithoutOptional } from '../../../validator/src/util-types'
 
-export type Unknown = unknown | unknown[]
+export type StringMapping = Record<string, Any>
 
-export type StringMapping = Record<string, Unknown>
-
-export type DataMapping = StringMapping | Unknown
+export type DataMapping = StringMapping | Any
 
 export type Request<
-  Method extends Optional<string> = undefined,
-  PathParams extends Optional<StringMapping> = undefined,
-  Data extends Optional<Unknown> = undefined,
-  QueryParams extends Optional<StringMapping> = undefined,
-  Headers extends Optional<StringMapping> = undefined,
+  Method extends Optional<string> = Optional<string>,
+  PathParams extends Optional<StringMapping> = Optional<StringMapping>,
+  Data extends Optional<Any> = Optional<Any>,
+  QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
+  Headers extends Optional<StringMapping> = Optional<StringMapping>,
 > = {
   method: Method,
   pathParams: PathParams,
@@ -22,9 +19,9 @@ export type Request<
 }
 
 export type Response<
-  StatusCode extends Optional<number> = undefined,
-  Data extends Optional<Unknown> = undefined,
-  Headers extends Optional<StringMapping> = undefined,
+  StatusCode extends Optional<number> = Optional<number>,
+  Data extends Optional<Any> = Optional<Any>,
+  Headers extends Optional<StringMapping> = Optional<StringMapping>,
 > = {
   statusCode: StatusCode,
   data: Data,

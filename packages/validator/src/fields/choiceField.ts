@@ -2,6 +2,7 @@ import { Field } from '../core'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 import { escapeRegex } from '../utils'
 import { Primitive, Json } from '../Json'
+import { Any } from '../util-types'
 
 type Params<Choices> = {
   readonly choices: Choices
@@ -15,7 +16,7 @@ class ChoiceField<
   constructor(readonly params: Params<readonly Choice[]>) {
     this.choicesSet = new Set(params.choices)
   }
-  getFieldWithRegExp(): Field<unknown> & WithRegExp {
+  getFieldWithRegExp(): Field<Any> & WithRegExp {
     return new ChoiceFieldWithRegExp(this.params)
   }
 

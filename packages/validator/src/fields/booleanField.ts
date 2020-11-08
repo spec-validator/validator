@@ -1,9 +1,10 @@
 import { Field } from '../core'
 import { Json } from '../Json'
+import { Any } from '../util-types'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 
 class BooleanField implements Field<boolean>, WithStringInputSupport {
-  getFieldWithRegExp(): Field<unknown> & WithRegExp {
+  getFieldWithRegExp(): Field<Any> & WithRegExp {
     return new BooleanFieldWithRegExp()
   }
   validate(value: any): boolean {

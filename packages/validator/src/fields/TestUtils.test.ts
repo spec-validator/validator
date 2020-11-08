@@ -2,8 +2,9 @@
 import { Field, getParams, serialize, validate } from '../core'
 import { WithStringInputSupport } from '../WithStringInputSupport'
 import { $ } from '../segmentChain'
+import { Any } from '../util-types'
 
-export const testValidateSpecOk = <T> (field: Field<T>, input: any, expected: T): void => {
+export const testValidateSpecOk = <T extends Any> (field: Field<T>, input: any, expected: T): void => {
   expect(validate(field, input)).toEqual(expected)
 }
 

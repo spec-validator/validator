@@ -1,12 +1,12 @@
 import { Field, SpecUnion, TypeHint, ValidatorSpec } from '@validator/validator/core'
 import { Segment, SegmentTypeHint } from '@validator/validator/segmentChain'
-import { Optional } from '@validator/validator/utils'
-import { StringMapping, Unknown, Response, Request } from './handler'
+import { StringMapping, Response, Request } from './handler'
+import { Any, Optional } from '../../../validator/src/util-types'
 
 export type RequestSpec<
   Method extends Optional<string> = Optional<string>,
   PathParams extends Optional<StringMapping> | unknown = Optional<StringMapping> | unknown,
-  Data extends Optional<Unknown> = Optional<Unknown> ,
+  Data extends Optional<Any> = Optional<Any> ,
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
   Headers extends Optional<StringMapping> = Optional<StringMapping>,
 > = {
@@ -20,7 +20,7 @@ export type RequestSpec<
 export type ResponseSpec<
   StatusCode extends Optional<number> = Optional<number>,
   Headers extends Optional<StringMapping> = Optional<StringMapping>,
-  Data extends Optional<Unknown> = Optional<Unknown>,
+  Data extends Optional<Any> = Optional<Any>,
 > = {
   statusCode?: Field<StatusCode>
   data?: SpecUnion<Data>,

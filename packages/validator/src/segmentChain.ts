@@ -1,11 +1,12 @@
 import { Field, validate } from './core'
+import { Any } from './util-types'
 import { WithRegExp, WithStringInputSupport } from './WithStringInputSupport'
 
 export class Segment<DeserializedType> {
 
   private parent?: Segment<unknown>
   private key?: string;
-  private field?: Field<unknown> & WithRegExp
+  private field?: Field<Any> & WithRegExp
 
   private regex?: string
 
@@ -18,13 +19,13 @@ export class Segment<DeserializedType> {
     return this._root as Segment<unknown>
   }
 
-  constructor(parent?: Segment<unknown>, key?: string, field?: Field<unknown> & WithStringInputSupport) {
+  constructor(parent?: Segment<unknown>, key?: string, field?: Field<Any> & WithStringInputSupport) {
     this.parent = parent
     this.key = key
     this.field = field?.getFieldWithRegExp()
   }
 
-  _<Key extends string, ExtraDeserializedType=undefined>(
+  _<Key extends string, ExtraDeserializedType extends Any=Any>(
     key: Key,
     field?: Field<ExtraDeserializedType> & WithStringInputSupport
   ): Segment<[ExtraDeserializedType] extends [undefined] ? DeserializedType : DeserializedType & {

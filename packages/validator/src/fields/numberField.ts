@@ -1,5 +1,6 @@
 import { Field } from '../core'
 import { Json } from '../Json'
+import { Any } from '../util-types'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 
 type Params = {
@@ -12,7 +13,7 @@ class NumberField implements Field<number>, WithStringInputSupport {
   constructor(params?: Params) {
     this.params = params
   }
-  getFieldWithRegExp(): Field<unknown> & WithRegExp {
+  getFieldWithRegExp(): Field<Any> & WithRegExp {
     return new NumberFieldWithRegExp(this.params)
   }
 
