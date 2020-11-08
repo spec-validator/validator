@@ -49,5 +49,6 @@ export type HandlerDecor<
 > = (spec: {
   request: Req,
   response: Resp,
-  handler: (request: Req) => Resp
+  handler: (request: Req extends RequestSpec ? RequestExt<Req> : undefined)
+    => Resp extends ResponseSpec ? ResponseExt<Resp> : undefined
 }) => (request: any) => any

@@ -57,12 +57,46 @@ describe('Response', () => {
 
 })
 
-test('HandlerDecor', () => {
-  type Decor = HandlerDecor
+describe('HandlerDecor', () => {
 
-  expectType<Decor, (spec: {
-    request: undefined,
-    response: undefined,
-    handler: (request: undefined) => undefined
-  }) => (request: any) => any>(true)
+  it('expects undefined request and response', () => {
+    type Decor = HandlerDecor
+
+    expectType<Decor, (spec: {
+      request: undefined,
+      response: undefined,
+      handler: (request: undefined) => undefined
+    }) => (request: any) => any>(true)
+  })
+
+  it('works with defined request and response', () => {
+    const reqSpec = {
+      method: stringField(),
+      headers: {
+        headerKey: stringField()
+      },
+      pathParams: $._('pathKey', stringField())
+    }
+
+    const respSpec = {
+      statusCode: choiceField(201, 404),
+      data: stringField()
+    }
+
+    type Decor = HandlerDecor<typeof reqSpec, typeof respSpec>
+
+    expectType<Decor, (spec: {
+      request: typeof reqSpec,
+      response: typeof respSpec,
+      handler: (request: {
+        method: string,
+        headers: { headerKey: string },
+        pathParams: { pathKey: string },
+      }) => ({
+        statusCode: 201 | 404,
+        data: string
+      })
+    }) => (request: any) => any>(true)
+  })
+
 })
