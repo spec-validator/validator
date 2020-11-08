@@ -27,14 +27,6 @@ export type ResponseSpec<
   headers?: ValidatorSpec<Headers>
 }
 
-export type HandlerSpec<
-  Req extends RequestSpec = RequestSpec,
-  Resp extends Optional<ResponseSpec> = ResponseSpec
-> = {
-  request: Req,
-  response: Resp
-}
-
 export type RequestExt<
   Spec extends RequestSpec,
 > = Request<
@@ -50,3 +42,12 @@ export type ResponseExt<Spec extends ResponseSpec> = Response<
   TypeHint<Spec['data']>,
   TypeHint<Spec['headers']>
 >
+
+export type HandlerDecor<
+  Req extends Optional<RequestSpec> = undefined,
+  Resp extends Optional<ResponseSpec> = undefined
+> = (spec: {
+  request: Req,
+  response: Resp,
+  handler: (request: Req) => Resp
+}) => (request: any) => any
