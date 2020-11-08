@@ -1,16 +1,17 @@
 import { expectType } from '@validator/validator/TypeTestUtils.test'
 import { Request, Response, Handler } from './handler'
+import { WithoutOptional } from './util-types'
 
 describe('Request', () => {
 
   it('contains nothing by default', () => {
-    type Req = Request
+    type Req = WithoutOptional<Request>
 
     expectType<Req, undefined>(true)
   })
 
   it('always contains the fields that are defined', () => {
-    type Req = Request<string, {pathKey: string}, undefined, undefined, {headerKey: string}>
+    type Req = WithoutOptional<Request<string, {pathKey: string}, undefined, undefined, {headerKey: string}>>
 
     expectType<{
       method: string,
@@ -24,13 +25,13 @@ describe('Request', () => {
 describe('Response', () => {
 
   it('contains nothing by default', () => {
-    type Resp = Response
+    type Resp = WithoutOptional<Response>
 
     expectType<Resp, undefined>(true)
   })
 
   it('always contains the fields that are defined', () => {
-    type Resp = Response<201 | 404, string>
+    type Resp = WithoutOptional<Response<201 | 404, string>>
 
     expectType<{
       statusCode: 201 | 404,

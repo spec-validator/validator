@@ -13,25 +13,25 @@ export type Request<
   Data extends Optional<Unknown> = undefined,
   QueryParams extends Optional<StringMapping> = undefined,
   Headers extends Optional<StringMapping> = undefined,
-> = WithoutOptional<{
+> = {
   method: Method,
   pathParams: PathParams,
   data: Data,
   headers: Headers,
   queryParams: QueryParams
-}>
+}
 
 export type Response<
   StatusCode extends Optional<number> = undefined,
   Data extends Optional<Unknown> = undefined,
   Headers extends Optional<StringMapping> = undefined,
-> = WithoutOptional<{
+> = {
   statusCode: StatusCode,
   data: Data,
   headers: Headers,
-}>
+}
 
 export type Handler<
   Req extends Request = Request,
   Resp extends Optional<Response> = undefined
-> = (request: Req) => Promise<Resp>
+> = (request: WithoutOptional<Req>) => Promise<WithoutOptional<Resp>>
