@@ -1,5 +1,6 @@
 import { expectType } from '@validator/validator/TypeTestUtils.test'
-import { AllNonNullKeyTypes, KeysOfType, RequiredKeys, WithoutOptional } from './util-types'
+import { Optional } from '@validator/validator/utils'
+import { AllNonNullKeyTypes, Foo, KeysOfType, RequiredKeys, WithoutOptional } from './util-types'
 
 type Input = {
   boolNUll?: boolean,
@@ -27,10 +28,21 @@ test('AllNonNullKeyTypes', () => {
   expect<KeyTypes>({} as number | boolean)
 })
 
-test('RequiredKeys', () => {
-  type Keys = RequiredKeys<Input>
+describe('RequiredKeys', () => {
+  it('returns enum of the keys', () => {
+    type Keys = RequiredKeys<Input>
 
-  expectType<Keys,'numNonNull' | 'boolNonNull'>(true)
+    expectType<Keys,'numNonNull' | 'boolNonNull'>(true)
+  })
+
+  it('returns never in case if there are no required keys', () => {
+    type AllOptional = {
+      one?: string,
+      two?: number
+    }
+    type Keys = RequiredKeys<AllOptional>
+    expectType<[Keys], [never]>(true)
+  })
 })
 
 describe('WithoutOptional', () => {
@@ -41,5 +53,15 @@ describe('WithoutOptional', () => {
       boolNonNull: boolean;
       numNonNull: number;
     }>(true)
+  })
+
+  it('returns undefined object if all keys are undefined', () => {
+    type AllOptional = {
+      opt1?: string,
+      opt2: Optional<string>
+    }
+    type Clean = WithoutOptional<AllOptional>
+
+    expectType<Clean, undefined>(true)
   })
 })

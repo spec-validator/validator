@@ -9,8 +9,7 @@ describe('Request', () => {
     const spec = {}
     type Req = RequestExt<typeof spec>
 
-    expectType<{
-    }, Req>(true)
+    expectType<Req, undefined>(true)
   })
 
   it('always contains the fields that are defined', () => {
@@ -24,11 +23,11 @@ describe('Request', () => {
 
     type Req = RequestExt<typeof spec>
 
-    expectType<{
+    expectType<Req, {
       method: string,
       headers: { headerKey: string },
       pathParams: { pathKey: string },
-    }, Req>(true)
+    }>(true)
   })
 
 })
@@ -39,8 +38,7 @@ describe('Response', () => {
     const spec = {}
     type Resp = ResponseExt<typeof spec>
 
-    expectType<{
-    }, Resp>(true)
+    expectType<Resp, undefined>(true)
   })
 
   it('always contains the fields that are defined', () => {
@@ -51,10 +49,10 @@ describe('Response', () => {
 
     type Resp = ResponseExt<typeof spec>
 
-    expectType<{
+    expectType<Resp, {
       statusCode: 201 | 404,
       data: string
-    }, Resp>(true)
+    }>(true)
   })
 
 })
