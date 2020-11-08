@@ -8,15 +8,15 @@ export const testValidateSpecOk = <T extends Any> (field: Field<T>, input: any, 
   expect(validate(field, input)).toEqual(expected)
 }
 
-export const testSerializeSpecOk = <T> (field: Field<T>, input: T, expected: any): void => {
+export const testSerializeSpecOk = <T extends Any> (field: Field<T>, input: T, expected: any): void => {
   expect(serialize(field, input)).toEqual(expected)
 }
 
-export const testGetParams = <T> (field: Field<T>, expected: any): void => {
+export const testGetParams = <T extends Any> (field: Field<T>, expected: any): void => {
   expect(getParams(field)).toEqual(expected)
 }
 
-export const testValidateSpecError = <T> (field: Field<T>, input: any, expectedError: any) => {
+export const testValidateSpecError = <T extends Any> (field: Field<T>, input: any, expectedError: any) => {
   let error: any = null
   try {
     validate(field, input)
@@ -26,7 +26,7 @@ export const testValidateSpecError = <T> (field: Field<T>, input: any, expectedE
   expect(error).toEqual(expectedError)
 }
 
-export const testValidateSegmentChainOK = <T> (
+export const testValidateSegmentChainOK = <T extends Any> (
   field: Field<T> & WithStringInputSupport,
   input: string,
   expected: T
@@ -40,7 +40,7 @@ export const testValidateSegmentChainOK = <T> (
   expect((valid as any).field).toEqual(expected)
 }
 
-export const testValidateSegmentChainError = <T> (
+export const testValidateSegmentChainError = <T extends Any> (
   field: Field<T> & WithStringInputSupport, input: any, expectedError: any
 ) => {
   const spec = $

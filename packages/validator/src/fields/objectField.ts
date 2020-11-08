@@ -32,7 +32,7 @@ class ObjectField<DeserializedType extends Record<string, Any>> implements Field
 
 }
 
-const objectField = <DeserializedType> (
+const objectField = <DeserializedType extends Record<string, Any>> (
   objectSpec: ValidatorSpec<DeserializedType>,
 ): ObjectField<DeserializedType> => new ObjectField(objectSpec)
 
