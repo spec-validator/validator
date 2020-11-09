@@ -14,7 +14,7 @@ export type RequestSpec<
 > = {
   pathParams: Segment<PathParams>,
   method: Field<Method>,
-  data?: ValidatorSpec<Data>,
+  data?: SpecUnion<Data>,
   query?: ValidatorSpec<QueryParams>,
   headers?: ValidatorSpec<Headers>
 }
