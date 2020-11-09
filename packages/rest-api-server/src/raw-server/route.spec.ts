@@ -69,7 +69,7 @@ describe('Route', () => {
     expectType<Decor, {
       request: undefined,
       response: undefined,
-      handler: (request: undefined) => undefined
+      handler: (request: undefined) => Promise<undefined>
         }>(true)
   })
 
@@ -96,10 +96,10 @@ describe('Route', () => {
         method: string,
         headers: { headerKey: string },
         pathParams: { pathKey: string },
-      }) => ({
+      }) => Promise<{
         statusCode: 201 | 404,
         data: string
-      })
+      }>
         }>(true)
   })
 
