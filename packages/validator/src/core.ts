@@ -1,19 +1,18 @@
 import { Json } from './Json'
 import { Any } from './util-types'
 
-export interface Field<DeserializedType extends Any> {
+export interface Field<DeserializedType> {
   validate(value: any): DeserializedType;
   serialize(deserialized: DeserializedType): Json
   getParams: () => Json
 }
 
-export type ValidatorSpec<DeserializedType extends { [property: string]: Any }> = {
+export type ValidatorSpec<DeserializedType extends Any> = {
   [P in keyof DeserializedType]: Field<DeserializedType[P]>;
 };
 
 export type SpecUnion<DeserializedType extends Any> =
-  DeserializedType extends { [property: string]: Any } ?
-  ValidatorSpec<DeserializedType> : Field<DeserializedType> | undefined;
+  ValidatorSpec<DeserializedType> | Field<DeserializedType> | undefined;
 
 export type TypeHint<Spec extends SpecUnion<Any> | undefined> =
   Spec extends ValidatorSpec<Record<string, Any>> ? {
