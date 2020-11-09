@@ -15,9 +15,12 @@ export type SpecUnion<DeserializedType extends Any> =
   ValidatorSpec<DeserializedType> | Field<DeserializedType> | undefined;
 
 export type TypeHint<Spec extends SpecUnion<Any> | undefined> =
-  Spec extends ValidatorSpec<Record<string, Any>> ? {
-  [P in keyof Spec]: ReturnType<Spec[P]['validate']>;
-} : Spec extends Field<Any> ? ReturnType<Spec['validate']> : undefined;
+  Spec extends ValidatorSpec<Record<string, Any>> ?
+    { [P in keyof Spec]: ReturnType<Spec[P]['validate']>; }
+  : Spec extends Field<Any> ?
+    ReturnType<Spec['validate']>
+  :
+    undefined;
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const withErrorDecoration = <R> (key: any, call: () => R): R => {
