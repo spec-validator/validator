@@ -90,6 +90,8 @@ const handleRoute = async (
 ): Promise<void> => {
   const [path, queryString] = (request.url || '').split('?', 2)
 
+  route.request.data
+
   const query = validate(route.request.query, qs.parse(queryString))
   const pathParams = route.request.pathParams.match(path)
   const method = route.request.method.validate(request.method)

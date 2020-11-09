@@ -3,10 +3,12 @@ import { Segment } from '@validator/validator/segmentChain'
 import { StringMapping, Response, Request, Handler } from './handler'
 import { Any, Optional } from '../../../validator/src/util-types'
 
+type ff = TypeHint<ValidatorSpec<Any>>
+
 export type RequestSpec<
   Method extends Optional<string> = Optional<string>,
   PathParams extends Optional<StringMapping> | unknown = Optional<StringMapping> | unknown,
-  Data extends Optional<Any> = Optional<Any> ,
+  Data extends Optional<Any> = Optional<Any>,
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
   Headers extends Optional<StringMapping> = Optional<StringMapping>,
 > = {
