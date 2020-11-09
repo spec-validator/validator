@@ -11,7 +11,7 @@ export type RequestSpec<
   Headers extends Optional<StringMapping> = Optional<StringMapping>,
 > = {
   pathParams: Segment<PathParams>,
-  method?: Field<Method>,
+  method: Field<Method>,
   data?: ValidatorSpec<Data>,
   query?: ValidatorSpec<QueryParams>,
   headers?: ValidatorSpec<Headers>
@@ -44,7 +44,7 @@ export type ResponseExt<Spec extends ResponseSpec> = Response<
 >
 
 export type Route<
-  Req extends Optional<RequestSpec> = Optional<RequestSpec>,
+  Req extends RequestSpec = RequestSpec,
   Resp extends Optional<ResponseSpec> = Optional<ResponseSpec>
 > = {
   request: Req,
