@@ -5,7 +5,7 @@ import { Any, Optional } from '../../../validator/src/util-types'
 
 export type RequestSpec<
   Method extends Optional<string> = Optional<string>,
-  PathParams extends Optional<StringMapping> | unknown = Optional<StringMapping> | unknown,
+  PathParams extends Optional<StringMapping> = Optional<StringMapping>,
   Data extends Optional<Any> = Optional<Any>,
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
   Headers extends Optional<StringMapping> = Optional<StringMapping>,
