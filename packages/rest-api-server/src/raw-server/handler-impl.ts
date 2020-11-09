@@ -90,7 +90,7 @@ const handleRoute = async (
 ): Promise<void> => {
   const [path, queryString] = (request.url || '').split('?', 2)
 
-  const queryParams = validate(route.request.query, qs.parse(queryString))
+  const query = validate(route.request.query, qs.parse(queryString))
   const pathParams = route.request.pathParams.match(path)
   const method = request.method?.toUpperCase()
   const data = validate(route.request.data, config.protocol.deserialize(await getData(request)))
@@ -98,7 +98,7 @@ const handleRoute = async (
 
   const resp = await withAppErrorStatusCode(
     config.appErrorStatusCode,
-    route.handler.bind(null, { method, pathParams, queryParams, data, headers })
+    route.handler.bind(null, { method, pathParams, query, data, headers })
   )
 
   Object.entries((resp as any).headers || {}).forEach(([key, value]) =>
