@@ -8,6 +8,8 @@ import { validate, serialize, isField } from '@validator/validator/core'
 import { Segment } from '@validator/validator/segmentChain'
 import { Json } from '@validator/validator/Json'
 import { Route } from './route'
+import { Request, Response } from './handler'
+import { Optional } from '@validator/validator/util-types'
 
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
@@ -96,19 +98,21 @@ const handleRoute = async (
   const data = validate(route.request.data, config.protocol.deserialize(await getData(request)))
   const headers = validate(route.request.headers, request.headers)
 
+  const handler = route.handler as (req: Optional<Request>) => Promise<Optional<Response>>
+
   const resp = await withAppErrorStatusCode(
     config.appErrorStatusCode,
     // Here casting to any is truly intentional since
-    async () => route.handler({ method, pathParams, query, data, headers } as any)
+    async () => handler({ method, pathParams, query, data, headers })
   )
 
   Object.entries((resp as any).headers || {}).forEach(([key, value]) =>
     response.setHeader(key, value as any)
   )
 
-  response.statusCode = resp.statusCode || data ? 200 : 201
+  response.statusCode = resp?.statusCode || data ? 200 : 201
 
-  const dataSpec = isField(route.responseSpec) ? route.requestSpec : route.requestSpec?.data
+  const dataSpec = route.response?.data
 
   if (!dataSpec) {
     return
