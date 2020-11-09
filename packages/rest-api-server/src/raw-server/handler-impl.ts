@@ -92,13 +92,14 @@ const handleRoute = async (
 
   const query = validate(route.request.query, qs.parse(queryString))
   const pathParams = route.request.pathParams.match(path)
-  const method = request.method?.toUpperCase()
+  const method = route.request.method.validate(request.method)
   const data = validate(route.request.data, config.protocol.deserialize(await getData(request)))
   const headers = validate(route.request.headers, request.headers)
 
   const resp = await withAppErrorStatusCode(
     config.appErrorStatusCode,
-    route.handler.bind(null, { method, pathParams, query, data, headers })
+    // Here casting to any is truly intentional since
+    async () => route.handler({ method, pathParams, query, data, headers } as any)
   )
 
   Object.entries((resp as any).headers || {}).forEach(([key, value]) =>
