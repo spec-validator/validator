@@ -6,13 +6,14 @@ import { Route, RequestExt, ResponseExt } from './route'
 
 describe('Request', () => {
 
-  it('always contains a method', () => {
+  it('empty by default', () => {
     const spec = {
       pathParams: $._('/')
     }
 
     type Req = WithoutOptional<RequestExt<typeof spec>>
 
+    // here the problem is in type hint of a segment
     expectType<Req, undefined>(true)
   })
 
@@ -66,6 +67,8 @@ describe('Route', () => {
   it('expects undefined request and response', () => {
     type Decor = Route
 
+
+    // empty by default
     expectType<Decor, {
       request: undefined,
       response: undefined,
