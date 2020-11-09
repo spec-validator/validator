@@ -1,25 +1,27 @@
 import { Field, validate } from './core'
-import { Any } from './util-types'
+import { Any, Optional } from './util-types'
 import { WithRegExp, WithStringInputSupport } from './WithStringInputSupport'
 
-export class Segment<DeserializedType> {
+export class Segment<
+  DeserializedType extends Optional<Record<string, Any>> = Optional<Record<string, Any>>
+> {
 
-  private parent?: Segment<unknown>
+  private parent?: Segment
   private key?: string;
   private field?: Field<Any> & WithRegExp
 
   private regex?: string
 
-  private _root?: Segment<unknown>
+  private _root?: Segment
 
-  get root(): Segment<unknown> {
+  get root(): Segment {
     if (!this._root) {
-      this._root = this.getSegments()[0]
+      this._root = this.getSegments()[0] as Segment<undefined>
     }
-    return this._root as Segment<unknown>
+    return this._root
   }
 
-  constructor(parent?: Segment<unknown>, key?: string, field?: Field<Any> & WithStringInputSupport) {
+  constructor(parent?: Segment, key?: string, field?: Field<Any> & WithStringInputSupport) {
     this.parent = parent
     this.key = key
     this.field = field?.getFieldWithRegExp()
@@ -36,10 +38,10 @@ export class Segment<DeserializedType> {
 
   // TODO: make getSegments and getFieldSegments lazy props
 
-  private getSegments(): Segment<unknown>[] {
-    const segments: Segment<unknown>[] = []
+  private getSegments(): Segment[] {
+    const segments: Segment[] = []
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let cursor: Segment<unknown> | undefined = this
+    let cursor: Segment | undefined = this
     while(cursor) {
       segments.push(cursor)
       cursor = cursor.parent
@@ -48,7 +50,7 @@ export class Segment<DeserializedType> {
     return segments
   }
 
-  private getFieldSegments(): Segment<unknown>[] {
+  private getFieldSegments(): Segment[] {
     return this.getSegments().filter(segment => segment.field)
   }
 
