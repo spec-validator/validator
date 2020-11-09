@@ -28,7 +28,7 @@ export class Segment<DeserializedType> {
   _<Key extends string, ExtraDeserializedType extends Any=Any>(
     key: Key,
     field?: Field<ExtraDeserializedType> & WithStringInputSupport
-  ): Segment<[ExtraDeserializedType] extends [undefined] ? DeserializedType : DeserializedType & {
+  ): Segment<ExtraDeserializedType extends undefined ? DeserializedType : DeserializedType & {
     [P in Key]: ExtraDeserializedType
   }> {
     return new Segment(this, key as any, field) as any

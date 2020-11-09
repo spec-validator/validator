@@ -23,9 +23,18 @@ test('basics', () => {
   })
 })
 
-test('type', () => {
-  type Seg = typeof $
-  expectType<Seg, Segment<unknown>>(true)
-  type Props = SegmentTypeHint<Seg>
-  expectType<Props, undefined>(true)
+describe('type', () => {
+
+  it('root', () => {
+    type Seg = typeof $
+    expectType<Seg, Segment<unknown>>(true)
+    type Props = SegmentTypeHint<Seg>
+    expectType<Props, undefined>(true)
+  })
+
+  it('with unparametrized segment', () => {
+    const path = $._('foo')
+    type Seg = typeof path
+    expectType<Seg, Segment<unknown>>(true)
+  })
 })
