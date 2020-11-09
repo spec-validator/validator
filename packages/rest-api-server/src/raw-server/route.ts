@@ -1,6 +1,6 @@
 import { Field, SpecUnion, TypeHint, ValidatorSpec } from '@validator/validator/core'
 import { Segment, SegmentTypeHint } from '@validator/validator/segmentChain'
-import { StringMapping, Response, Request } from './handler'
+import { StringMapping, Response, Request, Handler } from './handler'
 import { Any, Optional } from '../../../validator/src/util-types'
 
 export type RequestSpec<
@@ -44,11 +44,13 @@ export type ResponseExt<Spec extends ResponseSpec> = Response<
 >
 
 export type Route<
-  Req extends Optional<RequestSpec> = undefined,
-  Resp extends Optional<ResponseSpec> = undefined
+  Req extends Optional<RequestSpec> = Optional<RequestSpec>,
+  Resp extends Optional<ResponseSpec> = Optional<ResponseSpec>
 > = {
   request: Req,
   response: Resp,
-  handler: (request: Req extends RequestSpec ? RequestExt<Req> : undefined)
-    => Resp extends ResponseSpec ? ResponseExt<Resp> : undefined
+  handler: Handler<
+    Req extends RequestSpec ? RequestExt<Req> : undefined,
+    Resp extends ResponseSpec ? ResponseExt<Resp> : undefined
+  >
 }

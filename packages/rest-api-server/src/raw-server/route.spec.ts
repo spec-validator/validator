@@ -1,6 +1,7 @@
 import { choiceField, stringField } from '@validator/validator/fields'
 import { $ } from '@validator/validator/segmentChain'
 import { expectType } from '@validator/validator/TypeTestUtils.test'
+import { WithoutOptional } from '@validator/validator/util-types'
 import { Route, RequestExt, ResponseExt } from './route'
 
 describe('Request', () => {
@@ -10,7 +11,7 @@ describe('Request', () => {
       pathParams: $._('/')
     }
 
-    type Req = RequestExt<typeof spec>
+    type Req = WithoutOptional<RequestExt<typeof spec>>
 
     expectType<Req, undefined>(true)
   })
@@ -24,7 +25,7 @@ describe('Request', () => {
       pathParams: $._('pathKey', stringField())
     }
 
-    type Req = RequestExt<typeof spec>
+    type Req = WithoutOptional<RequestExt<typeof spec>>
 
     expectType<Req, {
       method: string,
@@ -39,7 +40,7 @@ describe('Response', () => {
 
   it('contains nothing by default', () => {
     const spec = {}
-    type Resp = ResponseExt<typeof spec>
+    type Resp = WithoutOptional<ResponseExt<typeof spec>>
 
     expectType<Resp, undefined>(true)
   })
@@ -50,7 +51,7 @@ describe('Response', () => {
       data: stringField()
     }
 
-    type Resp = ResponseExt<typeof spec>
+    type Resp = WithoutOptional<ResponseExt<typeof spec>>
 
     expectType<Resp, {
       statusCode: 201 | 404,

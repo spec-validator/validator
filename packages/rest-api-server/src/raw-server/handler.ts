@@ -29,6 +29,6 @@ export type Response<
 }
 
 export type Handler<
-  Req extends Request = Request,
-  Resp extends Optional<Response> = undefined
+  Req extends Optional<Request> = Optional<Request>,
+  Resp extends Optional<Response> = Optional<Response>
 > = (request: WithoutOptional<Req>) => Promise<WithoutOptional<Resp>>
