@@ -1,5 +1,5 @@
 import { Field, SpecUnion, TypeHint, ValidatorSpec } from '@validator/validator/core'
-import { Segment, SegmentTypeHint } from '@validator/validator/segmentChain'
+import { Segment } from '@validator/validator/segmentChain'
 import { StringMapping, Response, Request, Handler } from './handler'
 import { Any, Optional } from '../../../validator/src/util-types'
 
@@ -31,7 +31,7 @@ export type RequestExt<
   Spec extends RequestSpec,
 > = Request<
   TypeHint<Spec['method']>,
-  SegmentTypeHint<Spec['pathParams']>,
+  TypeHint<Spec['pathParams']>,
   TypeHint<Spec['data']>,
   TypeHint<Spec['query']>,
   TypeHint<Spec['headers']>

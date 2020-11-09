@@ -25,10 +25,10 @@ export class Segment<DeserializedType> {
     this.field = field?.getFieldWithRegExp()
   }
 
-  _<Key extends string, ExtraDeserializedType extends Any=Any>(
+  _<Key extends string, ExtraDeserializedType extends Any=undefined>(
     key: Key,
     field?: Field<ExtraDeserializedType> & WithStringInputSupport
-  ): Segment<ExtraDeserializedType extends undefined ? DeserializedType : DeserializedType & {
+  ): Segment<[ExtraDeserializedType] extends [undefined] ? DeserializedType : DeserializedType & {
     [P in Key]: ExtraDeserializedType
   }> {
     return new Segment(this, key as any, field) as any
@@ -77,8 +77,5 @@ export class Segment<DeserializedType> {
     return this.getRegex()
   }
 }
-
-export type SegmentTypeHint<Spec extends Segment<unknown> | undefined> =
-  Spec extends Segment<unknown> ? Segment<unknown> extends Spec ? undefined : ReturnType<Spec['match']> : undefined
 
 export const $ = new Segment()

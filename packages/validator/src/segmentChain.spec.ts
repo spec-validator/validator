@@ -2,8 +2,9 @@ import stringField from './fields/stringField'
 
 import numberField from './fields/numberField'
 
-import { $, Segment, SegmentTypeHint } from './segmentChain'
+import { $, Segment } from './segmentChain'
 import { expectType } from './TypeTestUtils.test'
+import { TypeHint } from './core'
 
 test('basics', () => {
   const segmentSpec = $
@@ -28,7 +29,7 @@ describe('type', () => {
   it('root', () => {
     type Seg = typeof $
     expectType<Seg, Segment<unknown>>(true)
-    type Props = SegmentTypeHint<Seg>
+    type Props = TypeHint<Seg>
     expectType<Props, undefined>(true)
   })
 
@@ -36,5 +37,13 @@ describe('type', () => {
     const path = $._('foo')
     type Seg = typeof path
     expectType<Seg, Segment<unknown>>(true)
+  })
+
+  it('with parametrized segment', () => {
+    const path = $._('foo')._('key', numberField())
+    type Seg = typeof path
+    expectType<Seg, Segment<{
+      key: number
+    }>>(true)
   })
 })

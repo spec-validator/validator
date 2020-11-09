@@ -1,6 +1,6 @@
 import { expectType } from '../TypeTestUtils.test'
 import { TypeHint } from '../core'
-import { $, SegmentTypeHint } from '../segmentChain'
+import { $ } from '../segmentChain'
 import stringField from './stringField'
 
 import {
@@ -47,7 +47,7 @@ test('types', () => {
     ._('field', field)
     ._('/suffix')
 
-  type SegmentSpec = SegmentTypeHint<typeof segmentSpec>
+  type SegmentSpec = TypeHint<typeof segmentSpec>
 
   expectType<SegmentSpec, {field: string}>(true)
 })
