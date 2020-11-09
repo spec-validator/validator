@@ -13,7 +13,7 @@ export type RequestSpec<
   pathParams: Segment<PathParams>,
   method: Field<Method>,
   data?: SpecUnion<Data>,
-  query?: ValidatorSpec<QueryParams>,
+  queryParams?: ValidatorSpec<QueryParams>,
   headers?: ValidatorSpec<Headers>
 }
 
@@ -33,7 +33,7 @@ export type RequestExt<
   TypeHint<Spec['method']>,
   TypeHint<Spec['pathParams']>,
   TypeHint<Spec['data']>,
-  TypeHint<Spec['query']>,
+  TypeHint<Spec['queryParams']>,
   TypeHint<Spec['headers']>
 >
 

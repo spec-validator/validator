@@ -4,7 +4,7 @@ import {
 
 import qs from 'qs'
 
-import { validate, serialize, isField } from '@validator/validator/core'
+import { validate, serialize } from '@validator/validator/core'
 import { Segment } from '@validator/validator/segmentChain'
 import { Json } from '@validator/validator/Json'
 import { Route } from './route'
@@ -92,7 +92,7 @@ const handleRoute = async (
 ): Promise<void> => {
   const [path, queryString] = (request.url || '').split('?', 2)
 
-  const query = validate(route.request.query, qs.parse(queryString))
+  const queryParams = validate(route.request.queryParams, qs.parse(queryString))
   const pathParams = route.request.pathParams.match(path)
   const method = route.request.method.validate(request.method)
   const data = validate(route.request.data, config.protocol.deserialize(await getData(request)))
@@ -103,7 +103,7 @@ const handleRoute = async (
   const resp = await withAppErrorStatusCode(
     config.appErrorStatusCode,
     // Here casting to any is truly intentional since
-    async () => handler({ method, pathParams, query, data, headers })
+    async () => handler({ method, pathParams, queryParams, data, headers })
   )
 
   Object.entries((resp as any).headers || {}).forEach(([key, value]) =>
@@ -127,7 +127,7 @@ const handleRoute = async (
 
 export const handle = async (
   config: ServerConfig,
-  routes: WildCardRoute[],
+  routes: Route[],
   request: IncomingMessage,
   response: ServerResponse
 ): Promise<void> => {
@@ -181,7 +181,7 @@ export const PATCH = withMethod('PATCH')
 
 export const serve = (
   config: Partial<ServerConfig>,
-  routes: WildCardRoute[],
+  routes: Route[],
 ): void => {
   const merged = mergeServerConfigs(config)
   createServer(handle.bind(null, merged, routes)).listen(merged.port)
