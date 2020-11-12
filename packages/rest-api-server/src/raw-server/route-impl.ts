@@ -155,14 +155,9 @@ export type Method =
 const withMethod = <
   ReqSpec extends RequestSpec = RequestSpec,
   RespSpec extends Optional<ResponseSpec> = Optional<ResponseSpec>
-> (method: ReqSpec['method']) => (pathParams: ReqSpec['pathParams'], spec: {
-  request: Exclude<ReqSpec, 'method' | 'pathParams'>,
-  response: RespSpec,
-  handler: Handler<
-    RequestExt<ReqSpec>,
-    RespSpec extends ResponseSpec ? ResponseExt<RespSpec> : undefined
-  >
-}): Route<ReqSpec, RespSpec> => ({
+> (method: Optional<ReqSpec['method']>) => (pathParams: ReqSpec['pathParams'], spec:
+  Route<ReqSpec, RespSpec> & {request: Exclude<ReqSpec, 'method' | 'pathParams'>}
+  ): Route<ReqSpec, RespSpec> => ({
     request: {
       ...spec.request,
       method,
