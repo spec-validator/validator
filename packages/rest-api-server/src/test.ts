@@ -1,8 +1,9 @@
+/*
 import { numberField, objectField, stringField } from '@validator/validator/fields'
 import { $ } from '@validator/validator/segmentChain'
 import { resource, serve } from './raw-server'
 
-/*
+
 serve({}, {
   foo: resource(
     $._('/foo/')._('username', stringField()),

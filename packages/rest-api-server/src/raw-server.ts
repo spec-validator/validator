@@ -4,7 +4,7 @@ import {
 
 import qs from 'qs'
 
-import { ValidatorSpec, validate, serialize, TypeHint, SpecUnion, isField } from '@validator/validator/core'
+import { validate, serialize, isField } from '@validator/validator/core'
 import { Segment } from '@validator/validator/segmentChain'
 import { Json } from '@validator/validator/Json'
 import { Route } from './raw-server/route'

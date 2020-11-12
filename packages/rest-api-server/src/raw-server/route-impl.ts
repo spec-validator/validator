@@ -5,10 +5,9 @@ import {
 import qs from 'qs'
 
 import { validate, serialize } from '@validator/validator/core'
-import { Segment } from '@validator/validator/segmentChain'
 import { Json } from '@validator/validator/Json'
-import { RequestExt, RequestSpec, ResponseExt, ResponseSpec, Route } from './route'
-import { Handler, Request, Response, StringMapping } from './handler'
+import { RequestSpec, ResponseSpec, Route } from './route'
+import { Request, Response } from './handler'
 import { Optional } from '@validator/validator/util-types'
 
 interface MediaTypeProtocol {
