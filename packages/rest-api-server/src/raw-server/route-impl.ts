@@ -162,7 +162,7 @@ const withMethod = <
     RequestExt<ReqSpec>,
     RespSpec extends ResponseSpec ? ResponseExt<RespSpec> : undefined
   >
-}): Route => ({
+}): Route<ReqSpec, RespSpec> => ({
     request: {
       ...spec.request,
       method,
