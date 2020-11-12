@@ -44,13 +44,13 @@ export type ResponseExt<Spec extends ResponseSpec> = Response<
 >
 
 export type Route<
-  Req extends RequestSpec = RequestSpec,
-  Resp extends Optional<ResponseSpec> = Optional<ResponseSpec>
+  ReqSpec extends RequestSpec = RequestSpec,
+  RespSpec extends Optional<ResponseSpec> = Optional<ResponseSpec>
 > = {
-  request: Req,
-  response: Resp,
+  request: ReqSpec,
+  response: RespSpec,
   handler: Handler<
-    Req extends RequestSpec ? RequestExt<Req> : undefined,
-    Resp extends ResponseSpec ? ResponseExt<Resp> : undefined
+    RequestExt<ReqSpec>,
+    RespSpec extends ResponseSpec ? ResponseExt<RespSpec> : undefined
   >
 }

@@ -7,8 +7,8 @@ import qs from 'qs'
 import { validate, serialize } from '@validator/validator/core'
 import { Segment } from '@validator/validator/segmentChain'
 import { Json } from '@validator/validator/Json'
-import { Route } from './route'
-import { Request, Response } from './handler'
+import { RequestExt, RequestSpec, ResponseExt, ResponseSpec, Route } from './route'
+import { Handler, Request, Response, StringMapping } from './handler'
 import { Optional } from '@validator/validator/util-types'
 
 interface MediaTypeProtocol {
@@ -152,21 +152,27 @@ export const handle = async (
 export type Method =
   'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH' | string
 
-export type MethodRoute = <
-  RequestPathParams,
-  TResponseSpec extends Optional<WildCardResponseSpec> = undefined,
-  TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
-> (
-    pathSpec: Segment<RequestPathParams>,
-    routeConfig: Omit<Route<RequestPathParams, TResponseSpec, TRequestSpec>, 'method' | 'pathSpec'>
-  )
-  => Route<RequestPathParams, TResponseSpec, TRequestSpec>
+type NoMethodRequestSpec =
 
-const withMethod = (method: string | undefined): MethodRoute => (pathSpec, routeConfig) => ({
-  method,
-  pathSpec,
-  ...routeConfig,
-})
+const withMethod = <
+  ReqSpec extends RequestSpec = RequestSpec,
+  RespSpec extends Optional<ResponseSpec> = Optional<ResponseSpec>
+> (method: ReqSpec['method']) => (pathParams: ReqSpec['pathParams'], spec: {
+  request: Exclude<ReqSpec, 'method' | 'pathParams'>,
+  response: RespSpec,
+  handler: Handler<
+    RequestExt<ReqSpec>,
+    RespSpec extends ResponseSpec ? ResponseExt<RespSpec> : undefined
+  >
+}): Route => ({
+    request: {
+      ...spec.request,
+      method,
+      pathParams,
+    },
+    response: spec.response,
+    handler: spec.handler
+  })
 
 export const ANY_METHOD = withMethod(undefined)
 export const GET = withMethod('GET')
