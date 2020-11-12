@@ -1,6 +1,6 @@
 import { Field, SpecUnion, TypeHint, ValidatorSpec } from '@validator/validator/core'
 import { Segment } from '@validator/validator/segmentChain'
-import { StringMapping, Response, Request, Handler } from './handler'
+import { StringMapping, Response, Request, Handler, HeaderMapping } from './handler'
 import { Any, Optional } from '../../../validator/src/util-types'
 
 export type RequestSpec<
@@ -8,7 +8,7 @@ export type RequestSpec<
   PathParams extends Optional<StringMapping> = Optional<StringMapping>,
   Data extends Optional<Any> = Optional<Any>,
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
-  Headers extends Optional<StringMapping> = Optional<StringMapping>,
+  Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
 > = {
   pathParams: Segment<PathParams>,
   method: Field<Method>,
@@ -19,7 +19,7 @@ export type RequestSpec<
 
 export type ResponseSpec<
   StatusCode extends Optional<number> = Optional<number>,
-  Headers extends Optional<StringMapping> = Optional<StringMapping>,
+  Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
   Data extends Optional<Any> = Optional<Any>,
 > = {
   statusCode?: Field<StatusCode>

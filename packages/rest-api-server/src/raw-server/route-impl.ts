@@ -9,7 +9,6 @@ import { Json } from '@validator/validator/Json'
 import { RequestSpec, ResponseSpec, Route } from './route'
 import { Request, Response } from './handler'
 import { Optional } from '@validator/validator/util-types'
-
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
   deserialize(serialized: string): Json
@@ -101,13 +100,12 @@ const handleRoute = async (
 
   const resp = await withAppErrorStatusCode(
     config.appErrorStatusCode,
-    // Here casting to any is truly intentional since
-    async () => handler({ method, pathParams, queryParams, data, headers })
+    handler.bind(null, { method, pathParams, queryParams, data, headers })
   )
 
-  Object.entries((resp as any).headers || {}).forEach(([key, value]) =>
-    response.setHeader(key, value as any)
-  )
+  Object.entries(resp?.headers || {}).forEach(([key, value]) => {
+    response.setHeader(key, value)
+  })
 
   response.statusCode = resp?.statusCode || data ? 200 : 201
 
@@ -118,7 +116,7 @@ const handleRoute = async (
   }
 
   response.write(
-    config.protocol.serialize(serialize(dataSpec, (resp as any).data)),
+    config.protocol.serialize(serialize(dataSpec, resp?.data)),
     config.encoding
   )
 

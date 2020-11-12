@@ -2,6 +2,8 @@ import { Any, Optional, WithoutOptional } from '../../../validator/src/util-type
 
 export type StringMapping = Record<string, Any>
 
+export type HeaderMapping = Record<string, string | string[] | number>
+
 export type DataMapping = StringMapping | Any
 
 export type Request<
@@ -9,7 +11,7 @@ export type Request<
   PathParams extends Optional<StringMapping> = Optional<StringMapping>,
   Data extends Optional<Any> = Optional<Any>,
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
-  Headers extends Optional<StringMapping> = Optional<StringMapping>,
+  Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
 > = {
   method: Method,
   pathParams: PathParams,
@@ -21,7 +23,7 @@ export type Request<
 export type Response<
   StatusCode extends Optional<number> = Optional<number>,
   Data extends Optional<Any> = Optional<Any>,
-  Headers extends Optional<StringMapping> = Optional<StringMapping>,
+  Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
 > = {
   statusCode: StatusCode,
   data: Data,
