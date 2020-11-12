@@ -152,8 +152,6 @@ export const handle = async (
 export type Method =
   'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH' | string
 
-type NoMethodRequestSpec =
-
 const withMethod = <
   ReqSpec extends RequestSpec = RequestSpec,
   RespSpec extends Optional<ResponseSpec> = Optional<ResponseSpec>
