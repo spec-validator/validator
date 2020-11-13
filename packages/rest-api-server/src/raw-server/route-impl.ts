@@ -112,20 +112,20 @@ const handleRoute = async (
     handler.bind(null, { method, pathParams, queryParams, data, headers })
   )
 
-  Object.entries(resp.headers || {}).forEach(([key, value]) => {
+  Object.entries(resp?.headers || {}).forEach(([key, value]) => {
     response.setHeader(key, value)
   })
 
   response.statusCode = resp.statusCode
 
-  const dataSpec = route.response.data
+  const dataSpec = route.response?.data
 
   if (!dataSpec) {
     return
   }
 
   response.write(
-    config.protocol.serialize(serialize(dataSpec, resp.data)),
+    config.protocol.serialize(serialize(dataSpec, resp?.data)),
     config.encoding
   )
 
