@@ -4,7 +4,7 @@ import { StringMapping, Response, Request, Handler, HeaderMapping } from './hand
 import { Any, Optional } from '../../../validator/src/util-types'
 
 export type RequestSpec<
-  Method extends string = 'GET',
+  Method extends string = string,
   PathParams extends Optional<StringMapping> = Optional<StringMapping>,
   Data extends Optional<Any> = Optional<Any>,
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
@@ -21,7 +21,7 @@ export type RequestSpec<
 // TODO: response is a union field of an array of response specs
 
 export type ResponseSpec<
-  StatusCode extends number = 200,
+  StatusCode extends number = number,
   Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
   Data extends Optional<Any> = Optional<Any>,
 > = {
