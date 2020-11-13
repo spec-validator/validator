@@ -33,7 +33,7 @@ export type ResponseSpec<
 export type RequestExt<
   Spec extends RequestSpec,
 > = Request<
-  TypeHint<Spec['method']>,
+  Spec['method'],
   TypeHint<Spec['pathParams']>,
   TypeHint<Spec['data']>,
   TypeHint<Spec['queryParams']>,
@@ -41,19 +41,19 @@ export type RequestExt<
 >
 
 export type ResponseExt<Spec extends ResponseSpec> = Response<
-  TypeHint<Spec['statusCode']>,
+  Spec['statusCode'],
   TypeHint<Spec['data']>,
   TypeHint<Spec['headers']>
 >
 
 export type Route<
   ReqSpec extends RequestSpec = RequestSpec,
-  RespSpec extends Optional<ResponseSpec> = Optional<ResponseSpec>
+  RespSpec extends ResponseSpec = ResponseSpec
 > = {
   request: ReqSpec,
   response: RespSpec,
   handler: Handler<
     RequestExt<ReqSpec>,
-    RespSpec extends ResponseSpec ? ResponseExt<RespSpec> : undefined
+    ResponseExt<RespSpec>
   >
 }

@@ -7,7 +7,7 @@ export type HeaderMapping = Record<string, string | string[] | number>
 export type DataMapping = StringMapping | Any
 
 export type Request<
-  Method extends Optional<string> = Optional<string>,
+  Method extends string = string,
   PathParams extends Optional<StringMapping> = Optional<StringMapping>,
   Data extends Optional<Any> = Optional<Any>,
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
@@ -21,7 +21,7 @@ export type Request<
 }
 
 export type Response<
-  StatusCode extends Optional<number> = Optional<number>,
+  StatusCode extends number = number,
   Data extends Optional<Any> = Optional<Any>,
   Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
 > = {
@@ -31,6 +31,6 @@ export type Response<
 }
 
 export type Handler<
-  Req extends Optional<Request> = Optional<Request>,
-  Resp extends Optional<Response> = Optional<Response>
+  Req extends Request = Request,
+  Resp extends Response = Response
 > = (request: WithoutOptional<Req>) => Promise<WithoutOptional<Resp>>

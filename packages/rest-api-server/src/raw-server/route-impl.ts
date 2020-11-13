@@ -53,7 +53,9 @@ const matchRoute = (
   route: Route
 ): boolean => {
   try {
-    route.request.method.validate(request.method)
+    if (route.request.method.toLowerCase() !== request.method?.toLowerCase()) {
+      return false
+    }
     route.request.pathParams.match(request.url || '')
   } catch (err) {
     return false
@@ -93,11 +95,17 @@ const handleRoute = async (
 
   const queryParams = validate(route.request.queryParams, qs.parse(queryString))
   const pathParams = route.request.pathParams.match(path)
-  const method = route.request.method.validate(request.method)
+  const method = route.request.method
+  if (method.toLowerCase() !== request.method?.toLowerCase()) {
+    throw {
+      statusCode: 404,
+      error: 'Method handler not found',
+    }
+  }
   const data = validate(route.request.data, config.protocol.deserialize(await getData(request)))
   const headers = validate(route.request.headers, request.headers)
 
-  const handler = route.handler as (req: Optional<Request>) => Promise<Optional<Response>>
+  const handler = route.handler as (req: Request) => Promise<Response>
 
   const resp = await withAppErrorStatusCode(
     config.appErrorStatusCode,
@@ -152,7 +160,7 @@ export type Method =
 
 const withMethod = <
   ReqSpec extends RequestSpec = RequestSpec,
-  RespSpec extends Optional<ResponseSpec> = Optional<ResponseSpec>
+  RespSpec extends ResponseSpec = ResponseSpec
 > (method: Optional<Method>) => (pathParams: ReqSpec['pathParams'], spec:
   Route<ReqSpec, RespSpec> & {request: Exclude<ReqSpec, 'method' | 'pathParams'>}
   ): Route<ReqSpec, RespSpec> => ({
