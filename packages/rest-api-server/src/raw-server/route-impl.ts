@@ -105,27 +105,27 @@ const handleRoute = async (
   const data = validate(route.request.data, config.protocol.deserialize(await getData(request)))
   const headers = validate(route.request.headers, request.headers)
 
-  const handler = route.handler as (req: Request) => Promise<Response>
+  const handler = route.handler as unknown as (req: Request) => Promise<Response>
 
   const resp = await withAppErrorStatusCode(
     config.appErrorStatusCode,
     handler.bind(null, { method, pathParams, queryParams, data, headers })
   )
 
-  Object.entries(resp?.headers || {}).forEach(([key, value]) => {
+  Object.entries(resp.headers || {}).forEach(([key, value]) => {
     response.setHeader(key, value)
   })
 
-  response.statusCode = resp?.statusCode || data ? 200 : 201
+  response.statusCode = resp.statusCode
 
-  const dataSpec = route.response?.data
+  const dataSpec = route.response.data
 
   if (!dataSpec) {
     return
   }
 
   response.write(
-    config.protocol.serialize(serialize(dataSpec, resp?.data)),
+    config.protocol.serialize(serialize(dataSpec, resp.data)),
     config.encoding
   )
 
