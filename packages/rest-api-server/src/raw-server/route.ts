@@ -1,28 +1,31 @@
-import { Field, SpecUnion, TypeHint, ValidatorSpec } from '@validator/validator/core'
+import { SpecUnion, TypeHint, ValidatorSpec } from '@validator/validator/core'
 import { Segment } from '@validator/validator/segmentChain'
 import { StringMapping, Response, Request, Handler, HeaderMapping } from './handler'
 import { Any, Optional } from '../../../validator/src/util-types'
 
 export type RequestSpec<
-  Method extends Optional<string> = Optional<string>,
+  Method extends string = 'GET',
   PathParams extends Optional<StringMapping> = Optional<StringMapping>,
   Data extends Optional<Any> = Optional<Any>,
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
   Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
 > = {
+  method: Method,
   pathParams: Segment<PathParams>,
-  method: Field<Method>,
   data?: SpecUnion<Data>,
   queryParams?: ValidatorSpec<QueryParams>,
   headers?: ValidatorSpec<Headers>
 }
 
+// TODO:
+// TODO: response is a union field of an array of response specs
+
 export type ResponseSpec<
-  StatusCode extends Optional<number> = Optional<number>,
+  StatusCode extends number = 200,
   Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
   Data extends Optional<Any> = Optional<Any>,
 > = {
-  statusCode?: Field<StatusCode>
+  statusCode: StatusCode
   data?: SpecUnion<Data>,
   headers?: ValidatorSpec<Headers>
 }
