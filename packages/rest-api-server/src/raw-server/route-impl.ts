@@ -9,6 +9,7 @@ import { Json } from '@validator/validator/Json'
 import { RequestSpec, ResponseSpec, Route } from './route'
 import { Request, Response } from './handler'
 import { Optional } from '@validator/validator/util-types'
+import { choiceField } from '@validator/validator/fields'
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
   deserialize(serialized: string): Json
@@ -157,7 +158,7 @@ const withMethod = <
   ): Route<ReqSpec, RespSpec> => ({
     request: {
       ...spec.request,
-      method,
+      method: method === undefined ? undefined : choiceField(method),
       pathParams,
     },
     response: spec.response,
