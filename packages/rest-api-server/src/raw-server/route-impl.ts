@@ -8,7 +8,6 @@ import { validate, serialize } from '@validator/validator/core'
 import { Json } from '@validator/validator/Json'
 import { RequestExt, RequestSpec, ResponseSpec, Route } from './route'
 import { Request, Response } from './handler'
-import { Optional } from '@validator/validator/util-types'
 import { choiceField } from '@validator/validator/fields'
 import { assertEqual, getOrUndefined } from '@validator/validator/utils'
 
@@ -149,14 +148,15 @@ export const handle = async (
   response.end()
 }
 
-export type Method =
-  'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH' | string
-
 export const withMethod = <
   ReqSpec extends RequestSpec = RequestSpec,
   RespSpec extends ResponseSpec = ResponseSpec
-> (method: Optional<Method>) => (pathParams: ReqSpec['pathParams'], spec:
-  Route<ReqSpec, RespSpec> & {request: Exclude<ReqSpec, 'method' | 'pathParams'>}
+> (method: string) => (
+    pathParams: ReqSpec['pathParams'],
+    spec: Exclude<Route<ReqSpec, RespSpec> & {
+      request: Exclude<ReqSpec, 'method' | 'pathParams'>
+    }, 'handler'>,
+    handler: Route<ReqSpec, RespSpec>['handler']
   ): Route<ReqSpec, RespSpec> => ({
     request: {
       ...spec.request,
@@ -164,10 +164,9 @@ export const withMethod = <
       pathParams,
     },
     response: spec.response,
-    handler: spec.handler
+    handler
   })
 
-export const ANY_METHOD = withMethod(undefined)
 export const GET = withMethod('GET')
 export const HEAD = withMethod('HEAD')
 export const POST = withMethod('POST')
