@@ -10,6 +10,7 @@ import { RequestExt, RequestSpec, ResponseSpec, Route } from './route'
 import { Request, Response } from './handler'
 import { Optional } from '@validator/validator/util-types'
 import { choiceField } from '@validator/validator/fields'
+import { getOrUndefined } from '@validator/validator/utils'
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
   deserialize(serialized: string): Json
@@ -134,12 +135,7 @@ export const handle = async (
   request: IncomingMessage,
   response: ServerResponse
 ): Promise<void> => {
-  let route: Optional<Route>
-  try {
-    route = routes.find(matchRoute.bind(null, request))
-  } catch (error) {
-    route = undefined
-  }
+  const route = routes.find(getOrUndefined.bind(null, () => matchRoute.bind(null, request)))
   if (route) {
     try {
       await handleRoute(config, route, request, response)
