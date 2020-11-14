@@ -11,6 +11,7 @@ import { Request, Response } from './handler'
 import { Optional } from '@validator/validator/util-types'
 import { choiceField } from '@validator/validator/fields'
 import { getOrUndefined } from '@validator/validator/utils'
+
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
   deserialize(serialized: string): Json
@@ -129,7 +130,7 @@ const handleRoute = async (
 
 }
 
-export const handle = async (
+const handle = async (
   config: ServerConfig,
   routes: Route[],
   request: IncomingMessage,
