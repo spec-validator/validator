@@ -1,6 +1,6 @@
 import { expectType } from '@validator/validator/TypeTestUtils.test'
 import { Request, Response, Handler } from './handler'
-import { WithoutOptional } from '../../../validator/src/util-types'
+import { WithoutOptional } from '@validator/validator/util-types'
 
 describe('Request', () => {
 

@@ -1,15 +1,16 @@
-import {
-  createServer, IncomingMessage, ServerResponse,
+import { IncomingMessage, ServerResponse,
 } from 'http'
 
 import qs from 'qs'
 
-import { validate, serialize } from '@validator/validator/core'
+import { validate, serialize, Field } from '@validator/validator/core'
 import { Json } from '@validator/validator/Json'
 import { RequestExt, RequestSpec, ResponseSpec, Route } from './route'
 import { Request, Response } from './handler'
-import { choiceField } from '@validator/validator/fields'
 import { assertEqual, getOrUndefined } from '@validator/validator/utils'
+import { Segment } from '@validator/validator/segmentChain'
+import { Optional, Any } from '@validator/validator/util-types'
+import { WithStringInputSupport } from '@validator/validator/WithStringInputSupport'
 
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
@@ -148,39 +149,52 @@ export const handle = async (
   response.end()
 }
 
-export const withMethod = <
-  ReqSpec extends RequestSpec = RequestSpec,
-  RespSpec extends ResponseSpec = ResponseSpec
-> (method: string) => (
-    pathParams: ReqSpec['pathParams'],
-    spec: Exclude<Route<ReqSpec, RespSpec> & {
-      request: Exclude<ReqSpec, 'method' | 'pathParams'>
-    }, 'handler'>,
-    handler: Route<ReqSpec, RespSpec>['handler']
-  ): Route<ReqSpec, RespSpec> => ({
-    request: {
-      ...spec.request,
-      method: method === undefined ? undefined : choiceField(method),
-      pathParams,
-    },
-    response: spec.response,
-    handler
-  })
+const createProxy = (trg: any) => new Proxy(
+  trg,
+  {
+    get(target, name, receiver) {
+      const rv = Reflect.get(target, name, receiver)
+      if (rv === undefined && typeof name === 'string') {
+        const routes: Route[] = target.root.routes
+        return <
+          ReqSpec extends RequestSpec = RequestSpec,
+          RespSpec extends ResponseSpec = ResponseSpec
+        > (
+          spec: Exclude<Route<ReqSpec, RespSpec> & {
+            request: Exclude<ReqSpec, 'method' | 'pathParams'>
+          }, 'handler'>,
+          handler: Route<ReqSpec, RespSpec>['handler']
+        ) => {
+          routes.push({
+            request: {
+              ...spec.request,
+              method: name,
+              pathParams: (target as _Route<ReqSpec['pathParams']>).segment,
+            },
+            response: spec.response,
+            handler: handler
+          })
+        }
+      } else {
+        return rv
+      }
+    }
+  }
+) as any
 
-export const GET = withMethod('GET')
-export const HEAD = withMethod('HEAD')
-export const POST = withMethod('POST')
-export const PUT = withMethod('PUT')
-export const DELETE = withMethod('DELETE')
-export const CONNECT = withMethod('CONNECT')
-export const OPTIONS = withMethod('OPTIONS')
-export const TRACE = withMethod('TRACE')
-export const PATCH = withMethod('PATCH')
+class _Route<DeserializedType extends Optional<Record<string, Any>> = Optional<Record<string, Any>>> {
 
-export const serve = (
-  config: Partial<ServerConfig>,
-  routes: Route[],
-): void => {
-  const merged = mergeServerConfigs(config)
-  createServer(handle.bind(null, merged, routes)).listen(merged.port)
+  constructor(readonly segment: Segment<DeserializedType>) {
+    this.segment = segment
+  }
+
+  _<Key extends string, ExtraDeserializedType extends Any=undefined>(
+    key: Key,
+    field?: Field<ExtraDeserializedType> & WithStringInputSupport
+  ): _Route<[ExtraDeserializedType] extends [undefined] ? DeserializedType : DeserializedType & {
+    [P in Key]: ExtraDeserializedType
+  }> {
+    return createProxy(new _Route(this.segment._(key, field)))
+  }
+
 }

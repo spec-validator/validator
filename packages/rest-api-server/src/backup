@@ -1,0 +1,36 @@
+export const withMethod = <
+  ReqSpec extends RequestSpec = RequestSpec,
+  RespSpec extends ResponseSpec = ResponseSpec
+> (method: string) => (
+    pathParams: ReqSpec['pathParams'],
+    spec: Exclude<Route<ReqSpec, RespSpec> & {
+      request: Exclude<ReqSpec, 'method' | 'pathParams'>
+    }, 'handler'>,
+    handler: Route<ReqSpec, RespSpec>['handler']
+  ): Route<ReqSpec, RespSpec> => ({
+    request: {
+      ...spec.request,
+      method: method === undefined ? undefined : choiceField(method),
+      pathParams,
+    },
+    response: spec.response,
+    handler
+  })
+
+export const GET = withMethod('GET')
+export const HEAD = withMethod('HEAD')
+export const POST = withMethod('POST')
+export const PUT = withMethod('PUT')
+export const DELETE = withMethod('DELETE')
+export const CONNECT = withMethod('CONNECT')
+export const OPTIONS = withMethod('OPTIONS')
+export const TRACE = withMethod('TRACE')
+export const PATCH = withMethod('PATCH')
+
+export const serve = (
+  config: Partial<ServerConfig>,
+  routes: Route[],
+): void => {
+  const merged = mergeServerConfigs(config)
+  createServer(handle.bind(null, merged, routes)).listen(merged.port)
+}

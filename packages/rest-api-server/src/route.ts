@@ -1,7 +1,7 @@
 import { SpecUnion, TypeHint, ValidatorSpec } from '@validator/validator/core'
 import { Segment } from '@validator/validator/segmentChain'
 import { StringMapping, Response, Request, Handler, HeaderMapping } from './handler'
-import { Any, Optional } from '../../../validator/src/util-types'
+import { Any, Optional } from '@validator/validator/util-types'
 
 export type RequestSpec<
   Method extends string = string,

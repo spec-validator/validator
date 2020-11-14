@@ -3,7 +3,6 @@ import { Field } from '@validator/validator/core'
 
 import { WithStringInputSupport } from '@validator/validator/WithStringInputSupport'
 import { serve, ServerConfig, WildCardRequestSpec, WildCardResponseSpecUnion, WildCardRoute } from './raw-server'
-import { Optional } from '@validator/validator/utils'
 
 import { Route as RawRoute } from './raw-server'
 

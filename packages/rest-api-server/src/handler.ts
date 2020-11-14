@@ -1,4 +1,4 @@
-import { Any, Optional, WithoutOptional } from '../../../validator/src/util-types'
+import { Any, Optional, WithoutOptional } from '@validator/validator/util-types'
 
 export type StringMapping = Record<string, Any>
 
