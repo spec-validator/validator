@@ -96,15 +96,21 @@ const handleRoute = async (
   const queryParams = validate(route.request.queryParams, qs.parse(queryString))
   const pathParams = route.request.pathParams.match(path)
   const method = route.request.method
+
+  // It is actually impossible to evaluate this to true because route matching
+  // will not hit the handler if the method is not supported
   if (method.toLowerCase() !== request.method?.toLowerCase()) {
     throw {
       statusCode: 404,
       error: 'Method handler not found',
     }
   }
+
   const data = validate(route.request.data, config.protocol.deserialize(await getData(request)))
   const headers = validate(route.request.headers, request.headers)
 
+  // This cast is totally reasoanble because in the interface we exclude
+  // null values.
   const handler = route.handler as unknown as (req: Request) => Promise<Response>
 
   const resp = await withAppErrorStatusCode(
