@@ -6,7 +6,7 @@ import qs from 'qs'
 
 import { validate, serialize } from '@validator/validator/core'
 import { Json } from '@validator/validator/Json'
-import { RequestSpec, ResponseSpec, Route } from './route'
+import { RequestExt, RequestSpec, ResponseSpec, Route } from './route'
 import { Request, Response } from './handler'
 import { Optional } from '@validator/validator/util-types'
 import { choiceField } from '@validator/validator/fields'
@@ -50,17 +50,22 @@ const mergeServerConfigs = (
 
 const matchRoute = (
   request: IncomingMessage,
-  route: Route
-): boolean => {
-  try {
-    if (route.request.method.toLowerCase() !== request.method?.toLowerCase()) {
-      return false
-    }
-    route.request.pathParams.match(request.url || '')
-  } catch (err) {
-    return false
+  route: Route,
+): {
+  method: Route['request']['method'],
+  queryParams: RequestExt<Route['request']>['queryParams'],
+  pathParams: RequestExt<Route['request']>['pathParams']
+} => {
+  const [path, queryString] = (request.url || '').split('?', 2)
+  const method = route.request.method.toLowerCase()
+  if (method !== request.method?.toLowerCase()) {
+    throw 'Method is not supported'
   }
-  return true
+  return {
+    queryParams: validate(route.request.queryParams, qs.parse(queryString)),
+    pathParams: route.request.pathParams.match(path),
+    method
+  }
 }
 
 const getData = async (msg: IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
@@ -91,21 +96,7 @@ const handleRoute = async (
   request: IncomingMessage,
   response: ServerResponse
 ): Promise<void> => {
-  const [path, queryString] = (request.url || '').split('?', 2)
-
-  const queryParams = validate(route.request.queryParams, qs.parse(queryString))
-  const pathParams = route.request.pathParams.match(path)
-  const method = route.request.method
-
-  // It is actually impossible to evaluate this to true because route matching
-  // will not hit the handler if the method is not supported
-  if (method.toLowerCase() !== request.method?.toLowerCase()) {
-    throw {
-      statusCode: 404,
-      error: 'Method handler not found',
-    }
-  }
-
+  const match = matchRoute(request, route)
   const data = validate(route.request.data, config.protocol.deserialize(await getData(request)))
   const headers = validate(route.request.headers, request.headers)
 
@@ -115,7 +106,7 @@ const handleRoute = async (
 
   const resp = await withAppErrorStatusCode(
     config.appErrorStatusCode,
-    handler.bind(null, { method, pathParams, queryParams, data, headers })
+    handler.bind(null, { ...match, data, headers })
   )
 
   Object.entries(resp?.headers || {}).forEach(([key, value]) => {
@@ -143,7 +134,12 @@ export const handle = async (
   request: IncomingMessage,
   response: ServerResponse
 ): Promise<void> => {
-  const route = routes.find(matchRoute.bind(null, request))
+  let route: Optional<Route>
+  try {
+    route = routes.find(matchRoute.bind(null, request))
+  } catch (error) {
+    route = undefined
+  }
   if (route) {
     try {
       await handleRoute(config, route, request, response)
