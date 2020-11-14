@@ -10,7 +10,7 @@ import { RequestExt, RequestSpec, ResponseSpec, Route } from './route'
 import { Request, Response } from './handler'
 import { Optional } from '@validator/validator/util-types'
 import { choiceField } from '@validator/validator/fields'
-import { getOrUndefined } from '@validator/validator/utils'
+import { assertEqual, getOrUndefined } from '@validator/validator/utils'
 
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
@@ -50,6 +50,7 @@ const mergeServerConfigs = (
   ...serverConfig,
 })
 
+
 export const matchRoute = (
   request: IncomingMessage,
   route: Route,
@@ -59,14 +60,14 @@ export const matchRoute = (
   pathParams: RequestExt<Route['request']>['pathParams']
 } => {
   const [path, queryString] = (request.url || '').split('?', 2)
-  const method = route.request.method.toLowerCase()
-  if (method !== request.method?.toLowerCase()) {
-    throw 'Method is not supported'
-  }
   return {
     queryParams: validate(route.request.queryParams, qs.parse(queryString)),
     pathParams: route.request.pathParams.match(path),
-    method
+    method: assertEqual(
+      route.request.method.toLowerCase(),
+      request.method?.toLowerCase() || '',
+      'Method is not supported'
+    )
   }
 }
 

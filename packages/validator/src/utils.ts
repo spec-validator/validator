@@ -15,3 +15,10 @@ export const getOrUndefined = <R>(get: () => R): Optional<R> => {
     return undefined
   }
 }
+
+export const assertEqual = <T>(one: T, two:T, errorMessage: string): T => {
+  if (one !== two) {
+    throw errorMessage
+  }
+  return one
+}
