@@ -16,9 +16,9 @@ export const getOrUndefined = <R>(get: () => R): Optional<R> => {
   }
 }
 
-export const assertEqual = <T>(one: T, two:T, errorMessage: string): T => {
-  if (one !== two) {
+export const assertEqual = <R, T extends R>(expected: T, actual: R, errorMessage: string): T => {
+  if (expected !== actual) {
     throw errorMessage
   }
-  return one
+  return expected
 }

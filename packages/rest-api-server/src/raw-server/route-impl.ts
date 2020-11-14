@@ -65,7 +65,7 @@ export const matchRoute = (
     pathParams: route.request.pathParams.match(path),
     method: assertEqual(
       route.request.method.toLowerCase(),
-      request.method?.toLowerCase() || '',
+      request.method?.toLowerCase(),
       'Method is not supported'
     )
   }
