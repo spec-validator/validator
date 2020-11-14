@@ -6,7 +6,7 @@ import qs from 'qs'
 import { validate, serialize, Field } from '@validator/validator/core'
 import { Json } from '@validator/validator/Json'
 import { RequestExt, RequestSpec, ResponseSpec, Route } from './route'
-import { Request, Response } from './handler'
+import { Request, Response, StringMapping } from './handler'
 import { assertEqual, getOrUndefined } from '@validator/validator/utils'
 import { Segment } from '@validator/validator/segmentChain'
 import { Optional, Any } from '@validator/validator/util-types'
@@ -182,7 +182,7 @@ const createProxy = (trg: any) => new Proxy(
   }
 ) as any
 
-class _Route<DeserializedType extends Optional<Record<string, Any>> = Optional<Record<string, Any>>> {
+class _Route<DeserializedType extends Optional<StringMapping> = Optional<StringMapping>> {
 
   constructor(readonly segment: Segment<DeserializedType>) {
     this.segment = segment
