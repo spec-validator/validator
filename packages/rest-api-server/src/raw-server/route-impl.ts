@@ -50,7 +50,7 @@ const mergeServerConfigs = (
   ...serverConfig,
 })
 
-const matchRoute = (
+export const matchRoute = (
   request: IncomingMessage,
   route: Route,
 ): {
@@ -92,7 +92,7 @@ const withAppErrorStatusCode = async <T>(statusCode: number, inner: () => Promis
   }
 }
 
-const handleRoute = async (
+export const handleRoute = async (
   config: ServerConfig,
   route: Route,
   request: IncomingMessage,
@@ -117,20 +117,14 @@ const handleRoute = async (
 
   response.statusCode = resp.statusCode
 
-  const dataSpec = route.response?.data
-
-  if (!dataSpec) {
-    return
-  }
-
   response.write(
-    config.protocol.serialize(serialize(dataSpec, resp?.data)),
+    config.protocol.serialize(serialize(route.response?.data, resp?.data)),
     config.encoding
   )
 
 }
 
-const handle = async (
+export const handle = async (
   config: ServerConfig,
   routes: Route[],
   request: IncomingMessage,
@@ -157,7 +151,7 @@ const handle = async (
 export type Method =
   'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH' | string
 
-const withMethod = <
+export const withMethod = <
   ReqSpec extends RequestSpec = RequestSpec,
   RespSpec extends ResponseSpec = ResponseSpec
 > (method: Optional<Method>) => (pathParams: ReqSpec['pathParams'], spec:
