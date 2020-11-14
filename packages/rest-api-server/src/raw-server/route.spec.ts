@@ -1,4 +1,4 @@
-import { choiceField, stringField } from '@validator/validator/fields'
+import { stringField } from '@validator/validator/fields'
 import { $ } from '@validator/validator/segmentChain'
 import { expectType } from '@validator/validator/TypeTestUtils.test'
 import { WithoutOptional } from '@validator/validator/util-types'
@@ -22,7 +22,7 @@ describe('Request', () => {
 
   it('always contains the fields that are defined', () => {
     const spec = {
-      method: stringField(),
+      method: 'GET' as const,
       headers: {
         headerKey: stringField()
       },
@@ -32,7 +32,7 @@ describe('Request', () => {
     type Req = WithoutOptional<RequestExt<typeof spec>>
 
     expectType<Req, {
-      method: string,
+      method: 'GET',
       headers: { headerKey: string },
       pathParams: { pathKey: string },
     }>(true)
@@ -43,22 +43,26 @@ describe('Request', () => {
 describe('Response', () => {
 
   it('contains nothing by default', () => {
-    const spec = {}
+    const spec = {
+      statusCode: 200 as const
+    }
     type Resp = WithoutOptional<ResponseExt<typeof spec>>
 
-    expectType<Resp, undefined>(true)
+    expectType<Resp, {
+      statusCode: 200
+    }>(true)
   })
 
   it('always contains the fields that are defined', () => {
     const spec = {
-      statusCode: choiceField(201, 404),
+      statusCode: 201 as const,
       data: stringField()
     }
 
     type Resp = WithoutOptional<ResponseExt<typeof spec>>
 
     expectType<Resp, {
-      statusCode: 201 | 404,
+      statusCode: 201,
       data: string
     }>(true)
   })
@@ -67,21 +71,9 @@ describe('Response', () => {
 
 describe('Route', () => {
 
-  it('expects undefined request and response', () => {
-    type Decor = Route
-
-
-    // empty by default
-    expectType<Decor, {
-      request: undefined,
-      response: undefined,
-      handler: (request: undefined) => Promise<undefined>
-        }>(true)
-  })
-
   it('works with defined request and response', () => {
     const reqSpec = {
-      method: stringField(),
+      method: 'GET' as const,
       headers: {
         headerKey: stringField()
       },
@@ -89,7 +81,7 @@ describe('Route', () => {
     }
 
     const respSpec = {
-      statusCode: choiceField(201, 404),
+      statusCode: 201 as const,
       data: stringField()
     }
 
@@ -99,11 +91,11 @@ describe('Route', () => {
       request: typeof reqSpec,
       response: typeof respSpec,
       handler: (request: {
-        method: string,
+        method: 'GET',
         headers: { headerKey: string },
         pathParams: { pathKey: string },
       }) => Promise<{
-        statusCode: 201 | 404,
+        statusCode: 201,
         data: string
       }>
         }>(true)
