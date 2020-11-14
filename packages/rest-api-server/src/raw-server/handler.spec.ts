@@ -7,7 +7,9 @@ describe('Request', () => {
   it('contains nothing by default', () => {
     type Req = WithoutOptional<Request>
 
-    expectType<Req, undefined>(true)
+    expectType<Req, {
+      method: string
+    }>(true)
   })
 
   it('always contains the fields that are defined', () => {
@@ -27,7 +29,9 @@ describe('Response', () => {
   it('contains nothing by default', () => {
     type Resp = WithoutOptional<Response>
 
-    expectType<Resp, undefined>(true)
+    expectType<Resp, {
+      statusCode: number
+    }>(true)
   })
 
   it('always contains the fields that are defined', () => {
@@ -45,7 +49,11 @@ describe('Handler', () => {
 
   it('in request: always contains a method', () => {
     type H = Handler
-    expectType<H, ((request: undefined) => Promise<undefined>)>(true)
+    expectType<H, ((request: {
+      method: string
+    }) => Promise<{
+      statusCode: number
+    }>)>(true)
   })
 
   it('in request: always contains the fields that are defined', () => {
@@ -55,12 +63,16 @@ describe('Handler', () => {
       method: string,
       headers: { headerKey: string },
       pathParams: { pathKey: string },
-    }) => Promise<undefined>)>(true)
+    }) => Promise<{
+      statusCode: number
+    }>)>(true)
   })
 
   it('in response: always contains the fields that are defined', () => {
     type H = Handler<Request, Response<201 | 404, string>>
-    expectType<H, ((request: undefined) => Promise<{
+    expectType<H, ((request: {
+      method: string
+    }) => Promise<{
       statusCode: 201 | 404,
       data: string
     }>)>(true)

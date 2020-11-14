@@ -8,13 +8,16 @@ describe('Request', () => {
 
   it('empty by default', () => {
     const spec = {
+      method: 'GET',
       pathParams: $._('/')
     }
 
     type Req = WithoutOptional<RequestExt<typeof spec>>
 
     // here the problem is in type hint of a segment
-    expectType<Req, undefined>(true)
+    expectType<Req, {
+      method: string
+    }>(true)
   })
 
   it('always contains the fields that are defined', () => {
