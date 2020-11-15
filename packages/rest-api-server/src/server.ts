@@ -3,7 +3,7 @@ import { IncomingMessage, ServerResponse,
 
 import qs from 'qs'
 
-import { validate, serialize, Field } from '@validator/validator/core'
+import { validate, serialize, Field, TypeHint } from '@validator/validator/core'
 import { Json } from '@validator/validator/Json'
 import { RequestExt, RequestSpec, ResponseSpec, Route } from './route'
 import { Request, Response, StringMapping } from './handler'
@@ -155,10 +155,10 @@ const createProxy = (trg: any) => new Proxy(
     get(target, name, receiver) {
       const rv = Reflect.get(target, name, receiver)
       if (rv === undefined && typeof name === 'string') {
-        const routes: Route[] = target.root.routes
+        const routes: Route<any, any>[] = target.root.routes
         return <
           ReqSpec extends RequestSpec = RequestSpec,
-          RespSpec extends ResponseSpec = ResponseSpec
+          RespSpec extends ResponseSpec = ResponseSpec,
         > (
           spec: Exclude<Route<ReqSpec, RespSpec> & {
             request: Exclude<ReqSpec, 'method' | 'pathParams'>
@@ -168,11 +168,11 @@ const createProxy = (trg: any) => new Proxy(
           routes.push({
             request: {
               ...spec.request,
-              method: name,
-              pathParams: (target as _Route<ReqSpec['pathParams']>).segment,
+              method: name as ReqSpec['method'],
+              pathParams: (target as _Route<TypeHint<ReqSpec['pathParams']>>).segment,
             },
             response: spec.response,
-            handler: handler
+            handler: handler as Route<ReqSpec, RespSpec>['handler']
           })
         }
       } else {
