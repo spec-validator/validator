@@ -11,7 +11,7 @@ const routes: Route[] = [
       }
     },
     response: {
-      statusCode: 200 as const
+      statusCode: 200
     },
   },
   async (request) => Promise.resolve({
