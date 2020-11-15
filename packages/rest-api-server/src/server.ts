@@ -28,9 +28,9 @@ export const withMethod = <
   RespSpec extends ResponseSpec = ResponseSpec
 > (method: string) => (
     pathParams: ReqSpec['pathParams'],
-    spec: Exclude<Route<ReqSpec, RespSpec> & {
-      request: Exclude<ReqSpec, 'method' | 'pathParams'>
-    }, 'handler'>,
+    spec: Omit<Route<ReqSpec, RespSpec>, 'handler'> & {
+      request: Omit<ReqSpec, 'method' | 'pathParams'>
+    },
     handler: Route<ReqSpec, RespSpec>['handler']
   ): Route<ReqSpec, RespSpec> => ({
     request: {
