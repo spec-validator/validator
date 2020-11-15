@@ -3,15 +3,11 @@ import { IncomingMessage, ServerResponse,
 
 import qs from 'qs'
 
-import { validate, serialize, Field, TypeHint } from '@validator/validator/core'
+import { validate, serialize } from '@validator/validator/core'
 import { Json } from '@validator/validator/Json'
-import { RequestExt, RequestSpec, ResponseSpec, Route } from './route'
-import { Request, Response, StringMapping } from './handler'
+import { RequestExt, Route } from './route'
+import { Request, Response } from './handler'
 import { assertEqual, getOrUndefined } from '@validator/validator/utils'
-import { Segment } from '@validator/validator/segmentChain'
-import { Optional, Any } from '@validator/validator/util-types'
-import { WithStringInputSupport } from '@validator/validator/WithStringInputSupport'
-
 interface MediaTypeProtocol {
   serialize(deserialized: Json): string
   deserialize(serialized: string): Json
@@ -147,54 +143,4 @@ export const handle = async (
     response.statusCode = 404
   }
   response.end()
-}
-
-const createProxy = (trg: any) => new Proxy(
-  trg,
-  {
-    get(target, name, receiver) {
-      const rv = Reflect.get(target, name, receiver)
-      if (rv === undefined && typeof name === 'string') {
-        const routes: Route<any, any>[] = target.root.routes
-        return <
-          ReqSpec extends RequestSpec = RequestSpec,
-          RespSpec extends ResponseSpec = ResponseSpec,
-        > (
-          spec: Exclude<Route<ReqSpec, RespSpec> & {
-            request: Exclude<ReqSpec, 'method' | 'pathParams'>
-          }, 'handler'>,
-          handler: Route<ReqSpec, RespSpec>['handler']
-        ) => {
-          routes.push({
-            request: {
-              ...spec.request,
-              method: name as ReqSpec['method'],
-              pathParams: (target as _Route<TypeHint<ReqSpec['pathParams']>>).segment,
-            },
-            response: spec.response,
-            handler: handler as Route<ReqSpec, RespSpec>['handler']
-          })
-        }
-      } else {
-        return rv
-      }
-    }
-  }
-) as any
-
-class _Route<DeserializedType extends Optional<StringMapping> = Optional<StringMapping>> {
-
-  constructor(readonly segment: Segment<DeserializedType>) {
-    this.segment = segment
-  }
-
-  _<Key extends string, ExtraDeserializedType extends Any=undefined>(
-    key: Key,
-    field?: Field<ExtraDeserializedType> & WithStringInputSupport
-  ): _Route<[ExtraDeserializedType] extends [undefined] ? DeserializedType : DeserializedType & {
-    [P in Key]: ExtraDeserializedType
-  }> {
-    return createProxy(new _Route(this.segment._(key, field)))
-  }
-
 }
