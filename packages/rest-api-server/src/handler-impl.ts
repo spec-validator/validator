@@ -7,7 +7,6 @@ import { Request, Response } from './handler'
 import { assertEqual, getOrUndefined } from '@validator/validator/utils'
 import { MediaTypeProtocol } from './protocols/base'
 
-
 export type ServerConfig = {
   protocol: MediaTypeProtocol,
   encoding: BufferEncoding,
@@ -16,7 +15,6 @@ export type ServerConfig = {
   appErrorStatusCode: number,
   reportError: (error: unknown) => Promise<void>
 }
-
 
 export const matchRoute = (
   request: http.IncomingMessage,
