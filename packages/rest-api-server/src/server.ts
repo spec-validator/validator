@@ -1,11 +1,11 @@
 import { Segment } from '@validator/validator/segmentChain'
 import { Optional } from '@validator/validator/util-types'
 import http from 'http'
-import { Handler, StringMapping } from './handler'
+import { StringMapping } from './handler'
 
 import { ServerConfig, handle } from './handler-impl'
 import JsonProtocol from './protocols/json'
-import { RequestExt, RequestSpec, ResponseExt, ResponseSpec, Route } from './route'
+import { RequestSpec, ResponseSpec, Route } from './route'
 
 const DEFAULT_SERVER_CONFIG: ServerConfig = {
   protocol: new JsonProtocol(),
@@ -27,33 +27,28 @@ const mergeServerConfigs = (
 })
 
 export const withMethod = <
-  Method extends string
-> (method: Method) => <
+  Method extends string,
   PathParams extends Optional<StringMapping> = Optional<StringMapping>,
-    ReqSpec extends Omit<RequestSpec, 'method' | 'pathParams'>
-      = Omit<RequestSpec, 'method' | 'pathParams'>,
-    RespSpec extends ResponseSpec = ResponseSpec
-  >(
-      pathParams: Segment<PathParams>,
-      spec: {
+  ReqSpec extends Omit<RequestSpec, 'method' | 'pathParams'> = Omit<RequestSpec, 'method' | 'pathParams'>,
+  RespSpec extends ResponseSpec = ResponseSpec
+> (method: Method) => (
+    pathParams: Segment<PathParams>,
+    spec: {
       request: ReqSpec,
       response: RespSpec
     },
-      handler: Handler<RequestExt<ReqSpec & {
-        method: Method,
-        pathParams: Segment<PathParams>
-      }>, ResponseExt<RespSpec>>
-    ): Route => ({
-      request: {
-        ...spec.request,
-        method,
-        pathParams,
-      },
-      response: spec.response,
-      handler: handler as any
-    })
+    handler: Route<ReqSpec & { method: Method, pathParams: Segment<PathParams> }, RespSpec>['handler']
+  ): Route => ({
+    request: {
+      ...spec.request,
+      method,
+      pathParams,
+    },
+    response: spec.response,
+    handler: handler as any
+  })
 
-export const GET = withMethod('GET' as const)
+export const GET = withMethod('GET')
 export const HEAD = withMethod('HEAD')
 export const POST = withMethod('POST')
 export const PUT = withMethod('PUT')
