@@ -56,24 +56,25 @@ class _Route<DeserializedType extends Optional<StringMapping> = Optional<StringM
 }
 
 type MethodSpec<
-  RequestPathParams extends any,
-  TResponseSpec extends WildCardResponseSpecUnion,
-  TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
-  Config = Omit<
-    RawRoute<RequestPathParams, TResponseSpec, TRequestSpec>,
-    'method' | 'pathSpec'
-  >
-> = (config: Config, handler: Config[]) => string
+  ReqSpec extends RequestSpec = RequestSpec,
+  RespSpec extends ResponseSpec = ResponseSpec
+> = (
+  spec: Exclude<Route<ReqSpec, RespSpec> & {
+    request: Exclude<ReqSpec, 'method' | 'pathParams'>
+  }, 'handler'>,
+  handler: Route<ReqSpec, RespSpec>['handler']
+) => void
 
 type SegmentHandler<Methods extends string> = Record<Methods, MethodSpec<any, any>>
 
+export type CommonHttpMethods = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'trace';
 
-export type RouteSegment<DeserializedType, Methods extends string> = SegmentHandler<Methods> & {
+export type RouteSegment<DeserializedType, Methods extends string=CommonHttpMethods> = SegmentHandler<Methods> & {
 
   _<Key extends string, ExtraDeserializedType extends Any=undefined>(
     key: Key,
     field?: Field<ExtraDeserializedType> & WithStringInputSupport
-  ): _Route<[ExtraDeserializedType] extends [undefined] ? DeserializedType : DeserializedType & {
+  ): RouteSegment<[ExtraDeserializedType] extends [undefined] ? DeserializedType : DeserializedType & {
     [P in Key]: ExtraDeserializedType
   }>
 
