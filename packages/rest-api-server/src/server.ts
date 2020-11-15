@@ -55,8 +55,20 @@ class _Route<DeserializedType extends Optional<StringMapping> = Optional<StringM
 
 }
 
-/*
-export type Route<DeserializedType, Methods extends string> = Handler<Methods> & {
+type MethodSpec<
+  RequestPathParams extends any,
+  TResponseSpec extends WildCardResponseSpecUnion,
+  TRequestSpec extends Optional<WildCardRequestSpec> = undefined,
+  Config = Omit<
+    RawRoute<RequestPathParams, TResponseSpec, TRequestSpec>,
+    'method' | 'pathSpec'
+  >
+> = (config: Config, handler: Config[]) => string
+
+type SegmentHandler<Methods extends string> = Record<Methods, MethodSpec<any, any>>
+
+
+export type RouteSegment<DeserializedType, Methods extends string> = SegmentHandler<Methods> & {
 
   _<Key extends string, ExtraDeserializedType extends Any=undefined>(
     key: Key,
@@ -66,4 +78,3 @@ export type Route<DeserializedType, Methods extends string> = Handler<Methods> &
   }>
 
 }
-*/
