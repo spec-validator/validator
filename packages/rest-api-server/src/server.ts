@@ -28,25 +28,26 @@ const mergeServerConfigs = (
 
 export const withMethod = <
   Method extends string,
+> (method: Method) => <
   PathParams extends Optional<StringMapping> = Optional<StringMapping>,
   ReqSpec extends Omit<RequestSpec, 'method' | 'pathParams'> = Omit<RequestSpec, 'method' | 'pathParams'>,
   RespSpec extends ResponseSpec = ResponseSpec
-> (method: Method) => (
-    pathParams: Segment<PathParams>,
-    spec: {
+  > (
+      pathParams: Segment<PathParams>,
+      spec: {
       request: ReqSpec,
       response: RespSpec
     },
-    handler: Route<ReqSpec & { method: Method, pathParams: Segment<PathParams> }, RespSpec>['handler']
-  ): Route => ({
-    request: {
-      ...spec.request,
-      method,
-      pathParams,
-    },
-    response: spec.response,
-    handler: handler as any
-  })
+      handler: Route<ReqSpec & { method: Method, pathParams: Segment<PathParams> }, RespSpec>['handler']
+    ): Route => ({
+      request: {
+        ...spec.request,
+        method,
+        pathParams,
+      },
+      response: spec.response,
+      handler: handler as unknown as Route['handler']
+    })
 
 export const GET = withMethod('GET')
 export const HEAD = withMethod('HEAD')
