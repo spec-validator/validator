@@ -1,21 +1,21 @@
 import { stringField } from '@validator/validator/fields'
 import { $ } from '@validator/validator/segmentChain'
 import { Route } from './route'
-import { PUT } from './server'
+import { GET } from './server'
 
 const routes: Route[] = [
-  PUT($._('/item/')._('id', stringField()), {
+  GET($._('/item/')._('id', stringField()), {
     request: {
       queryParams: {
         pk: stringField()
       },
       data: {
-        title: stringField()
+        userName: stringField()
       }
     },
     response: {
       // TODO static field for only one possible value
-      statusCode: 200 as const
+      statusCode: 200
     },
   },
   async (request) => {
