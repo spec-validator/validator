@@ -11,6 +11,7 @@ const routes: Route[] = [
       }
     },
     response: {
+      // TODO static field for only one possible value
       statusCode: 200
     },
   },
