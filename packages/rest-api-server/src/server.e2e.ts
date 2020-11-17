@@ -8,9 +8,6 @@ const routes: Route[] = [
     request: {
       queryParams: {
         pk: stringField()
-      },
-      data: {
-        userName: stringField()
       }
     },
     response: {
