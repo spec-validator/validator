@@ -1,9 +1,9 @@
 import { Field, validate } from './core'
-import { Any, Optional } from './util-types'
+import { Any } from './util-types'
 import { WithRegExp, WithStringInputSupport } from './WithStringInputSupport'
 
 export class Segment<
-  DeserializedType extends Optional<Record<string, Any>> = Optional<Record<string, Any>>
+  DeserializedType = unknown
 > {
 
   private parent?: Segment
@@ -80,4 +80,4 @@ export class Segment<
   }
 }
 
-export const $ = new Segment()
+export const $ = new Segment<unknown>()
