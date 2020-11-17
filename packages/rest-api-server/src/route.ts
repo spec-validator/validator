@@ -10,11 +10,11 @@ export type RequestSpec<
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
   Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
 > = {
-  method: Method,
-  pathParams: Segment<PathParams>,
-  data?: SpecUnion<Data>,
-  queryParams?: ValidatorSpec<QueryParams>,
-  headers?: ValidatorSpec<Headers>
+  readonly method: Method,
+  readonly pathParams: Segment<PathParams>,
+  readonly data?: SpecUnion<Data>,
+  readonly queryParams?: ValidatorSpec<QueryParams>,
+  readonly headers?: ValidatorSpec<Headers>
 }
 
 // TODO:
@@ -25,9 +25,9 @@ export type ResponseSpec<
   Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
   Data extends Optional<Any> = Optional<Any>,
 > = {
-  statusCode: StatusCode
-  data?: SpecUnion<Data>,
-  headers?: ValidatorSpec<Headers>
+  readonly statusCode: StatusCode
+  readonly data?: SpecUnion<Data>,
+  readonly headers?: ValidatorSpec<Headers>
 }
 
 export type RequestExt<
@@ -50,9 +50,9 @@ export type Route<
   ReqSpec extends RequestSpec = RequestSpec,
   RespSpec extends ResponseSpec = ResponseSpec
 > = {
-  request: ReqSpec,
-  response: RespSpec,
-  handler: Handler<
+  readonly request: ReqSpec,
+  readonly response: RespSpec,
+  readonly handler: Handler<
     RequestExt<ReqSpec>,
     ResponseExt<RespSpec>
   >

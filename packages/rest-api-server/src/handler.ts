@@ -13,11 +13,11 @@ export type Request<
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
   Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
 > = {
-  method: Method,
-  pathParams: PathParams,
-  data: Data,
-  headers: Headers,
-  queryParams: QueryParams
+  readonly method: Method,
+  readonly pathParams: PathParams,
+  readonly data: Data,
+  readonly headers: Headers,
+  readonly queryParams: QueryParams
 }
 
 export type Response<
@@ -25,9 +25,9 @@ export type Response<
   Data extends Optional<Any> = Optional<Any>,
   Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
 > = {
-  statusCode: StatusCode,
-  data: Data,
-  headers: Headers,
+  readonly statusCode: StatusCode,
+  readonly data: Data,
+  readonly headers: Headers,
 }
 
 export type Handler<
