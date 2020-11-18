@@ -3,34 +3,27 @@ import { Any } from './util-types'
 import { WithRegExp, WithStringInputSupport } from './WithStringInputSupport'
 
 export class Segment<
-  DeserializedType = unknown
+  DeserializedType = undefined
 > {
 
-  private parent?: Segment
+  private parent?: Segment<unknown>
   private key?: string;
   private field?: Field<Any> & WithRegExp
-
   private regex?: string
 
-  private _root?: Segment
-
-  get root(): Segment {
-    if (!this._root) {
-      this._root = this.getSegments()[0] as Segment<undefined>
-    }
-    return this._root
-  }
-
-  constructor(parent?: Segment, key?: string, field?: Field<Any> & WithStringInputSupport) {
+  constructor(parent?: Segment<unknown>, key?: string, field?: Field<Any> & WithStringInputSupport) {
     this.parent = parent
     this.key = key
     this.field = field?.getFieldWithRegExp()
   }
 
-  _<Key extends string, ExtraDeserializedType extends Any=undefined>(
+  _<Key extends string, ExtraDeserializedType extends Any = undefined>(
     key: Key,
     field?: Field<ExtraDeserializedType> & WithStringInputSupport
-  ): Segment<[ExtraDeserializedType] extends [undefined] ? DeserializedType : DeserializedType & {
+  ): Segment<ExtraDeserializedType extends undefined ? DeserializedType : DeserializedType extends undefined ?
+  {
+    [P in Key]: ExtraDeserializedType
+  } : DeserializedType & {
     [P in Key]: ExtraDeserializedType
   }> {
     return new Segment(this, key as any, field) as any
@@ -38,10 +31,10 @@ export class Segment<
 
   // TODO: make getSegments and getFieldSegments lazy props
 
-  private getSegments(): Segment[] {
-    const segments: Segment[] = []
+  private getSegments(): Segment<unknown>[] {
+    const segments: Segment<unknown>[] = []
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let cursor: Segment | undefined = this
+    let cursor: Segment<unknown> | undefined = this
     while(cursor) {
       segments.push(cursor)
       cursor = cursor.parent
@@ -50,7 +43,7 @@ export class Segment<
     return segments
   }
 
-  private getFieldSegments(): Segment[] {
+  private getFieldSegments(): Segment<unknown>[] {
     return this.getSegments().filter(segment => segment.field)
   }
 
@@ -80,4 +73,4 @@ export class Segment<
   }
 }
 
-export const $ = new Segment<unknown>()
+export const $ = new Segment<undefined>()
