@@ -5,7 +5,8 @@
     "outDir": "./dist",
     "paths": {
       "@validator/validator/*": ["validator/src/*"],
-      "@validator/rest-api-server/*": ["rest-api-server/src/*"]
+      "@validator/rest-api-server/*": ["rest-api-server/src/*"],
+      "@validator/open-api-endpoint/*": ["open-api-endpoint/src/*"]
     }
   }
 }
