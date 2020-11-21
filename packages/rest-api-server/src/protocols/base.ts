@@ -1,6 +1,6 @@
 import { Json } from '@validator/validator/Json'
 
-export interface MediaTypeProtocol {
+export default interface MediaTypeProtocol {
   serialize(deserialized: Json): string
   deserialize(serialized: string): Json
 }
