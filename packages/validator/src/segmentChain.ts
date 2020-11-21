@@ -26,7 +26,7 @@ export class Segment<
   } : DeserializedType & {
     [P in Key]: ExtraDeserializedType
   }> {
-    return new Segment(this, key as any, field) as any
+    return new Segment(this, key as any, field)
   }
 
   // TODO: make getSegments and getFieldSegments lazy props
