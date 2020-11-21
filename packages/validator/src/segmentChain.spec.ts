@@ -28,7 +28,7 @@ describe('type', () => {
 
   it('root', () => {
     type Seg = typeof $
-    expectType<Seg, Segment<unknown>>(true)
+    expectType<Seg, Segment<undefined>>(true)
     type Props = TypeHint<Seg>
     expectType<Props, undefined>(true)
   })
@@ -36,7 +36,7 @@ describe('type', () => {
   it('with unparametrized segment', () => {
     const path = $._('foo')
     type Seg = typeof path
-    expectType<Seg, Segment<unknown>>(true)
+    expectType<Seg, Segment<undefined>>(true)
   })
 
   it('with parametrized segment', () => {
