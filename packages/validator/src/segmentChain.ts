@@ -20,13 +20,13 @@ export class Segment<
   _<Key extends string, ExtraDeserializedType extends Any = undefined>(
     key: Key,
     field?: Field<ExtraDeserializedType> & WithStringInputSupport
-  ): Segment<ExtraDeserializedType extends undefined ? DeserializedType : DeserializedType extends undefined ?
+  ): Segment<[ExtraDeserializedType] extends [undefined] ? DeserializedType : [DeserializedType] extends [undefined] ?
   {
     [P in Key]: ExtraDeserializedType
   } : DeserializedType & {
     [P in Key]: ExtraDeserializedType
   }> {
-    return new Segment(this, key as any, field)
+    return new Segment(this, key as any, field) as any
   }
 
   // TODO: make getSegments and getFieldSegments lazy props
