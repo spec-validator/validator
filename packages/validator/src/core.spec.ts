@@ -103,3 +103,32 @@ test('nested validate', () => {
     },
   })
 })
+
+test('nested validate with Error', () => {
+  let error: unknown
+  try {
+    validate(schema, {
+      innerSchema: {
+        str: 'string',
+        num: 12,
+      },
+      innerList: [{
+        fl: 'Some random payload',
+      }],
+    })
+  } catch (err) {
+    error = err
+  }
+  expect(error).toEqual({
+    path: [ 'innerList', 0, 'fl' ],
+    inner: 'Not a number'
+  })
+})
+
+test('validate with undefined spec', () => {
+  expect(validate(undefined, 'Some value')).toEqual(undefined)
+})
+
+test('validate with a tuple', () => {
+  expect(validate([numberField(), stringField()], [14, 'Val'])).toEqual([14, 'Val'])
+})

@@ -4,9 +4,9 @@ import numberField from './numberField'
 import objectField from './objectField'
 import stringField from './stringField'
 import choiceField from './choiceField'
-
 import withDefault from './withDefault'
 import optional from './optional'
+import unionField from './unionField'
 
 export {
   arrayField,
@@ -17,4 +17,5 @@ export {
   choiceField,
   withDefault,
   optional,
+  unionField
 }
