@@ -1,5 +1,6 @@
 import { ServerConfig, Route } from '@validator/rest-api-server'
 import { Field } from '@validator/validator'
+import { Segment } from '@validator/validator/segmentChain'
 
 import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
@@ -21,7 +22,12 @@ const createParameter = (name: string, field: Field<unknown>): OpenAPI.Parameter
 }
 
 
-const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [route.request.pathParams.toString(), {
+const createRoute = (segment: Segment<unknown>): string => {
+  return "//"
+}
+
+
+const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [createRoute(route.request.pathParams), {
   summary: 'FILL ME',
   [route.request.method.toLowerCase()]: {
     summary: 'FILL ME',
