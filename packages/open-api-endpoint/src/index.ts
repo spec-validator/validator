@@ -5,10 +5,10 @@ import { Segment } from '@validator/validator/segmentChain'
 
 import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
-const createParameter = (name: string, field: Field<unknown>): OpenAPI.ParameterObject => {
+const createParameter = (type: 'query' | 'path', name: string, field: Field<unknown>): OpenAPI.ParameterObject => {
   return {
     name: name,
-    in: 'qeurty', //'query' | 'path';
+    in: type,
     description?: string;
     required?: boolean;
     allowEmptyValue?: boolean;
@@ -31,9 +31,9 @@ const createPathParams = (segment: Segment<unknown>): ValidatorSpec<Record<strin
   return {}
 }
 
-const specToParams = (spec?: ValidatorSpec<Record<string, unknown>>): OpenAPI.ParameterObject[] =>
+const specToParams = (type: 'query' | 'path', spec?: ValidatorSpec<Record<string, unknown>>): OpenAPI.ParameterObject[] =>
   Object.entries(spec || {}).map(
-    ([name, field]) => createParameter(name, field)
+    ([name, field]) => createParameter(type, name, field)
   )
 
 const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [createRoute(route.request.pathParams), {
@@ -41,8 +41,8 @@ const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [createRo
   [route.request.method.toLowerCase()]: {
     summary: 'FILL ME',
     parameters: [
-      ...specToParams(route.request.queryParams),
-      ...specToParams(createPathParams(route.request.pathParams))
+      ...specToParams('query', route.request.queryParams),
+      ...specToParams('path', createPathParams(route.request.pathParams))
     ],
     requestBody?: {
       description?: string;
