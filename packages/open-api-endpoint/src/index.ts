@@ -16,7 +16,6 @@ const createParameter = (type: 'query' | 'path', name: string, field: Field<unkn
     explode?: boolean;
     allowReserved?: boolean;
     schema?: SchemaObject;
-    example?: any;
     examples?: { [media: string]: ExampleObject };
     content?: { [media: string]: MediaTypeObject };
   }
@@ -44,12 +43,12 @@ const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [createRo
       ...specToParams('query', route.request.queryParams),
       ...specToParams('path', createPathParams(route.request.pathParams))
     ],
-    requestBody?: {
+    requestBody: {
       description?: string;
       content: { [media: string]: MediaTypeObject };
-      required?: boolean;
-    }
-    responses?: {
+      required: boolean;
+    },
+    responses: {
       code: {
         description: string;
         headers?: { [header: string]: HeaderObject };
