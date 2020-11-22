@@ -14,7 +14,6 @@ const createParameter = (type: 'query' | 'path', name: string, field: Field<unkn
     allowEmptyValue?: boolean;
     style?: string;
     explode?: boolean;
-    allowReserved?: boolean;
     schema?: SchemaObject;
     examples?: { [media: string]: ExampleObject };
     content?: { [media: string]: MediaTypeObject };
