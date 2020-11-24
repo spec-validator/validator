@@ -4,13 +4,15 @@ type Information = {
   name: string
   description: string
   version: string
-  // https://schema.getpostman.com/collection/json/v2.1.0/draft-07/docs/index.html
-  // https://schema.getpostman.com/collection/json/v2.1.0/draft-07/collection.json
+  // as per: https://schema.getpostman.com/collection/json/v2.1.0/draft-07/docs/index.html
+  // value hardcoded: https://schema.getpostman.com/collection/json/v2.1.0/draft-07/collection.json
   // schema: string //!!
 }
 
 type Url = {
-
+  // postman style request template
+  // e.g.: /items/:itemId/something
+  raw: string
 }
 
 type Header = {
