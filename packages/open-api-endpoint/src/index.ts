@@ -37,26 +37,30 @@ const specToParams = (type: 'query' | 'path', spec?: ValidatorSpec<Record<string
   )
 
 const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [createRoute(route.request.pathParams), {
-  summary: 'FILL ME',
   [route.request.method.toLowerCase()]: {
-    summary: 'FILL ME',
     parameters: [
       ...specToParams('query', route.request.queryParams),
       ...specToParams('path', createPathParams(route.request.pathParams))
     ],
     requestBody: {
-      description?: string;
-      content: { [media: string]: MediaTypeObject };
-      required: boolean;
+      // TODO: inject media type from server configs
+      content: { 'application/json': {
+        schema: {
+
+        }
+      } },
+      required: false
     },
     responses: {
       code: {
-        description: string;
-        headers?: { [header: string]: HeaderObject };
-        content?: { [media: string]: MediaTypeObject };
-        links?: { [link: string]:  LinkObject };
+        headers?: { 'header-name': 'header-value' },
+        content: { 'application/json': {
+          schema: {
+
+          }
+        } }
       }
-    };
+    }
   }
 }]
 
