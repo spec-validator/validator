@@ -60,15 +60,19 @@ const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [createRo
   }
 }]
 
+type WithInfo = {
+  info: {
+    title: string,
+    version: string
+  }
+}
+
 const createOpenApiSpec = (
-  config: ServerConfig,
+  config: ServerConfig & WithInfo,
   routes: Route[],
 ): OpenAPI.Document => ({
   openapi: '3.0.3',
-  info: {
-    title: 'FILL ME',
-    version: 'FILL ME'
-  },
+  info: config.info,
   servers: [
     {
       url: config.baseUrl
