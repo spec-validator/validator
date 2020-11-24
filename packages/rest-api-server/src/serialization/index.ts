@@ -1,4 +1,4 @@
-import JsonProtocol from './json'
+import JsonSerialization from './json'
 import SerializationFormat from './base'
 
-export { JsonProtocol, SerializationFormat }
+export { JsonSerialization, SerializationFormat }
