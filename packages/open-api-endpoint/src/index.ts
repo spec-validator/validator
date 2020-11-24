@@ -67,6 +67,17 @@ type WithInfo = {
   }
 }
 
+const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<string, OpenAPI.PathItemObject> => {
+  const record: Record<string, OpenAPI.PathItemObject>  = {}
+  pairs.forEach(([a, b]) => {
+    record[a] = {
+      ...(record[a] || {}),
+      ...b
+    }
+  })
+  return record
+}
+
 const createOpenApiSpec = (
   config: ServerConfig & WithInfo,
   routes: Route[],
@@ -78,7 +89,7 @@ const createOpenApiSpec = (
       url: config.baseUrl
     }
   ],
-  paths: Object.fromEntries(routes.map(createPath))
+  paths: mergeValues(routes.map(createPath))
 })
 
 export default createOpenApiSpec
