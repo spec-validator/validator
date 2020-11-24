@@ -5,12 +5,12 @@ import { URL } from 'url'
 import { StringMapping } from './handler'
 
 import { ServerConfig, handle } from './handler-impl'
-import JsonProtocol from './protocols/json'
+import JsonProtocol from './serialization/json'
 import { RequestSpec, ResponseSpec, Route } from './route'
 
 const DEFAULT_SERVER_CONFIG: ServerConfig = {
   baseUrl: 'http://localhost:8000',
-  protocol: new JsonProtocol(),
+  serialization: new JsonProtocol(),
   encoding: 'utf-8',
   frameworkErrorStatusCode: 502,
   appErrorStatusCode: 500,

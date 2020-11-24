@@ -5,11 +5,11 @@ import { validate, serialize } from '@validator/validator'
 import { RequestExt, Route } from './route'
 import { Request, Response } from './handler'
 import { assertEqual, getOrUndefined } from '@validator/validator/utils'
-import { MediaTypeProtocol } from './protocols'
+import { SerializationFormat } from './serialization'
 
 export type ServerConfig = {
   readonly baseUrl: string,
-  readonly protocol: MediaTypeProtocol,
+  readonly serialization: SerializationFormat,
   readonly encoding: BufferEncoding,
   readonly frameworkErrorStatusCode: number,
   readonly appErrorStatusCode: number,
@@ -65,7 +65,7 @@ export const handleRoute = async (
   response: http.ServerResponse
 ): Promise<void> => {
   const match = matchRoute(request, route)
-  const data = validate(route.request.data, config.protocol.deserialize(await getData(request)))
+  const data = validate(route.request.data, config.serialization.deserialize(await getData(request)))
   const headers = validate(route.request.headers, request.headers)
 
   // This cast is totally reasoanble because in the interface we exclude
@@ -84,7 +84,7 @@ export const handleRoute = async (
   response.statusCode = resp.statusCode
 
   response.write(
-    config.protocol.serialize(serialize(route.response?.data, resp?.data)),
+    config.serialization.serialize(serialize(route.response?.data, resp?.data)),
     config.encoding
   )
 
