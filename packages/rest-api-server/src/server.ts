@@ -65,7 +65,6 @@ const SUPPORTED_PROTOCOLS= {
   'https': 443
 } as const
 
-
 const supportedProtocols = new Set(Object.keys(SUPPORTED_PROTOCOLS))
 
 const verifyProtocol = (protocol: string): protocol is keyof typeof SUPPORTED_PROTOCOLS =>
