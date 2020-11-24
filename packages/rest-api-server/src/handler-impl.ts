@@ -5,12 +5,12 @@ import { validate, serialize } from '@validator/validator'
 import { RequestExt, Route } from './route'
 import { Request, Response } from './handler'
 import { assertEqual, getOrUndefined } from '@validator/validator/utils'
-import { MediaTypeProtocol } from './protocols/base'
+import { MediaTypeProtocol } from './protocols'
 
 export type ServerConfig = {
+  readonly baseUrl: string,
   readonly protocol: MediaTypeProtocol,
   readonly encoding: BufferEncoding,
-  readonly port: number,
   readonly frameworkErrorStatusCode: number,
   readonly appErrorStatusCode: number,
   readonly reportError: (error: unknown) => Promise<void>

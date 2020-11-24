@@ -5,6 +5,8 @@ import { Segment } from '@validator/validator/segmentChain'
 
 import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
+// https://swagger.io/specification/
+
 const createParameter = (type: 'query' | 'path', name: string, field: Field<unknown>): OpenAPI.ParameterObject => {
   return {
     name: name,
@@ -58,21 +60,21 @@ const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [createRo
   }
 }]
 
-const createOpenApiRoute = (
+const createOpenApiSpec = (
   config: Partial<ServerConfig>,
   routes: Route[],
 ): OpenAPI.Document => ({
-  openapi: 'FILL ME',
+  openapi: '3.0.3',
   info: {
     title: 'FILL ME',
     version: 'FILL ME'
   },
   servers: [
     {
-      url: 'FILL ME'
+      url: config.baseUrl
     }
   ],
   paths: Object.fromEntries(routes.map(createPath))
 })
 
-export default createOpenApiRoute
+export default createOpenApiSpec
