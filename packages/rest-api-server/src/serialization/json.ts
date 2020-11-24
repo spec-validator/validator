@@ -1,6 +1,6 @@
-import SerializationBase from './base'
+import SerializationFormat from './base'
 
-export default class JsonProtocol implements SerializationBase {
+export default class JsonProtocol implements SerializationFormat {
   serialize = JSON.stringify;
   deserialize = JSON.parse;
 }
