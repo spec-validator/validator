@@ -6,22 +6,36 @@ import { $, Segment } from './segmentChain'
 import { expectType } from './TypeTestUtils.test'
 import { TypeHint } from './core'
 
-test('basics', () => {
-  const segmentSpec = $
-    ._('/')
-    ._('username', stringField())
-    ._('/todos/')
-    ._('uid', numberField())
-    ._('/subtodos/')
-    ._('suid', numberField())
 
-  const valid = segmentSpec.match('/john-sick/todos/11/subtodos/42')
+describe('basics', () => {
+  it('validates the input correctly', () => {
+    const segmentSpec = $
+      ._('/')
+      ._('username', stringField())
+      ._('/todos/')
+      ._('uid', numberField())
+      ._('/subtodos/')
+      ._('suid', numberField())
 
-  expect(valid).toEqual({
-    username: 'john-sick',
-    uid: 11,
-    suid: 42,
+    const valid = segmentSpec.match('/john-sick/todos/11/subtodos/42')
+
+    expect(valid).toEqual({
+      username: 'john-sick',
+      uid: 11,
+      suid: 42,
+    })
+
   })
+
+  it('leverages regexp cache (coverage) when matching twice', () => {
+    const segmentSpec = $
+      ._('/')
+      ._('username', stringField())
+
+    segmentSpec.match('/john-sick')
+    segmentSpec.match('/john-woo')
+  })
+
 })
 
 describe('type', () => {
