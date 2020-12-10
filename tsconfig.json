@@ -9,7 +9,7 @@
       "@validator/rest-api-server/*": ["rest-api-server/src/*"],
       "@validator/rest-api-server": ["rest-api-server/src/index.ts"],
       "@validator/open-api-endpoint/*": ["open-api-endpoint/src/*"],
-      "@validator/open-api-endpoint": ["open-api-endpoint/src/index.ts"],
+      "@validator/open-api-endpoint": ["open-api-endpoint/src/index.ts"]
     }
   }
 }
