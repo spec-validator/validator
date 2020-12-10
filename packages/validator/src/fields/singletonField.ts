@@ -2,7 +2,6 @@ import { Field } from '../core'
 import { Json } from '../Json'
 
 export class SingletonField<Choice extends Json> implements Field<Choice> {
-
   constructor(private readonly choice: Choice) {}
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
