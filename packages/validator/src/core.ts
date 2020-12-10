@@ -73,7 +73,7 @@ const mapSpec = <DeserializedType extends Any, TSpec extends SpecUnion<Deseriali
 export const getParams = <TSpec extends SpecUnion<Any>> (validatorSpec: TSpec): Json =>
   mapSpec(validatorSpec, validator => validator.getParams())
 
-const ensureNoExtraFields = <DeserializedType extends Any, TSpec extends SpecUnion<DeserializedType>, R> (
+const ensureNoExtraFields = <DeserializedType extends Any, TSpec extends SpecUnion<DeserializedType>> (
   validatorSpec: TSpec,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   value: any
