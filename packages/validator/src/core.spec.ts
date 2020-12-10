@@ -132,3 +132,24 @@ test('validate with undefined spec', () => {
 test('validate with a tuple', () => {
   expect(validate([numberField(), stringField()], [14, 'Val'])).toEqual([14, 'Val'])
 })
+
+test('validate with extra fields with Error', () => {
+  let error: unknown
+  try {
+    validate({
+      fieldOne: stringField()
+    }, {
+      fieldOne: 'one',
+      fieldTwo: 'two',
+      fieldThree: 'three'
+    })
+  } catch (err) {
+    error = err
+  }
+  expect(error).toEqual({
+    'extraKeys': [
+      'fieldTwo',
+      'fieldThree',
+    ],
+  })
+})

@@ -11,9 +11,9 @@ const createParameter = (type: 'query' | 'path', name: string, field: Field<unkn
   return {
     name: name,
     in: type,
-    description?: string;
-    required?: boolean;
-    allowEmptyValue?: boolean;
+    description: (field as any)?.description,
+    required: !(field as any)?.isOptional,
+    allowEmptyValue?: boolean,
     style?: string;
     explode?: boolean;
     schema?: SchemaObject;

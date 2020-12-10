@@ -73,16 +73,37 @@ const mapSpec = <DeserializedType extends Any, TSpec extends SpecUnion<Deseriali
 export const getParams = <TSpec extends SpecUnion<Any>> (validatorSpec: TSpec): Json =>
   mapSpec(validatorSpec, validator => validator.getParams())
 
+const ensureNoExtraFields = <DeserializedType extends Any, TSpec extends SpecUnion<DeserializedType>, R> (
+  validatorSpec: TSpec,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  value: any
+) => {
+  if (validatorSpec === undefined || isField<DeserializedType>(validatorSpec)|| Array.isArray(validatorSpec)) {
+    // OK
+  } else {
+    const extraKeys = new Set(Object.keys(value))
+    Object.keys(validatorSpec as ValidatorSpec<DeserializedType>).forEach((it) => extraKeys.delete(it))
+    if (extraKeys.size !== 0) {
+      throw {
+        extraKeys: Array.from(extraKeys)
+      }
+    }
+  }
+}
+
 // The whole point of the library is to validate wildcard objects
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const validate = <TSpec extends SpecUnion<Any>> (
   validatorSpec: TSpec,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   value: any
-): TypeHint<TSpec> =>
-    mapSpec(validatorSpec,
-      (validator, key) => validator.validate(key === undefined ? value : value[key])
-    )
+): TypeHint<TSpec> => {
+  const result = mapSpec(validatorSpec,
+    (validator, key) => validator.validate(key === undefined ? value : value[key])
+  )
+  ensureNoExtraFields(validatorSpec, value)
+  return result
+}
 
 export const serialize = <TSpec extends SpecUnion<Any>> (
   validatorSpec: TSpec,
