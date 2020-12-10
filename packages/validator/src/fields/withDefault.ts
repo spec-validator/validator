@@ -1,16 +1,10 @@
-import { Field } from '../core'
+import { Field, FieldDecorator } from '../core'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 import { merge } from '../utils'
 
-class DefaultFieldDecorator<T extends Any> implements Field<T> {
-  private innerField: Field<T>;
-  private defaultValue: T;
-
-  constructor(innerField: Field<T>, defaultValue: T) {
-    this.innerField = innerField
-    this.defaultValue = defaultValue
-  }
+class DefaultFieldDecorator<T extends Any> implements Field<T>, FieldDecorator {
+  constructor(readonly innerField: Field<T>, private readonly defaultValue: T) {}
 
   validate(value: any): T {
     if (value === undefined) {

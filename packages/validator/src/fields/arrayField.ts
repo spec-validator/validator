@@ -6,11 +6,7 @@ type Params<T> = {
 }
 
 class ArrayField<T> implements Field<T[]> {
-  private params: Params<T>;
-
-  constructor(params: Params<T>) {
-    this.params = params
-  }
+  constructor(private readonly params: Params<T>) {}
 
   validate(value: any): T[] {
     if (!Array.isArray(value)) {

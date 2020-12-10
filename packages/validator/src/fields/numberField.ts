@@ -8,11 +8,8 @@ type Params = {
 }
 
 class NumberField implements Field<number>, WithStringInputSupport {
-  protected params?: Params
+  constructor(protected readonly params?: Params) {}
 
-  constructor(params?: Params) {
-    this.params = params
-  }
   getFieldWithRegExp(): Field<Any> & WithRegExp {
     return new NumberFieldWithRegExp(this.params)
   }

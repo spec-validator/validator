@@ -1,14 +1,10 @@
-import { Field } from '../core'
+import { Field, FieldDecorator } from '../core'
 import { Json } from '../Json'
 import { Any, Optional } from '../util-types'
 import { merge } from '../utils'
 
-class OptionalValueDecorator<T extends Any> implements Field<Optional<T>> {
-  private innerField: Field<T>;
-
-  constructor(innerField: Field<T>) {
-    this.innerField = innerField
-  }
+class OptionalValueDecorator<T extends Any> implements Field<Optional<T>>, FieldDecorator {
+  constructor(readonly innerField: Field<T>) {}
 
   validate(value: any): Optional<T> {
     if (value === undefined) {

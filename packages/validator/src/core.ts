@@ -2,6 +2,10 @@ import { Json } from './Json'
 import { Segment } from './segmentChain'
 import { Any } from './util-types'
 
+export interface FieldDecorator {
+  innerField: Field<unknown>
+}
+
 export interface Field<DeserializedType> {
   validate(value: any): DeserializedType;
   serialize(deserialized: DeserializedType): Json

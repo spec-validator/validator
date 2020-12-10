@@ -9,11 +9,7 @@ import { Json } from '../Json'
 import { Any } from '../util-types'
 
 class ObjectField<DeserializedType extends Record<string, Any>> implements Field<DeserializedType> {
-  private objectSpec: ValidatorSpec<DeserializedType>
-
-  constructor(objectSpec: ValidatorSpec<DeserializedType>) {
-    this.objectSpec = objectSpec
-  }
+  constructor(readonly objectSpec: ValidatorSpec<DeserializedType>) {}
 
   validate(value: any): DeserializedType {
     if (typeof value !== 'object' || value === null) {

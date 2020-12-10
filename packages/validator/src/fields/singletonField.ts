@@ -3,7 +3,7 @@ import { Json } from '../Json'
 
 export class SingletonField<Choice extends Json> implements Field<Choice> {
 
-  constructor(readonly choice: Choice) {}
+  constructor(private readonly choice: Choice) {}
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   validate(_: any): Choice {
