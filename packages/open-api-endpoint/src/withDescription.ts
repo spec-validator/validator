@@ -1,15 +1,10 @@
 import { Field, Json } from '@validator/validator'
+import { FieldDecorator } from '@validator/validator/core'
 import { Any } from '@validator/validator/util-types'
 import { merge } from '@validator/validator/utils'
 
-class WithDescription<T extends Any> implements Field<T> {
-  private innerField: Field<T>;
-  private description: string;
-
-  constructor(innerField: Field<T>, description: string) {
-    this.innerField = innerField
-    this.description = description
-  }
+class WithDescription<T extends Any> implements Field<T>, FieldDecorator {
+  constructor(readonly innerField: Field<T>, private readonly description: string) {}
 
   validate(value: any): T {
     return this.innerField.validate(value)
