@@ -7,31 +7,22 @@ import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 // https://swagger.io/specification/
 
-const createParameter = (type: 'query' | 'path', name: string, field: Field<unknown>): OpenAPI.ParameterObject => {
-  return {
-    name: name,
-    in: type,
-    description: (field as any)?.description,
-    required: !(field as any)?.isOptional,
-    allowEmptyValue?: boolean,
-    style?: string;
-    explode?: boolean;
-    schema?: SchemaObject;
-    examples?: { [media: string]: ExampleObject };
-    content?: { [media: string]: MediaTypeObject };
-  }
-}
+const createParameter = (type: 'query' | 'path', name: string, field: Field<unknown>): OpenAPI.ParameterObject => ({
+  name: name,
+  in: type,
+  description: (field as any)?.description,
+  required: !(field as any)?.isOptional,
+})
 
 
-const createRoute = (segment: Segment<unknown>): string => {
-  return "//"
-}
+const createRoute = (segment: Segment<unknown>): string => '//'
 
-const createPathParams = (segment: Segment<unknown>): ValidatorSpec<Record<string, unknown>> => {
-  return {}
-}
+const createPathParams = (segment: Segment<unknown>): ValidatorSpec<Record<string, unknown>> => ({})
 
-const specToParams = (type: 'query' | 'path', spec?: ValidatorSpec<Record<string, unknown>>): OpenAPI.ParameterObject[] =>
+const specToParams = (
+  type: 'query' | 'path',
+  spec?: ValidatorSpec<Record<string, unknown>>
+): OpenAPI.ParameterObject[] =>
   Object.entries(spec || {}).map(
     ([name, field]) => createParameter(type, name, field)
   )
@@ -53,7 +44,7 @@ const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [createRo
     },
     responses: {
       code: {
-        headers?: { 'header-name': 'header-value' },
+        headers: { 'header-name': 'header-value' },
         content: { 'application/json': {
           schema: {
 
