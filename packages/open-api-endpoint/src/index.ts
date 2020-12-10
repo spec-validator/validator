@@ -17,7 +17,6 @@ const createParameter = (type: 'query' | 'path', name: string, field: Field<unkn
   }
 })
 
-
 const createRoute = (segment: Segment<unknown>): string => '//'
 
 const createPathParams = (segment: Segment<unknown>): ValidatorSpec<Record<string, unknown>> => ({})
