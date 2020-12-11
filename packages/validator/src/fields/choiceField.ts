@@ -8,10 +8,14 @@ type Params<Choices> = {
   readonly choices: Choices
 }
 
+const FieldSymbol = Symbol('@validator/fields.ChoiceField')
+
 class ChoiceField<
   Choice extends Primitive,
 > implements Field<Choice>, WithStringInputSupport {
   private choicesSet: Set<Primitive>
+
+  type = FieldSymbol
 
   constructor(readonly params: Params<readonly Choice[]>) {
     this.choicesSet = new Set(params.choices)
@@ -71,6 +75,8 @@ const choiceField = <
     new ChoiceField({
       choices,
     })
+
+choiceField.type = FieldSymbol
 
 export default choiceField
 

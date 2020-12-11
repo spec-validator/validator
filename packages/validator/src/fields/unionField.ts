@@ -5,11 +5,15 @@ type Unioned<T extends Field<any>[]> = {
   [P in keyof T]: T[P] extends Field<any> ? TypeHint<T[P]> : never
 }[number];
 
+const FieldSymbol = Symbol('@validator/fields.UnionField')
+
 class UnionField<
   Variants extends Field<any>[]
 > implements Field<Variants> {
 
   constructor(private readonly variants: Variants) {}
+
+  type = FieldSymbol
 
   validate(value: any): Unioned<Variants> {
     for (const variant of this.variants) {
@@ -43,5 +47,7 @@ const unionField = <
   Variants extends Field<any>[],
 > (...variants: Variants): UnionField<Variants> =>
     new UnionField(variants)
+
+unionField.type = FieldSymbol
 
 export default unionField

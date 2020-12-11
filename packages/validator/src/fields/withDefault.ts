@@ -3,8 +3,11 @@ import { Json } from '../Json'
 import { Any } from '../util-types'
 import { merge } from '../utils'
 
-class DefaultFieldDecorator<T extends Any> implements Field<T>, FieldDecorator {
+const FieldSymbol = Symbol('@validator/fields.WithDefault')
+
+class WithDefault<T extends Any> implements Field<T>, FieldDecorator {
   constructor(readonly innerField: Field<T>, private readonly defaultValue: T) {}
+  type = FieldSymbol
 
   validate(value: any): T {
     if (value === undefined) {
@@ -23,6 +26,8 @@ class DefaultFieldDecorator<T extends Any> implements Field<T>, FieldDecorator {
 }
 
 const defaultValueDecor = <T extends Any> (innerField: Field<T>, defaultValue: T): Field<T> =>
-  new DefaultFieldDecorator(innerField, defaultValue)
+  new WithDefault(innerField, defaultValue)
+
+defaultValueDecor.type = FieldSymbol
 
 export default defaultValueDecor

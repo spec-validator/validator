@@ -3,7 +3,11 @@ import { Json } from '../Json'
 import { Any } from '../util-types'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 
+const FieldSymbol = Symbol('@validator/fields.BooleanField')
+
 class BooleanField implements Field<boolean>, WithStringInputSupport {
+  type = FieldSymbol
+
   getFieldWithRegExp(): Field<Any> & WithRegExp {
     return new BooleanFieldWithRegExp()
   }
@@ -41,5 +45,7 @@ class BooleanFieldWithRegExp extends BooleanField implements WithRegExp {
 }
 
 const booleanField = (): BooleanField => new BooleanField()
+
+booleanField.type = FieldSymbol
 
 export default booleanField

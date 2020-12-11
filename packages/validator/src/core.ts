@@ -7,6 +7,7 @@ export interface FieldDecorator {
 }
 
 export interface Field<DeserializedType> {
+  type: symbol;
   validate(value: any): DeserializedType;
   serialize(deserialized: DeserializedType): Json
   getParams: () => Json

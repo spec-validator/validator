@@ -3,8 +3,11 @@ import { Json } from '../Json'
 import { Any, Optional } from '../util-types'
 import { merge } from '../utils'
 
+const FieldSymbol = Symbol('@validator/fields.Optional')
+
 class OptionalValueDecorator<T extends Any> implements Field<Optional<T>>, FieldDecorator {
   constructor(readonly innerField: Field<T>) {}
+  type = FieldSymbol
 
   validate(value: any): Optional<T> {
     if (value === undefined) {
@@ -24,8 +27,10 @@ class OptionalValueDecorator<T extends Any> implements Field<Optional<T>>, Field
 
 }
 
-const optionalValueDecor = <T extends Any> (
+const optional = <T extends Any> (
   innerField: Field<T>
 ): Field<Optional<T>> => new OptionalValueDecorator(innerField)
 
-export default optionalValueDecor
+optional.type = FieldSymbol
+
+export default optional

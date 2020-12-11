@@ -5,8 +5,11 @@ type Params<T> = {
   itemField: Field<T>
 }
 
+const FieldSymbol = Symbol('@validator/fields.ArrayField')
+
 class ArrayField<T> implements Field<T[]> {
   constructor(private readonly params: Params<T>) {}
+  type = FieldSymbol
 
   validate(value: any): T[] {
     if (!Array.isArray(value)) {
@@ -34,5 +37,7 @@ const arrayField = <T> (
     new ArrayField({
       itemField,
     })
+
+arrayField.type = FieldSymbol
 
 export default arrayField

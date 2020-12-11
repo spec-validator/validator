@@ -7,8 +7,12 @@ type Params = {
   canBeFloat?: boolean
 }
 
+const FieldSymbol = Symbol('@validator/fields.NumberField')
+
 class NumberField implements Field<number>, WithStringInputSupport {
   constructor(protected readonly params?: Params) {}
+
+  type = FieldSymbol
 
   getFieldWithRegExp(): Field<Any> & WithRegExp {
     return new NumberFieldWithRegExp(this.params)
@@ -53,5 +57,7 @@ class NumberFieldWithRegExp extends NumberField implements WithRegExp {
 }
 
 const numberField = (params?: Params): NumberField => new NumberField(params)
+
+numberField.type = FieldSymbol
 
 export default numberField

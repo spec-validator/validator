@@ -2,12 +2,15 @@ import { Field } from '../core'
 import { Json } from '../Json'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 
+const FieldSymbol = Symbol('@validator/fields.StringField')
+
 class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
   private regexV?: RegExp;
 
   constructor(regex?: RegExp) {
     this.regexV = regex
   }
+  type = FieldSymbol
   getFieldWithRegExp(): StringField & WithRegExp {
     return this
   }
@@ -38,5 +41,7 @@ class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
 }
 
 const stringField = (regex?: RegExp): StringField => new StringField(regex)
+
+stringField.type = FieldSymbol
 
 export default stringField
