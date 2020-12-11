@@ -1,5 +1,4 @@
-import { Field, Json } from '@validator/validator'
-import { FieldDecorator } from '@validator/validator/core'
+import { Field, Json, FieldDecorator } from '@validator/validator'
 import { Any } from '@validator/validator/util-types'
 import { merge } from '@validator/validator/utils'
 
