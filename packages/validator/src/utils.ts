@@ -22,3 +22,9 @@ export const assertEqual = <R, T extends R>(expected: T, actual: R, errorMessage
   }
   return expected
 }
+
+export const mapValues = <Key extends string, Src, Trg>(
+  source: Record<Key, Src>, mapValue: (src: Src) => Trg
+): Record<Key, Src> =>
+    Object.fromEntries(Object.entries(source)
+      .map(([key, value]) => [key, mapValue(value as Src)]))as unknown as Record<Key, Src>
