@@ -2,7 +2,7 @@ import { Field, Json, FieldDecorator } from '@validator/validator'
 import { Any } from '@validator/validator/util-types'
 import { merge } from '@validator/validator/utils'
 
-const FieldSymbol = Symbol('@validator/fields.ArrayField')
+const FieldSymbol = Symbol('@open-api-endpoint/WithDescription')
 
 class WithDescription<T extends Any> implements Field<T>, FieldDecorator {
   constructor(readonly innerField: Field<T>, private readonly description: string) {}
