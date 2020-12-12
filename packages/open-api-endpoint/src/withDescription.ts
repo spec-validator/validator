@@ -2,8 +2,11 @@ import { Field, Json, FieldDecorator } from '@validator/validator'
 import { Any } from '@validator/validator/util-types'
 import { merge } from '@validator/validator/utils'
 
+const FieldSymbol = Symbol('@validator/fields.ArrayField')
+
 class WithDescription<T extends Any> implements Field<T>, FieldDecorator {
   constructor(readonly innerField: Field<T>, private readonly description: string) {}
+  type = FieldSymbol
 
   validate(value: any): T {
     return this.innerField.validate(value)
@@ -20,5 +23,7 @@ class WithDescription<T extends Any> implements Field<T>, FieldDecorator {
 
 const withDescription = <T extends Any> (innerField: Field<T>, description: string): Field<T> =>
   new WithDescription(innerField, description)
+
+withDescription.type = FieldSymbol
 
 export default withDescription
