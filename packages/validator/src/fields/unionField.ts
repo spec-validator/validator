@@ -11,7 +11,7 @@ class UnionField<
   Variants extends Field<any>[]
 > implements Field<Variants> {
 
-  constructor(private readonly variants: Variants) {}
+  constructor(readonly variants: Variants) {}
 
   type = FieldSymbol
 

@@ -10,7 +10,7 @@ type Params = {
 const FieldSymbol = Symbol('@validator/fields.NumberField')
 
 class NumberField implements Field<number>, WithStringInputSupport {
-  constructor(protected readonly params?: Params) {}
+  constructor(readonly params?: Params) {}
 
   type = FieldSymbol
 

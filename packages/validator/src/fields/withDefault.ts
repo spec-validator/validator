@@ -4,7 +4,7 @@ import { Any } from '../util-types'
 const FieldSymbol = Symbol('@validator/fields.WithDefault')
 
 class WithDefault<T extends Any> implements Field<T>, FieldDecorator {
-  constructor(readonly innerField: Field<T>, private readonly defaultValue: T) {}
+  constructor(readonly innerField: Field<T>, readonly defaultValue: T) {}
   type = FieldSymbol
 
   validate(value: any): T {
