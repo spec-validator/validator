@@ -1,5 +1,0 @@
-# SPEC
-
-## Data types
-
-
