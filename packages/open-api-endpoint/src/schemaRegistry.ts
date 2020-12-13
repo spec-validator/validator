@@ -27,22 +27,26 @@ type WithType = {
   type: symbol
 }
 
-type MappingTuple = [WithType, (field: Field<unknown>) => OpenAPI.SchemaObject]
+type Mapping = Record<symbol, (field: Field<unknown>) => OpenAPI.SchemaObject>
+
+type MappingTuple = [WithType, (mapping: MappingTuple, field: Field<unknown>) => OpenAPI.SchemaObject]
 
 const mappingTuples: MappingTuple[] = [
-  [arrayField, (field) => ({})],
-  [booleanField, (field) => ({})],
-  [choiceField, (field) => ({})],
-  [numberField, (field) => ({})],
-  [objectField, (field) => ({})],
-  [optional, (field) => ({})],
-  [stringField, (field) => ({})],
-  [unionField, (field) => ({})],
-  [withDefault, (field) => ({})]
+  [arrayField, (mapping, field) => ({})],
+  [booleanField, (mapping, field) => ({})],
+  [choiceField, (mapping, field) => ({})],
+  [numberField, (mapping, field) => ({})],
+  [objectField, (mapping, field) => ({})],
+  [optional, (mapping, field) => ({})],
+  [stringField, (mapping, field) => ({})],
+  [unionField, (mapping, field) => ({})],
+  [withDefault, (mapping, field) => ({})]
 ]
 
-const schemaRegistry = (mappingTuples: MappingTuple[]):
-  Record<symbol, (field: Field<unknown>) => OpenAPI.SchemaObject> =>
+export const getSchema = (mapping: MappingTuple, field: Field<unknown>): OpenAPI.SchemaObject =>
+  mapping[field.type as any] as any
+
+const schemaRegistry = (mappingTuples: MappingTuple[]):Mapping =>
   Object.fromEntries(mappingTuples.map(it => [it[0].type, it[1]]))
 
 export default schemaRegistry

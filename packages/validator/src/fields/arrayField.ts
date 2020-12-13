@@ -29,6 +29,10 @@ class ArrayField<T> implements Field<T[]> {
       itemSpec: this.params.itemField.getParams(),
     }
   }
+
+  get itemField(): Field<T> {
+    return this.params.itemField
+  }
 }
 
 const arrayField = <T> (
