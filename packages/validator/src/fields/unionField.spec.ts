@@ -1,5 +1,5 @@
 import unionField from './unionField'
-import { getParams, serialize, TypeHint, validate } from '../core'
+import { serialize, TypeHint, validate } from '../core'
 import { expectType } from '../TypeTestUtils.test'
 import booleanField from './booleanField'
 import choiceField from './choiceField'
@@ -23,15 +23,6 @@ test('serialization', () => {
   expect(serialize(field, 3)).toEqual(3)
   expect(serialize(field, true)).toEqual(true)
   expect(serialize(field, 'foo')).toEqual('foo')
-})
-
-test('getParams', () => {
-  expect(getParams(field)).toEqual({
-    'innerSpecs':[
-      {},
-      {'choices':[1,2,3]},
-      {},
-    ]})
 })
 
 test('types', () => {

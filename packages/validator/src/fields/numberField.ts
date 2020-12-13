@@ -30,11 +30,6 @@ class NumberField implements Field<number>, WithStringInputSupport {
   serialize(deserialized: number): Json {
     return deserialized
   }
-  getParams() {
-    return {
-      ...this.params,
-    }
-  }
 }
 
 class NumberFieldWithRegExp extends NumberField implements WithRegExp {

@@ -1,16 +1,14 @@
-import { Field, validate, TypeHint, Json, serialize, getParams, $ } from '.'
+import { Field, validate, TypeHint, Json, serialize, $ } from '.'
 
 import { expectType } from './TypeTestUtils.test'
 
 class SampleField implements Field<'sample'> {
+  type: symbol
   validate(_: any): 'sample' {
     return 'sample'
   }
   serialize(_: 'sample'): Json {
     return 'sample'
-  }
-  getParams() {
-    return {}
   }
 }
 
@@ -18,7 +16,6 @@ test('imports', () => {
   expect($).toBeTruthy()
   expect(validate).toBeTruthy()
   expect(serialize).toBeTruthy()
-  expect(getParams).toBeTruthy()
 
   const schema = {
     key: new SampleField()

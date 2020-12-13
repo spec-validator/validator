@@ -7,7 +7,6 @@ import {
   testValidateSpecError,
   testValidateSegmentChainOK,
   testValidateSegmentChainError,
-  testGetParams,
 } from './TestUtils.test'
 import { expectType } from '../TypeTestUtils.test'
 
@@ -21,17 +20,6 @@ describe('spec', () => {
 
   it('prevents invalid choices from getting through', () => {
     testValidateSpecError(field, 4, 'Invalid choice')
-  })
-
-  it('returns proper params', () => {
-    testGetParams(field, {
-      'choices':  [
-        1,
-        2,
-        3,
-      ],
-      'description': undefined,
-    })
   })
 
   it('serializes data properly', () => {

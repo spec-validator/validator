@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Field, getParams, serialize, TypeHint, validate } from '../core'
+import { Field, serialize, TypeHint, validate } from '../core'
 import { WithStringInputSupport } from '../WithStringInputSupport'
 import { $ } from '../segmentChain'
 import { Any } from '../util-types'
@@ -12,10 +12,6 @@ export const testSerializeSpecOk = <T extends Any> (
   field: Field<T>, input: TypeHint<Field<T>>, expected: any
 ): void => {
   expect(serialize(field, input)).toEqual(expected)
-}
-
-export const testGetParams = <T extends Any> (field: Field<T>, expected: any): void => {
-  expect(getParams(field)).toEqual(expected)
 }
 
 export const testValidateSpecError = <T extends Any> (field: Field<T>, input: any, expectedError: any) => {

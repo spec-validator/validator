@@ -1,7 +1,5 @@
 import { Field, Json, FieldDecorator } from '@validator/validator'
 import { Any } from '@validator/validator/util-types'
-import { mapValues, merge } from '@validator/validator/utils'
-
 const FieldSymbol = Symbol('@open-api-endpoint/WithDoc')
 
 type Example<T extends Any> = {
@@ -23,15 +21,6 @@ class WithDoc<T extends Any> implements Field<T>, FieldDecorator {
   }
   serialize(deserialized: T): Json {
     return this.innerField.serialize(deserialized)
-  }
-  getParams() {
-    return merge({
-      description: this.doc.description,
-      examples: this.doc.examples && mapValues(this.doc.examples, (src) => ({
-        ...src,
-        value: this.serialize(src.value)
-      }))
-    }, this.innerField.getParams())
   }
 }
 

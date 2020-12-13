@@ -18,17 +18,6 @@ describe('field', () => {
   it('should proxy the value to the inner field', () => {
     expect(field.validate(42)).toEqual(42)
   })
-
-  it('should annotate params with a description', () => {
-    expect(field.getParams()).toEqual({'description': 'Some description',
-      'examples': {
-        'zero': {
-          'summary': 'Sample value',
-          'value': 14,
-        },
-      },
-    })
-  })
 })
 
 test('types', () => {

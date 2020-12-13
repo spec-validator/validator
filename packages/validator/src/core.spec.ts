@@ -1,4 +1,4 @@
-import { getParams, serialize, TypeHint, validate } from './core'
+import { serialize, TypeHint, validate } from './core'
 import { arrayField, booleanField, numberField, objectField, optional, stringField, withDefault } from './fields'
 import { expectType } from './TypeTestUtils.test'
 
@@ -28,34 +28,6 @@ test('nested expectType', () => {
       fl: number
     }[]
   }>(true)
-})
-
-test('nested getParams', () => {
-  expect(getParams(schema)).toEqual({
-    'innerList': {
-      'itemSpec': {
-        'spec': {
-          'bool': {
-            'isOptional': true,
-          },
-          'fl': {
-            'canBeFloat': false,
-          },
-        },
-      },
-    },
-    'innerSchema': {
-      'description': undefined,
-      'spec': {
-        'num': {
-          'defaultValue': 42,
-        },
-        'str': {
-          'regex': undefined,
-        },
-      },
-    },
-  })
 })
 
 test('nested serialize', () => {

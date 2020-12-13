@@ -32,12 +32,6 @@ class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
   serialize(deserialized: string): Json {
     return deserialized
   }
-  getParams() {
-    return {
-      regex: this.regexV?.source,
-    }
-  }
-
 }
 
 const stringField = (regex?: RegExp): StringField => new StringField(regex)

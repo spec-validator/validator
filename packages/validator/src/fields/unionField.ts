@@ -35,12 +35,6 @@ class UnionField<
     }
     throw 'Invalid variant - should have matched'
   }
-  getParams() {
-    return {
-      innerSpecs: this.variants.map(it => it.getParams()),
-    }
-  }
-
 }
 
 const unionField = <

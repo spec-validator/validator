@@ -3,7 +3,6 @@ import {
   ValidatorSpec,
   validate,
   serialize,
-  getParams,
 } from '../core'
 import { Json } from '../Json'
 import { Any } from '../util-types'
@@ -23,12 +22,6 @@ class ObjectField<DeserializedType extends Record<string, Any>> implements Field
   serialize(deserialized: DeserializedType): Json {
     return serialize(this.objectSpec, deserialized as any)
   }
-  getParams() {
-    return {
-      spec: getParams(this.objectSpec),
-    }
-  }
-
 }
 
 const objectField = <DeserializedType extends Record<string, Any>> (
