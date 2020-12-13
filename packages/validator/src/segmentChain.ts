@@ -51,7 +51,7 @@ export class Segment<
     if (!this.regex) {
       this.regex = `^${this.getSegments()
         .map(segment => segment.field && segment.key
-          ? `(?<${segment.key}>${segment.field.regex().source})`
+          ? `(?<${segment.key}>${segment.field.regex.source})`
           : (segment.key || '')
         ).join('')}$`
     }

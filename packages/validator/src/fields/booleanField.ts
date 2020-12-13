@@ -24,7 +24,7 @@ class BooleanField implements Field<boolean>, WithStringInputSupport {
 
 class BooleanFieldWithRegExp extends BooleanField implements WithRegExp {
 
-  regex() {
+  get regex() {
     return /true|false|1|0/
   }
 

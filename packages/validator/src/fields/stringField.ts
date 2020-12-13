@@ -14,7 +14,7 @@ class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
   getFieldWithRegExp(): StringField & WithRegExp {
     return this
   }
-  regex() {
+  get regex() {
     return this?.regexV || /.*/
   }
   validate(value: any): string {
