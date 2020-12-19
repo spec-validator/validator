@@ -1,17 +1,19 @@
-import { Field, Json } from '.'
-import { SpecUnion } from './core'
-import { Any } from './util-types'
+import { Field } from '.'
 
-type WithType = {
-  readonly type: string
+type OfType<Type extends string> = {
+  readonly type: Type
 }
 
-export const declareField = <Params extends any[], FieldType extends Field<unknown>> (
-  type: string,
-  constructor: new (...params: Params) => FieldType
-): ((...params: Readonly<Params>) => FieldType & WithType) & WithType => {
-  const wrapper = (...params: Params): FieldType & WithType => {
-    const result = new constructor(...params) as FieldType & { type: string }
+export const declareField = <
+Type extends string,
+  Params extends any[],
+  FieldType extends Field<unknown>
+> (
+    type: Type,
+    constructor: new (...params: Params) => FieldType
+  ): ((...params: Readonly<Params>) => FieldType & OfType<Type>) & OfType<Type> => {
+  const wrapper = (...params: Params): FieldType & OfType<Type> => {
+    const result = new constructor(...params) as FieldType & { type: Type }
     result.type = type
     return result
   }
@@ -19,15 +21,19 @@ export const declareField = <Params extends any[], FieldType extends Field<unkno
   return wrapper
 }
 
-type FieldPair<FieldType extends Field<unknown> = Field<unknown>> =
-  [(() => FieldType) & WithType, (field: FieldType) => Json]
 
-type Registy = [FieldPair]
+type FieldPair<
+  RepresentationFormat,
+  FieldType extends Field<unknown> = Field<unknown>,
+> =
+  [(() => FieldType) & OfType<string>, (field: FieldType) => RepresentationFormat]
 
-const getSchema = (
-  ...registries: Registy[]
+export type Registy<RepresentationFormat> = [FieldPair<RepresentationFormat>]
+
+export default <RepresentationFormat>(
+  ...registries: Registy<RepresentationFormat>[]
 ) => (specs: SpecUnion<Any>) => {
-  const mapping: Record<any, (field: Field<unknown>) => Json> = {}
+  const mapping: Record<any, (field: Field<unknown>) => RepresentationFormat> = {}
   registries.forEach(registry => {
     registry.forEach(([key, value]) => {
       if (mapping[key.type]) {
@@ -36,5 +42,4 @@ const getSchema = (
       mapping[key.type] = value
     })
   })
-
 }
