@@ -10,11 +10,13 @@ export const declareField = <Params extends any[], FieldType extends Field<unkno
   type: string,
   constructor: new (...params: Params) => FieldType
 ): ((...params: Params) => FieldType & WithType) & WithType => {
-  const wrapper = (...params: Params): FieldType & WithType => Object.assign(
-    {type},
-    new constructor(...params)
-  )
-  return Object.assign({type}, wrapper)
+  const wrapper = (...params: Params): FieldType & WithType => {
+    const result = new constructor(...params) as FieldType & { type: string }
+    result.type = type
+    return result
+  }
+  wrapper.type = type
+  return wrapper
 }
 
 type FieldPair<FieldType extends Field<unknown> = Field<unknown>> =
