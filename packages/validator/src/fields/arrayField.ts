@@ -1,5 +1,5 @@
 import { Field, withErrorDecoration } from '../core'
-import { declareField } from '../docRegistry'
+import { declareField } from '../registry'
 import { Json } from '../Json'
 
 class ArrayField<T> implements Field<T[]> {

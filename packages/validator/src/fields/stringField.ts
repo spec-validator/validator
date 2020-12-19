@@ -1,5 +1,5 @@
 import { Field } from '../core'
-import { declareField } from '../docRegistry'
+import { declareField } from '../registry'
 import { Json } from '../Json'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 

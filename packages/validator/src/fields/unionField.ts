@@ -1,5 +1,5 @@
 import { Field, TypeHint } from '../core'
-import { declareField } from '../docRegistry'
+import { declareField } from '../registry'
 import { Json } from '../Json'
 
 type Unioned<T extends Field<any>[]> = {

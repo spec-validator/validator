@@ -4,7 +4,7 @@ import {
   validate,
   serialize,
 } from '../core'
-import { declareField } from '../docRegistry'
+import { declareField } from '../registry'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 

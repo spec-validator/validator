@@ -9,7 +9,7 @@ type WithType = {
 export const declareField = <Params extends any[], FieldType extends Field<unknown>> (
   type: string,
   constructor: new (...params: Params) => FieldType
-): ((...params: Params) => FieldType & WithType) & WithType => {
+): ((...params: Readonly<Params>) => FieldType & WithType) & WithType => {
   const wrapper = (...params: Params): FieldType & WithType => {
     const result = new constructor(...params) as FieldType & { type: string }
     result.type = type
@@ -30,7 +30,10 @@ const getSchema = (
   const mapping: Record<any, (field: Field<unknown>) => Json> = {}
   registries.forEach(registry => {
     registry.forEach(([key, value]) => {
-      //(mapping)[key.type] = value
+      if (mapping[key.type]) {
+        throw `Field '${key.type}' is already registered`
+      }
+      mapping[key.type] = value
     })
   })
 
