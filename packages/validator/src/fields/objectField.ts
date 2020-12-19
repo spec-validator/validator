@@ -4,14 +4,12 @@ import {
   validate,
   serialize,
 } from '../core'
+import { declareField } from '../docRegistry'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 
-const FieldSymbol = Symbol('@validator/fields.ObjectField')
-
 class ObjectField<DeserializedType extends Record<string, Any>> implements Field<DeserializedType> {
   constructor(readonly objectSpec: ValidatorSpec<DeserializedType>) {}
-  type = FieldSymbol
 
   validate(value: any): DeserializedType {
     if (typeof value !== 'object' || value === null) {
@@ -24,10 +22,7 @@ class ObjectField<DeserializedType extends Record<string, Any>> implements Field
   }
 }
 
-const objectField = <DeserializedType extends Record<string, Any>> (
+export default declareField('@validator/fields.ObjectField', ObjectField) as
+<DeserializedType extends Record<string, Any>> (
   objectSpec: ValidatorSpec<DeserializedType>,
-): ObjectField<DeserializedType> => new ObjectField(objectSpec)
-
-objectField.type = FieldSymbol
-
-export default objectField
+) => ObjectField<DeserializedType>

@@ -1,11 +1,9 @@
 import { Field, withErrorDecoration } from '../core'
+import { declareField } from '../docRegistry'
 import { Json } from '../Json'
-
-const FieldSymbol = Symbol('@validator/fields.ArrayField')
 
 class ArrayField<T> implements Field<T[]> {
   constructor(readonly itemField: Field<T>) {}
-  type = FieldSymbol
 
   validate(value: any): T[] {
     if (!Array.isArray(value)) {
@@ -22,11 +20,5 @@ class ArrayField<T> implements Field<T[]> {
   }
 }
 
-const arrayField = <T> (
-  itemField: Field<T>,
-): ArrayField<T> =>
-    new ArrayField(itemField)
-
-arrayField.type = FieldSymbol
-
-export default arrayField
+export default declareField('@validator/fields.ArrayField', ArrayField) as
+  <T> (itemField: Field<T>) => ArrayField<T>

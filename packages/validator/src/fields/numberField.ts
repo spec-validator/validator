@@ -1,18 +1,13 @@
 import { Field } from '../core'
+import { declareField } from '../docRegistry'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 
-type Params = {
-  canBeFloat?: boolean
-}
-
-const FieldSymbol = Symbol('@validator/fields.NumberField')
-
 class NumberField implements Field<number>, WithStringInputSupport {
-  constructor(readonly params?: Params) {}
-
-  type = FieldSymbol
+  constructor(readonly params?: {
+    canBeFloat?: boolean
+  }) {}
 
   getFieldWithRegExp(): Field<Any> & WithRegExp {
     return new NumberFieldWithRegExp(this.params)
@@ -51,8 +46,4 @@ class NumberFieldWithRegExp extends NumberField implements WithRegExp {
 
 }
 
-const numberField = (params?: Params): NumberField => new NumberField(params)
-
-numberField.type = FieldSymbol
-
-export default numberField
+export default declareField('@validator/fields.NumberField', NumberField)
