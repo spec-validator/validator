@@ -20,5 +20,7 @@ class ArrayField<T> implements Field<T[]> {
   }
 }
 
-export default declareField('@validator/fields.ArrayField', ArrayField) as
+const field = declareField('@validator/fields.ArrayField', ArrayField) as
   <T> (itemField: Field<T>) => ArrayField<T>
+
+export default field
