@@ -5,6 +5,13 @@ type OfType<Type extends string> = {
   readonly type: Type
 }
 
+export type FieldDeclaration<
+  Type extends string = string,
+  Params extends any[] = any[],
+  FieldType extends Field<unknown> = Field<unknown>
+> =
+  ((...params: Readonly<Params>) => FieldType & OfType<Type>) & OfType<Type>
+
 export const declareField = <
   Type extends string,
   Params extends any[],
@@ -12,7 +19,7 @@ export const declareField = <
 > (
     type: Type,
     constructor: new (...params: Params) => FieldType
-  ): ((...params: Readonly<Params>) => FieldType & OfType<Type>) & OfType<Type> => {
+  ): FieldDeclaration<Type, Params, FieldType> => {
   const wrapper = (...params: Params): FieldType & OfType<Type> => {
     const result = new constructor(...params) as FieldType & { type: Type }
     result.type = type
@@ -23,7 +30,7 @@ export const declareField = <
 }
 
 type GetRepresentation<
-  FieldType extends Field<unknown> = Field<unknown>, 
+  FieldType extends Field<unknown> = Field<unknown>,
   Type extends string=string
 > =
   (
@@ -32,10 +39,16 @@ type GetRepresentation<
   ) => Json
 
 export type FieldPair<
-  FieldType extends Field<unknown> = Field<unknown>,
-  Type extends string = string
+  Declaration extends FieldDeclaration = FieldDeclaration
 > =
-  [((...params: any[]) => FieldType) & OfType<Type>, GetRepresentation<FieldType, Type>]
+  [Declaration, GetRepresentation<ReturnType<Declaration>, Declaration['type']>]
+
+export const $ = <
+  Declaration extends FieldDeclaration<string, any[], Field<unknown>>
+>(
+    fieldDeclaration: Declaration,
+    getRepresentation: GetRepresentation<ReturnType<Declaration>, Declaration['type']>
+  ): FieldPair<Declaration> => [fieldDeclaration, getRepresentation]
 
 const withNoDuplicates = <T extends any[]>(items: T): T => {
   const processed = new Set()
@@ -72,8 +85,8 @@ const getValue = <V> (mapping: Record<string, V>, key: string): V => {
 const createRegistry = (
   pairs: FieldPair[]
 ): <Type extends string>(field: Field<unknown> & OfType<Type>) => Json => {
-  const mapping: Record<any, GetRepresentation> = Object.fromEntries(
-    withNoDuplicates(pairs).map(([key, value]) => [key.type, value])
+  const mapping = Object.fromEntries(
+    withNoDuplicates(pairs).map(([key, value]) => ([key.type, value]))
   )
   const getRepresentation = <Key extends string>(
     field: Field<unknown> & OfType<Key>

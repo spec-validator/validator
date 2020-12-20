@@ -1,10 +1,15 @@
-import { stringField } from './fields'
+import { numberField, stringField } from './fields'
 
-import { FieldPair } from './registry'
+import { $, FieldDeclaration, FieldPair } from './registry'
 
-const normalRegistryPairs: FieldPair[] = [
-  [stringField, (field) => 42]
-]
+const pair: FieldPair<FieldDeclaration> = $(stringField, (field) => 42)
+
+const pair2 = $(numberField, (field) => 42)
+
+const normalRegistryPairs = [
+  pair,
+  pair2
+] as const
 
 describe('createRegistry', () => {
   it('')
