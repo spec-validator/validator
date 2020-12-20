@@ -2,7 +2,7 @@ import { Field } from '.'
 import { Json } from './Json'
 
 type OfType<Type extends string> = {
-  readonly type: Type
+  readonly type: string
 }
 
 export type FieldDeclaration<
@@ -38,7 +38,7 @@ type GetRepresentation<
     getRepresentation: GetRepresentation
   ) => Json
 
-export type FieldPair<
+type FieldPair<
   Declaration extends FieldDeclaration = FieldDeclaration
 > =
   [Declaration, GetRepresentation<ReturnType<Declaration>, Declaration['type']>]
@@ -48,7 +48,12 @@ export const $ = <
 >(
     fieldDeclaration: Declaration,
     getRepresentation: GetRepresentation<ReturnType<Declaration>, Declaration['type']>
-  ): FieldPair<Declaration> => [fieldDeclaration, getRepresentation]
+  ): FieldPair<FieldDeclaration<string, any[], Field<unknown>>> => [
+    fieldDeclaration,
+    getRepresentation as GetRepresentation
+  ]
+
+export type Registry = FieldPair[]
 
 const withNoDuplicates = <T extends any[]>(items: T): T => {
   const processed = new Set()
