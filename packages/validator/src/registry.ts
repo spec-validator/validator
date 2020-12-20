@@ -22,19 +22,22 @@ export const declareField = <
   return wrapper
 }
 
-type GetRepresentation<Type extends string=string> =
+type GetRepresentation<
+  FieldType extends Field<unknown> = Field<unknown>, 
+  Type extends string=string
+> =
   (
-    field: Field<unknown> & OfType<Type>,
+    field: FieldType & OfType<Type>,
     getRepresentation: GetRepresentation
   ) => Json
 
-type FieldPair<
+export type FieldPair<
   FieldType extends Field<unknown> = Field<unknown>,
   Type extends string = string
 > =
-  [(() => FieldType) & OfType<Type>, GetRepresentation<Type>]
+  [((...params: any[]) => FieldType) & OfType<Type>, GetRepresentation<FieldType, Type>]
 
-const ensureNoDuplicates = (items: unknown[]) => {
+const withNoDuplicates = <T extends any[]>(items: T): T => {
   const processed = new Set()
   items.forEach((item) => {
     if (processed.has(item)) {
@@ -42,6 +45,15 @@ const ensureNoDuplicates = (items: unknown[]) => {
     }
     processed.add(item)
   })
+  return items
+}
+
+const getValue = <V> (mapping: Record<string, V>, key: string): V => {
+  const value = mapping[key]
+  if (value === undefined) {
+    throw `Could not find element with key '${key}'`
+  }
+  return value
 }
 
 /**
@@ -58,19 +70,14 @@ const ensureNoDuplicates = (items: unknown[]) => {
  * including the `WithRegExp` ones.
  */
 const createRegistry = (
-  ...registry: FieldPair[]
+  pairs: FieldPair[]
 ): <Type extends string>(field: Field<unknown> & OfType<Type>) => Json => {
-  ensureNoDuplicates(registry.map((item) => item[0].type))
   const mapping: Record<any, GetRepresentation> = Object.fromEntries(
-    registry.map(([key, value]) => [key.type, value])
+    withNoDuplicates(pairs).map(([key, value]) => [key.type, value])
   )
-  const getRepresentation = <Key extends string>(field: Field<unknown> & OfType<Key>): Json => {
-    const fieldMapper = mapping[field.type]
-    if (!fieldMapper) {
-      throw `Field type '${field.type}' is not registered`
-    }
-    return fieldMapper(field, getRepresentation)
-  }
+  const getRepresentation = <Key extends string>(
+    field: Field<unknown> & OfType<Key>
+  ): Json => getValue(mapping, field.type)(field, getRepresentation)
   return getRepresentation
 }
 
