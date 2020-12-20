@@ -34,6 +34,16 @@ type FieldPair<
 > =
   [(() => FieldType) & OfType<Type>, GetRepresentation<Type>]
 
+const ensureNoDuplicates = (items: unknown[]) => {
+  const processed = new Set()
+  items.forEach((item) => {
+    if (processed.has(item)) {
+      throw `Found duplicate of ${item}`
+    }
+    processed.add(item)
+  })
+}
+
 /**
  * This is a generic solution to provide a virtually inlimited number
  * of serializable representations of the field classes.
@@ -47,17 +57,13 @@ type FieldPair<
  * Note: each field subclass should be registered separately
  * including the `WithRegExp` ones.
  */
-export default (
+const createRegistry = (
   ...registry: FieldPair[]
 ): <Type extends string>(field: Field<unknown> & OfType<Type>) => Json => {
-
-  const mapping: Record<any, GetRepresentation> = {}
-  registry.forEach(([key, value]) => {
-    if (mapping[key.type]) {
-      throw `Field type '${key.type}' is already registered`
-    }
-    mapping[key.type] = value
-  })
+  ensureNoDuplicates(registry.map((item) => item[0].type))
+  const mapping: Record<any, GetRepresentation> = Object.fromEntries(
+    registry.map(([key, value]) => [key.type, value])
+  )
   const getRepresentation = <Key extends string>(field: Field<unknown> & OfType<Key>): Json => {
     const fieldMapper = mapping[field.type]
     if (!fieldMapper) {
@@ -67,3 +73,5 @@ export default (
   }
   return getRepresentation
 }
+
+export default createRegistry

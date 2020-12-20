@@ -1,0 +1,3 @@
+import createRegistry from './registry'
+
+
