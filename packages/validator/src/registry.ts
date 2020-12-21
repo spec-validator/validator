@@ -43,7 +43,7 @@ type ProvideRepresentation<
     ) => RepresentationType
   ) => RepresentationType
 
-type FieldPair<
+export type FieldPair<
   RepresentationType,
   Declaration extends FieldDeclaration = FieldDeclaration
 > =
