@@ -27,8 +27,8 @@ export const declareField = <
   return wrapper
 }
 
-type RequestRepresentation<RepresentationType> =
-  (field: Field<unknown>) => RepresentationType
+type RequestRepresentation =
+  (field: Field<unknown>) => any
 
 type ProvideRepresentation<
   RepresentationType,
@@ -44,23 +44,21 @@ type ProvideRepresentation<
   ) => RepresentationType
 
 export type FieldPair<
-  RepresentationType,
   Declaration extends FieldDeclaration = FieldDeclaration
 > =
-  [Declaration, ProvideRepresentation<RepresentationType, ReturnType<Declaration>>]
+  [Declaration, ProvideRepresentation<ReturnType<Declaration>>]
 
 export const $ = <
-  RepresentationType,
   Declaration extends FieldDeclaration<string, any[], Field<unknown>>
 >(
     fieldDeclaration: Declaration,
     provideRepresentation: (
       field: ReturnType<Declaration>,
-      requestRepresentation: RequestRepresentation<RepresentationType>
-    ) => RepresentationType
-  ): FieldPair<RepresentationType, FieldDeclaration<string, any[], Field<unknown>>> => [
+      requestRepresentation: RequestRepresentation
+    ) => any
+  ): FieldPair<FieldDeclaration<string, any[], Field<unknown>>> => [
     fieldDeclaration,
-    provideRepresentation as RequestRepresentation<RepresentationType>
+    provideRepresentation as any
   ]
 
 const withNoDuplicates = <T extends any[]>(items: T, by: (item: T[number]) => string): T => {
@@ -82,8 +80,8 @@ const getValue = <V> (mapping: Record<string, V>, type: string): V => {
   return value
 }
 
-export type GetRepresentation<RepresentationType> =
-  <Type extends string>(field: Field<unknown> & OfType<Type>) => RepresentationType
+export type GetRepresentation =
+  <Type extends string>(field: Field<unknown> & OfType<Type>) => any
 
 /**
  * This is a generic solution to provide a virtually inlimited number
@@ -98,13 +96,13 @@ export type GetRepresentation<RepresentationType> =
  * Note: each field subclass should be registered separately
  * including the `WithRegExp` ones.
  */
-const createRegistry = <RepresentationType> (
-  pairs: FieldPair<RepresentationType>[]
-): GetRepresentation<RepresentationType> => {
+const createRegistry = (
+  pairs: FieldPair[]
+): GetRepresentation => {
   const mapping = Object.fromEntries(
     withNoDuplicates(pairs, (pair) => pair[0].type).map(([key, value]) => ([key.type, value]))
   )
-  const getRepresentation: GetRepresentation<RepresentationType> =
+  const getRepresentation: GetRepresentation =
     (field) => getValue(mapping, field.type)(field, getRepresentation)
   return getRepresentation
 }

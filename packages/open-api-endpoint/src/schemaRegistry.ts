@@ -24,9 +24,14 @@ type Schema = {
 }
 */
 
-const getSchema = createRegistry<OpenAPI.SchemaObject>([
-  $(arrayField, (field) => ({})),
-  $(booleanField, (field) => ({})),
+const getSchema = createRegistry([
+  $(arrayField, (field, requestSchema): OpenAPI.ArraySchemaObject => ({
+    items: requestSchema(field.itemField),
+    type: 'array'
+  })),
+  $(booleanField, (): OpenAPI.NonArraySchemaObject  => ({
+    type: 'boolean',
+  })),
   $(choiceField, (field) => ({})),
   $(numberField, (field) => ({})),
   $(objectField, (field) => ({})),
