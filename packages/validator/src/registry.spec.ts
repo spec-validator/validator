@@ -11,9 +11,11 @@ const normalRegistryPairs: Registry = [
     canBeFloat: field.params?.canBeFloat || false,
     type: 'number'
   })),
-  $(objectField, (field, getRepresentation) => Object.fromEntries(
-    Object.entries(field.objectSpec).map(([key, field]) => [key, getRepresentation(field)])
-  )
+  $(objectField, (field, requestRepresentation) => Object.fromEntries(
+    Object.entries(field.objectSpec).map(
+      ([key, subfield]) => [key, requestRepresentation(subfield)]
+    )
+  ))
 ]
 
 describe('createRegistry', () => {

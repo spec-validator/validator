@@ -29,28 +29,37 @@ export const declareField = <
   return wrapper
 }
 
-type GetRepresentation<
+type RequestRepresentation =
+  (field: Field<unknown>) => Json
+
+type ProvideRepresentation<
   FieldType extends Field<unknown> = Field<unknown>,
-  Type extends string=string
+  Type extends string = string
 > =
   (
-    field: FieldType & OfType<Type>,
-    getRepresentation: GetRepresentation
+    field: FieldType,
+    provideRepresentation: (
+      field: FieldType & OfType<Type>,
+      requestRepresentation: RequestRepresentation
+    ) => Json
   ) => Json
 
 type FieldPair<
   Declaration extends FieldDeclaration = FieldDeclaration
 > =
-  [Declaration, GetRepresentation<ReturnType<Declaration>, Declaration['type']>]
+  [Declaration, ProvideRepresentation<ReturnType<Declaration>>]
 
 export const $ = <
   Declaration extends FieldDeclaration<string, any[], Field<unknown>>
 >(
     fieldDeclaration: Declaration,
-    getRepresentation: GetRepresentation<ReturnType<Declaration>, Declaration['type']>
+    provideRepresentation: (
+      field: ReturnType<Declaration>,
+      requestRepresentation: RequestRepresentation
+    ) => Json
   ): FieldPair<FieldDeclaration<string, any[], Field<unknown>>> => [
     fieldDeclaration,
-    getRepresentation as GetRepresentation
+    provideRepresentation as RequestRepresentation
   ]
 
 export type Registry = FieldPair[]
@@ -93,8 +102,8 @@ const createRegistry = (
   const mapping = Object.fromEntries(
     withNoDuplicates(pairs).map(([key, value]) => ([key.type, value]))
   )
-  const getRepresentation = <Key extends string>(
-    field: Field<unknown> & OfType<Key>
+  const getRepresentation = <Type extends string>(
+    field: Field<unknown> & OfType<Type>
   ): Json => getValue(mapping, field.type)(field, getRepresentation)
   return getRepresentation
 }
