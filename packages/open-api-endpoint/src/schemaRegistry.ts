@@ -47,7 +47,7 @@ const splitOfOneOrMany = (choices: readonly Primitive[]): OpenAPI.NonArraySchema
   }
 }
 
-const getSchema = createRegistry([
+export const BASE_PAIRS = [
   $(arrayField, (field, requestSchema): OpenAPI.ArraySchemaObject => ({
     items: requestSchema(field.itemField),
     type: 'array'
@@ -85,6 +85,8 @@ const getSchema = createRegistry([
     ...requestSchema(field.innerField),
     description: field.doc
   })),
-])
+]
+
+const getSchema = createRegistry(BASE_PAIRS)
 
 export default getSchema
