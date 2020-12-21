@@ -19,7 +19,6 @@ class OptionalValueDecorator<T extends Any> implements Field<Optional<T>>, Field
 
 const t = '@validator/fields.Optional' as const
 type Type = OfType<typeof t>
-
 export default declareField(t, OptionalValueDecorator) as
   (<T extends Any> (
     innerField: Field<T>

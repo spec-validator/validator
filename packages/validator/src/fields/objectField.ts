@@ -23,9 +23,7 @@ class ObjectField<DeserializedType extends Record<string, Any>> implements Field
 }
 
 const t = '@validator/fields.ObjectField' as const
-
 type Type = OfType<typeof t>
-
 export default declareField(t, ObjectField) as
 (<DeserializedType extends Record<string, Any>> (
   objectSpec: ValidatorSpec<DeserializedType>,

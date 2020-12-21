@@ -61,11 +61,6 @@ class ChoiceFieldWithRegExp<
 }
 
 const t = '@validator/fields.ChoiceField' as const
-
 type Type = OfType<typeof t>
-
-const choiceField = declareField(t, ChoiceField) as
+export default declareField(t, ChoiceField) as
   (<Choice extends Primitive> (...choices: readonly Choice[]) => ChoiceField<Choice> & Type) & Type
-
-export default choiceField
-
