@@ -7,23 +7,45 @@ import createRegistry, { $ } from '@validator/validator/registry'
 import withDoc from './withDoc'
 import { Primitive } from '@validator/validator/Json'
 
-/*
-type Schema = {
-  title?: string, // name of the field
-  type?: 'string' | 'number' | 'integer' | 'boolean' | 'array' | 'object',
-  format?: string, // for any string based field
-  pattern?: string, // for regex in string fields
-  default?: unknown,
-  oneOf?: unknown[], // for union field (excludes type)
-  enum?: unknown[], // for choice field (for multitype choices use oneOf + type + enum since enums must be of type)
-  // array type
-  items?: Schema, // for inner items' schema
-  // object type
-  properties?: Record<string, Schema>, // for type object
-  required?: string[], // for type object (required is an object level field not a property field)
-  additionalProperties?: boolean // if extra, unspecified keys are allowed
+const splitIntoOnOfs = (choices: readonly Primitive[]): OpenAPI.NonArraySchemaObject [] => {
+  const numbers = choices.filter(it => typeof it === 'number')
+  const booleans = choices.filter(it => typeof it === 'boolean')
+  const strings = choices.filter(it => typeof it === 'string')
+
+  const result: OpenAPI.NonArraySchemaObject[] = []
+  if (numbers) {
+    result.push({
+      type: 'number',
+      enum: numbers
+    })
+  }
+  if (booleans) {
+    result.push({
+      type: 'boolean',
+      enum: booleans
+    })
+  }
+  if (strings) {
+    result.push({
+      type: 'string',
+      enum: strings
+    })
+  }
+  return result
 }
-*/
+
+const splitOfOneOrMany = (choices: readonly Primitive[]): OpenAPI.NonArraySchemaObject => {
+  const result = splitIntoOnOfs(choices)
+  if (result.length === 0) {
+    return {}
+  } else if (result.length === 1) {
+    return result[0]
+  } else {
+    return {
+      oneOf: result
+    }
+  }
+}
 
 const getSchema = createRegistry([
   $(arrayField, (field, requestSchema): OpenAPI.ArraySchemaObject => ({
@@ -33,9 +55,7 @@ const getSchema = createRegistry([
   $(booleanField, (): OpenAPI.NonArraySchemaObject  => ({
     type: 'boolean',
   })),
-  $(choiceField, (field): OpenAPI.NonArraySchemaObject => ({
-    enum: field.choices as Primitive[] // Do type splitting into oneOfs
-  })),
+  $(choiceField, (field): OpenAPI.NonArraySchemaObject => splitOfOneOrMany(field.choices)),
   $(numberField, (field): OpenAPI.NonArraySchemaObject => ({
     type: field.params?.canBeFloat ? 'number' : 'integer'
   })),
