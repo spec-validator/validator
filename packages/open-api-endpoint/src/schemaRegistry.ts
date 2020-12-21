@@ -5,6 +5,7 @@ import {
 } from '@validator/validator/fields'
 import createRegistry, { $ } from '@validator/validator/registry'
 import withDoc from './withDoc'
+import { Primitive } from '@validator/validator/Json'
 
 /*
 type Schema = {
@@ -32,10 +33,23 @@ const getSchema = createRegistry([
   $(booleanField, (): OpenAPI.NonArraySchemaObject  => ({
     type: 'boolean',
   })),
-  $(choiceField, (field) => ({})),
-  $(numberField, (field) => ({})),
-  $(objectField, (field) => ({})),
-  $(optional, (field) => ({})),
+  $(choiceField, (field): OpenAPI.NonArraySchemaObject => ({
+    enum: field.choices as Primitive[]
+  })),
+  $(numberField, (field): OpenAPI.NonArraySchemaObject => ({
+    type: field.params?.canBeFloat ? 'number' : 'integer'
+  })),
+  $(objectField, (field, requestSchema): OpenAPI.NonArraySchemaObject  => ({
+    properties: Object.fromEntries(
+      Object.entries(field.objectSpec).map(([key, value]) => [key, requestSchema(value)] )
+    ),
+    required: Object.entries(field.objectSpec).filter(
+      ([_, value]) => (value as any).type !== optional.type
+    ).map(([key, _]) => key)
+  })),
+  $(optional, (field, requestSchema): OpenAPI.SchemaObject  => ({
+    ...requestSchema(field)
+  })),
   $(stringField, (field) => ({})),
   $(unionField, (field) => ({})),
   $(withDefault, (field) => ({})),

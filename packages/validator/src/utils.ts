@@ -30,9 +30,3 @@ export const withParentFields = <T>(parent: any, child: T, fields: string[]): T 
   })
   return child
 }
-
-export const mapValues = <Key extends string, Src, Trg>(
-  source: Record<Key, Src>, mapValue: (src: Src) => Trg
-): Record<Key, Src> =>
-    Object.fromEntries(Object.entries(source)
-      .map(([key, value]) => [key, mapValue(value as Src)]))as unknown as Record<Key, Src>
