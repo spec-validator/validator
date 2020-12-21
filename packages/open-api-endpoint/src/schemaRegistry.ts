@@ -1,10 +1,8 @@
-import { OpenAPIV3 as OpenAPI } from 'openapi-types'
-
-import { Field } from '@validator/validator'
 import {
   arrayField, booleanField, choiceField, numberField, objectField, optional, stringField, unionField, withDefault,
 } from '@validator/validator/fields'
-import { $, Registry } from '@validator/validator/registry'
+import createRegistry, { $ } from '@validator/validator/registry'
+import withDoc from './withDoc'
 
 /*
 type Schema = {
@@ -24,7 +22,7 @@ type Schema = {
 }
 */
 
-const mappingTuples: Registry = [
+const getSchema = createRegistry([
   $(arrayField, (field) => ({})),
   $(booleanField, (field) => ({})),
   $(choiceField, (field) => ({})),
@@ -33,13 +31,8 @@ const mappingTuples: Registry = [
   $(optional, (field) => ({})),
   $(stringField, (field) => ({})),
   $(unionField, (field) => ({})),
-  $(withDefault, (field) => ({}))
-]
+  $(withDefault, (field) => ({})),
+  $(withDoc, (field) => ({})),
+])
 
-export const getSchema = (mapping: MappingTuple, field: Field<unknown>): OpenAPI.SchemaObject =>
-  mapping[field.type as any] as any
-
-const schemaRegistry = (mappingTuples: MappingTuple[]):Mapping =>
-  Object.fromEntries(mappingTuples.map(it => [it[0].type, it[1]]))
-
-export default schemaRegistry
+export default getSchema

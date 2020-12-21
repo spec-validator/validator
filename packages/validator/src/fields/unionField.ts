@@ -1,5 +1,5 @@
 import { Field, TypeHint } from '../core'
-import { declareField } from '../registry'
+import { declareField, OfType } from '../registry'
 import { Json } from '../Json'
 
 type Unioned<T extends Field<any>[]> = {
@@ -37,5 +37,7 @@ class UnionField<
   }
 }
 
-export default declareField('@validator/fields.UnionField', UnionField) as
-  <Variants extends Field<any>[]> (...variants: Variants) => UnionField<Variants>
+const t = '@validator/fields.UnionField' as const
+type Type = OfType<typeof t>
+export default declareField(t, UnionField) as
+  (<Variants extends Field<any>[]> (...variants: Variants) => UnionField<Variants> & Type) & Type

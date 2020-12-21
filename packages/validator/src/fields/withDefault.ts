@@ -1,5 +1,5 @@
 import { Field, FieldDecorator } from '../core'
-import { declareField } from '../registry'
+import { declareField, OfType } from '../registry'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 
@@ -17,6 +17,7 @@ class WithDefault<T extends Any> implements Field<T>, FieldDecorator {
   }
 }
 
-
-export default declareField('@validator/fields.WithDefault', WithDefault) as
-  <T extends Any> (innerField: Field<T>, defaultValue: T) => Field<T>
+const t = '@validator/fields.WithDefault' as const
+type Type = OfType<typeof t>
+export default declareField(t, WithDefault) as
+  (<T extends Any> (innerField: Field<T>, defaultValue: T) => Field<T> & Type) & Type

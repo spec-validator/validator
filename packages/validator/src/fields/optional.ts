@@ -1,5 +1,5 @@
 import { Field, FieldDecorator } from '../core'
-import { declareField } from '../registry'
+import { declareField, OfType } from '../registry'
 import { Json } from '../Json'
 import { Any, Optional } from '../util-types'
 
@@ -17,7 +17,10 @@ class OptionalValueDecorator<T extends Any> implements Field<Optional<T>>, Field
   }
 }
 
-export default declareField('@validator/fields.Optional', OptionalValueDecorator) as
-<T extends Any> (
-  innerField: Field<T>
-) => Field<Optional<T>>
+const t = '@validator/fields.Optional' as const
+type Type = OfType<typeof t>
+
+export default declareField(t, OptionalValueDecorator) as
+  (<T extends Any> (
+    innerField: Field<T>
+  ) => Field<Optional<T>> & Type) & Type

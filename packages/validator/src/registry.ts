@@ -83,6 +83,9 @@ const getValue = <V> (mapping: Record<string, V>, type: string): V => {
   return value
 }
 
+export type GetRepresentation =
+  <Type extends string>(field: Field<unknown> & OfType<Type>) => Json
+
 /**
  * This is a generic solution to provide a virtually inlimited number
  * of serializable representations of the field classes.
@@ -98,13 +101,12 @@ const getValue = <V> (mapping: Record<string, V>, type: string): V => {
  */
 const createRegistry = (
   pairs: FieldPair[]
-): <Type extends string>(field: Field<unknown> & OfType<Type>) => Json => {
+): GetRepresentation => {
   const mapping = Object.fromEntries(
     withNoDuplicates(pairs, (pair) => pair[0].type).map(([key, value]) => ([key.type, value]))
   )
-  const getRepresentation = <Type extends string>(
-    field: Field<unknown> & OfType<Type>
-  ): Json => getValue(mapping, field.type)(field, getRepresentation)
+  const getRepresentation: GetRepresentation =
+    (field) => getValue(mapping, field.type)(field, getRepresentation)
   return getRepresentation
 }
 

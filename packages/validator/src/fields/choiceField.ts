@@ -3,19 +3,16 @@ import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 import { escapeRegex } from '../utils'
 import { Primitive, Json } from '../Json'
 import { Any } from '../util-types'
+import { declareField, OfType } from '../registry'
 
 type Params<Choices> = {
   readonly choices: Choices
 }
 
-const FieldSymbol = Symbol('@validator/fields.ChoiceField')
-
 class ChoiceField<
   Choice extends Primitive,
 > implements Field<Choice>, WithStringInputSupport {
   private choicesSet: Set<Primitive>
-
-  type = FieldSymbol
 
   constructor(readonly params: Params<readonly Choice[]>) {
     this.choicesSet = new Set(params.choices)
@@ -65,14 +62,15 @@ class ChoiceFieldWithRegExp<
 
 }
 
-const choiceField = <
-  Choice extends Primitive,
-> (...choices: readonly Choice[]): ChoiceField<Choice> =>
-    new ChoiceField({
-      choices,
-    })
+const t = '@validator/fields.ChoiceField' as const
 
-choiceField.type = FieldSymbol
+type Type = OfType<typeof t>
+
+const choiceField = declareField(t, ChoiceField) as
+  (<Choice extends Primitive> (...choices: readonly Choice[]) => ChoiceField<Choice> & Type) & Type
+
+//(<T> (itemField: Field<T>) => ArrayField<T> & Type) & Type
+
 
 export default choiceField
 
