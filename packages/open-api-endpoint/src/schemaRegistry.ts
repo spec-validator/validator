@@ -1,3 +1,5 @@
+import { OpenAPIV3 as OpenAPI } from 'openapi-types'
+
 import {
   arrayField, booleanField, choiceField, numberField, objectField, optional, stringField, unionField, withDefault,
 } from '@validator/validator/fields'
@@ -22,7 +24,7 @@ type Schema = {
 }
 */
 
-const getSchema = createRegistry([
+const getSchema = createRegistry<OpenAPI.SchemaObject>([
   $(arrayField, (field) => ({})),
   $(booleanField, (field) => ({})),
   $(choiceField, (field) => ({})),

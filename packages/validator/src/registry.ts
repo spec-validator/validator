@@ -1,6 +1,4 @@
 import { Field } from '.'
-import { Json } from './Json'
-
 export type OfType<Type extends string> = {
   readonly type: Type
 }
@@ -29,11 +27,11 @@ export const declareField = <
   return wrapper
 }
 
-type RequestRepresentation<RepresentationType extends Json> =
+type RequestRepresentation<RepresentationType> =
   (field: Field<unknown>) => RepresentationType
 
 type ProvideRepresentation<
-  RepresentationType extends Json,
+  RepresentationType,
   FieldType extends Field<unknown> = Field<unknown>,
   Type extends string = string,
 > =
@@ -46,13 +44,13 @@ type ProvideRepresentation<
   ) => RepresentationType
 
 type FieldPair<
-  RepresentationType extends Json,
+  RepresentationType,
   Declaration extends FieldDeclaration = FieldDeclaration
 > =
   [Declaration, ProvideRepresentation<RepresentationType, ReturnType<Declaration>>]
 
 export const $ = <
-  RepresentationType extends Json,
+  RepresentationType,
   Declaration extends FieldDeclaration<string, any[], Field<unknown>>
 >(
     fieldDeclaration: Declaration,
@@ -84,7 +82,7 @@ const getValue = <V> (mapping: Record<string, V>, type: string): V => {
   return value
 }
 
-export type GetRepresentation<RepresentationType extends Json> =
+export type GetRepresentation<RepresentationType> =
   <Type extends string>(field: Field<unknown> & OfType<Type>) => RepresentationType
 
 /**
@@ -100,7 +98,7 @@ export type GetRepresentation<RepresentationType extends Json> =
  * Note: each field subclass should be registered separately
  * including the `WithRegExp` ones.
  */
-const createRegistry = <RepresentationType extends Json> (
+const createRegistry = <RepresentationType> (
   pairs: FieldPair<RepresentationType>[]
 ): GetRepresentation<RepresentationType> => {
   const mapping = Object.fromEntries(

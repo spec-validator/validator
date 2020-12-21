@@ -1,9 +1,9 @@
+import { OpenAPIV3 as OpenAPI } from 'openapi-types'
+
 import { ServerConfig, Route } from '@validator/rest-api-server'
 import { Field } from '@validator/validator'
 import { ValidatorSpec } from '@validator/validator/core'
 import { Segment } from '@validator/validator/segmentChain'
-
-import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 // https://swagger.io/specification/
 
