@@ -1,27 +1,25 @@
 import { numberField, stringField, objectField, booleanField } from './fields'
-import { Json } from './Json'
-
 import createRegistry, { $, FieldPair } from './registry'
 
-const normalRegistryPairs: FieldPair<Json>[] = [
-  $(stringField, (field): Json => ({
+const normalRegistryPairs: FieldPair[] = [
+  $(stringField, (field) => ({
     regexp: field.regex.source,
     type: 'string'
   })),
-  $(numberField, (field): Json => ({
+  $(numberField, (field) => ({
     canBeFloat: field.params?.canBeFloat || false,
     type: 'number'
   })),
-  $(objectField, (field, requestRepresentation): Json => Object.fromEntries(
+  $(objectField, (field, requestRepresentation) => Object.fromEntries(
     Object.entries(field.objectSpec).map(
       ([key, subfield]) => [key, requestRepresentation(subfield)]
     )
-  ) as Json)
+  ))
 ]
 
 describe('createRegistry', () => {
   it('correctly returns a representation of a schema with known field', () => {
-    const registry = createRegistry<Json>(normalRegistryPairs)
+    const registry = createRegistry(normalRegistryPairs)
     const schema = objectField({
       title: stringField(),
       page: objectField({
@@ -33,7 +31,7 @@ describe('createRegistry', () => {
   })
 
   it('throws an error if a duplicate type is registered', () => {
-    expect(() => createRegistry([...normalRegistryPairs, $(stringField, (): Json => undefined)]))
+    expect(() => createRegistry([...normalRegistryPairs, $(stringField, () => undefined)]))
       .toThrow(`Found duplicate of type declaration '${stringField.type}'`)
   })
 
