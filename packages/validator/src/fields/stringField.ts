@@ -20,7 +20,7 @@ class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
       throw 'Not a string'
     }
     if (this.regexV) {
-      const match = value.match(`^${this.regexV.source}$`)
+      const match = value.match(this.regexV)
       if (!match) {
         throw 'Doesn\'t match a regex'
       }
