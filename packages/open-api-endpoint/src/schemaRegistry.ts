@@ -34,7 +34,7 @@ const getSchema = createRegistry([
     type: 'boolean',
   })),
   $(choiceField, (field): OpenAPI.NonArraySchemaObject => ({
-    enum: field.choices as Primitive[]
+    enum: field.choices as Primitive[] // Do type splitting into oneOfs
   })),
   $(numberField, (field): OpenAPI.NonArraySchemaObject => ({
     type: field.params?.canBeFloat ? 'number' : 'integer'
@@ -54,7 +54,9 @@ const getSchema = createRegistry([
     type: 'string',
     pattern: field.regex.source
   })),
-  $(unionField, (field): OpenAPI.SchemaObject => ({})),
+  $(unionField, (field, requestSchema): OpenAPI.SchemaObject => ({
+
+  })),
   $(withDefault, (field, requestSchema): OpenAPI.SchemaObject => ({
     ...requestSchema(field.innerField),
     default: field.defaultValue
