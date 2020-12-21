@@ -1,6 +1,6 @@
 import { Field, Json, FieldDecorator } from '@validator/validator'
+import { declareField } from '@validator/validator/registry'
 import { Any } from '@validator/validator/util-types'
-const FieldSymbol = Symbol('@open-api-endpoint/WithDoc')
 
 type Example<T extends Any> = {
   value: T,
@@ -14,7 +14,6 @@ type Doc<T extends Any> = {
 
 class WithDoc<T extends Any> implements Field<T>, FieldDecorator {
   constructor(readonly innerField: Field<T>, private readonly doc: Doc<T>) {}
-  type = FieldSymbol
 
   validate(value: any): T {
     return this.innerField.validate(value)
@@ -24,9 +23,6 @@ class WithDoc<T extends Any> implements Field<T>, FieldDecorator {
   }
 }
 
-const withDoc = <T extends Any> (innerField: Field<T>, doc: Doc<T>): Field<T> =>
-  new WithDoc(innerField, doc)
-
-withDoc.type = FieldSymbol
+const withDoc = declareField('@validator/fields.WithDoc', WithDoc)
 
 export default withDoc
