@@ -1,12 +1,24 @@
-import { numberField, stringField } from './fields'
+import { numberField, stringField, objectField } from './fields'
 
-import { $ } from './registry'
+import createRegistry, { $, Registry } from './registry'
 
-const normalRegistryPairs = [
-  $(stringField, (field) => 42),
-  $(numberField, (field) => 42)
+const normalRegistryPairs: Registry = [
+  $(stringField, (field) => ({
+    regexp: field.regex.source,
+    type: 'string'
+  })),
+  $(numberField, (field) => ({
+    canBeFloat: field.params?.canBeFloat || false,
+    type: 'number'
+  })),
+  $(objectField, (field, getRepresentation) => Object.fromEntries(
+    Object.entries(field.objectSpec).map(([key, field]) => [key, getRepresentation(field)])
+  )
 ]
 
 describe('createRegistry', () => {
-  it('')
+  it('correctly returns a representation of a schema of a', () => {
+    const registry = createRegistry(normalRegistryPairs)
+
+  })
 })

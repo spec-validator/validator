@@ -4,7 +4,7 @@ import {
   validate,
   serialize,
 } from '../core'
-import { declareField } from '../registry'
+import { declareField, OfType } from '../registry'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 
@@ -22,7 +22,9 @@ class ObjectField<DeserializedType extends Record<string, Any>> implements Field
   }
 }
 
+type Type = OfType<'@validator/fields.ObjectField'>
+
 export default declareField('@validator/fields.ObjectField', ObjectField) as
-<DeserializedType extends Record<string, Any>> (
+(<DeserializedType extends Record<string, Any>> (
   objectSpec: ValidatorSpec<DeserializedType>,
-) => ObjectField<DeserializedType>
+) => ObjectField<DeserializedType> & Type) & Type

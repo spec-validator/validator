@@ -1,8 +1,8 @@
 import { Field } from '.'
 import { Json } from './Json'
 
-type OfType<Type extends string> = {
-  readonly type: string
+export type OfType<Type extends string> = {
+  readonly type: Type
 }
 
 export type FieldDeclaration<
