@@ -9,6 +9,7 @@ type Example<T extends Any> = {
 
 type Doc<T extends Any> = {
   description?: string,
+  format?: string,
   examples?: Record<string, Example<T>>
 }
 
@@ -23,6 +24,4 @@ class WithDoc<T extends Any> implements Field<T>, FieldDecorator {
   }
 }
 
-const withDoc = declareField('@validator/fields.WithDoc', WithDoc)
-
-export default withDoc
+export default declareField('@validator/fields.WithDoc', WithDoc)
