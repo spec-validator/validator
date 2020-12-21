@@ -9,7 +9,7 @@ type Unioned<T extends Field<any>[]> = {
 class UnionField<
   Variants extends Field<any>[]
 > implements Field<Variants> {
-  private readonly variants: Variants
+  readonly variants: Variants
 
   constructor(...variants: Variants) {
     this.variants = variants

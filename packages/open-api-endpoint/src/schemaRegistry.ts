@@ -55,7 +55,7 @@ const getSchema = createRegistry([
     pattern: field.regex.source
   })),
   $(unionField, (field, requestSchema): OpenAPI.SchemaObject => ({
-
+    oneOf: field.variants.map(requestSchema)
   })),
   $(withDefault, (field, requestSchema): OpenAPI.SchemaObject => ({
     ...requestSchema(field.innerField),
