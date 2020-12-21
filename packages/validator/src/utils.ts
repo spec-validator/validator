@@ -23,6 +23,14 @@ export const assertEqual = <R, T extends R>(expected: T, actual: R, errorMessage
   return expected
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const withParentFields = <T>(parent: any, child: T, fields: string[]): T => {
+  fields.forEach(it => {
+    (child as any)[it] = (parent as any)[it]
+  })
+  return child
+}
+
 export const mapValues = <Key extends string, Src, Trg>(
   source: Record<Key, Src>, mapValue: (src: Src) => Trg
 ): Record<Key, Src> =>

@@ -1,6 +1,6 @@
 import { Field } from '../core'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
-import { escapeRegex } from '../utils'
+import { escapeRegex, withParentFields } from '../utils'
 import { Primitive, Json } from '../Json'
 import { Any } from '../util-types'
 import { declareField, OfType } from '../registry'
@@ -16,7 +16,7 @@ class ChoiceField<
     this.choicesSet = new Set(choices)
   }
   getFieldWithRegExp(): Field<Any> & WithRegExp {
-    return new ChoiceFieldWithRegExp(...this.choices)
+    return withParentFields(this, new ChoiceFieldWithRegExp(...this.choices), ['type'])
   }
 
   validate(value: any): Choice {

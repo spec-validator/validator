@@ -3,6 +3,7 @@ import { declareField } from '../registry'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
+import { withParentFields } from '../utils'
 
 class NumberField implements Field<number>, WithStringInputSupport {
   constructor(readonly params?: {
@@ -10,7 +11,7 @@ class NumberField implements Field<number>, WithStringInputSupport {
   }) {}
 
   getFieldWithRegExp(): Field<Any> & WithRegExp {
-    return new NumberFieldWithRegExp(this.params)
+    return withParentFields(this, new NumberFieldWithRegExp(this.params), ['type'])
   }
 
   validate(value: any): number {

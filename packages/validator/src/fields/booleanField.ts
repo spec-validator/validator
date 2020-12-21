@@ -3,10 +3,11 @@ import { declareField } from '../registry'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
+import { withParentFields } from '../utils'
 
 class BooleanField implements Field<boolean>, WithStringInputSupport {
   getFieldWithRegExp(): Field<Any> & WithRegExp {
-    return new BooleanFieldWithRegExp()
+    return withParentFields(this, new BooleanFieldWithRegExp(), ['type'])
   }
   validate(value: any): boolean {
     if (value !== true && value !== false) {
