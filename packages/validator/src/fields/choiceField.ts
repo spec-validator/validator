@@ -5,20 +5,18 @@ import { Primitive, Json } from '../Json'
 import { Any } from '../util-types'
 import { declareField, OfType } from '../registry'
 
-type Params<Choices> = {
-  readonly choices: Choices
-}
-
 class ChoiceField<
   Choice extends Primitive,
 > implements Field<Choice>, WithStringInputSupport {
+  choices: readonly Choice[]
   private choicesSet: Set<Primitive>
 
-  constructor(readonly params: Params<readonly Choice[]>) {
-    this.choicesSet = new Set(params.choices)
+  constructor(...choices: readonly Choice[]) {
+    this.choices = choices
+    this.choicesSet = new Set(choices)
   }
   getFieldWithRegExp(): Field<Any> & WithRegExp {
-    return new ChoiceFieldWithRegExp(this.params)
+    return new ChoiceFieldWithRegExp(...this.choices)
   }
 
   validate(value: any): Choice {
@@ -38,18 +36,18 @@ class ChoiceFieldWithRegExp<
 
   private fullChoiceMap: Map<any, Primitive>
 
-  constructor(readonly params: Params<readonly Choice[]>) {
-    super(params)
+  constructor(...choices: readonly Choice[]) {
+    super(...choices)
     this.fullChoiceMap = new Map<any, Primitive>()
 
-    params.choices.forEach(it => {
+    choices.forEach(it => {
       this.fullChoiceMap.set(it, it)
       this.fullChoiceMap.set(it.toString(), it)
     })
   }
 
   get regex() {
-    return new RegExp(Object.keys(this.params.choices)
+    return new RegExp(Object.keys(this.choices)
       .map(it => it.toString())
       .map(escapeRegex)
       .join('|')
