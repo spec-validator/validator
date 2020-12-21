@@ -64,21 +64,21 @@ export const $ = <
 
 export type Registry = FieldPair[]
 
-const withNoDuplicates = <T extends any[]>(items: T): T => {
+const withNoDuplicates = <T extends any[]>(items: T, by: (item: T[number]) => string): T => {
   const processed = new Set()
   items.forEach((item) => {
-    if (processed.has(item)) {
-      throw `Found duplicate of ${item}`
+    if (processed.has(by(item))) {
+      throw `Found duplicate of type declaration '${by(item)}'`
     }
-    processed.add(item)
+    processed.add(by(item))
   })
   return items
 }
 
-const getValue = <V> (mapping: Record<string, V>, key: string): V => {
-  const value = mapping[key]
+const getValue = <V> (mapping: Record<string, V>, type: string): V => {
+  const value = mapping[type]
   if (value === undefined) {
-    throw `Could not find element with key '${key}'`
+    throw `Could not find field of type '${type}'`
   }
   return value
 }
@@ -100,7 +100,7 @@ const createRegistry = (
   pairs: FieldPair[]
 ): <Type extends string>(field: Field<unknown> & OfType<Type>) => Json => {
   const mapping = Object.fromEntries(
-    withNoDuplicates(pairs).map(([key, value]) => ([key.type, value]))
+    withNoDuplicates(pairs, (pair) => pair[0].type).map(([key, value]) => ([key.type, value]))
   )
   const getRepresentation = <Type extends string>(
     field: Field<unknown> & OfType<Type>
