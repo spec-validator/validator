@@ -29,40 +29,41 @@ export const declareField = <
   return wrapper
 }
 
-type RequestRepresentation =
-  (field: Field<unknown>) => Json
+type RequestRepresentation<RepresentationType extends Json> =
+  (field: Field<unknown>) => RepresentationType
 
 type ProvideRepresentation<
+  RepresentationType extends Json,
   FieldType extends Field<unknown> = Field<unknown>,
-  Type extends string = string
+  Type extends string = string,
 > =
   (
     field: FieldType,
     provideRepresentation: (
       field: FieldType & OfType<Type>,
-      requestRepresentation: RequestRepresentation
-    ) => Json
-  ) => Json
+      requestRepresentation: RepresentationType
+    ) => RepresentationType
+  ) => RepresentationType
 
 type FieldPair<
+  RepresentationType extends Json,
   Declaration extends FieldDeclaration = FieldDeclaration
 > =
-  [Declaration, ProvideRepresentation<ReturnType<Declaration>>]
+  [Declaration, ProvideRepresentation<RepresentationType, ReturnType<Declaration>>]
 
 export const $ = <
+  RepresentationType extends Json,
   Declaration extends FieldDeclaration<string, any[], Field<unknown>>
 >(
     fieldDeclaration: Declaration,
     provideRepresentation: (
       field: ReturnType<Declaration>,
-      requestRepresentation: RequestRepresentation
-    ) => Json
-  ): FieldPair<FieldDeclaration<string, any[], Field<unknown>>> => [
+      requestRepresentation: RequestRepresentation<RepresentationType>
+    ) => RepresentationType
+  ): FieldPair<RepresentationType, FieldDeclaration<string, any[], Field<unknown>>> => [
     fieldDeclaration,
-    provideRepresentation as RequestRepresentation
+    provideRepresentation as RequestRepresentation<RepresentationType>
   ]
-
-export type Registry = FieldPair[]
 
 const withNoDuplicates = <T extends any[]>(items: T, by: (item: T[number]) => string): T => {
   const processed = new Set()
@@ -83,8 +84,8 @@ const getValue = <V> (mapping: Record<string, V>, type: string): V => {
   return value
 }
 
-export type GetRepresentation =
-  <Type extends string>(field: Field<unknown> & OfType<Type>) => Json
+export type GetRepresentation<RepresentationType extends Json> =
+  <Type extends string>(field: Field<unknown> & OfType<Type>) => RepresentationType
 
 /**
  * This is a generic solution to provide a virtually inlimited number
@@ -99,13 +100,13 @@ export type GetRepresentation =
  * Note: each field subclass should be registered separately
  * including the `WithRegExp` ones.
  */
-const createRegistry = (
-  pairs: FieldPair[]
-): GetRepresentation => {
+const createRegistry = <RepresentationType extends Json> (
+  pairs: FieldPair<RepresentationType>[]
+): GetRepresentation<RepresentationType> => {
   const mapping = Object.fromEntries(
     withNoDuplicates(pairs, (pair) => pair[0].type).map(([key, value]) => ([key.type, value]))
   )
-  const getRepresentation: GetRepresentation =
+  const getRepresentation: GetRepresentation<RepresentationType> =
     (field) => getValue(mapping, field.type)(field, getRepresentation)
   return getRepresentation
 }
