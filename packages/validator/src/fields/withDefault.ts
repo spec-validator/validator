@@ -20,4 +20,4 @@ class WithDefault<T extends Any> implements Field<T>, FieldDecorator {
 const t = '@validator/fields.WithDefault' as const
 type Type = OfType<typeof t>
 export default declareField(t, WithDefault) as
-  (<T extends Any> (innerField: Field<T>, defaultValue: T) => Field<T> & Type) & Type
+  (<T extends Any> (innerField: Field<T>, defaultValue: T) => WithDefault<T> & Type) & Type

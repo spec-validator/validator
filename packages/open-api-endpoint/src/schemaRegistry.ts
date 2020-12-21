@@ -50,10 +50,19 @@ const getSchema = createRegistry([
   $(optional, (field, requestSchema): OpenAPI.SchemaObject  => ({
     ...requestSchema(field)
   })),
-  $(stringField, (field) => ({})),
-  $(unionField, (field) => ({})),
-  $(withDefault, (field) => ({})),
-  $(withDoc, (field) => ({})),
+  $(stringField, (field): OpenAPI.NonArraySchemaObject => ({
+    type: 'string',
+    pattern: field.regex.source
+  })),
+  $(unionField, (field): OpenAPI.SchemaObject => ({})),
+  $(withDefault, (field, requestSchema): OpenAPI.SchemaObject => ({
+    ...requestSchema(field.innerField),
+    default: field.defaultValue
+  })),
+  $(withDoc, (field, requestSchema): OpenAPI.SchemaObject  => ({
+    ...requestSchema(field.innerField),
+    description: field.doc
+  })),
 ])
 
 export default getSchema

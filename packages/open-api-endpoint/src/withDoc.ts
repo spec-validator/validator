@@ -13,7 +13,7 @@ type Doc<T extends Any> = {
 }
 
 class WithDoc<T extends Any> implements Field<T>, FieldDecorator {
-  constructor(readonly innerField: Field<T>, private readonly doc: Doc<T>) {}
+  constructor(readonly innerField: Field<T>, readonly doc: Doc<T>) {}
 
   validate(value: any): T {
     return this.innerField.validate(value)
