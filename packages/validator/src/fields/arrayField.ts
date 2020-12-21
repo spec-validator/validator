@@ -21,10 +21,6 @@ class ArrayField<T> implements Field<T[]> {
 }
 
 const t = '@validator/fields.ArrayField' as const
-
 type Type = OfType<typeof t>
-
-const field = declareField(t, ArrayField) as
+export default  declareField(t, ArrayField) as
   (<T> (itemField: Field<T>) => ArrayField<T> & Type) & Type
-
-export default field
