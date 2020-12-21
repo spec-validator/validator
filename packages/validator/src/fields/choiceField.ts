@@ -69,8 +69,5 @@ type Type = OfType<typeof t>
 const choiceField = declareField(t, ChoiceField) as
   (<Choice extends Primitive> (...choices: readonly Choice[]) => ChoiceField<Choice> & Type) & Type
 
-//(<T> (itemField: Field<T>) => ArrayField<T> & Type) & Type
-
-
 export default choiceField
 
