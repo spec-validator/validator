@@ -1,5 +1,5 @@
 import { Field, withErrorDecoration } from '../core'
-import { declareField } from '../registry'
+import { declareField, OfType } from '../registry'
 import { Json } from '../Json'
 
 class ArrayField<T> implements Field<T[]> {
@@ -20,7 +20,9 @@ class ArrayField<T> implements Field<T[]> {
   }
 }
 
+type Type = OfType<'@validator/fields.ArrayField'>
+
 const field = declareField('@validator/fields.ArrayField', ArrayField) as
-  <T> (itemField: Field<T>) => ArrayField<T>
+  (<T> (itemField: Field<T>) => ArrayField<T> & Type) & Type
 
 export default field

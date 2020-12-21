@@ -2,8 +2,9 @@ import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import { Field } from '@validator/validator'
 import {
-  arrayField, booleanField, choiceField, numberField, objectField, optional, stringField, unionField, withDefault
+  arrayField, booleanField, choiceField, numberField, objectField, optional, stringField, unionField, withDefault,
 } from '@validator/validator/fields'
+import { $, Registry } from '@validator/validator/registry'
 
 /*
 type Schema = {
@@ -23,24 +24,16 @@ type Schema = {
 }
 */
 
-type WithType = {
-  type: symbol
-}
-
-type Mapping = Record<symbol, (field: Field<unknown>) => OpenAPI.SchemaObject>
-
-type MappingTuple = [WithType, (mapping: MappingTuple, field: Field<unknown>) => OpenAPI.SchemaObject]
-
-const mappingTuples: MappingTuple[] = [
-  [arrayField, (mapping, field) => ({})],
-  [booleanField, (mapping, field) => ({})],
-  [choiceField, (mapping, field) => ({})],
-  [numberField, (mapping, field) => ({})],
-  [objectField, (mapping, field) => ({})],
-  [optional, (mapping, field) => ({})],
-  [stringField, (mapping, field) => ({})],
-  [unionField, (mapping, field) => ({})],
-  [withDefault, (mapping, field) => ({})]
+const mappingTuples: Registry = [
+  $(arrayField, (field) => ({})),
+  $(booleanField, (field) => ({})),
+  $(choiceField, (field) => ({})),
+  $(numberField, (field) => ({})),
+  $(objectField, (field) => ({})),
+  $(optional, (field) => ({})),
+  $(stringField, (field) => ({})),
+  $(unionField, (field) => ({})),
+  $(withDefault, (field) => ({}))
 ]
 
 export const getSchema = (mapping: MappingTuple, field: Field<unknown>): OpenAPI.SchemaObject =>
