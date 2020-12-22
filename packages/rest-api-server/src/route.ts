@@ -18,9 +18,14 @@ export type RequestSpec<
 }
 
 /**
+ * TODO: put it into documentation
+ *
  * Each request handler must have only one success code & response
  * combination. I.e. the same handler should not be able to return
  * 200 and 201 codes,
+ *
+ * As for error handling, error status codes must just comply with
+ * the standards.
  */
 
 export type ResponseSpec<
