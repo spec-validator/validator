@@ -17,8 +17,11 @@ export type RequestSpec<
   readonly headers?: ValidatorSpec<Headers>
 }
 
-// TODO:
-// TODO: response is a union field of an array of response specs
+/**
+ * Each request handler must have only one success code & response
+ * combination. I.e. the same handler should not be able to return
+ * 200 and 201 codes,
+ */
 
 export type ResponseSpec<
   StatusCode extends number = number,
