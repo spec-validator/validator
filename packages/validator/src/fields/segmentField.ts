@@ -20,7 +20,9 @@ class Segment<
   private field?: FieldWithRegExp<Any>
   private regex?: string
 
-  constructor(parent?: Segment<unknown>, key?: string, field?: FieldWithStringInputSupport<Any>) {
+  // Here we actually do want to have a constructor parameter as 'any' since it is not going
+  // to be used outside of this file
+  constructor(parent?: Segment<unknown>, key?: string, field?: FieldWithStringInputSupport<any>) {
     this.parent = parent
     this.key = key
     this.field = field?.getFieldWithRegExp()
@@ -35,7 +37,7 @@ class Segment<
   } : DeserializedType & {
     [P in Key]: ExtraDeserializedType
   }> {
-    return new Segment(this, key as any, field) as any
+    return new Segment(this, key as any, field)
   }
 
   // TODO: make getSegments and getFieldSegments lazy props
@@ -81,7 +83,7 @@ class Segment<
     const result: string[] = []
     this.getSegments().forEach((it: Segment<unknown>) => {
       if (it.field && it.key) {
-        result.push(it.field.toString((deserialized as any)[it.key]))
+        result.push(it.field.asString((deserialized as any)[it.key]))
       } else if (it.key) {
         result.push(it.key)
       }

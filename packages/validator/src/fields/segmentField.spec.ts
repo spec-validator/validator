@@ -59,23 +59,21 @@ describe('basics', () => {
 describe('type', () => {
 
   it('root', () => {
-    type Seg = typeof $
-    expectType<Seg, Segment<undefined>>(true)
-    type Props = TypeHint<Seg>
+    type Props = TypeHint<typeof $>
     expectType<Props, undefined>(true)
   })
 
   it('with unparametrized segment', () => {
     const path = $._('foo')
-    type Seg = typeof path
-    expectType<Seg, Segment<undefined>>(true)
+    type Props = TypeHint<typeof path>
+    expectType<Props, undefined>(true)
   })
 
   it('with parametrized segment', () => {
     const path = $._('foo')._('key', numberField())
-    type Seg = typeof path
-    expectType<Seg, Segment<{
+    type Props = TypeHint<typeof path>
+    expectType<Props, {
       key: number
-    }>>(true)
+    }>(true)
   })
 })
