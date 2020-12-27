@@ -37,10 +37,6 @@ export type RequestExt<
   TypeHint<Spec['headers']>
 >
 
-type SF = ValidatorSpec<Response>
-
-type FF = TypeHint<SF>
-
 export type Route<
   ReqSpec extends RequestSpec = RequestSpec,
   RespSpec extends ValidatorSpec<Response> = ValidatorSpec<Response>
