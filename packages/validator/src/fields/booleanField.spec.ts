@@ -1,6 +1,6 @@
 import { expectType } from '../TypeTestUtils.test'
 import { TypeHint } from '../core'
-import { $ } from '../segmentChain'
+import { $ } from './segmentField'
 import booleanField from './booleanField'
 import {
   testValidateSegmentChainError,

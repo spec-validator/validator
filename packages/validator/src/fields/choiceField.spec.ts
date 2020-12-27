@@ -1,6 +1,6 @@
 import choiceField from './choiceField'
 import { TypeHint } from '../core'
-import { $ } from '../segmentChain'
+import { $ } from './segmentField'
 
 import {
   testValidateSpecOk,

@@ -1,5 +1,5 @@
 import { SpecUnion, TypeHint, ValidatorSpec } from '@validator/validator/core'
-import { Segment } from '@validator/validator/segmentChain'
+import { Segment } from '@validator/validator/fields/segmentField'
 import { StringMapping, Request, Handler, HeaderMapping, Response } from './handler'
 import { Any, Optional } from '@validator/validator/util-types'
 

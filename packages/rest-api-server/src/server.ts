@@ -1,4 +1,4 @@
-import { Segment } from '@validator/validator/segmentChain'
+import { Segment } from '@validator/validator/fields/segmentField'
 import { Optional } from '@validator/validator/util-types'
 import http from 'http'
 import { URL } from 'url'

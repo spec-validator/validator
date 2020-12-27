@@ -1,5 +1,5 @@
 import { stringField } from '@validator/validator/fields'
-import { $ } from '@validator/validator/segmentChain'
+import { $ } from '@validator/validator/fields/segmentField'
 import { Route } from './route'
 import { GET } from './server'
 
