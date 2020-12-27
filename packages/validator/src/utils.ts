@@ -1,10 +1,5 @@
 import { Optional } from './util-types'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const merge = (...objects: any) => Object.assign({}, ...objects)
-
-export const tuple = <T extends any[]>(...args: T): T => args
-
 // eslint-disable-next-line no-useless-escape
 export const escapeRegex = (value: string): string => value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
 
@@ -16,13 +11,6 @@ export const getOrUndefined = <R>(get: () => R): Optional<R> => {
   }
 }
 
-export const assertEqual = <R, T extends R>(expected: T, actual: R, errorMessage: string): T => {
-  if (expected !== actual) {
-    throw errorMessage
-  }
-  return expected
-}
-
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const withParentFields = <T>(parent: any, child: T, fields: string[]): T => {
   fields.forEach(it => {
@@ -30,3 +18,4 @@ export const withParentFields = <T>(parent: any, child: T, fields: string[]): T 
   })
   return child
 }
+
