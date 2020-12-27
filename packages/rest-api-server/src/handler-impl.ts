@@ -2,7 +2,7 @@ import http from 'http'
 import qs from 'qs'
 
 import { validate, serialize } from '@validator/validator'
-import { RequestExt, Route } from './route'
+import { Route } from './route'
 import { Request, Response } from './handler'
 import { assertEqual, getOrUndefined } from '@validator/validator/utils'
 import { SerializationFormat } from './serialization'
