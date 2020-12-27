@@ -1,10 +1,10 @@
 import http from 'http'
 import qs from 'qs'
 
-import { validate, serialize } from '@validator/validator'
+import { validate, serialize, TypeHint } from '@validator/validator'
 import { Route } from './route'
 import { Request, Response } from './handler'
-import { assertEqual, getOrUndefined } from '@validator/validator/utils'
+import { getOrUndefined } from '@validator/validator/utils'
 import { SerializationFormat } from './serialization'
 
 export type ServerConfig = {
@@ -20,19 +20,15 @@ export const matchRoute = (
   request: http.IncomingMessage,
   route: Route,
 ): {
-  method: Route['request']['method'],
-  queryParams: RequestExt<Route['request']>['queryParams'],
-  pathParams: RequestExt<Route['request']>['pathParams']
+  method: TypeHint<Route['request']['method']>,
+  queryParams: TypeHint<Route['request']['queryParams']>,
+  pathParams: TypeHint<Route['request']['pathParams']>
 } => {
   const [path, queryString] = (request.url || '').split('?', 2)
   return {
     queryParams: validate(route.request.queryParams, qs.parse(queryString)),
-    pathParams: route.request.pathParams.match(path),
-    method: assertEqual(
-      route.request.method.toLowerCase(),
-      request.method?.toLowerCase(),
-      'Method is not supported'
-    )
+    pathParams: route.request.pathParams?.validate(path),
+    method: validate(route.request.method, request.method),
   }
 }
 
