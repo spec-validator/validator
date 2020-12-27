@@ -1,0 +1,97 @@
+import { Field, validate } from '../core'
+import { Json } from '../Json'
+import { Any } from '../util-types'
+
+export interface FieldWithRegExp<Type> extends Field<Type> {
+  regex: RegExp
+  asString: (value: Type) => string
+}
+
+export interface FieldWithStringInputSupport<Type> extends Field<Type> {
+  getFieldWithRegExp(): FieldWithRegExp<Type>
+}
+
+class Segment<
+  DeserializedType = undefined
+> implements Field<DeserializedType> {
+
+  private parent?: Segment<unknown>
+  private key?: string;
+  private field?: FieldWithRegExp<Any>
+  private regex?: string
+
+  constructor(parent?: Segment<unknown>, key?: string, field?: FieldWithStringInputSupport<Any>) {
+    this.parent = parent
+    this.key = key
+    this.field = field?.getFieldWithRegExp()
+  }
+
+  _<Key extends string, ExtraDeserializedType extends Any = undefined>(
+    key: Key,
+    field?: FieldWithStringInputSupport<ExtraDeserializedType>
+  ): Segment<[ExtraDeserializedType] extends [undefined] ? DeserializedType : [DeserializedType] extends [undefined] ?
+  {
+    [P in Key]: ExtraDeserializedType
+  } : DeserializedType & {
+    [P in Key]: ExtraDeserializedType
+  }> {
+    return new Segment(this, key as any, field) as any
+  }
+
+  // TODO: make getSegments and getFieldSegments lazy props
+
+  private getSegments(): Segment<unknown>[] {
+    const segments: Segment<unknown>[] = []
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    let cursor: Segment<unknown> | undefined = this
+    while(cursor) {
+      segments.push(cursor)
+      cursor = cursor.parent
+    }
+    segments.reverse()
+    return segments
+  }
+
+  private getFieldSegments(): Segment<unknown>[] {
+    return this.getSegments().filter(segment => segment.field)
+  }
+
+  private getRegex(): string {
+    if (!this.regex) {
+      this.regex = `^${this.getSegments()
+        .map(segment => segment.field && segment.key
+          ? `(?<${segment.key}>${segment.field.regex.source})`
+          : (segment.key || '')
+        ).join('')}$`
+    }
+    return this.regex
+  }
+
+  validate(value: string): DeserializedType {
+    const matches = value.match(this.getRegex())?.groups
+    if (!matches) {
+      throw 'Didn\'t match'
+    }
+    const segments = this.getFieldSegments()
+    const spec = Object.fromEntries(segments.map(segment => [segment.key, segment.field]))
+    return validate(spec, matches)
+  }
+
+  serialize(deserialized: DeserializedType): Json {
+    const result: string[] = []
+    this.getSegments().forEach((it: Segment<unknown>) => {
+      if (it.field && it.key) {
+        result.push(it.field.toString((deserialized as any)[it.key]))
+      } else if (it.key) {
+        result.push(it.key)
+      }
+    })
+    return result.join('')
+  }
+
+  toString(): string {
+    return this.getRegex()
+  }
+}
+
+export default new Segment<undefined>()

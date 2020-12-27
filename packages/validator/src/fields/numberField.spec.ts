@@ -1,6 +1,6 @@
 import { expectType } from '../TypeTestUtils.test'
 import { TypeHint } from '../core'
-import { $ } from './segmentField'
+import $ from './segmentField'
 import numberField from './numberField'
 
 import {

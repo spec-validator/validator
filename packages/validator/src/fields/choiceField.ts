@@ -1,13 +1,11 @@
-import { Field } from '../core'
-import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 import { escapeRegex, withParentFields } from '../utils'
 import { Primitive, Json } from '../Json'
-import { Any } from '../util-types'
 import { declareField, OfType } from '../registry'
+import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
 class ChoiceField<
   Choice extends Primitive,
-> implements Field<Choice>, WithStringInputSupport {
+> implements FieldWithStringInputSupport<Choice> {
   choices: readonly Choice[]
   private choicesSet: Set<Primitive>
 
@@ -15,7 +13,7 @@ class ChoiceField<
     this.choices = choices
     this.choicesSet = new Set(choices)
   }
-  getFieldWithRegExp(): Field<Any> & WithRegExp {
+  getFieldWithRegExp(): ChoiceFieldWithRegExp<Choice> {
     return withParentFields(this, new ChoiceFieldWithRegExp(...this.choices), ['type'])
   }
 
@@ -32,7 +30,7 @@ class ChoiceField<
 
 class ChoiceFieldWithRegExp<
   Choice extends Primitive
-> extends ChoiceField<Choice> implements WithRegExp {
+> extends ChoiceField<Choice> implements FieldWithRegExp<Choice> {
 
   private fullChoiceMap: Map<any, Primitive>
 
@@ -44,6 +42,10 @@ class ChoiceFieldWithRegExp<
       this.fullChoiceMap.set(it, it)
       this.fullChoiceMap.set(it.toString(), it)
     })
+  }
+
+  asString(value: Choice) {
+    return value.toString()
   }
 
   get regex() {

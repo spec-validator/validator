@@ -1,12 +1,10 @@
-import { Field } from '../core'
 import { declareField } from '../registry'
 import { Json } from '../Json'
-import { Any } from '../util-types'
-import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 import { withParentFields } from '../utils'
+import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
-class BooleanField implements Field<boolean>, WithStringInputSupport {
-  getFieldWithRegExp(): Field<Any> & WithRegExp {
+class BooleanField implements FieldWithStringInputSupport<boolean> {
+  getFieldWithRegExp(): BooleanFieldWithRegExp {
     return withParentFields(this, new BooleanFieldWithRegExp(), ['type'])
   }
   validate(value: any): boolean {
@@ -20,8 +18,11 @@ class BooleanField implements Field<boolean>, WithStringInputSupport {
   }
 }
 
-class BooleanFieldWithRegExp extends BooleanField implements WithRegExp {
+class BooleanFieldWithRegExp extends BooleanField implements FieldWithRegExp<boolean> {
 
+  asString(value: boolean) {
+    return value.toString()
+  }
   get regex() {
     return /true|false|1|0/
   }

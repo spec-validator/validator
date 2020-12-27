@@ -1,16 +1,18 @@
-import { Field } from '../core'
 import { declareField } from '../registry'
 import { Json } from '../Json'
-import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
+import { FieldWithStringInputSupport, FieldWithRegExp } from './segmentField'
 
-class StringField implements Field<string>, WithStringInputSupport, WithRegExp {
+class StringField implements FieldWithStringInputSupport<string>, FieldWithRegExp<string> {
   private regexV?: RegExp;
 
   constructor(regex?: RegExp) {
     this.regexV = regex
   }
-  getFieldWithRegExp(): StringField & WithRegExp {
+  getFieldWithRegExp(): StringField {
     return this
+  }
+  asString(value: string) {
+    return value
   }
   get regex() {
     return this?.regexV || /.*/

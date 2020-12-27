@@ -1,16 +1,14 @@
-import { Field } from '../core'
 import { declareField } from '../registry'
 import { Json } from '../Json'
-import { Any } from '../util-types'
-import { WithRegExp, WithStringInputSupport } from '../WithStringInputSupport'
 import { withParentFields } from '../utils'
+import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
-class NumberField implements Field<number>, WithStringInputSupport {
+class NumberField implements FieldWithStringInputSupport<number> {
   constructor(readonly params?: {
     canBeFloat?: boolean
   }) {}
 
-  getFieldWithRegExp(): Field<Any> & WithRegExp {
+  getFieldWithRegExp(): NumberFieldWithRegExp {
     return withParentFields(this, new NumberFieldWithRegExp(this.params), ['type'])
   }
 
@@ -28,7 +26,7 @@ class NumberField implements Field<number>, WithStringInputSupport {
   }
 }
 
-class NumberFieldWithRegExp extends NumberField implements WithRegExp {
+class NumberFieldWithRegExp extends NumberField implements FieldWithRegExp<number> {
 
   get regex() {
     const parts: string[] = []
@@ -39,6 +37,10 @@ class NumberFieldWithRegExp extends NumberField implements WithRegExp {
     }
 
     return RegExp(parts.join(''))
+  }
+
+  asString(value: number) {
+    return value.toString()
   }
 
   validate(value: any) {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Field, serialize, TypeHint, validate } from '../core'
 import { WithStringInputSupport } from '../WithStringInputSupport'
-import { $ } from './segmentField'
+import $ from './segmentField'
 import { Any } from '../util-types'
 
 export const testValidateSpecOk = <T extends Any> (field: Field<T>, input: any, expected: T): void => {
@@ -25,7 +25,7 @@ export const testValidateSpecError = <T extends Any> (field: Field<T>, input: an
 }
 
 export const testValidateSegmentChainOK = <T extends Any> (
-  field: Field<T> & WithStringInputSupport,
+  field: Field<T> & WithStringInputSupport<T>,
   input: string,
   expected: T
 ): void => {
@@ -34,12 +34,12 @@ export const testValidateSegmentChainOK = <T extends Any> (
     ._('field', field)
     ._('/suffix')
 
-  const valid = spec.match('/' + input + '/suffix')
+  const valid = spec.validate('/' + input + '/suffix')
   expect((valid as any).field).toEqual(expected)
 }
 
 export const testValidateSegmentChainError = <T extends Any> (
-  field: Field<T> & WithStringInputSupport, input: any, expectedError: any
+  field: Field<T> & WithStringInputSupport<T>, input: any, expectedError: any
 ) => {
   const spec = $
     ._('/')
@@ -48,7 +48,7 @@ export const testValidateSegmentChainError = <T extends Any> (
 
   let error: any = null
   try {
-    spec.match('/' + input + '/suffix')
+    spec.validate('/' + input + '/suffix')
   } catch (err) {
     error = err
   }
