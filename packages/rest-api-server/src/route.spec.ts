@@ -1,4 +1,4 @@
-import { stringField } from '@validator/validator/fields'
+import { choiceField, stringField } from '@validator/validator/fields'
 import { $ } from '@validator/validator/segmentChain'
 import { expectType } from '@validator/validator/TypeTestUtils.test'
 import { WithoutOptional } from '@validator/validator/util-types'
@@ -52,7 +52,7 @@ describe('Route', () => {
     }
 
     const respSpec = {
-      statusCode: 201,
+      statusCode: choiceField(201),
       data: stringField(),
     }
 
