@@ -16,6 +16,23 @@ export type ServerConfig = {
   readonly reportError: (error: unknown) => Promise<void>
 }
 
+const splitPath = (url?: string) => {
+  const [pathParams, queryParams] = (url || '').split('?', 2)
+  return {
+    pathParams, queryParams
+  }
+}
+
+const getWildcardRoute = async (
+  serialization: SerializationFormat,
+  request: http.IncomingMessage,
+) => ({
+  ...splitPath(request.url),
+  method: request.method,
+  data: serialization.deserialize(await getData(request)),
+  headers: request.headers
+})
+
 export const matchRoute = (
   request: http.IncomingMessage,
   route: Route,

@@ -19,3 +19,9 @@ export const withParentFields = <T>(parent: any, child: T, fields: string[]): T 
   return child
 }
 
+export const omit = <T, K extends keyof T>(full: T, keys: K[]): Omit<T, K> => {
+  const toDrop = new Set(keys)
+  return Object.fromEntries(
+    Object.entries(full).filter(it => !toDrop.has(it[0] as K))
+  ) as Omit<T, K>
+}
