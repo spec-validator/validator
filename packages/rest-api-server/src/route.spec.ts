@@ -1,5 +1,5 @@
 import { choiceField, stringField } from '@validator/validator/fields'
-import { $ } from '@validator/validator/fields/segmentField'
+import $ from '@validator/validator/fields/segmentField'
 import { expectType } from '@validator/validator/TypeTestUtils.test'
 import { WithoutOptional } from '@validator/validator/util-types'
 import { Route, RequestExt } from './route'
