@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Field, serialize, TypeHint, validate } from '../core'
-import { WithStringInputSupport } from '../WithStringInputSupport'
-import $ from './segmentField'
+import $, { FieldWithStringInputSupport } from './segmentField'
 import { Any } from '../util-types'
 
 export const testValidateSpecOk = <T extends Any> (field: Field<T>, input: any, expected: T): void => {
@@ -25,7 +24,7 @@ export const testValidateSpecError = <T extends Any> (field: Field<T>, input: an
 }
 
 export const testValidateSegmentChainOK = <T extends Any> (
-  field: Field<T> & WithStringInputSupport<T>,
+  field: FieldWithStringInputSupport<T>,
   input: string,
   expected: T
 ): void => {
@@ -39,7 +38,7 @@ export const testValidateSegmentChainOK = <T extends Any> (
 }
 
 export const testValidateSegmentChainError = <T extends Any> (
-  field: Field<T> & WithStringInputSupport<T>, input: any, expectedError: any
+  field: FieldWithStringInputSupport<T>, input: any, expectedError: any
 ) => {
   const spec = $
     ._('/')

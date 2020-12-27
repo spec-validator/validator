@@ -1,5 +1,4 @@
 import { SpecUnion, TypeHint, ValidatorSpec } from '@validator/validator/core'
-import { Segment } from '@validator/validator/fields/segmentField'
 import { StringMapping, Request, Handler, HeaderMapping, Response } from './handler'
 import { Any, Optional } from '@validator/validator/util-types'
 
@@ -11,7 +10,7 @@ export type RequestSpec<
   Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
 > = {
   readonly method: Method,
-  readonly pathParams: Segment<PathParams>,
+  readonly pathParams: ValidatorSpec<PathParams>,
   readonly data?: SpecUnion<Data>,
   readonly queryParams?: ValidatorSpec<QueryParams>,
   readonly headers?: ValidatorSpec<Headers>
@@ -37,6 +36,10 @@ export type RequestExt<
   TypeHint<Spec['queryParams']>,
   TypeHint<Spec['headers']>
 >
+
+type SF = ValidatorSpec<Response>
+
+type FF = TypeHint<SF>
 
 export type Route<
   ReqSpec extends RequestSpec = RequestSpec,

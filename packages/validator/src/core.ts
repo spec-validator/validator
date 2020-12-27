@@ -1,4 +1,4 @@
-import { Json, Primitive } from './Json'
+import { Json } from './Json'
 import { Any } from './util-types'
 
 export interface FieldDecorator {
@@ -10,11 +10,11 @@ export interface Field<DeserializedType> {
   serialize(deserialized: DeserializedType): Json
 }
 
-export type ValidatorSpec<DeserializedType extends Any> = {
-  [P in keyof DeserializedType]: DeserializedType[P] extends Any ? SpecUnion<DeserializedType[P]> : DeserializedType
+export type ValidatorSpec<DeserializedType> = {
+  [P in keyof DeserializedType]: Field<DeserializedType[P]>
 };
 
-export type SpecUnion<DeserializedType extends Any> =
+export type SpecUnion<DeserializedType> =
   ValidatorSpec<DeserializedType> | Field<DeserializedType> | undefined;
 
 export type TypeHint<Spec extends SpecUnion<Any> | undefined> =
@@ -22,8 +22,6 @@ export type TypeHint<Spec extends SpecUnion<Any> | undefined> =
     { [P in keyof Spec]: TypeHint<Spec[P]>; }
   : Spec extends Field<Any> ?
     ReturnType<Spec['validate']>
-  : Spec extends Primitive ?
-    Spec
   :
     undefined;
 
