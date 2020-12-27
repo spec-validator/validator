@@ -56,12 +56,12 @@ export type ResponseExt<Spec extends ResponseSpec> = Response<
 
 export type Route<
   ReqSpec extends RequestSpec = RequestSpec,
-  RespSpec extends ResponseSpec = ResponseSpec
+  RespSpec extends ValidatorSpec<Response> = ValidatorSpec<Response>
 > = {
   readonly request: ReqSpec,
   readonly response: RespSpec,
   readonly handler: Handler<
     RequestExt<ReqSpec>,
-    ResponseExt<RespSpec>
+    TypeHint<RespSpec>
   >
 }
