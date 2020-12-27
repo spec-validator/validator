@@ -26,8 +26,8 @@ export type Response<
   Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
 > = {
   readonly statusCode: StatusCode,
-  readonly data: Data,
-  readonly headers: Headers,
+  readonly data?: Data,
+  readonly headers?: Headers,
 }
 
 export type Handler<

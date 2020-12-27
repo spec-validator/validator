@@ -1,6 +1,6 @@
 import { SpecUnion, TypeHint, ValidatorSpec } from '@validator/validator/core'
 import { Segment } from '@validator/validator/segmentChain'
-import { StringMapping, Response, Request, Handler, HeaderMapping } from './handler'
+import { StringMapping, Request, Handler, HeaderMapping, Response } from './handler'
 import { Any, Optional } from '@validator/validator/util-types'
 
 export type RequestSpec<
@@ -28,16 +28,6 @@ export type RequestSpec<
  * the standards.
  */
 
-export type ResponseSpec<
-  StatusCode extends number = number,
-  Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
-  Data extends Optional<Any> = Optional<Any>,
-> = {
-  readonly statusCode: StatusCode
-  readonly data?: SpecUnion<Data>,
-  readonly headers?: ValidatorSpec<Headers>
-}
-
 export type RequestExt<
   Spec extends RequestSpec,
 > = Request<
@@ -45,12 +35,6 @@ export type RequestExt<
   TypeHint<Spec['pathParams']>,
   TypeHint<Spec['data']>,
   TypeHint<Spec['queryParams']>,
-  TypeHint<Spec['headers']>
->
-
-export type ResponseExt<Spec extends ResponseSpec> = Response<
-  Spec['statusCode'],
-  TypeHint<Spec['data']>,
   TypeHint<Spec['headers']>
 >
 

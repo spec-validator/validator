@@ -1,8 +1,8 @@
-import { numberField, stringField } from '@validator/validator/fields'
+import { stringField } from '@validator/validator/fields'
 import { $ } from '@validator/validator/segmentChain'
 import { expectType } from '@validator/validator/TypeTestUtils.test'
 import { WithoutOptional } from '@validator/validator/util-types'
-import { Route, RequestExt, ResponseExt } from './route'
+import { Route, RequestExt } from './route'
 
 describe('Request', () => {
 
@@ -40,35 +40,6 @@ describe('Request', () => {
 
 })
 
-describe('Response', () => {
-
-  it('contains nothing by default', () => {
-    const spec = {
-      statusCode: 200 as const
-    }
-    type Resp = WithoutOptional<ResponseExt<typeof spec>>
-
-    expectType<Resp, {
-      statusCode: 200
-    }>(true)
-  })
-
-  it('always contains the fields that are defined', () => {
-    const spec = {
-      statusCode: 201 as const,
-      data: stringField()
-    }
-
-    type Resp = WithoutOptional<ResponseExt<typeof spec>>
-
-    expectType<Resp, {
-      statusCode: 201,
-      data: string
-    }>(true)
-  })
-
-})
-
 describe('Route', () => {
 
   it('works with defined request and response', () => {
@@ -81,8 +52,8 @@ describe('Route', () => {
     }
 
     const respSpec = {
-      statusCode: numberField(),
-      data: stringField()
+      statusCode: 201,
+      data: stringField(),
     }
 
     type Decor = Route<typeof reqSpec, typeof respSpec>
