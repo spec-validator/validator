@@ -1,4 +1,4 @@
-import { Json } from './Json'
+import { Json, Primitive } from './Json'
 import { Segment } from './segmentChain'
 import { Any } from './util-types'
 
@@ -12,7 +12,7 @@ export interface Field<DeserializedType> {
 }
 
 export type ValidatorSpec<DeserializedType extends Any> = {
-  [P in keyof DeserializedType]: Field<DeserializedType[P]>;
+  [P in keyof DeserializedType]: DeserializedType[P] extends Any ? SpecUnion<DeserializedType[P]> : DeserializedType
 };
 
 export type SpecUnion<DeserializedType extends Any> =
@@ -22,9 +22,11 @@ export type TypeHint<Spec extends SpecUnion<Any> | undefined> =
   Spec extends Segment<Any> ?
     ReturnType<Spec['match']>
   : Spec extends ValidatorSpec<Record<string, Any>> ?
-    { [P in keyof Spec]: ReturnType<Spec[P]['validate']>; }
+    { [P in keyof Spec]: TypeHint<Spec[P]>; }
   : Spec extends Field<Any> ?
     ReturnType<Spec['validate']>
+  : Spec extends Primitive ?
+    Spec
   :
     undefined;
 
