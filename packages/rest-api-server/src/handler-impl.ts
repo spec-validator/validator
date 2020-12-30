@@ -1,10 +1,8 @@
 import http from 'http'
-import qs from 'qs'
-
-import { validate, serialize, TypeHint } from '@validator/validator'
+import { validate, serialize } from '@validator/validator'
 import { Route } from './route'
 import { Request, Response } from './handler'
-import { getOrUndefined } from '@validator/validator/utils'
+import { getOrUndefined, resolveValues } from '@validator/validator/utils'
 import { SerializationFormat } from './serialization'
 
 export type ServerConfig = {
@@ -34,19 +32,11 @@ const getWildcardRoute = async (
 })
 
 export const matchRoute = (
+  serialization: SerializationFormat,
   request: http.IncomingMessage,
   route: Route,
-): {
-  method: TypeHint<Route['request']['method']>,
-  queryParams: TypeHint<Route['request']['queryParams']>,
-  pathParams: TypeHint<Route['request']['pathParams']>
-} => {
-  const [path, queryString] = (request.url || '').split('?', 2)
-  return {
-    queryParams: validate(route.request.queryParams, qs.parse(queryString)),
-    pathParams: route.request.pathParams?.validate(path),
-    method: validate(route.request.method, request.method),
-  }
+): void => {
+  validate(route.request, resolveValues(getWildcardRoute(serialization, request)))
 }
 
 const getData = async (msg: http.IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
@@ -74,12 +64,12 @@ const withAppErrorStatusCode = async <T>(statusCode: number, inner: () => Promis
 export const handleRoute = async (
   config: ServerConfig,
   route: Route,
-  request: http.IncomingMessage,
+  requestIn: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const match = matchRoute(request, route)
-  const data = validate(route.request.data, config.serialization.deserialize(await getData(request)))
-  const headers = validate(route.request.headers, request.headers)
+  const wildcardRequest = resolveValues(getWildcardRoute(config.serialization, requestIn))
+
+  const request = validate(route.request, wildcardRequest)
 
   // This cast is totally reasoanble because in the interface we exclude
   // null values.
@@ -87,7 +77,7 @@ export const handleRoute = async (
 
   const resp = await withAppErrorStatusCode(
     config.appErrorStatusCode,
-    handler.bind(null, { ...match, data, headers })
+    () => handler(request)
   )
 
   Object.entries(resp?.headers || {}).forEach(([key, value]) => {

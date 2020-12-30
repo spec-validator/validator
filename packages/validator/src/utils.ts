@@ -25,3 +25,20 @@ export const omit = <T, K extends keyof T>(full: T, keys: K[]): Omit<T, K> => {
     Object.entries(full).filter(it => !toDrop.has(it[0] as K))
   ) as Omit<T, K>
 }
+
+export const pick = <T, K extends keyof T>(full: T, keys: K[]): Pick<T, K> => {
+  const toPick = new Set(keys)
+  return Object.fromEntries(
+    Object.entries(full).filter(it => toPick.has(it[0] as K))
+  ) as Pick<T, K>
+}
+
+export const keys = <T>(o: T): Array<keyof T> => <Array<keyof T>>Object.keys(o)
+
+export type PromisedValues<Spec> =
+  { [P in keyof Spec]: Promise<Spec[P]> | Spec[P]; }
+
+export const resolveValues = async <Spec> (
+  promised: PromisedValues<Spec>
+): Promise<Spec> =>
+  Object.fromEntries(Object.entries(promised).map(async ([key, value]) => [key, await value]) as any) as Spec
