@@ -76,7 +76,7 @@ export const handleRoute = async (
   requestIn: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const wildcardRequest = resolveValues(getWildcardRoute(config.serialization, requestIn))
+  const wildcardRequest = await getWildcardRoute(config.serialization, requestIn)
 
   const request = validate(route.request, wildcardRequest)
 
