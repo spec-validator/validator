@@ -21,27 +21,22 @@ const splitPath = (url?: string) => {
   }
 }
 
-const getWildcardRoute = async (
-  serialization: SerializationFormat,
+const getWildcardRequestBase = (
   request: http.IncomingMessage,
 ) => ({
   ...splitPath(request.url),
   method: request.method,
-  data: serialization.deserialize(await getData(request)),
-  headers: request.headers
 })
 
-export const matchRoute = async (
-  serialization: SerializationFormat,
+const matchRoute = async (
   request: http.IncomingMessage,
   route: Route,
 ): Promise<boolean> => {
-  const tKeys: (keyof Request)[] = ['method', 'pathParams']
-  validate(
+  const tKeys = ['method' as const, 'pathParams' as const]
+  return !!validate(
     pick(route.request, tKeys),
-    resolveValues(pick(await getWildcardRoute(serialization, request), tKeys))
+    resolveValues(pick(getWildcardRequestBase(request), tKeys))
   )
-  return true
 }
 
 const getData = async (msg: http.IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
@@ -53,6 +48,15 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
   } catch (err) {
     reject(err)
   }
+})
+
+const getWildcardRoute = async (
+  serialization: SerializationFormat,
+  request: http.IncomingMessage,
+) => ({
+  ...getWildcardRequestBase(request),
+  data: serialization.deserialize(await getData(request)),
+  headers: request.headers
 })
 
 const withAppErrorStatusCode = async <T>(statusCode: number, inner: () => Promise<T>): Promise<T> => {
@@ -104,7 +108,7 @@ export const handle = async (
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const route = routes.find(getOrUndefined.bind(null, () => matchRoute.bind(null, config.serialization, request)))
+  const route = routes.find(getOrUndefined.bind(null, () => matchRoute.bind(null, request)))
   if (route) {
     try {
       await handleRoute(config, route, request, response)
