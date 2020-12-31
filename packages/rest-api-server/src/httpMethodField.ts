@@ -13,7 +13,7 @@ class HttpMethodField<Method extends string> implements Field<Method> {
   }
 }
 
-const t = '@validator/fields.SingletonField' as const
+const t = '@validator/rest.HttpMethodField' as const
 type Type = OfType<typeof t>
 export default declareField(t, HttpMethodField) as
   (<Choice extends string> (
