@@ -2,7 +2,7 @@ import http from 'http'
 import { validate, serialize } from '@validator/validator'
 import { Route } from './route'
 import { Request, Response } from './handler'
-import { getOrUndefined, resolveValues } from '@validator/validator/utils'
+import { getOrUndefined, pick, resolveValues } from '@validator/validator/utils'
 import { SerializationFormat } from './serialization'
 
 export type ServerConfig = {
@@ -31,12 +31,17 @@ const getWildcardRoute = async (
   headers: request.headers
 })
 
-export const matchRoute = (
+export const matchRoute = async (
   serialization: SerializationFormat,
   request: http.IncomingMessage,
   route: Route,
-): void => {
-  validate(route.request, resolveValues(getWildcardRoute(serialization, request)))
+): Promise<boolean> => {
+  const tKeys: (keyof Request)[] = ['method', 'pathParams']
+  validate(
+    pick(route.request, tKeys),
+    resolveValues(pick(await getWildcardRoute(serialization, request), tKeys))
+  )
+  return true
 }
 
 const getData = async (msg: http.IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
@@ -99,7 +104,7 @@ export const handle = async (
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const route = routes.find(getOrUndefined.bind(null, () => matchRoute.bind(null, request)))
+  const route = routes.find(getOrUndefined.bind(null, () => matchRoute.bind(null, config.serialization, request)))
   if (route) {
     try {
       await handleRoute(config, route, request, response)
