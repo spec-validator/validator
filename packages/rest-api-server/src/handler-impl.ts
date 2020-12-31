@@ -28,16 +28,15 @@ const getWildcardRequestBase = (
   method: request.method,
 })
 
+const ROUTE_KEYS = ['method' as const, 'pathParams' as const]
+
 const matchRoute = async (
   request: http.IncomingMessage,
   route: Route,
-): Promise<boolean> => {
-  const tKeys = ['method' as const, 'pathParams' as const]
-  return !!validate(
-    pick(route.request, tKeys),
-    resolveValues(pick(getWildcardRequestBase(request), tKeys))
-  )
-}
+): Promise<boolean> => !!validate(
+  pick(route.request, ROUTE_KEYS),
+  resolveValues(pick(getWildcardRequestBase(request), ROUTE_KEYS))
+)
 
 const getData = async (msg: http.IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
   try {
