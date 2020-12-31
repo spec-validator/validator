@@ -1,7 +1,5 @@
 import { TypeHint } from '@validator/validator'
 import { ValidatorSpec } from '@validator/validator/core'
-import segmentField from '@validator/validator/fields/segmentField'
-import singletonField from '@validator/validator/fields/singletonField'
 import { Any, Optional, WithoutOptional } from '@validator/validator/util-types'
 
 export type StringMapping = Record<string, Any>
@@ -40,13 +38,8 @@ export type Handler<
 > = (request: WithoutOptional<Req>) => Promise<WithoutOptional<Resp>>
 
 
-type RequestSpect = ValidatorSpec<Request> & {
-  method: ReturnType<typeof singletonField>
-  pathParams: typeof segmentField
-}
-
 export type Route<
-  ReqSpec extends RequestSpect = RequestSpect,
+  ReqSpec extends ValidatorSpec<Request> = ValidatorSpec<Request>,
   RespSpec extends ValidatorSpec<Response> = ValidatorSpec<Response>
 > = {
   readonly request: ReqSpec,
