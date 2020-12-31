@@ -30,7 +30,7 @@ const specToParams = (
   )
 
 const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [createRoute(route.request.pathParams), {
-  [route.request.method.toLowerCase()]: {
+  [route.request.method.choice.toLowerCase()]: {
     parameters: [
       ...specToParams('query', route.request.queryParams),
       ...specToParams('path', createPathParams(route.request.pathParams))
