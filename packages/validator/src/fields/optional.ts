@@ -22,4 +22,4 @@ type Type = OfType<typeof t>
 export default declareField(t, OptionalValueDecorator) as
   (<T extends Any> (
     innerField: Field<T>
-  ) => Field<Optional<T>> & Type) & Type
+  ) => OptionalValueDecorator<T> & Type) & Type

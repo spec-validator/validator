@@ -1,5 +1,6 @@
 import { Field } from '../core'
 import { Json } from '../Json'
+import { OfType, declareField } from '../registry'
 
 class SingletonField<Choice extends Json> implements Field<Choice> {
   constructor(private readonly choice: Choice) {}
@@ -13,4 +14,9 @@ class SingletonField<Choice extends Json> implements Field<Choice> {
   }
 }
 
-export default <Choice extends Json>(choice: Choice): SingletonField<Choice> => new SingletonField(choice)
+const t = '@validator/fields.SingletonField' as const
+type Type = OfType<typeof t>
+export default declareField(t, SingletonField) as
+  (<Choice extends Json> (
+    choice: Choice
+  ) => SingletonField<Choice> & Type) & Type
