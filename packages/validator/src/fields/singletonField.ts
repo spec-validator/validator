@@ -11,9 +11,6 @@ class SingletonField<Choice extends Json> implements Field<Choice> {
   serialize(_: Choice): Json {
     return this.choice
   }
-  getParams(): Json  {
-    return
-  }
 }
 
 export default <Choice extends Json>(choice: Choice): SingletonField<Choice> => new SingletonField(choice)
