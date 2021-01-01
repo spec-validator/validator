@@ -1,4 +1,3 @@
-import { Segment } from '@validator/validator/fields/segmentField'
 import { Optional } from '@validator/validator/util-types'
 import http from 'http'
 import { URL } from 'url'
@@ -6,7 +5,7 @@ import { StringMapping } from './route'
 
 import { ServerConfig, handle } from './handler-impl'
 import { JsonSerialization } from './serialization'
-import { RequestSpec, ResponseSpec, Route } from './route'
+import { Route } from './route'
 
 const DEFAULT_SERVER_CONFIG: ServerConfig = {
   baseUrl: 'http://localhost:8000',
