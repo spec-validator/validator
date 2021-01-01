@@ -1,6 +1,7 @@
 import { TypeHint } from '@validator/validator'
 import { ValidatorSpec } from '@validator/validator/core'
 import { Any, Optional, WithoutOptional } from '@validator/validator/util-types'
+
 export type StringMapping = Record<string, Any>
 
 export type HeaderMapping = Record<string, string | string[] | number>
