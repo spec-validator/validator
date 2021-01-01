@@ -14,23 +14,23 @@ export type Request<
   Data extends Optional<Any> = Optional<Any>,
   QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
   Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
-> = {
+> = WithoutOptional<{
   readonly method: Method,
-  readonly pathParams?: PathParams,
-  readonly data?: Data,
-  readonly headers?: Headers,
-  readonly queryParams?: QueryParams
-}
+  readonly pathParams: PathParams,
+  readonly data: Data,
+  readonly headers: Headers,
+  readonly queryParams: QueryParams
+}>
 
 export type Response<
   StatusCode extends number = number,
   Data extends Optional<Any> = Optional<Any>,
   Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
-> = {
+> = WithoutOptional<{
   readonly statusCode: StatusCode,
-  readonly data?: Data,
-  readonly headers?: Headers,
-}
+  readonly data: Data,
+  readonly headers: Headers,
+}>
 
 export type Handler<
   Req extends Request = Request,
