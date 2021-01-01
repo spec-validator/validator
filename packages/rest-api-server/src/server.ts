@@ -1,11 +1,13 @@
 import { Optional } from '@validator/validator/util-types'
 import http from 'http'
 import { URL } from 'url'
-import { StringMapping } from './route'
+import { Request, Response, StringMapping } from './route'
 
 import { ServerConfig, handle } from './handler-impl'
 import { JsonSerialization } from './serialization'
 import { Route } from './route'
+import { Field, ValidatorSpec } from '@validator/validator/core'
+import { choiceField } from '@validator/validator/fields'
 
 const DEFAULT_SERVER_CONFIG: ServerConfig = {
   baseUrl: 'http://localhost:8000',
@@ -26,23 +28,30 @@ const mergeServerConfigs = (
   ...serverConfig,
 })
 
+type RequestSpec = ValidatorSpec<Omit<Request, 'method' | 'pathParams'>>
+
+type ResponseSpec = ValidatorSpec<Response>
+
 export const withMethod = <
   Method extends string,
 > (method: Method) => <
   PathParams extends Optional<StringMapping> = Optional<StringMapping>,
-  ReqSpec extends Omit<RequestSpec, 'method' | 'pathParams'> = Omit<RequestSpec, 'method' | 'pathParams'>,
+  ReqSpec extends RequestSpec = RequestSpec,
   RespSpec extends ResponseSpec = ResponseSpec
   > (
-      pathParams: Segment<PathParams>,
+      pathParams: Field<PathParams>,
       spec: {
       request: ReqSpec,
       response: RespSpec
     },
-      handler: Route<ReqSpec & { method: Method, pathParams: Segment<PathParams> }, RespSpec>['handler']
+      handler: Route<ReqSpec & {
+        readonly method: Field<string>,
+        readonly pathParams: Field<PathParams>
+      }, RespSpec>['handler']
     ): Route => ({
       request: {
         ...spec.request,
-        method,
+        method: choiceField(method),
         pathParams,
       },
       response: spec.response,
