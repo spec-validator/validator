@@ -1,6 +1,5 @@
 import { TypeHint, ValidatorSpec } from '@validator/validator/core'
 import { expectType } from '@validator/validator/TypeTestUtils.test'
-import { WithoutOptional } from '@validator/validator/util-types'
 import { Request, Response, Handler } from './route'
 
 describe('Request', () => {
@@ -14,7 +13,7 @@ describe('Request', () => {
   })
 
   it('always contains the fields that are defined', () => {
-    type Req = WithoutOptional<Request<'GET', {pathKey: string}, undefined, undefined, {headerKey: string}>>
+    type Req = Request<'GET', {pathKey: string}, undefined, undefined, {headerKey: string}>
 
     expectType<{
       method: 'GET',
