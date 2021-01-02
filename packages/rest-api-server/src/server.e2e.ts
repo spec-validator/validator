@@ -1,4 +1,4 @@
-import { stringField } from '@validator/validator/fields'
+import { choiceField, stringField } from '@validator/validator/fields'
 import { $ } from '@validator/validator/fields/segmentField'
 import { Route } from './route'
 import { GET } from './server'
@@ -12,7 +12,7 @@ const routes: Route[] = [
     },
     response: {
       // TODO static field for only one possible value
-      statusCode: 200
+      statusCode: choiceField(200)
     },
   },
   async (request) => Promise.resolve({

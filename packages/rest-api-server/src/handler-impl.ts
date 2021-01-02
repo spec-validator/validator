@@ -1,7 +1,7 @@
 import http from 'http'
 import { validate, serialize } from '@validator/validator'
-import { Route } from './route'
-import { Request, Response } from './route'
+import { Request, Route } from './route'
+import { Response } from './route'
 import { getOrUndefined, pick, resolveValues } from '@validator/validator/utils'
 import { SerializationFormat } from './serialization'
 
