@@ -3,7 +3,6 @@ import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 import { ServerConfig, Route } from '@validator/rest-api-server'
 import { Field } from '@validator/validator'
 import { ValidatorSpec } from '@validator/validator/core'
-import { Segment } from '@validator/validator/fields/segmentField'
 
 // https://swagger.io/specification/
 
@@ -17,9 +16,9 @@ const createParameter = (type: 'query' | 'path', name: string, field: Field<unkn
   }
 })
 
-const createRoute = (segment: Segment<unknown>): string => '//'
+const createRoute = (segment: unknown): string => '//'
 
-const createPathParams = (segment: Segment<unknown>): ValidatorSpec<Record<string, unknown>> => ({})
+const createPathParams = (segment: unknown): ValidatorSpec<Record<string, unknown>> => ({})
 
 const specToParams = (
   type: 'query' | 'path',

@@ -1,8 +1,8 @@
 import { choiceField, stringField } from '@validator/validator/fields'
-import { $ } from '@validator/validator/fields/segmentField'
 import { Route } from './route'
 import { GET } from './server'
 
+/*
 const routes: Route[] = [
   GET($._('/item/')._('id', stringField()), {
     request: {
@@ -19,3 +19,4 @@ const routes: Route[] = [
     statusCode: 200
   }))
 ]
+*/
