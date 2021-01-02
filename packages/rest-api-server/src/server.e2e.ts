@@ -1,8 +1,9 @@
+
+/*
 import { choiceField, stringField } from '@validator/validator/fields'
 import { Route } from './route'
 import { GET } from './server'
 
-/*
 const routes: Route[] = [
   GET($._('/item/')._('id', stringField()), {
     request: {
