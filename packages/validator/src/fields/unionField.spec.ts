@@ -41,5 +41,5 @@ test('serialization', () => {
 test('types', () => {
   type Spec = TypeHint<typeof field>
 
-  expectType<Spec, string | boolean | 1 | 2 | 3>(true)
+  expectType<Spec, string | boolean | 1 | 2 | 3 | { innerField: string }>(true)
 })
