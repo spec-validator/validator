@@ -74,7 +74,7 @@ const withNoDuplicates = <T extends any[]>(items: T, by: (item: T[number]) => st
 
 const getValue = <V> (mapping: Record<string, V>, type?: string): V => {
   if (!type) {
-    throw 'Fields without type are not supported'
+    throw 'Fields without \'type\' are not supported'
   }
   const value = mapping[type]
   if (value === undefined) {
@@ -86,7 +86,7 @@ const getValue = <V> (mapping: Record<string, V>, type?: string): V => {
 export type GetRepresentation = (field: Field<unknown>) => any
 
 /**
- * This is a generic solution to provide a virtually inlimited number
+ * This is a generic solution to provide a virtually unlimited number
  * of serializable representations of the field classes.
  *
  * The solution is based on aspect-oriented programming model in
@@ -94,9 +94,6 @@ export type GetRepresentation = (field: Field<unknown>) => any
  *
  * The registry maps a field creator of a specific type with
  * a function that has to provide a representation of the field.
- *
- * Note: each field subclass should be registered separately
- * including the `WithRegExp` ones.
  */
 const createRegistry = (
   pairs: FieldPair[]
