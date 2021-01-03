@@ -1,4 +1,5 @@
-import { choiceField, objectField, stringField } from '@validator/validator/fields'
+import { objectField, stringField } from '@validator/validator/fields'
+import constantField from '@validator/validator/fields/constantField'
 import $ from '@validator/validator/fields/segmentField'
 
 import { expectType } from '@validator/validator/TypeTestUtils.test'
@@ -8,7 +9,7 @@ describe('Route', () => {
 
   it('always contains the fields that are defined', () => {
     const reqSpec = {
-      method: choiceField('GET'),
+      method: constantField('GET'),
       headers: objectField({
         headerKey: stringField()
       }),
@@ -16,7 +17,7 @@ describe('Route', () => {
     }
 
     const respSpec = {
-      statusCode: choiceField(201),
+      statusCode: constantField(201),
       data: stringField(),
     }
 
@@ -38,11 +39,11 @@ describe('Route', () => {
 
   it('always contains a method in a request and statusCode in a response', () => {
     const reqSpec = {
-      method: choiceField('GET'),
+      method: constantField('GET'),
     }
 
     const respSpec = {
-      statusCode: choiceField(201),
+      statusCode: constantField(201),
     }
 
     type Decor = Route<typeof reqSpec, typeof respSpec>

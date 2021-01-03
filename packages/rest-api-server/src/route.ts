@@ -1,6 +1,6 @@
 import { TypeHint } from '@validator/validator'
 import { Field } from '@validator/validator/core'
-import { ChoiceField } from '@validator/validator/fields/choiceField'
+import { ConstantField } from '@validator/validator/fields/constantField'
 import { ObjectField } from '@validator/validator/fields/objectField'
 import { SegmentField } from '@validator/validator/fields/segmentField'
 import { Any, WithoutOptional } from '@validator/validator/util-types'
@@ -18,7 +18,7 @@ export type RequestSpec<
   QueryParams extends StringMapping = StringMapping,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
-  readonly method: ChoiceField<Method>,
+  readonly method: ConstantField<Method>,
   readonly pathParams?: SegmentField<PathParams>,
   readonly data?: Field<Data>,
   readonly headers?: ObjectField<Headers>,
@@ -30,7 +30,7 @@ export type ResponseSpec<
   Data extends Any = Any,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
-  readonly statusCode: ChoiceField<StatusCode>,
+  readonly statusCode: ConstantField<StatusCode>,
   readonly data?: Field<Data>,
   readonly headers?: ObjectField<Headers>,
 }
