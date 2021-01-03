@@ -35,6 +35,8 @@ export type ResponseSpec<
 
 export type Route<
   ReqSpec extends RequestSpec = RequestSpec,
+  // One response per route is intentional - there should be only on positive outcome
+  // For negative ones there should be special 'error' handlers
   RespSpec extends ResponseSpec = ResponseSpec
 > = {
   readonly request: ReqSpec,
