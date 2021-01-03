@@ -40,6 +40,7 @@ describe('Route', () => {
   it('always contains a method in a request and statusCode in a response', () => {
     const reqSpec = {
       method: constantField('GET'),
+      pathParams: $
     }
 
     const respSpec = {

@@ -2,7 +2,8 @@ import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import { ServerConfig, Route } from '@validator/rest-api-server'
 import { Field } from '@validator/validator'
-import { ValidatorSpec } from '@validator/validator/core'
+import { $ } from '@validator/validator/fields'
+import { StringMapping } from '@validator/rest-api-server/route'
 
 // https://swagger.io/specification/
 
@@ -16,20 +17,22 @@ const createParameter = (type: 'query' | 'path', name: string, field: Field<unkn
   }
 })
 
-const createRoute = (segment: unknown): string => '//'
+type PathSpec<PathParams extends StringMapping | unknown =StringMapping | unknown> = typeof $ & Field<PathParams>
 
-const createPathParams = (segment: unknown): ValidatorSpec<Record<string, unknown>> => ({})
+const createRoute = (segment?: PathSpec): string => '//'
+
+const createPathParams = (segment?: PathSpec): Field<Record<string, unknown>> => ({})
 
 const specToParams = (
   type: 'query' | 'path',
-  spec?: ValidatorSpec<Record<string, unknown>>
+  spec?: Field<Record<string, unknown>>
 ): OpenAPI.ParameterObject[] =>
   Object.entries(spec || {}).map(
     ([name, field]) => createParameter(type, name, field)
   )
 
 const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [createRoute(route.request.pathParams), {
-  [route.request.method.choice.toLowerCase()]: {
+  [(route.request.method.constant as string).toLowerCase()]: {
     parameters: [
       ...specToParams('query', route.request.queryParams),
       ...specToParams('path', createPathParams(route.request.pathParams))

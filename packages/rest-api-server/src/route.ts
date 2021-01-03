@@ -11,13 +11,13 @@ export type DataMapping = StringMapping | Any
 
 export type RequestSpec<
   Method extends string = string,
-  PathParams extends StringMapping = StringMapping,
+  PathParams extends StringMapping | unknown = StringMapping | unknown,
   Data extends Any = Any,
   QueryParams extends StringMapping = StringMapping,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
   readonly method: ReturnType<typeof constantField> & Field<Method>,
-  readonly pathParams?: typeof $ & Field<PathParams>,
+  readonly pathParams: typeof $ & Field<PathParams>,
   readonly data?: Field<Data>,
   readonly headers?: ReturnType<typeof objectField> & Field<Headers>,
   readonly queryParams?: ReturnType<typeof objectField> & Field<QueryParams>
