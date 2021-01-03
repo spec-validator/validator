@@ -1,13 +1,12 @@
-import { Optional } from '@validator/validator/util-types'
 import http from 'http'
 import { URL } from 'url'
-import { Request, Response, StringMapping } from './route'
+import { StringMapping } from './route'
 
 import { ServerConfig, handle } from './handler-impl'
 import { JsonSerialization } from './serialization'
-import { Route } from './route'
-import { Field, ValidatorSpec } from '@validator/validator/core'
-import { choiceField } from '@validator/validator/fields'
+import { Route, RequestSpec, ResponseSpec } from './route'
+import constantField, { ConstantField } from '@validator/validator/fields/constantField'
+import { SegmentField } from '@validator/validator/fields/segmentField'
 
 const DEFAULT_SERVER_CONFIG: ServerConfig = {
   baseUrl: 'http://localhost:8000',
@@ -28,30 +27,28 @@ const mergeServerConfigs = (
   ...serverConfig,
 })
 
-type RequestSpec = ValidatorSpec<Omit<Request, 'method' | 'pathParams'>>
-
-type ResponseSpec = ValidatorSpec<Response>
+type RequestSpecMethod = Omit<RequestSpec, 'method' | 'pathParams'>
 
 export const withMethod = <
   Method extends string,
 > (method: Method) => <
-  PathParams extends Optional<StringMapping> = Optional<StringMapping>,
-  ReqSpec extends RequestSpec = RequestSpec,
+  PathParams extends StringMapping = StringMapping,
+  ReqSpec extends RequestSpecMethod = RequestSpecMethod,
   RespSpec extends ResponseSpec = ResponseSpec
   > (
-      pathParams: Field<PathParams>,
+      pathParams: SegmentField<PathParams>,
       spec: {
       request: ReqSpec,
       response: RespSpec
     },
       handler: Route<ReqSpec & {
-        readonly method: Field<string>,
-        readonly pathParams: Field<PathParams>
+        readonly method: ConstantField<string>,
+        readonly pathParams: SegmentField<PathParams>
       }, RespSpec>['handler']
     ): Route => ({
       request: {
         ...spec.request,
-        method: choiceField(method),
+        method: constantField(method),
         pathParams,
       },
       response: spec.response,
