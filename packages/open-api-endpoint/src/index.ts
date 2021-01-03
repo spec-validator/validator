@@ -19,9 +19,9 @@ const createParameter = (type: 'query' | 'path', name: string, field: Field<unkn
 
 type PathSpec<PathParams extends StringMapping | unknown =StringMapping | unknown> = typeof $ & Field<PathParams>
 
-const createRoute = (segment?: PathSpec): string => '//'
+const createRoute = (segment: PathSpec): string => segment.toString()
 
-const createPathParams = (segment?: PathSpec): Field<Record<string, unknown>> => ({})
+const createPathParams = (segment: PathSpec): Field<Record<string, unknown>> => ({})
 
 const specToParams = (
   type: 'query' | 'path',
