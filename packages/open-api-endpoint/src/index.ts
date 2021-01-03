@@ -87,7 +87,7 @@ const createOpenApiSpec = (
       url: config.baseUrl
     }
   ],
-  paths: mergeValues(routes.map(createPath))
+  paths: mergeValues(routes.map(createPath.bind(null, getSchema)))
 })
 
 export default createOpenApiSpec
