@@ -28,33 +28,35 @@ const specToParams = (
     ([name, field]) => createParameter(getSchema, type, name, field)
   )
 
-const createPath = (getSchema: GetRepresentation, route: Route):
-  [string, OpenAPI.PathItemObject] => [route.request.pathParams.toString(), {
-  [(route.request.method.constant as string).toLowerCase()]: {
-    parameters: [
-      ...specToParams(getSchema, 'query', route.request.queryParams?.objectSpec || {}),
-      ...specToParams(getSchema, 'path', route.request.pathParams.getObjectSpec())
-    ],
-    requestBody: {
-      // TODO: inject media type from server configs
+const createOperationObject = (getSchema: GetRepresentation, route: Route): OpenAPI.OperationObject => ({
+  parameters: [
+    ...specToParams(getSchema, 'query', route.request.queryParams?.objectSpec || {}),
+    ...specToParams(getSchema, 'path', route.request.pathParams.getObjectSpec())
+  ],
+  requestBody: {
+    // TODO: inject media type from server configs
+    content: { 'application/json': {
+      schema: {
+
+      }
+    } },
+    required: false
+  },
+  responses: {
+    code: {
+      headers: { 'header-name': 'header-value' },
       content: { 'application/json': {
         schema: {
 
         }
-      } },
-      required: false
-    },
-    responses: {
-      code: {
-        headers: { 'header-name': 'header-value' },
-        content: { 'application/json': {
-          schema: {
-
-          }
-        } }
-      }
+      } }
     }
   }
+})
+
+const createPath = (getSchema: GetRepresentation, route: Route):
+  [string, OpenAPI.PathItemObject] => [route.request.pathParams.toString(), {
+  [(route.request.method.constant as string).toLowerCase()]: createOperationObject(getSchema, route)
 }]
 
 type WithInfo = {
