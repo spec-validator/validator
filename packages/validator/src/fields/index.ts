@@ -7,6 +7,8 @@ import choiceField from './choiceField'
 import withDefault from './withDefault'
 import optional from './optional'
 import unionField from './unionField'
+import constantField from './constantField'
+import $ from './segmentField'
 
 export {
   arrayField,
@@ -17,5 +19,7 @@ export {
   choiceField,
   withDefault,
   optional,
-  unionField
+  unionField,
+  constantField,
+  $
 }

@@ -1,8 +1,6 @@
 import { TypeHint } from '@validator/validator'
 import { Field } from '@validator/validator/core'
-import { ConstantField } from '@validator/validator/fields/constantField'
-import { ObjectField } from '@validator/validator/fields/objectField'
-import { SegmentField } from '@validator/validator/fields/segmentField'
+import { $, constantField, objectField } from '@validator/validator/fields'
 import { Any, WithoutOptional } from '@validator/validator/util-types'
 
 export type StringMapping = Record<string, Any>
@@ -18,11 +16,11 @@ export type RequestSpec<
   QueryParams extends StringMapping = StringMapping,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
-  readonly method: ConstantField<Method>,
-  readonly pathParams?: SegmentField<PathParams>,
+  readonly method: ReturnType<typeof constantField> & Field<Method>,
+  readonly pathParams?: typeof $ & Field<PathParams>,
   readonly data?: Field<Data>,
-  readonly headers?: ObjectField<Headers>,
-  readonly queryParams?: ObjectField<QueryParams>
+  readonly headers?: ReturnType<typeof objectField> & Field<Headers>,
+  readonly queryParams?: ReturnType<typeof objectField> & Field<QueryParams>
 }
 
 export type ResponseSpec<
@@ -30,9 +28,9 @@ export type ResponseSpec<
   Data extends Any = Any,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
-  readonly statusCode: ConstantField<StatusCode>,
+  readonly statusCode: ReturnType<typeof constantField> & Field<StatusCode>,
   readonly data?: Field<Data>,
-  readonly headers?: ObjectField<Headers>,
+  readonly headers?: ReturnType<typeof objectField> & Field<Headers>,
 }
 
 export type Route<
