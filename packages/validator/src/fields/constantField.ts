@@ -3,14 +3,17 @@ import { Json } from '../Json'
 import { OfType, declareField } from '../registry'
 
 export class ConstantField<Constant extends Json> implements Field<Constant> {
-  constructor(readonly choice: Constant) {}
+  constructor(readonly constant: Constant) {}
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  validate(_: any): Constant {
-    return this.choice
+  validate(value: any): Constant {
+    if (value !== this.constant) {
+      throw 'Constant does not match the requirement'
+    }
+    return this.constant
   }
   serialize(_: Constant): Json {
-    return this.choice
+    return this.constant
   }
 }
 
@@ -18,5 +21,5 @@ const t = '@validator/fields.ConstantField' as const
 type Type = OfType<typeof t>
 export default declareField(t, ConstantField) as
   (<Constant extends Json> (
-    choice: Constant
+    constant: Constant
   ) => ConstantField<Constant> & Type) & Type
