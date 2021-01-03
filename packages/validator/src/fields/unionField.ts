@@ -2,7 +2,7 @@ import { Field, serialize, SpecUnion, TypeHint, validate } from '../core'
 import { declareField, OfType } from '../registry'
 import { Json } from '../Json'
 
-type Unioned<T extends SpecUnion<any>[]> = {
+export type Unioned<T extends SpecUnion<any>[]> = {
   [P in keyof T]: T[P] extends SpecUnion<any> ? TypeHint<T[P]> : never
 }[number];
 
