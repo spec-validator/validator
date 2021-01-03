@@ -97,4 +97,4 @@ class SegmentField<
   }
 }
 
-export default new SegmentField<undefined>()
+export default new SegmentField<unknown>()
