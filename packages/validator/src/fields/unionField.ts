@@ -40,4 +40,4 @@ class UnionField<
 const t = '@validator/fields.UnionField' as const
 type Type = OfType<typeof t>
 export default declareField(t, UnionField) as
-  (<Variants extends Field<any>[]> (...variants: Variants) => UnionField<Variants> & Type) & Type
+  (<Variants extends SpecUnion<any>[]> (...variants: Variants) => UnionField<Variants> & Type) & Type

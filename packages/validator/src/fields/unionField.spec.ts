@@ -8,7 +8,10 @@ import stringField from './stringField'
 const field = unionField(
   stringField(),
   choiceField(1, 2, 3),
-  booleanField()
+  booleanField(),
+  {
+    innerField: stringField()
+  }
 )
 
 test('validation', () => {
@@ -16,6 +19,11 @@ test('validation', () => {
   expect(validate(field, 3)).toEqual(3)
   expect(validate(field, true)).toEqual(true)
   expect(validate(field, 'foo')).toEqual('foo')
+  expect(validate(field, {
+    innerField: 'foo'
+  })).toEqual({
+    innerField: 'foo'
+  })
 })
 
 test('serialization', () => {
@@ -23,6 +31,11 @@ test('serialization', () => {
   expect(serialize(field, 3)).toEqual(3)
   expect(serialize(field, true)).toEqual(true)
   expect(serialize(field, 'foo')).toEqual('foo')
+  expect(serialize(field, {
+    innerField: 'foo'
+  })).toEqual({
+    innerField: 'foo'
+  })
 })
 
 test('types', () => {
