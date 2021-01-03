@@ -1,4 +1,4 @@
-import { objectField, stringField } from '@validator/validator/fields'
+import { choiceField, numberField, objectField, stringField, unionField } from '@validator/validator/fields'
 import constantField from '@validator/validator/fields/constantField'
 import $ from '@validator/validator/fields/segmentField'
 
@@ -60,4 +60,33 @@ describe('Route', () => {
         }>(true)
   })
 
+  it('works with a union of responses', () => {
+    const reqSpec = {
+      method: constantField('GET'),
+      pathParams: $
+    }
+
+    const respSpec = unionField({
+      statusCode: constantField(201),
+      data: numberField()
+    }, {
+      statusCode: constantField(202),
+      data: choiceField('one', 'two'),
+    })
+
+    type Decor = Route<typeof reqSpec, typeof respSpec>
+
+    expectType<Decor, {
+      request: typeof reqSpec,
+      response: typeof respSpec,
+      handler: (request: {
+        method: 'GET',
+      }) => Promise<{
+        statusCode: 201,
+        data: number
+      } | {
+        statusCode: 202,
+        data: 'one' | 'two'
+      }>}>(true)
+  })
 })

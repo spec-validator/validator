@@ -1,6 +1,7 @@
 import { TypeHint } from '@validator/validator'
 import { Field } from '@validator/validator/core'
-import { $, constantField, objectField } from '@validator/validator/fields'
+import { $, constantField, objectField, unionField } from '@validator/validator/fields'
+import { Unioned } from '@validator/validator/fields/unionField'
 import { Any, WithoutOptional } from '@validator/validator/util-types'
 
 export type StringMapping = Record<string, Any>
@@ -33,9 +34,12 @@ export type ResponseSpec<
   readonly headers?: ReturnType<typeof objectField> & Field<Headers>,
 }
 
+export type ResponsesSpec<ResponseVariants extends ResponseSpec[] = ResponseSpec[]> =
+  ReturnType<typeof unionField> & Field<Unioned<ResponseVariants>>
+
 export type Route<
   ReqSpec extends RequestSpec = RequestSpec,
-  RespSpec extends ResponseSpec = ResponseSpec
+  RespSpec extends ResponsesSpec | ResponseSpec = ResponsesSpec | ResponseSpec
 > = {
   readonly request: ReqSpec,
   readonly response: RespSpec,
