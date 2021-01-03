@@ -1,13 +1,13 @@
-import { Field, TypeHint } from '../core'
+import { Field, serialize, SpecUnion, TypeHint, validate } from '../core'
 import { declareField, OfType } from '../registry'
 import { Json } from '../Json'
 
-type Unioned<T extends Field<any>[]> = {
-  [P in keyof T]: T[P] extends Field<any> ? TypeHint<T[P]> : never
+type Unioned<T extends SpecUnion<any>[]> = {
+  [P in keyof T]: T[P] extends SpecUnion<any> ? TypeHint<T[P]> : never
 }[number];
 
 class UnionField<
-  Variants extends Field<any>[]
+  Variants extends SpecUnion<any>[]
 > implements Field<Variants> {
   readonly variants: Variants
 
@@ -18,7 +18,7 @@ class UnionField<
   validate(value: any): Unioned<Variants> {
     for (const variant of this.variants) {
       try {
-        return variant.validate(value)
+        return validate(variant, value)
       } catch {
         // SKIP
       }
@@ -28,7 +28,7 @@ class UnionField<
   serialize(deserialized: Unioned<Variants>): Json {
     for (const variant of this.variants) {
       try {
-        return variant.serialize(variant.validate(deserialized))
+        return serialize(variant, validate(variant, deserialized))
       } catch {
         // SKIP
       }
