@@ -1,5 +1,5 @@
 import { Json } from './Json'
-import { Any } from './util-types'
+import { Any, Optional } from './util-types'
 
 export interface FieldDecorator {
   innerField: Field<unknown>
@@ -14,11 +14,17 @@ export type ValidatorSpec<DeserializedType> = {
   [P in keyof DeserializedType]: Field<DeserializedType[P]>
 };
 
+export type UnknownSpec = {
+  [key: string]: Optional<Field<any>>
+};
+
 export type SpecUnion<DeserializedType> =
-  ValidatorSpec<DeserializedType> | Field<DeserializedType> | undefined;
+  UnknownSpec | ValidatorSpec<DeserializedType> | Field<DeserializedType> | undefined;
 
 export type TypeHint<Spec extends SpecUnion<Any> | undefined> =
-  Spec extends ValidatorSpec<Record<string, Any>> ?
+  Spec extends UnknownSpec ?
+    { [P in keyof Spec]: TypeHint<Spec[P]>; }
+  : Spec extends ValidatorSpec<Record<string, Any>> ?
     { [P in keyof Spec]: TypeHint<Spec[P]>; }
   : Spec extends Field<Any> ?
     ReturnType<Spec['validate']>

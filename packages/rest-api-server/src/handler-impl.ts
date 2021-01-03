@@ -1,7 +1,6 @@
 import http from 'http'
-import { validate, serialize } from '@validator/validator'
-import { Request, Route } from './route'
-import { Response } from './route'
+import { validate, serialize, TypeHint } from '@validator/validator'
+import { RequestSpec, ResponseSpec, Route } from './route'
 import { getOrUndefined, pick, resolveValues } from '@validator/validator/utils'
 import { SerializationFormat } from './serialization'
 
@@ -81,7 +80,7 @@ export const handleRoute = async (
 
   // This cast is totally reasoanble because in the interface we exclude
   // null values.
-  const handler = route.handler as unknown as (req: Request) => Promise<Response>
+  const handler = route.handler as unknown as (req: TypeHint<RequestSpec>) => Promise<TypeHint<ResponseSpec>>
 
   const resp = await withAppErrorStatusCode(
     config.appErrorStatusCode,

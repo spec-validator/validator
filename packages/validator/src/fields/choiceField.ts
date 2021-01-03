@@ -3,7 +3,7 @@ import { Primitive, Json } from '../Json'
 import { declareField, OfType } from '../registry'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
-class ChoiceField<
+export class ChoiceField<
   Choice extends Primitive,
 > implements FieldWithStringInputSupport<Choice> {
   choices: readonly Choice[]
@@ -17,6 +17,7 @@ class ChoiceField<
     return withParentFields(this, new ChoiceFieldWithRegExp(...this.choices), ['type'])
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   validate(value: any): Choice {
     if (this.choicesSet.has(value)) {
       return value as Choice

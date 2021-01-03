@@ -1,6 +1,9 @@
 import { TypeHint } from '@validator/validator'
-import { ValidatorSpec } from '@validator/validator/core'
-import { Any, Optional, WithoutOptional } from '@validator/validator/util-types'
+import { Field } from '@validator/validator/core'
+import { ChoiceField } from '@validator/validator/fields/choiceField'
+import { ObjectField } from '@validator/validator/fields/objectField'
+import { SegmentField } from '@validator/validator/fields/segmentField'
+import { Any, WithoutOptional } from '@validator/validator/util-types'
 
 export type StringMapping = Record<string, Any>
 
@@ -8,43 +11,35 @@ export type HeaderMapping = Record<string, string | string[] | number>
 
 export type DataMapping = StringMapping | Any
 
-export type Request<
+export type RequestSpec<
   Method extends string = string,
-  PathParams extends Optional<StringMapping> = Optional<StringMapping>,
-  Data extends Optional<Any> = Optional<Any>,
-  QueryParams extends Optional<StringMapping> = Optional<StringMapping>,
-  Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
+  PathParams extends StringMapping = StringMapping,
+  Data extends Any = Any,
+  QueryParams extends StringMapping = StringMapping,
+  Headers extends HeaderMapping = HeaderMapping,
 > = {
-  readonly method: Method,
-  readonly pathParams?: PathParams,
-  readonly data?: Data,
-  readonly headers?: Headers,
-  readonly queryParams?: QueryParams
+  readonly method: ChoiceField<Method>,
+  readonly pathParams?: SegmentField<PathParams>,
+  readonly data?: Field<Data>,
+  readonly headers?: ObjectField<Headers>,
+  readonly queryParams?: ObjectField<QueryParams>
 }
 
-export type Response<
+export type ResponseSpec<
   StatusCode extends number = number,
-  Data extends Optional<Any> = Optional<Any>,
-  Headers extends Optional<HeaderMapping> = Optional<HeaderMapping>,
+  Data extends Any = Any,
+  Headers extends HeaderMapping = HeaderMapping,
 > = {
-  readonly statusCode: StatusCode,
-  readonly data?: Data,
-  readonly headers?: Headers,
+  readonly statusCode: ChoiceField<StatusCode>,
+  readonly data?: Field<Data>,
+  readonly headers?: ObjectField<Headers>,
 }
-
-export type Handler<
-  Req extends Request = Request,
-  Resp extends Response = Response
-> = (request: WithoutOptional<Req>) => Promise<WithoutOptional<Resp>>
 
 export type Route<
-  ReqSpec extends ValidatorSpec<Request> = ValidatorSpec<Request>,
-  RespSpec extends ValidatorSpec<Response> = ValidatorSpec<Response>
+  ReqSpec extends RequestSpec = RequestSpec,
+  RespSpec extends ResponseSpec = ResponseSpec
 > = {
   readonly request: ReqSpec,
   readonly response: RespSpec,
-  readonly handler: Handler<
-    TypeHint<ReqSpec>,
-    TypeHint<RespSpec>
-  >
+  readonly handler: (request: WithoutOptional<TypeHint<ReqSpec>>) => Promise<WithoutOptional<TypeHint<RespSpec>>>
 }
