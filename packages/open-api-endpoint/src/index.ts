@@ -2,7 +2,7 @@ import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import { ServerConfig, Route } from '@validator/rest-api-server'
 import { Field } from '@validator/validator'
-import { $ } from '@validator/validator/fields'
+import { $, objectField } from '@validator/validator/fields'
 import { StringMapping } from '@validator/rest-api-server/route'
 
 // https://swagger.io/specification/
@@ -17,15 +17,19 @@ const createParameter = (type: 'query' | 'path', name: string, field: Field<unkn
   }
 })
 
-type PathSpec<PathParams extends StringMapping | unknown =StringMapping | unknown> = typeof $ & Field<PathParams>
+type PathSpec<PathParams extends StringMapping | unknown = StringMapping | unknown> = typeof $ & Field<PathParams>
 
 const createRoute = (segment: PathSpec): string => segment.toString()
 
-const createPathParams = (segment: PathSpec): Field<Record<string, unknown>> => ({})
+const createPathParams = (segment: PathSpec): Record<string, Field<unknown>> => ({})
+
+type QuerySpec<QueryParams extends StringMapping = StringMapping> = ReturnType<typeof objectField> & Field<QueryParams>
+
+const createQueryParams = (params?: QuerySpec): Record<string, Field<unknown>> => params?.objectSpec || {}
 
 const specToParams = (
   type: 'query' | 'path',
-  spec?: Field<Record<string, unknown>>
+  spec?: Record<string, Field<unknown>>
 ): OpenAPI.ParameterObject[] =>
   Object.entries(spec || {}).map(
     ([name, field]) => createParameter(type, name, field)
@@ -34,7 +38,7 @@ const specToParams = (
 const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [createRoute(route.request.pathParams), {
   [(route.request.method.constant as string).toLowerCase()]: {
     parameters: [
-      ...specToParams('query', route.request.queryParams),
+      ...specToParams('query', createQueryParams(route.request.queryParams)),
       ...specToParams('path', createPathParams(route.request.pathParams))
     ],
     requestBody: {

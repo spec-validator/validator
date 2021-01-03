@@ -1,7 +1,6 @@
 import { Field, validate } from '../core'
 import { Json } from '../Json'
 import { Any } from '../util-types'
-
 export interface FieldWithRegExp<Type> extends Field<Type> {
   regex: RegExp
   asString: (value: Type) => string
@@ -68,6 +67,17 @@ class SegmentField<
         ).join('')}$`
     }
     return this.regex
+  }
+
+  getObjectSpec(): Record<string, Field<unknown>> | undefined {
+    const fieldSegments = this.getFieldSegments()
+    if (fieldSegments.length === 0) {
+      return undefined
+    } else {
+      return Object.fromEntries(fieldSegments.map(it =>
+        [it.key as string, it.field as Field<unknown>]
+      )) as Record<string, Field<unknown>>
+    }
   }
 
   validate(value: string): DeserializedType {
