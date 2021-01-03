@@ -5,8 +5,9 @@ import { StringMapping } from './route'
 import { ServerConfig, handle } from './handler-impl'
 import { JsonSerialization } from './serialization'
 import { Route, RequestSpec, ResponseSpec } from './route'
-import constantField, { ConstantField } from '@validator/validator/fields/constantField'
-import { SegmentField } from '@validator/validator/fields/segmentField'
+
+import { Field } from '@validator/validator'
+import { constantField, $} from '@validator/validator/fields'
 
 const DEFAULT_SERVER_CONFIG: ServerConfig = {
   baseUrl: 'http://localhost:8000',
@@ -29,6 +30,8 @@ const mergeServerConfigs = (
 
 type RequestSpecMethod = Omit<RequestSpec, 'method' | 'pathParams'>
 
+type PathSpec<PathParams extends StringMapping> = typeof $ & Field<PathParams>
+
 export const withMethod = <
   Method extends string,
 > (method: Method) => <
@@ -36,14 +39,14 @@ export const withMethod = <
   ReqSpec extends RequestSpecMethod = RequestSpecMethod,
   RespSpec extends ResponseSpec = ResponseSpec
   > (
-      pathParams: SegmentField<PathParams>,
+      pathParams: PathSpec<PathParams>,
       spec: {
       request: ReqSpec,
       response: RespSpec
     },
       handler: Route<ReqSpec & {
-        readonly method: ConstantField<string>,
-        readonly pathParams: SegmentField<PathParams>
+        readonly method: ReturnType<typeof constantField> & Field<string>,
+        readonly pathParams: PathSpec<PathParams>
       }, RespSpec>['handler']
     ): Route => ({
       request: {
