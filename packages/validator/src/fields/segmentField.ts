@@ -11,7 +11,7 @@ export interface FieldWithStringInputSupport<Type> extends Field<Type> {
   getFieldWithRegExp(): FieldWithRegExp<Type>
 }
 
-export class SegmentField<
+class SegmentField<
   DeserializedType = undefined
 > implements Field<DeserializedType> {
 

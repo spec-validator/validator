@@ -8,7 +8,7 @@ import { declareField, OfType } from '../registry'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 
-export class ObjectField<DeserializedType extends Record<string, Any>> implements Field<DeserializedType> {
+class ObjectField<DeserializedType extends Record<string, Any>> implements Field<DeserializedType> {
   constructor(readonly objectSpec: ValidatorSpec<DeserializedType>) {}
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
