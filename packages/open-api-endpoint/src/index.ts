@@ -2,30 +2,38 @@ import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import { ServerConfig, Route } from '@validator/rest-api-server'
 import { Field } from '@validator/validator'
+import { GetRepresentation } from '@validator/validator/registry'
 
-const createParameter = (type: 'query' | 'path', name: string, field: Field<unknown>): OpenAPI.ParameterObject => ({
+import getFieldSchema from './schemaRegistry'
+
+const createParameter = (
+  getSchema: GetRepresentation,
+  type: 'query' | 'path',
+  name: string,
+  field: Field<unknown>
+): OpenAPI.ParameterObject => ({
   name: name,
   in: type,
   description: (field as any)?.description,
   required: !(field as any)?.isOptional,
-  schema: {
-    type: 'string'
-  }
+  schema: getSchema(field)
 })
 
 const specToParams = (
+  getSchema: GetRepresentation,
   type: 'query' | 'path',
   spec?: Record<string, Field<unknown>>
 ): OpenAPI.ParameterObject[] =>
   Object.entries(spec || {}).map(
-    ([name, field]) => createParameter(type, name, field)
+    ([name, field]) => createParameter(getSchema, type, name, field)
   )
 
-const createPath = (route: Route): [string, OpenAPI.PathItemObject] => [route.request.pathParams.toString(), {
+const createPath = (getSchema: GetRepresentation, route: Route):
+  [string, OpenAPI.PathItemObject] => [route.request.pathParams.toString(), {
   [(route.request.method.constant as string).toLowerCase()]: {
     parameters: [
-      ...specToParams('query', route.request.queryParams?.objectSpec || {}),
-      ...specToParams('path', route.request.pathParams.getObjectSpec())
+      ...specToParams(getSchema, 'query', route.request.queryParams?.objectSpec || {}),
+      ...specToParams(getSchema, 'path', route.request.pathParams.getObjectSpec())
     ],
     requestBody: {
       // TODO: inject media type from server configs
@@ -70,6 +78,7 @@ const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<st
 const createOpenApiSpec = (
   config: ServerConfig & WithInfo,
   routes: Route[],
+  getSchema: GetRepresentation = getFieldSchema
 ): OpenAPI.Document => ({
   openapi: '3.0.3',
   info: config.info,

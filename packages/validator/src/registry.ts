@@ -72,7 +72,10 @@ const withNoDuplicates = <T extends any[]>(items: T, by: (item: T[number]) => st
   return items
 }
 
-const getValue = <V> (mapping: Record<string, V>, type: string): V => {
+const getValue = <V> (mapping: Record<string, V>, type?: string): V => {
+  if (!type) {
+    throw 'Fields without type are not supported'
+  }
   const value = mapping[type]
   if (value === undefined) {
     throw `Could not find field of type '${type}'`
@@ -80,8 +83,7 @@ const getValue = <V> (mapping: Record<string, V>, type: string): V => {
   return value
 }
 
-export type GetRepresentation =
-  <Type extends string>(field: Field<unknown> & OfType<Type>) => any
+export type GetRepresentation = (field: Field<unknown>) => any
 
 /**
  * This is a generic solution to provide a virtually inlimited number
@@ -103,7 +105,7 @@ const createRegistry = (
     withNoDuplicates(pairs, (pair) => pair[0].type).map(([key, value]) => ([key.type, value]))
   )
   const getRepresentation: GetRepresentation =
-    (field) => getValue(mapping, field.type)(field, getRepresentation)
+    (field) => getValue(mapping, (field as unknown as OfType<string>).type)(field, getRepresentation)
   return getRepresentation
 }
 
