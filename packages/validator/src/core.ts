@@ -14,15 +14,15 @@ export type ValidatorSpec<DeserializedType> = {
   [P in keyof DeserializedType]: Field<DeserializedType[P]>
 };
 
-export type UnknownSpec = {
-  [key: string]: Optional<Field<any>>
+export type WildcardSpec = {
+  [key: string]: Optional<Field<unknown>>
 };
 
 export type SpecUnion<DeserializedType> =
-  UnknownSpec | ValidatorSpec<DeserializedType> | Field<DeserializedType> | undefined;
+  WildcardSpec | ValidatorSpec<DeserializedType> | Field<DeserializedType> | undefined;
 
 export type TypeHint<Spec extends SpecUnion<Any> | undefined> =
-  Spec extends UnknownSpec ?
+  Spec extends WildcardSpec ?
     { [P in keyof Spec]: TypeHint<Spec[P]>; }
   : Spec extends ValidatorSpec<Record<string, Any>> ?
     { [P in keyof Spec]: TypeHint<Spec[P]>; }
