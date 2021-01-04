@@ -1,7 +1,6 @@
 import { TypeHint } from '@validator/validator'
 import { Field } from '@validator/validator/core'
-import { $, constantField, objectField, unionField } from '@validator/validator/fields'
-import { Unioned } from '@validator/validator/fields/unionField'
+import { $, constantField, objectField } from '@validator/validator/fields'
 import { Any, WithoutOptional } from '@validator/validator/util-types'
 
 export type StringMapping = Record<string, Any>
@@ -34,15 +33,13 @@ export type ResponseSpec<
   readonly headers?: ReturnType<typeof objectField> & Field<Headers>,
 }
 
-export type ResponsesSpec<ResponseVariants extends ResponseSpec[] = ResponseSpec[]> =
-  ReturnType<typeof unionField> & Field<Unioned<ResponseVariants>>
-
 export type Route<
   ReqSpec extends RequestSpec = RequestSpec,
-  RespSpec extends ResponsesSpec | ResponseSpec = ResponsesSpec | ResponseSpec
+  RespSpec extends  ResponseSpec = ResponseSpec
 > = {
   readonly request: ReqSpec,
   readonly response: RespSpec,
+  // Having one expected response per handler is intentional
   readonly handler: (request: WithoutOptional<TypeHint<ReqSpec>>) => Promise<
     WithoutOptional<TypeHint<RespSpec>>
   >
