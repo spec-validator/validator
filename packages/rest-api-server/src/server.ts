@@ -10,7 +10,7 @@ import { Field } from '@validator/validator'
 import { constantField, $} from '@validator/validator/fields'
 import { ConstantField } from '@validator/validator/fields/constantField'
 
-const DEFAULT_SERVER_CONFIG: ServerConfig = {
+export const DEFAULT_SERVER_CONFIG: ServerConfig = {
   baseUrl: 'http://localhost:8000',
   serializationFormats: [new JsonSerialization()],
   encoding: 'utf-8',

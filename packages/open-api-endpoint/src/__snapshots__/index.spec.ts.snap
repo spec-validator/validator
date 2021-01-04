@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fullRoute 1`] = `
+Object {
+  "info": Object {
+    "title": "Test",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.3",
+  "paths": Object {
+    "^/item/(?<id>.*)$": Object {
+      "get": Object {
+        "parameters": Array [
+          Object {
+            "description": "",
+            "in": "query",
+            "name": "pk",
+            "required": true,
+            "schema": Object {
+              "pattern": ".*",
+              "type": "string",
+            },
+          },
+          Object {
+            "description": "",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": Object {
+              "pattern": ".*",
+              "type": "string",
+            },
+          },
+        ],
+        "requestBody": undefined,
+        "responses": Object {},
+      },
+    },
+  },
+  "servers": Array [
+    Object {
+      "url": "http://localhost:8000",
+    },
+  ],
+}
+`;
