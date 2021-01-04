@@ -7,6 +7,7 @@ import { GetRepresentation, OfType } from '@validator/validator/registry'
 
 import getFieldSchema from './schemaRegistry'
 import { Any, ConstructorArgs } from '@validator/validator/util-types'
+import { isResponsesSpec, ResponseSpec } from '@validator/rest-api-server/route'
 
 const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<string, OpenAPI.PathItemObject> => {
   const record: Record<string, OpenAPI.PathItemObject>  = {}
@@ -86,7 +87,7 @@ class OpenApiGenerator {
     }]
   ))
 
-  createResponseObject = (response: Route['response']): OpenAPI.ResponseObject => ({
+  createResponseObject = (response: ResponseSpec): OpenAPI.ResponseObject => ({
     headers: response.headers && Object.fromEntries(Object.entries(response.headers).map(([name, value]) => [
       name,
       this.createParameterBaseObject(value)
@@ -100,15 +101,25 @@ class OpenApiGenerator {
     required: isRequired(data)
   })
 
+  createResponses = (spec: Route['response']) => {
+    const result: Record<string, OpenAPI.ResponseObject> = {}
+    if (isResponsesSpec(spec)) {
+      spec.variants.forEach(it => {
+        result[it.statusCode] = this.createResponseObject(it)
+      })
+    } else {
+      this.createResponseObject(spec)
+    }
+    return result
+  }
+
   createOperationObject = (route: Route): OpenAPI.OperationObject => ({
     parameters: [
       ...this.specToParams('query', route.request.queryParams?.objectSpec),
       ...this.specToParams('path', route.request.pathParams.getObjectSpec())
     ],
     requestBody: route.request.data && this.createRequestBodyObject(route.request.data),
-    responses: {
-      [route.response.statusCode.constant.toString()]: this.createResponseObject(route.response)
-    }
+    responses: this.createResponses(route.response)
   })
 
   createPath = (route: Route): [string, OpenAPI.PathItemObject] => [route.request.pathParams.toString(), {
