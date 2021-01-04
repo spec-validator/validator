@@ -37,6 +37,7 @@ export type ResponseSpec<
   readonly headers?: ObjectField<Headers>,
 }
 
+// TODO: how to extract schema from
 export type ResponsesSpec<ResponseVariants extends ResponseSpec[] = ResponseSpec[]> =
   ReturnType<typeof unionField> & Field<Unioned<ResponseVariants>>
 
