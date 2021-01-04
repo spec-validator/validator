@@ -18,14 +18,14 @@ export const field = <
 > (
     type: Type,
     constructor: Constructor
-  ): Constructor & OfType<Type>  => {
+  ): (Constructor) & OfType<Type>  => {
   const wrapper = (...params: any[]) => {
     const result = (constructor as any)(...params)
     result.type = type
     return result
   }
   wrapper.type = type
-  return wrapper as any
+  return wrapper as (Constructor) & OfType<Type>
 }
 
 type RequestRepresentation =

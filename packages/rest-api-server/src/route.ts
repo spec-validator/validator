@@ -1,7 +1,8 @@
 import { TypeHint } from '@validator/validator'
-import { Field, isField, ValidatorSpec } from '@validator/validator/core'
+import { Field, isField } from '@validator/validator/core'
 import { $, constantField, objectField, unionField } from '@validator/validator/fields'
-import { Unioned } from '@validator/validator/fields/unionField'
+import { ObjectField } from '@validator/validator/fields/objectField'
+import { UnionField } from '@validator/validator/fields/unionField'
 import { OfType } from '@validator/validator/registry'
 import { Any, WithoutOptional } from '@validator/validator/util-types'
 
@@ -25,10 +26,6 @@ export type RequestSpec<
   readonly queryParams?: ReturnType<typeof objectField> & Field<QueryParams>
 }
 
-type ObjectField<T> = ReturnType<typeof objectField> & {
-  objectSpec: ValidatorSpec<T>
-} & Field<T>
-
 export type ResponseSpec<
   StatusCode extends number = number,
   Data extends Any = Any,
@@ -43,9 +40,7 @@ type ResponseField<Spec extends ResponseSpec=ResponseSpec> = ObjectField<TypeHin
 
 // TODO: how to extract schema from
 type ResponsesSpec<ResponseVariants extends ResponseField[] = ResponseField[]> =
-  OfType<string> & {
-    variants: ResponseVariants
-  } & Field<Unioned<ResponseVariants>>
+  UnionField<ResponseVariants>
 
 export type Route<
   ReqSpec extends RequestSpec = RequestSpec,
@@ -59,4 +54,4 @@ export type Route<
 }
 
 export const isResponsesSpec = (spec: ResponsesSpec | ResponseSpec): spec is ResponsesSpec =>
-  isField(spec) && (spec as OfType<string>).type !== unionField.type
+  isField(spec) && (spec as unknown as OfType<string>).type !== unionField.type
