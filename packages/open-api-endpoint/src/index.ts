@@ -2,10 +2,10 @@ import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import { ServerConfig, Route } from '@validator/rest-api-server'
 import { Field } from '@validator/validator'
+import { optional } from '@validator/validator/fields'
 import { GetRepresentation, OfType } from '@validator/validator/registry'
 
 import getFieldSchema from './schemaRegistry'
-import { optional } from '@validator/validator/fields'
 
 const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<string, OpenAPI.PathItemObject> => {
   const record: Record<string, OpenAPI.PathItemObject>  = {}
@@ -55,7 +55,7 @@ class OpenApiGenerator {
       name: name,
       in: type,
       description: (field as any)?.description,
-      required: !(field as any)?.isOptional,
+      required: (field as unknown as OfType<string>).type !== optional.type,
       schema: this.getSchema(field)
     }
   }
@@ -77,20 +77,22 @@ class OpenApiGenerator {
       ],
       requestBody: route.request.data && {
       // TODO: inject media type from server configs
-        content: { 'application/json': {
-          schema: this.getSchema(route.request.data)
-        } },
+        content: Object.fromEntries(this.config.serializationFormats.map(
+          it => [it.mediaType, {
+            schema: route.request.data && this.getSchema(route.request.data)
+          }]
+        )),
         // TODO: extra test is required
         required: (route.request.data as unknown as OfType<string>).type !== optional.type
       },
       responses: {
-        code: {
+        [route.response.statusCode.constant.toString()]: {
           headers: { 'header-name': 'header-value' },
-          content: { 'application/json': {
-            schema: {
-
-            }
-          } }
+          content: Object.fromEntries(this.config.serializationFormats.map(
+            it => [it.mediaType, {
+              schema: route.response.data && this.getSchema(route.response.data)
+            }]
+          )),
         }
       }
     }

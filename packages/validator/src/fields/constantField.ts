@@ -1,8 +1,8 @@
 import { Field } from '../core'
-import { Json } from '../Json'
+import { Primitive } from '../Json'
 import { OfType, declareField } from '../registry'
 
-class ConstantField<Constant extends Json> implements Field<Constant> {
+class ConstantField<Constant extends Primitive> implements Field<Constant> {
   constructor(readonly constant: Constant) {}
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -12,7 +12,7 @@ class ConstantField<Constant extends Json> implements Field<Constant> {
     }
     return this.constant
   }
-  serialize(_: Constant): Json {
+  serialize(_: Constant): Primitive {
     return this.constant
   }
 }
@@ -20,6 +20,6 @@ class ConstantField<Constant extends Json> implements Field<Constant> {
 const t = '@validator/fields.ConstantField' as const
 type Type = OfType<typeof t>
 export default declareField(t, ConstantField) as
-  (<Constant extends Json> (
+  (<Constant extends Primitive> (
     constant: Constant
   ) => ConstantField<Constant> & Type) & Type
