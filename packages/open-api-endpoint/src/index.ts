@@ -6,6 +6,7 @@ import { optional } from '@validator/validator/fields'
 import { GetRepresentation, OfType } from '@validator/validator/registry'
 
 import getFieldSchema from './schemaRegistry'
+import { Any } from '@validator/validator/util-types'
 
 const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<string, OpenAPI.PathItemObject> => {
   const record: Record<string, OpenAPI.PathItemObject>  = {}
@@ -54,7 +55,7 @@ class OpenApiGenerator {
     return {
       name: name,
       in: type,
-      description: (field as any)?.description,
+      description: (field as any)?.description?.toString(),
       required: (field as unknown as OfType<string>).type !== optional.type,
       schema: this.getSchema(field)
     }
@@ -69,31 +70,40 @@ class OpenApiGenerator {
     )
   }
 
+  createResponseObject(response: Route['response']): OpenAPI.ResponseObject {
+    return {
+      //headers: { 'header-name': 'header-value' },
+      description: (response as any)?.description?.toString(),
+      content: Object.fromEntries(this.config.serializationFormats.map(
+        it => [it.mediaType, {
+          schema: response.data && this.getSchema(response.data)
+        }]
+      )),
+    }
+  }
+
+  createRequestBodyObject(data: Field<Any>): OpenAPI.RequestBodyObject {
+    return {
+      // TODO: inject media type from server configs
+      content: Object.fromEntries(this.config.serializationFormats.map(
+        it => [it.mediaType, {
+          schema: data && this.getSchema(data)
+        }]
+      )),
+      // TODO: extra test is required
+      required: (data as unknown as OfType<string>).type !== optional.type
+    }
+  }
+
   createOperationObject(route: Route): OpenAPI.OperationObject {
     return {
       parameters: [
         ...this.specToParams('query', route.request.queryParams?.objectSpec || {}),
         ...this.specToParams('path', route.request.pathParams.getObjectSpec())
       ],
-      requestBody: route.request.data && {
-      // TODO: inject media type from server configs
-        content: Object.fromEntries(this.config.serializationFormats.map(
-          it => [it.mediaType, {
-            schema: route.request.data && this.getSchema(route.request.data)
-          }]
-        )),
-        // TODO: extra test is required
-        required: (route.request.data as unknown as OfType<string>).type !== optional.type
-      },
+      requestBody: route.request.data && this.createRequestBodyObject(route.request.data),
       responses: {
-        [route.response.statusCode.constant.toString()]: {
-          headers: { 'header-name': 'header-value' },
-          content: Object.fromEntries(this.config.serializationFormats.map(
-            it => [it.mediaType, {
-              schema: route.response.data && this.getSchema(route.response.data)
-            }]
-          )),
-        }
+        [route.response.statusCode.constant.toString()]: this.createResponseObject(route.response)
       }
     }
   }
