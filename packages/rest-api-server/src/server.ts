@@ -8,6 +8,7 @@ import { Route, RequestSpec, ResponseSpec } from './route'
 
 import { Field } from '@validator/validator'
 import { constantField, $} from '@validator/validator/fields'
+import { ConstantField } from '@validator/validator/fields/constantField'
 
 const DEFAULT_SERVER_CONFIG: ServerConfig = {
   baseUrl: 'http://localhost:8000',
@@ -45,7 +46,7 @@ export const withMethod = <
       response: RespSpec
     },
       handler: Route<ReqSpec & {
-        readonly method: ReturnType<typeof constantField> & Field<string>,
+        readonly method: ConstantField<string>,
         readonly pathParams: PathSpec<PathParams>
       }, RespSpec>['handler']
     ): Route => ({

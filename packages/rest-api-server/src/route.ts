@@ -1,6 +1,7 @@
 import { TypeHint } from '@validator/validator'
-import { Field, isField } from '@validator/validator/core'
-import { $, constantField, objectField, unionField } from '@validator/validator/fields'
+import { Field, isField, ValidatorSpec } from '@validator/validator/core'
+import { $, unionField } from '@validator/validator/fields'
+import { ConstantField } from '@validator/validator/fields/constantField'
 import { ObjectField } from '@validator/validator/fields/objectField'
 import { UnionField } from '@validator/validator/fields/unionField'
 import { OfType } from '@validator/validator/registry'
@@ -19,11 +20,11 @@ export type RequestSpec<
   QueryParams extends StringMapping = StringMapping,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
-  readonly method: ReturnType<typeof constantField> & Field<Method>,
+  readonly method: ConstantField<Method>,
   readonly pathParams: typeof $ & Field<PathParams>,
   readonly data?: Field<Data>,
-  readonly headers?: ReturnType<typeof objectField> & Field<Headers>,
-  readonly queryParams?: ReturnType<typeof objectField> & Field<QueryParams>
+  readonly headers?: ObjectField<ValidatorSpec<Headers>>,
+  readonly queryParams?: ObjectField<ValidatorSpec<QueryParams>>
 }
 
 export type ResponseSpec<
@@ -31,12 +32,12 @@ export type ResponseSpec<
   Data extends Any = Any,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
-  readonly statusCode: ReturnType<typeof constantField> & Field<StatusCode>,
+  readonly statusCode: ConstantField<StatusCode>,
   readonly data?: Field<Data>,
-  readonly headers?: ObjectField<Headers>,
+  readonly headers?: ObjectField<ValidatorSpec<Headers>>,
 }
 
-type ResponseField<Spec extends ResponseSpec=ResponseSpec> = ObjectField<TypeHint<Spec>>
+type ResponseField<Spec extends ResponseSpec=ResponseSpec> = ObjectField<WithoutOptional<Spec>>
 
 // TODO: how to extract schema from
 type ResponsesSpec<ResponseVariants extends ResponseField[] = ResponseField[]> =

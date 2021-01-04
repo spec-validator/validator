@@ -3,25 +3,30 @@ import {
   ValidatorSpec,
   validate,
   serialize,
+  TypeHint,
 } from '../core'
 import { field } from '../registry'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 
-export interface ObjectField<DeserializedType extends Record<string, Any>> extends Field<DeserializedType> {
-  readonly objectSpec: ValidatorSpec<DeserializedType>
+export interface ObjectField<
+  Spec extends ValidatorSpec<Record<string, Any>> = ValidatorSpec<Record<string, Any>>
+> extends Field<TypeHint<Spec>> {
+  readonly objectSpec: Spec
 }
 
-export default field('@validator/fields.ObjectField', <DeserializedType extends Record<string, Any>> (
-  objectSpec: ValidatorSpec<DeserializedType>
-): ObjectField<DeserializedType> => ({
+export default field('@validator/fields.ObjectField', <
+  Spec extends ValidatorSpec<Record<string, Any>> = ValidatorSpec<Record<string, Any>>
+> (
+    objectSpec: Spec
+  ): ObjectField<Spec> => ({
     objectSpec,
-    validate: (value: any): DeserializedType => {
+    validate: (value: any): TypeHint<Spec> => {
       if (typeof value !== 'object' || value === null) {
         throw 'Not an object'
       }
-      return validate(objectSpec, value) as DeserializedType
+      return validate(objectSpec, value) as TypeHint<Spec>
     },
-    serialize: (deserialized: DeserializedType): Json => serialize(objectSpec, deserialized as any)
+    serialize: (deserialized: TypeHint<Spec>): Json => serialize(objectSpec, deserialized as any)
   }))
 
