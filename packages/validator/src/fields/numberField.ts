@@ -1,52 +1,50 @@
-import { declareField } from '../registry'
+import { field, OfType } from '../registry'
 import { Json } from '../Json'
-import { withParentFields } from '../utils'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
-class NumberField implements FieldWithStringInputSupport<number> {
-  constructor(readonly params?: {
+export interface NumberField extends FieldWithStringInputSupport<number> {
+  readonly params?: {
     canBeFloat?: boolean
-  }) {}
-
-  getFieldWithRegExp(): NumberFieldWithRegExp {
-    return withParentFields(this, new NumberFieldWithRegExp(this.params), ['type'])
   }
+}
 
-  validate(value: any): number {
+export default field('@validator/fields.NumberField', (params?: {
+  canBeFloat?: boolean
+}): NumberField => {
+  const validate = (value: any): number => {
     if (typeof value !== 'number') {
       throw 'Not a number'
     }
-    if (!this.params?.canBeFloat && value !== Math.floor(value)) {
+    if (!params?.canBeFloat && value !== Math.floor(value)) {
       throw 'Not an int'
     }
     return value
   }
-  serialize(deserialized: number): Json {
-    return deserialized
-  }
-}
+  const serialize = (deserialized: number): Json => deserialized
 
-class NumberFieldWithRegExp extends NumberField implements FieldWithRegExp<number> {
+  const field = {
+    params,
+    validate,
+    serialize,
+  } as NumberField & OfType<string>
 
-  get regex() {
+  field.getFieldWithRegExp = (): Omit<NumberField, 'getFieldWithRegExp'> & FieldWithRegExp<number> & OfType<string> => {
     const parts: string[] = []
     parts.push('-?')
     parts.push('\\d+')
-    if (this.params?.canBeFloat) {
+    if (params?.canBeFloat) {
       parts.push('(\\.\\d+)?')
     }
 
-    return RegExp(parts.join(''))
+    return {
+      params,
+      type: field.type,
+      validate: (value: any) => validate(Number.parseFloat(value)),
+      serialize,
+      regex: RegExp(parts.join('')),
+      asString: (value: number): string => value.toString()
+    }
   }
 
-  asString(value: number) {
-    return value.toString()
-  }
-
-  validate(value: any) {
-    return super.validate(Number.parseFloat(value))
-  }
-
-}
-
-export default declareField('@validator/fields.NumberField', NumberField)
+  return field
+})

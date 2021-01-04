@@ -6,25 +6,26 @@ export type OfType<Type extends string> = {
 export type FieldDeclaration<
   Type extends string = string,
   Params extends any[] = any[],
-  FieldType extends Field<unknown> = Field<unknown>
-> =
-  ((...params: Readonly<Params>) => FieldType & OfType<Type>) & OfType<Type>
+  FieldType extends Field<unknown> = Field<unknown>,
+  Constructor extends (...params: Params) => FieldType = (...params: Params) => FieldType
+> = Constructor & OfType<Type>
 
-export const declareField = <
+export const field = <
   Type extends string,
   Params extends any[],
-  FieldType extends Field<unknown>
+  FieldType extends Field<unknown>,
+  Constructor extends (...params: Params) => FieldType
 > (
     type: Type,
-    constructor: new (...params: Params) => FieldType
-  ): FieldDeclaration<Type, Params, FieldType> => {
-  const wrapper = (...params: Params): FieldType & OfType<Type> => {
-    const result = new constructor(...params) as FieldType & { type: Type }
+    constructor: Constructor
+  ): Constructor & OfType<Type>  => {
+  const wrapper = (...params: any[]) => {
+    const result = (constructor as any)(...params)
     result.type = type
     return result
   }
   wrapper.type = type
-  return wrapper
+  return wrapper as any
 }
 
 type RequestRepresentation =
