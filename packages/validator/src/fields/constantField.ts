@@ -1,25 +1,20 @@
 import { Field } from '../core'
 import { Primitive } from '../Json'
-import { OfType, declareField } from '../registry'
+import { field } from '../registry'
 
-class ConstantField<Constant extends Primitive> implements Field<Constant> {
-  constructor(readonly constant: Constant) {}
-
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  validate(value: any): Constant {
-    if (value !== this.constant) {
-      throw 'Constant does not match the requirement'
-    }
-    return this.constant
-  }
-  serialize(_: Constant): Primitive {
-    return this.constant
-  }
+export interface ConstantField<Constant extends Primitive> extends Field<Constant> {
+  readonly constant: Constant
 }
 
-const t = '@validator/fields.ConstantField' as const
-type Type = OfType<typeof t>
-export default declareField(t, ConstantField) as
-  (<Constant extends Primitive> (
-    constant: Constant
-  ) => ConstantField<Constant> & Type) & Type
+export default field('@validator/fields.ConstantField', <Constant extends Primitive> (
+  constant: Constant
+): ConstantField<Constant> => ({
+    constant,
+    validate: (value: any): Constant => {
+      if (value !== constant) {
+        throw 'Constant does not match the requirement'
+      }
+      return constant
+    },
+    serialize: () => constant
+  }))
