@@ -26,6 +26,12 @@ type WithInfo = {
   }
 }
 
+const getDescription = (field: unknown) =>
+  (field as { description?: string })?.description?.toString() || ''
+
+const isRequired = (field: unknown) =>
+  (field as OfType<string>).type !== optional.type
+
 class OpenApiGenerator {
 
   constructor(
@@ -55,8 +61,8 @@ class OpenApiGenerator {
     return {
       name: name,
       in: type,
-      description: (field as any)?.description?.toString(),
-      required: (field as unknown as OfType<string>).type !== optional.type,
+      description: getDescription(field),
+      required: isRequired(field),
       schema: this.getSchema(field)
     }
   }
@@ -73,7 +79,7 @@ class OpenApiGenerator {
   createResponseObject(response: Route['response']): OpenAPI.ResponseObject {
     return {
       //headers: { 'header-name': 'header-value' },
-      description: (response as any)?.description?.toString(),
+      description: getDescription(response),
       content: Object.fromEntries(this.config.serializationFormats.map(
         it => [it.mediaType, {
           schema: response.data && this.getSchema(response.data)
@@ -84,14 +90,12 @@ class OpenApiGenerator {
 
   createRequestBodyObject(data: Field<Any>): OpenAPI.RequestBodyObject {
     return {
-      // TODO: inject media type from server configs
       content: Object.fromEntries(this.config.serializationFormats.map(
         it => [it.mediaType, {
           schema: data && this.getSchema(data)
         }]
       )),
-      // TODO: extra test is required
-      required: (data as unknown as OfType<string>).type !== optional.type
+      required: isRequired(data)
     }
   }
 
