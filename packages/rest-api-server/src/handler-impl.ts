@@ -116,13 +116,13 @@ export const handleRoute = async (
   // null values.
   const handler = route.handler as unknown as (req: TypeHint<RequestSpec>) => Promise<TypeHint<ResponseSpec>>
 
-  const resp = await withAppErrorStatusCode(
+  const resp = serialize(route.response, await withAppErrorStatusCode(
     config.appErrorStatusCode,
     () => handler(request)
-  )
+  )) as any
 
   Object.entries(resp?.headers || {}).forEach(([key, value]) => {
-    response.setHeader(key, value)
+    response.setHeader(key, value as any)
   })
 
   response.statusCode = resp.statusCode
@@ -139,10 +139,9 @@ export const handleRoute = async (
   }
 
   response.write(
-    responseSerializationFormat.serialize(serialize(route.response?.data, resp?.data)),
+    responseSerializationFormat.serialize(resp?.data),
     config.encoding
   )
-
 }
 
 export const handle = async (

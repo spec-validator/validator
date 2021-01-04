@@ -11,7 +11,7 @@ import { constantField, $} from '@validator/validator/fields'
 
 const DEFAULT_SERVER_CONFIG: ServerConfig = {
   baseUrl: 'http://localhost:8000',
-  serialization: new JsonSerialization(),
+  serializationFormats: [new JsonSerialization()],
   encoding: 'utf-8',
   frameworkErrorStatusCode: 502,
   appErrorStatusCode: 500,
