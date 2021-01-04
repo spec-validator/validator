@@ -3,7 +3,7 @@ import constantField from '@validator/validator/fields/constantField'
 import $ from '@validator/validator/fields/segmentField'
 
 import { expectType } from '@validator/validator/TypeTestUtils.test'
-import { ResponsesSpec, Route } from './route'
+import { Route } from './route'
 
 describe('Route', () => {
 
@@ -76,13 +76,6 @@ describe('Route', () => {
         headerKey: stringField()
       })
     }))
-
-    type hh = typeof respSpec
-
-    const foo: ResponsesSpec = undefined as any
-
-    const bar: hh = foo
-    console.log(bar)
 
     type Decor = Route<typeof reqSpec, typeof respSpec>
 

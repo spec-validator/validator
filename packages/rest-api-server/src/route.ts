@@ -37,8 +37,10 @@ export type ResponseSpec<
   readonly headers?: ObjectField<Headers>,
 }
 
+export type ResponseField<Spec extends ResponseSpec=ResponseSpec> = ObjectField<TypeHint<Spec>>
+
 // TODO: how to extract schema from
-export type ResponsesSpec<ResponseVariants extends ObjectField<ResponseSpec>[] = ObjectField<ResponseSpec>[]> =
+export type ResponsesSpec<ResponseVariants extends ResponseField[] = ResponseField[]> =
   ReturnType<typeof unionField> & Field<Unioned<ResponseVariants>>
 
 export type Route<
