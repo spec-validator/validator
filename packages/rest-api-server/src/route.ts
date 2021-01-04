@@ -38,7 +38,7 @@ export type ResponseSpec<
 }
 
 // TODO: how to extract schema from
-export type ResponsesSpec<ResponseVariants extends ResponseSpec[] = ResponseSpec[]> =
+export type ResponsesSpec<ResponseVariants extends ObjectField<ResponseSpec>[] = ObjectField<ResponseSpec>[]> =
   ReturnType<typeof unionField> & Field<Unioned<ResponseVariants>>
 
 export type Route<

@@ -8,7 +8,7 @@ export type Unioned<T extends SpecUnion<any>[]> = {
 
 class UnionField<
   Variants extends Field<any>[]
-> implements Field<Variants> {
+> implements Field<Unioned<Variants>> {
   readonly variants: Variants
 
   constructor(...variants: Variants) {
