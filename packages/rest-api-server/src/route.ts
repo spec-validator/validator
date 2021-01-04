@@ -1,5 +1,5 @@
 import { TypeHint } from '@validator/validator'
-import { Field, isField } from '@validator/validator/core'
+import { Field, isField, ValidatorSpec } from '@validator/validator/core'
 import { $, constantField, objectField, unionField } from '@validator/validator/fields'
 import { Unioned } from '@validator/validator/fields/unionField'
 import { OfType } from '@validator/validator/registry'
@@ -25,7 +25,9 @@ export type RequestSpec<
   readonly queryParams?: ReturnType<typeof objectField> & Field<QueryParams>
 }
 
-type ObjectField<T> = ReturnType<typeof objectField> & Field<T>
+type ObjectField<T> = ReturnType<typeof objectField> & {
+  objectSpec: ValidatorSpec<T>
+} & Field<T>
 
 export type ResponseSpec<
   StatusCode extends number = number,
@@ -37,11 +39,13 @@ export type ResponseSpec<
   readonly headers?: ObjectField<Headers>,
 }
 
-export type ResponseField<Spec extends ResponseSpec=ResponseSpec> = ObjectField<TypeHint<Spec>>
+type ResponseField<Spec extends ResponseSpec=ResponseSpec> = ObjectField<TypeHint<Spec>>
 
 // TODO: how to extract schema from
-export type ResponsesSpec<ResponseVariants extends ResponseField[] = ResponseField[]> =
-  ReturnType<typeof unionField> & Field<Unioned<ResponseVariants>>
+type ResponsesSpec<ResponseVariants extends ResponseField[] = ResponseField[]> =
+  OfType<string> & {
+    variants: ResponseVariants
+  } & Field<Unioned<ResponseVariants>>
 
 export type Route<
   ReqSpec extends RequestSpec = RequestSpec,

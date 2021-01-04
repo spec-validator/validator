@@ -104,8 +104,8 @@ class OpenApiGenerator {
   createResponses = (spec: Route['response']) => {
     const result: Record<string, OpenAPI.ResponseObject> = {}
     if (isResponsesSpec(spec)) {
-      spec.variants.forEach(it => {
-        result[it.statusCode] = this.createResponseObject(it)
+      spec.variants.forEach((it) => {
+        result[it.objectSpec.statusCode.constant.toString()] = this.createResponseObject(it.objectSpec)
       })
     } else {
       this.createResponseObject(spec)
