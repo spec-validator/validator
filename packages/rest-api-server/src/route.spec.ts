@@ -72,6 +72,9 @@ describe('Route', () => {
     }, {
       statusCode: constantField(202),
       data: choiceField('one', 'two'),
+      headers: objectField({
+        headerKey: stringField()
+      })
     })
 
     type Decor = Route<typeof reqSpec, typeof respSpec>
@@ -86,7 +89,10 @@ describe('Route', () => {
         data: number
       } | {
         statusCode: 202,
-        data: 'one' | 'two'
+        data: 'one' | 'two',
+        headers: {
+          headerKey: string
+        }
       }>}>(true)
   })
 })
