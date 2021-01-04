@@ -1,5 +1,5 @@
-import { Field, Json, FieldDecorator } from '@validator/validator'
-import { declareField } from '@validator/validator/registry'
+import { Field } from '@validator/validator'
+import { field } from '@validator/validator/registry'
 import { Any } from '@validator/validator/util-types'
 
 type Example<T extends Any> = {
@@ -13,15 +13,16 @@ type Doc<T extends Any> = {
   examples?: Record<string, Example<T>>
 }
 
-class WithDoc<T extends Any> implements Field<T>, FieldDecorator {
-  constructor(readonly innerField: Field<T>, readonly doc: Doc<T>) {}
-
-  validate(value: any): T {
-    return this.innerField.validate(value)
-  }
-  serialize(deserialized: T): Json {
-    return this.innerField.serialize(deserialized)
-  }
+export interface WithDoc<T extends Any, F extends Field<T>> extends Field<T> {
+  readonly innerField: F,
+  readonly doc: Doc<T>
 }
 
-export default declareField('@validator/fields.WithDoc', WithDoc)
+export default field('@validator/fields.WithDoc', <T extends Any, F extends Field<T>> (
+  innerField: F,
+  doc: Doc<T>
+): WithDoc<T, F> => ({
+    ...innerField,
+    innerField,
+    doc
+  }))

@@ -8,7 +8,7 @@ const field = withDoc(numberField(), {
   description: 'Some description',
   examples: {
     zero: {
-      value: 14,
+      value: 14 as number,
       summary: 'Sample value'
     }
   }
