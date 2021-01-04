@@ -34,11 +34,3 @@ export const pick = <T, K extends keyof T>(full: T, keys: K[]): Pick<T, K> => {
 }
 
 export const keys = <T>(o: T): Array<keyof T> => <Array<keyof T>>Object.keys(o)
-
-export type PromisedValues<Spec> =
-  { [P in keyof Spec]: Promise<Spec[P]> | Spec[P]; }
-
-export const resolveValues = async <Spec> (
-  promised: PromisedValues<Spec>
-): Promise<Spec> =>
-  Object.fromEntries(Object.entries(promised).map(async ([key, value]) => [key, await value]) as any) as Spec

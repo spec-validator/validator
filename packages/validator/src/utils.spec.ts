@@ -1,4 +1,4 @@
-import { omit, pick, resolveValues } from './utils'
+import { omit, pick } from './utils'
 
 test('omit', () => {
   expect(omit({
@@ -13,15 +13,4 @@ test('pick', () => {
     key: 11,
     key2: 22
   }, ['key2'])).toEqual({key2: 22})
-})
-
-
-test('resolveValues', () => {
-  expect(resolveValues({
-    key: Promise.resolve('promised'),
-    key2: 'exact'
-  })).toEqual(Promise.resolve({
-    key: 'promised',
-    key2: 'exact'
-  }))
 })

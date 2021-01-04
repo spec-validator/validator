@@ -1,7 +1,7 @@
 import http from 'http'
 import { validate, serialize, TypeHint } from '@validator/validator'
 import { RequestSpec, ResponseSpec, Route } from './route'
-import { getOrUndefined, pick, resolveValues } from '@validator/validator/utils'
+import { getOrUndefined, pick } from '@validator/validator/utils'
 import { SerializationFormat } from './serialization'
 
 export type ServerConfig = {
@@ -34,7 +34,7 @@ const matchRoute = async (
   route: Route,
 ): Promise<boolean> => !!validate(
   pick(route.request, ROUTE_KEYS),
-  resolveValues(pick(getWildcardRequestBase(request), ROUTE_KEYS))
+  pick(getWildcardRequestBase(request), ROUTE_KEYS)
 )
 
 const getData = async (msg: http.IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {

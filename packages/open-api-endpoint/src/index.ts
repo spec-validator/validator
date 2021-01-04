@@ -32,6 +32,8 @@ const getDescription = (field: unknown) =>
 const isRequired = (field: unknown) =>
   (field as OfType<string>).type !== optional.type
 
+type ParameterType = 'query' | 'path'
+
 class OpenApiGenerator {
 
   constructor(
@@ -53,22 +55,30 @@ class OpenApiGenerator {
     }
   }
 
-  createParameter(
-    type: 'query' | 'path',
-    name: string,
+  createParameterBaseObject(
     field: Field<unknown>
-  ): OpenAPI.ParameterObject {
+  ): OpenAPI.ParameterBaseObject {
     return {
-      name: name,
-      in: type,
       description: getDescription(field),
       required: isRequired(field),
       schema: this.getSchema(field)
     }
   }
 
+  createParameter(
+    type: ParameterType,
+    name: string,
+    field: Field<unknown>
+  ): OpenAPI.ParameterObject {
+    return {
+      name: name,
+      in: type,
+      ...this.createParameterBaseObject(field)
+    }
+  }
+
   specToParams(
-    type: 'query' | 'path',
+    type: ParameterType,
     spec?: Record<string, Field<unknown>>
   ): OpenAPI.ParameterObject[] {
     return Object.entries(spec || {}).map(
@@ -78,7 +88,10 @@ class OpenApiGenerator {
 
   createResponseObject(response: Route['response']): OpenAPI.ResponseObject {
     return {
-      //headers: { 'header-name': 'header-value' },
+      headers: response.headers && Object.fromEntries(Object.entries(response.headers).map(([name, value]) => [
+        name,
+        this.createParameterBaseObject(value)
+      ])),
       description: getDescription(response),
       content: Object.fromEntries(this.config.serializationFormats.map(
         it => [it.mediaType, {
@@ -102,7 +115,7 @@ class OpenApiGenerator {
   createOperationObject(route: Route): OpenAPI.OperationObject {
     return {
       parameters: [
-        ...this.specToParams('query', route.request.queryParams?.objectSpec || {}),
+        ...this.specToParams('query', route.request.queryParams?.objectSpec),
         ...this.specToParams('path', route.request.pathParams.getObjectSpec())
       ],
       requestBody: route.request.data && this.createRequestBodyObject(route.request.data),
