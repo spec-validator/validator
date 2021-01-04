@@ -1,4 +1,4 @@
-import { choiceField, numberField, objectField, stringField, unionField } from '@validator/validator/fields'
+import { objectField, stringField } from '@validator/validator/fields'
 import constantField from '@validator/validator/fields/constantField'
 import $ from '@validator/validator/fields/segmentField'
 
@@ -60,6 +60,11 @@ describe('Route', () => {
         }>(true)
   })
 
+  /*
+  // NOTE: not sure if it is a good feature, though it is easy to implement
+  // though, to be fair, the goal is to provide a way to describe HTTP protocol
+  // thus should not be too picky
+
   it('works with a union of responses', () => {
     const reqSpec = {
       method: constantField('GET'),
@@ -95,4 +100,5 @@ describe('Route', () => {
         }
       }>}>(true)
   })
+  */
 })
