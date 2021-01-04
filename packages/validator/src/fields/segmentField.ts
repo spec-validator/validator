@@ -1,6 +1,7 @@
 import { Field, validate } from '../core'
 import { Json } from '../Json'
 import { Any } from '../util-types'
+
 export interface FieldWithRegExp<Type> extends Field<Type> {
   regex: RegExp
 }
@@ -14,9 +15,10 @@ class SegmentField<
 > implements Field<DeserializedType> {
 
   private parent?: SegmentField<unknown>
-  private key?: string;
-  private field?: FieldWithRegExp<Any>
   private regex?: string
+
+  readonly key?: string;
+  readonly field?: FieldWithRegExp<Any>
 
   // Here we actually do want to have a constructor parameter as 'any' since it is not going
   // to be used outside of this file
@@ -41,7 +43,7 @@ class SegmentField<
 
   // TODO: make getSegments and getFieldSegments lazy props
 
-  private getSegments(): SegmentField<unknown>[] {
+  getSegments(): SegmentField<unknown>[] {
     const segments: SegmentField<unknown>[] = []
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let cursor: SegmentField<unknown> | undefined = this

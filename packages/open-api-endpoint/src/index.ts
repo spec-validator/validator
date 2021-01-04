@@ -2,7 +2,7 @@ import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import { ServerConfig, Route } from '@validator/rest-api-server'
 import { Field } from '@validator/validator'
-import { optional } from '@validator/validator/fields'
+import { $, optional } from '@validator/validator/fields'
 import { GetRepresentation, OfType } from '@validator/validator/registry'
 
 import getFieldSchema from './schemaRegistry'
@@ -122,7 +122,10 @@ class OpenApiGenerator {
     responses: this.createResponses(route.response)
   })
 
-  createPath = (route: Route): [string, OpenAPI.PathItemObject] => [route.request.pathParams.toString(), {
+  createPathString = (pathParams: typeof $): string =>
+    pathParams.getSegments().map(it => it.field ? `{${it.key || ''}}` : it.key || '').join('')
+
+  createPath = (route: Route): [string, OpenAPI.PathItemObject] => [this.createPathString(route.request.pathParams), {
     [(route.request.method.constant as string).toLowerCase()]: this.createOperationObject(route)
   }]
 

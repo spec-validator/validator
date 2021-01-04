@@ -1,5 +1,5 @@
 import { GET, Route } from '@validator/rest-api-server'
-import { $, stringField, objectField, constantField } from '@validator/validator/fields'
+import { $, stringField, objectField, constantField, booleanField } from '@validator/validator/fields'
 import genOpenApi from '.'
 import { DEFAULT_SERVER_CONFIG } from '@validator/rest-api-server/server'
 
@@ -8,7 +8,7 @@ test('fullRoute', () => {
     GET($._('/item/')._('id', stringField()), {
       request: {
         queryParams: objectField({
-          pk: stringField()
+          full: booleanField()
         })
       },
       response: {

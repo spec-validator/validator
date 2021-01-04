@@ -8,17 +8,16 @@ Object {
   },
   "openapi": "3.0.3",
   "paths": Object {
-    "^/item/(?<id>.*)$": Object {
+    "/item/{id}": Object {
       "get": Object {
         "parameters": Array [
           Object {
             "description": "",
             "in": "query",
-            "name": "pk",
+            "name": "full",
             "required": true,
             "schema": Object {
-              "pattern": ".*",
-              "type": "string",
+              "type": "boolean",
             },
           },
           Object {
