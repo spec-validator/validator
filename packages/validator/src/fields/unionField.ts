@@ -7,7 +7,7 @@ export type Unioned<T extends SpecUnion<any>[]> = {
 }[number];
 
 class UnionField<
-  Variants extends SpecUnion<any>[]
+  Variants extends Field<any>[]
 > implements Field<Variants> {
   readonly variants: Variants
 
@@ -40,4 +40,4 @@ class UnionField<
 const t = '@validator/fields.UnionField' as const
 type Type = OfType<typeof t>
 export default declareField(t, UnionField) as
-  (<Variants extends SpecUnion<any>[]> (...variants: Variants) => UnionField<Variants> & Type) & Type
+  (<Variants extends Field<any>[]> (...variants: Variants) => UnionField<Variants> & Type) & Type

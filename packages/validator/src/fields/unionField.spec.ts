@@ -1,17 +1,15 @@
 import unionField from './unionField'
 import { serialize, TypeHint, validate } from '../core'
 import { expectType } from '../TypeTestUtils.test'
-import booleanField from './booleanField'
-import choiceField from './choiceField'
-import stringField from './stringField'
+import { objectField, booleanField , choiceField, stringField } from '.'
 
 const field = unionField(
   stringField(),
   choiceField(1, 2, 3),
   booleanField(),
-  {
+  objectField({
     innerField: stringField()
-  }
+  })
 )
 
 test('validation', () => {

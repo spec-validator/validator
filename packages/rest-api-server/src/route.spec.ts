@@ -66,16 +66,16 @@ describe('Route', () => {
       pathParams: $
     }
 
-    const respSpec = unionField({
+    const respSpec = unionField(objectField({
       statusCode: constantField(201),
       data: numberField()
-    }, {
+    }), objectField({
       statusCode: constantField(202),
       data: choiceField('one', 'two'),
       headers: objectField({
         headerKey: stringField()
       })
-    })
+    }))
 
     type Decor = Route<typeof reqSpec, typeof respSpec>
 
