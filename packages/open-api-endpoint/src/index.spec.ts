@@ -16,7 +16,7 @@ test('fullRoute', () => {
         statusCode: constantField(200)
       },
     },
-    async (request) => Promise.resolve({
+    async () => Promise.resolve({
       statusCode: 200 as const
     }))
   ]
