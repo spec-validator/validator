@@ -1,26 +1,28 @@
 import { Field, withErrorDecoration } from '../core'
-import { declareField, OfType } from '../registry'
+import { declareField2, OfType } from '../registry'
 import { Json } from '../Json'
 
-class ArrayField<T> implements Field<T[]> {
-  constructor(readonly itemField: Field<T>) {}
+interface ArrayField<T> extends Field<T[]> {
+  readonly itemField: Field<T>
+}
 
-  validate(value: any): T[] {
+const arrayField = <T>(itemField: Field<T>): ArrayField<T> => ({
+  itemField,
+  validate: (value: any): T[] => {
     if (!Array.isArray(value)) {
       throw 'Not an array'
     }
     return value.map(
-      (it, index) => withErrorDecoration(index, () => this.itemField.validate(it))
+      (it, index) => withErrorDecoration(index, () => itemField.validate(it))
     )
-  }
-  serialize(deserialized: T[]): Json {
-    return deserialized.map(
-      (it, index) => withErrorDecoration(index, () => this.itemField.serialize(it) as unknown as Json)
+  },
+  serialize: (deserialized: T[]): Json =>
+    deserialized.map(
+      (it, index) => withErrorDecoration(index, () => itemField.serialize(it) as unknown as Json)
     )
-  }
-}
+})
 
 const t = '@validator/fields.ArrayField' as const
 type Type = OfType<typeof t>
-export default  declareField(t, ArrayField) as
+export default declareField2(t, arrayField) as
   (<T> (itemField: Field<T>) => ArrayField<T> & Type) & Type
