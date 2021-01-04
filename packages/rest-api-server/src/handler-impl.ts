@@ -104,7 +104,7 @@ export const handleRoute = async (
   if (!requestSerializationFormat) {
     throw {
       statusCode: 415,
-      reason: 'Not supported Content-Type'
+      reason: 'Not supported: Content-Type'
     }
   }
 
@@ -134,7 +134,7 @@ export const handleRoute = async (
   if (!responseSerializationFormat) {
     throw {
       statusCode: 415,
-      reason: 'Not supported Accept'
+      reason: 'Not supported: Accept'
     }
   }
 
