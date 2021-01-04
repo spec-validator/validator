@@ -6,7 +6,7 @@ import { optional } from '@validator/validator/fields'
 import { GetRepresentation, OfType } from '@validator/validator/registry'
 
 import getFieldSchema from './schemaRegistry'
-import { Any } from '@validator/validator/util-types'
+import { Any, ConstructorArgs } from '@validator/validator/util-types'
 
 const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<string, OpenAPI.PathItemObject> => {
   const record: Record<string, OpenAPI.PathItemObject>  = {}
@@ -132,3 +132,6 @@ class OpenApiGenerator {
   }
 
 }
+
+export default (...params: ConstructorArgs<typeof OpenApiGenerator>): OpenAPI.Document =>
+  new OpenApiGenerator(...params).createOpenApiSpec()
