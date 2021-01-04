@@ -27,23 +27,6 @@ export const declareField = <
   return wrapper
 }
 
-export const declareField2 = <
-  Type extends string,
-  Params extends any[],
-  FieldType extends Field<unknown>
-> (
-    type: Type,
-    constructor: (...params: Params) => FieldType
-  ): FieldDeclaration<Type, Params, FieldType> => {
-  const wrapper = (...params: Params): FieldType & OfType<Type> => {
-    const result = constructor(...params) as FieldType & { type: Type }
-    result.type = type
-    return result
-  }
-  wrapper.type = type
-  return wrapper
-}
-
 type RequestRepresentation =
   (field: Field<unknown>) => any
 
