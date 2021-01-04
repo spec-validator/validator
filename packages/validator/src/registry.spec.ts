@@ -3,7 +3,7 @@ import createRegistry, { $, FieldPair } from './registry'
 
 const normalRegistryPairs: FieldPair[] = [
   $(stringField, (field) => ({
-    regexp: field.regex.source,
+    regexp: field.regex?.source,
     type: 'string'
   })),
   $(numberField, (field) => ({

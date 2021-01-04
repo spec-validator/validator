@@ -8,6 +8,7 @@ import { GetRepresentation, OfType } from '@validator/validator/registry'
 import getFieldSchema from './schemaRegistry'
 import { Any, ConstructorArgs } from '@validator/validator/util-types'
 import { isResponsesSpec, ResponseSpec } from '@validator/rest-api-server/route'
+import { withoutOptional } from '@validator/validator/utils'
 
 const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<string, OpenAPI.PathItemObject> => {
   const record: Record<string, OpenAPI.PathItemObject>  = {}
@@ -27,8 +28,8 @@ type WithInfo = {
   }
 }
 
-const getDescription = (field: unknown) =>
-  (field as { description?: string })?.description?.toString() || ''
+const getDescription = (field: unknown): string | undefined =>
+  (field as { description?: string })?.description?.toString()
 
 const isRequired = (field: unknown) =>
   (field as OfType<string>).type !== optional.type
@@ -43,7 +44,7 @@ class OpenApiGenerator {
     readonly getSchema: GetRepresentation = getFieldSchema
   ) {}
 
-  createOpenApiSpec = (): OpenAPI.Document => ({
+  createOpenApiSpec = (): OpenAPI.Document => withoutOptional({
     openapi: '3.0.3',
     info: this.config.info,
     servers: [
@@ -56,7 +57,7 @@ class OpenApiGenerator {
 
   createParameterBaseObject = (
     field: Field<unknown>
-  ): OpenAPI.ParameterBaseObject => ({
+  ): OpenAPI.ParameterBaseObject => withoutOptional({
     description: getDescription(field),
     required: isRequired(field),
     schema: this.getSchema(field)
@@ -66,7 +67,7 @@ class OpenApiGenerator {
     type: ParameterType,
     name: string,
     field: Field<unknown>
-  ): OpenAPI.ParameterObject => ({
+  ): OpenAPI.ParameterObject => withoutOptional({
     name: name,
     in: type,
     ...this.createParameterBaseObject(field)
@@ -87,16 +88,16 @@ class OpenApiGenerator {
     }]
   ))
 
-  createResponseObject = (response: ResponseSpec): OpenAPI.ResponseObject => ({
+  createResponseObject = (response: ResponseSpec): OpenAPI.ResponseObject => withoutOptional({
     headers: response.headers && Object.fromEntries(Object.entries(response.headers).map(([name, value]) => [
       name,
       this.createParameterBaseObject(value)
     ])),
-    description: getDescription(response),
+    description: getDescription(response) || '',
     content: response.data && this.createContentObject(response.data),
   })
 
-  createRequestBodyObject = (data: Field<Any>): OpenAPI.RequestBodyObject => ({
+  createRequestBodyObject = (data: Field<Any>): OpenAPI.RequestBodyObject => withoutOptional({
     content: this.createContentObject(data),
     required: isRequired(data)
   })
@@ -113,7 +114,7 @@ class OpenApiGenerator {
     return result
   }
 
-  createOperationObject = (route: Route): OpenAPI.OperationObject => ({
+  createOperationObject = (route: Route): OpenAPI.OperationObject => withoutOptional({
     parameters: [
       ...this.specToParams('query', route.request.queryParams?.objectSpec),
       ...this.specToParams('path', route.request.pathParams.getObjectSpec())

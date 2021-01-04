@@ -12,7 +12,6 @@ Object {
       "get": Object {
         "parameters": Array [
           Object {
-            "description": "",
             "in": "query",
             "name": "full",
             "required": true,
@@ -21,17 +20,15 @@ Object {
             },
           },
           Object {
-            "description": "",
             "in": "path",
             "name": "id",
             "required": true,
             "schema": Object {
-              "pattern": ".*",
+              "pattern": undefined,
               "type": "string",
             },
           },
         ],
-        "requestBody": undefined,
         "responses": Object {},
       },
     },

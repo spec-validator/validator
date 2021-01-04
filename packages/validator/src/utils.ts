@@ -1,4 +1,4 @@
-import { Optional } from './util-types'
+import { Optional, WithoutOptional } from './util-types'
 
 // eslint-disable-next-line no-useless-escape
 export const escapeRegex = (value: string): string => value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
@@ -34,3 +34,6 @@ export const pick = <T, K extends keyof T>(full: T, keys: K[]): Pick<T, K> => {
 }
 
 export const keys = <T>(o: T): Array<keyof T> => <Array<keyof T>>Object.keys(o)
+
+export const withoutOptional = <T> (item: T): WithoutOptional<T> =>
+  Object.fromEntries(Object.entries(item).filter(([_, value]) => value !== undefined)) as WithoutOptional<T>
