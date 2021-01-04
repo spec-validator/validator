@@ -1,4 +1,4 @@
-import { objectField, stringField } from '@validator/validator/fields'
+import { choiceField, numberField, objectField, stringField, unionField } from '@validator/validator/fields'
 import constantField from '@validator/validator/fields/constantField'
 import $ from '@validator/validator/fields/segmentField'
 
@@ -60,7 +60,6 @@ describe('Route', () => {
         }>(true)
   })
 
-  /*
   it('works with a union of responses', () => {
     const reqSpec = {
       method: constantField('GET'),
@@ -90,5 +89,4 @@ describe('Route', () => {
         data: 'one' | 'two'
       }>}>(true)
   })
-  */
 })

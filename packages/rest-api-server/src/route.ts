@@ -43,5 +43,7 @@ export type Route<
 > = {
   readonly request: ReqSpec,
   readonly response: RespSpec,
-  readonly handler: (request: WithoutOptional<TypeHint<ReqSpec>>) => Promise<WithoutOptional<TypeHint<RespSpec>>>
+  readonly handler: (request: WithoutOptional<TypeHint<ReqSpec>>) => Promise<
+    WithoutOptional<TypeHint<RespSpec>>
+  >
 }
