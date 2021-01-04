@@ -102,7 +102,10 @@ export const handleRoute = async (
   const requestSerializationFormat = serializationFormats[contentType]
 
   if (!requestSerializationFormat) {
-    throw 'Not supported Content-Type'
+    throw {
+      statusCode: 415,
+      reason: 'Not supported Content-Type'
+    }
   }
 
   const wildcardRequest = await getWildcardRoute(requestSerializationFormat, requestIn)
@@ -129,11 +132,14 @@ export const handleRoute = async (
   const responseSerializationFormat = serializationFormats[accept]
 
   if (!responseSerializationFormat) {
-    throw 'Not supported Content-Type'
+    throw {
+      statusCode: 415,
+      reason: 'Not supported Accept'
+    }
   }
 
   response.write(
-    config.serialization.serialize(serialize(route.response?.data, resp?.data)),
+    responseSerializationFormat.serialize(serialize(route.response?.data, resp?.data)),
     config.encoding
   )
 
