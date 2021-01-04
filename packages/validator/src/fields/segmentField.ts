@@ -3,7 +3,7 @@ import { Json } from '../Json'
 import { Any } from '../util-types'
 
 export interface FieldWithRegExp<Type> extends Field<Type> {
-  regex: RegExp
+  regex?: RegExp
 }
 
 export interface FieldWithStringInputSupport<Type> extends Field<Type> {
@@ -63,7 +63,7 @@ class SegmentField<
     if (!this.regex) {
       this.regex = `^${this.getSegments()
         .map(segment => segment.field && segment.key
-          ? `(?<${segment.key}>${segment.field.regex.source})`
+          ? `(?<${segment.key}>${segment.field.regex?.source || /.*/})`
           : (segment.key || '')
         ).join('')}$`
     }
