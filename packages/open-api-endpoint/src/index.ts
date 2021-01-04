@@ -42,94 +42,78 @@ class OpenApiGenerator {
     readonly getSchema: GetRepresentation = getFieldSchema
   ) {}
 
-  createOpenApiSpec(): OpenAPI.Document {
-    return {
-      openapi: '3.0.3',
-      info: this.config.info,
-      servers: [
-        {
-          url: this.config.baseUrl
-        }
-      ],
-      paths: mergeValues(this.routes.map(this.createPath))
-    }
-  }
+  createOpenApiSpec = (): OpenAPI.Document => ({
+    openapi: '3.0.3',
+    info: this.config.info,
+    servers: [
+      {
+        url: this.config.baseUrl
+      }
+    ],
+    paths: mergeValues(this.routes.map(this.createPath))
+  })
 
-  createParameterBaseObject(
+  createParameterBaseObject = (
     field: Field<unknown>
-  ): OpenAPI.ParameterBaseObject {
-    return {
-      description: getDescription(field),
-      required: isRequired(field),
-      schema: this.getSchema(field)
-    }
-  }
+  ): OpenAPI.ParameterBaseObject => ({
+    description: getDescription(field),
+    required: isRequired(field),
+    schema: this.getSchema(field)
+  })
 
-  createParameter(
+  createParameter = (
     type: ParameterType,
     name: string,
     field: Field<unknown>
-  ): OpenAPI.ParameterObject {
-    return {
-      name: name,
-      in: type,
-      ...this.createParameterBaseObject(field)
-    }
-  }
+  ): OpenAPI.ParameterObject => ({
+    name: name,
+    in: type,
+    ...this.createParameterBaseObject(field)
+  })
 
-  specToParams(
+  specToParams = (
     type: ParameterType,
     spec?: Record<string, Field<unknown>>
-  ): OpenAPI.ParameterObject[] {
-    return Object.entries(spec || {}).map(
-      ([name, field]) => this.createParameter(type, name, field)
-    )
-  }
+  ): OpenAPI.ParameterObject[] => Object.entries(spec || {}).map(
+    ([name, field]) => this.createParameter(type, name, field)
+  )
 
-  createResponseObject(response: Route['response']): OpenAPI.ResponseObject {
-    return {
-      headers: response.headers && Object.fromEntries(Object.entries(response.headers).map(([name, value]) => [
-        name,
-        this.createParameterBaseObject(value)
-      ])),
-      description: getDescription(response),
-      content: Object.fromEntries(this.config.serializationFormats.map(
-        it => [it.mediaType, {
-          schema: response.data && this.getSchema(response.data)
-        }]
-      )),
-    }
-  }
-
-  createRequestBodyObject(data: Field<Any>): OpenAPI.RequestBodyObject {
-    return {
-      content: Object.fromEntries(this.config.serializationFormats.map(
-        it => [it.mediaType, {
-          schema: data && this.getSchema(data)
-        }]
-      )),
-      required: isRequired(data)
-    }
-  }
-
-  createOperationObject(route: Route): OpenAPI.OperationObject {
-    return {
-      parameters: [
-        ...this.specToParams('query', route.request.queryParams?.objectSpec),
-        ...this.specToParams('path', route.request.pathParams.getObjectSpec())
-      ],
-      requestBody: route.request.data && this.createRequestBodyObject(route.request.data),
-      responses: {
-        [route.response.statusCode.constant.toString()]: this.createResponseObject(route.response)
-      }
-    }
-  }
-
-  createPath(route: Route): [string, OpenAPI.PathItemObject] {
-    return [route.request.pathParams.toString(), {
-      [(route.request.method.constant as string).toLowerCase()]: this.createOperationObject(route)
+  createContentObject = (data: Field<unknown>): {
+    [media: string]: OpenAPI.MediaTypeObject
+  } => Object.fromEntries(this.config.serializationFormats.map(
+    it => [it.mediaType, {
+      schema: this.getSchema(data)
     }]
-  }
+  ))
+
+  createResponseObject = (response: Route['response']): OpenAPI.ResponseObject => ({
+    headers: response.headers && Object.fromEntries(Object.entries(response.headers).map(([name, value]) => [
+      name,
+      this.createParameterBaseObject(value)
+    ])),
+    description: getDescription(response),
+    content: response.data && this.createContentObject(response.data),
+  })
+
+  createRequestBodyObject = (data: Field<Any>): OpenAPI.RequestBodyObject => ({
+    content: this.createContentObject(data),
+    required: isRequired(data)
+  })
+
+  createOperationObject = (route: Route): OpenAPI.OperationObject => ({
+    parameters: [
+      ...this.specToParams('query', route.request.queryParams?.objectSpec),
+      ...this.specToParams('path', route.request.pathParams.getObjectSpec())
+    ],
+    requestBody: route.request.data && this.createRequestBodyObject(route.request.data),
+    responses: {
+      [route.response.statusCode.constant.toString()]: this.createResponseObject(route.response)
+    }
+  })
+
+  createPath = (route: Route): [string, OpenAPI.PathItemObject] => [route.request.pathParams.toString(), {
+    [(route.request.method.constant as string).toLowerCase()]: this.createOperationObject(route)
+  }]
 
 }
 
