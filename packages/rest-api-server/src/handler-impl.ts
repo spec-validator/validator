@@ -6,7 +6,7 @@ import { SerializationFormat } from './serialization'
 
 export type ServerConfig = {
   readonly baseUrl: string,
-  readonly serialization: SerializationFormat,
+  readonly serializationFormats: [SerializationFormat, ...SerializationFormat[]],
   readonly encoding: BufferEncoding,
   readonly frameworkErrorStatusCode: number,
   readonly appErrorStatusCode: number,
@@ -68,13 +68,44 @@ const withAppErrorStatusCode = async <T>(statusCode: number, inner: () => Promis
   }
 }
 
+// TODO: CACHING
+const getSerializationMapping = (
+  serializationFormats: SerializationFormat[],
+): Record<string, SerializationFormat> => {
+  const result: Record<string, SerializationFormat> = {}
+  serializationFormats.forEach(it => {
+    result[it.mediaType] = it
+  })
+  return result
+}
+
+const firstHeader = (value: string | string[] | undefined): string | undefined => {
+  if (!value) {
+    return undefined
+  } if (typeof value === 'string') {
+    return value
+  } else {
+    return value[0]
+  }
+}
+
 export const handleRoute = async (
   config: ServerConfig,
   route: Route,
   requestIn: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const wildcardRequest = await getWildcardRoute(config.serialization, requestIn)
+  const serializationFormats = getSerializationMapping(config.serializationFormats)
+
+  // default to the top-most media type
+  const contentType = firstHeader(requestIn.headers['Content-Type']) || config.serializationFormats[0].mediaType
+  const requestSerializationFormat = serializationFormats[contentType]
+
+  if (!requestSerializationFormat) {
+    throw 'Not supported Content-Type'
+  }
+
+  const wildcardRequest = await getWildcardRoute(requestSerializationFormat, requestIn)
 
   const request = validate(route.request, wildcardRequest)
 
@@ -92,6 +123,14 @@ export const handleRoute = async (
   })
 
   response.statusCode = resp.statusCode
+
+  // default to the same media type as content
+  const accept = firstHeader(requestIn.headers.accept) || contentType
+  const responseSerializationFormat = serializationFormats[accept]
+
+  if (!responseSerializationFormat) {
+    throw 'Not supported Content-Type'
+  }
 
   response.write(
     config.serialization.serialize(serialize(route.response?.data, resp?.data)),

@@ -2,9 +2,10 @@ import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import { ServerConfig, Route } from '@validator/rest-api-server'
 import { Field } from '@validator/validator'
-import { GetRepresentation } from '@validator/validator/registry'
+import { GetRepresentation, OfType } from '@validator/validator/registry'
 
 import getFieldSchema from './schemaRegistry'
+import { optional } from '@validator/validator/fields'
 
 const createParameter = (
   getSchema: GetRepresentation,
@@ -33,14 +34,13 @@ const createOperationObject = (getSchema: GetRepresentation, route: Route): Open
     ...specToParams(getSchema, 'query', route.request.queryParams?.objectSpec || {}),
     ...specToParams(getSchema, 'path', route.request.pathParams.getObjectSpec())
   ],
-  requestBody: {
+  requestBody: route.request.data && {
     // TODO: inject media type from server configs
     content: { 'application/json': {
-      schema: {
-
-      }
+      schema: getSchema(route.request.data)
     } },
-    required: false
+    // TODO: extra test is required
+    required: (route.request.data as unknown as OfType<string>).type !== optional.type
   },
   responses: {
     code: {
@@ -89,7 +89,7 @@ const createOpenApiSpec = (
       url: config.baseUrl
     }
   ],
-  paths: mergeValues(routes.map(createPath.bind(null, getSchema)))
+  paths: mergeValues(routes.map(createPath.bind(null, getSchema, config.serialization)))
 })
 
 export default createOpenApiSpec
