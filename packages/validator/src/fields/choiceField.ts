@@ -1,69 +1,52 @@
-import { escapeRegex, withParentFields } from '../utils'
+import { escapeRegex } from '../utils'
 import { Primitive, Json } from '../Json'
-import { declareField, OfType } from '../registry'
+import { field, OfType } from '../registry'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
-export class ChoiceField<
-  Choice extends Primitive,
-> implements FieldWithStringInputSupport<Choice> {
+export interface ChoiceField<Choice extends Primitive> extends FieldWithStringInputSupport<Choice> {
   choices: readonly Choice[]
-  private choicesSet: Set<Primitive>
+}
 
-  constructor(...choices: readonly Choice[]) {
-    this.choices = choices
-    this.choicesSet = new Set(choices)
-  }
-  getFieldWithRegExp(): ChoiceFieldWithRegExp<Choice> {
-    return withParentFields(this, new ChoiceFieldWithRegExp(...this.choices), ['type'])
-  }
+export default field('@validator/fields.ChoiceField', <Choice extends Primitive>(
+  ...choices: readonly Choice[]
+): ChoiceField<Choice> => {
+  const choicesSet = new Set(choices)
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  validate(value: any): Choice {
-    if (this.choicesSet.has(value)) {
+  const validate = (value: any): Choice => {
+    if (choicesSet.has(value)) {
       return value as Choice
     }
     throw 'Invalid choice'
   }
-  serialize(deserialized: Choice): Json {
-    return deserialized as unknown as Primitive
-  }
-}
+  const serialize = (deserialized: Choice): Json => deserialized
 
-class ChoiceFieldWithRegExp<
-  Choice extends Primitive
-> extends ChoiceField<Choice> implements FieldWithRegExp<Choice> {
+  const field = {
+    validate,
+    serialize,
+  } as ChoiceField<Choice> & OfType<string>
 
-  private fullChoiceMap: Map<any, Primitive>
+  field.getFieldWithRegExp = (): Omit<ChoiceField<Choice>, 'getFieldWithRegExp'> &
+    FieldWithRegExp<Choice> & OfType<string> => {
 
-  constructor(...choices: readonly Choice[]) {
-    super(...choices)
-    this.fullChoiceMap = new Map<any, Primitive>()
-
+    const fullChoiceMap: Map<any, Primitive> = new Map<any, Primitive>()
     choices.forEach(it => {
-      this.fullChoiceMap.set(it, it)
-      this.fullChoiceMap.set(it.toString(), it)
+      fullChoiceMap.set(it, it)
+      fullChoiceMap.set(it.toString(), it)
     })
+
+    return {
+      type: field.type,
+      choices,
+      regex: new RegExp(
+        Object.keys(choices)
+          .map(it => it.toString())
+          .map(escapeRegex)
+          .join('|')
+      ),
+      serialize: (value: Choice) => value.toString(),
+      validate: (value: any): Choice => validate(fullChoiceMap.get(value))
+    }
   }
 
-  asString(value: Choice) {
-    return value.toString()
-  }
-
-  get regex() {
-    return new RegExp(Object.keys(this.choices)
-      .map(it => it.toString())
-      .map(escapeRegex)
-      .join('|')
-    )
-  }
-
-  validate(value: any): Choice {
-    return super.validate(this.fullChoiceMap.get(value))
-  }
-
-}
-
-const t = '@validator/fields.ChoiceField' as const
-type Type = OfType<typeof t>
-export default declareField(t, ChoiceField) as
-  (<Choice extends Primitive> (...choices: readonly Choice[]) => ChoiceField<Choice> & Type) & Type
+  return field
+})

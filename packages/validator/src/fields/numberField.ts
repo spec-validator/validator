@@ -40,9 +40,8 @@ export default field('@validator/fields.NumberField', (params?: {
       params,
       type: field.type,
       validate: (value: any) => validate(Number.parseFloat(value)),
-      serialize,
+      serialize: (value: number) => value.toString(),
       regex: RegExp(parts.join('')),
-      asString: (value: number): string => value.toString()
     }
   }
 

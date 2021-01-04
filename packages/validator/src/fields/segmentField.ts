@@ -3,7 +3,6 @@ import { Json } from '../Json'
 import { Any } from '../util-types'
 export interface FieldWithRegExp<Type> extends Field<Type> {
   regex: RegExp
-  asString: (value: Type) => string
 }
 
 export interface FieldWithStringInputSupport<Type> extends Field<Type> {
@@ -94,7 +93,7 @@ class SegmentField<
     const result: string[] = []
     this.getSegments().forEach((it: SegmentField<unknown>) => {
       if (it.field && it.key) {
-        result.push(it.field.asString((deserialized as any)[it.key]))
+        result.push(it.field.serialize((deserialized as any)[it.key]) as string)
       } else if (it.key) {
         result.push(it.key)
       }

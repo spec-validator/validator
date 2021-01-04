@@ -1,42 +1,38 @@
-import { declareField } from '../registry'
+import { field, OfType } from '../registry'
 import { Json } from '../Json'
-import { withParentFields } from '../utils'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
-class BooleanField implements FieldWithStringInputSupport<boolean> {
-  getFieldWithRegExp(): BooleanFieldWithRegExp {
-    return withParentFields(this, new BooleanFieldWithRegExp(), ['type'])
-  }
-  validate(value: any): boolean {
+export type BooleanField = FieldWithStringInputSupport<boolean>
+
+export default field('@validator/fields.BooleanField', (): BooleanField => {
+  const validate = (value: any): boolean => {
     if (value !== true && value !== false) {
       throw 'Not a boolean'
     }
     return value
   }
-  serialize(deserialized: boolean): Json {
-    return deserialized
-  }
-}
+  const serialize = (deserialized: boolean): Json => deserialized
 
-class BooleanFieldWithRegExp extends BooleanField implements FieldWithRegExp<boolean> {
+  const field = {
+    validate,
+    serialize,
+  } as BooleanField & OfType<string>
 
-  asString(value: boolean) {
-    return value.toString()
-  }
-  get regex() {
-    return /true|false|1|0/
-  }
+  field.getFieldWithRegExp = (): Omit<BooleanField, 'getFieldWithRegExp'> &
+    FieldWithRegExp<boolean> & OfType<string> => ({
+    type: field.type,
+    validate: (value: any) => {
+      if (value === 'true' || value === '1') {
+        value = true
+      }
+      if (value === 'false' || value === '0') {
+        value = false
+      }
+      return validate(value)
+    },
+    serialize: (value: boolean): string => value.toString(),
+    regex: /true|false|1|0/,
+  })
 
-  validate(value: any): boolean {
-    if (value === 'true' || value === '1') {
-      value = true
-    }
-    if (value === 'false' || value === '0') {
-      value = false
-    }
-    return super.validate(value)
-  }
-
-}
-
-export default declareField('@validator/fields.BooleanField', BooleanField)
+  return field
+})
