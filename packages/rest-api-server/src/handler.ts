@@ -57,6 +57,24 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
   }
 })
 
+const withAppErrorStatusCode = async <T>(
+  statusCode: number,
+  inner: () => Promise<T> | T
+): Promise<T> => {
+  try {
+    return await inner()
+  } catch (error) {
+    if (error.statusCode) {
+      throw error
+    } else {
+      throw {
+        statusCode,
+        reason: error
+      }
+    }
+  }
+}
+
 const getWildcardRoute = async (
   serialization: SerializationFormat,
   request: http.IncomingMessage,
@@ -64,21 +82,9 @@ const getWildcardRoute = async (
   const data = await getData(request)
   return ({
     ...getWildcardRequestBase(request),
-    data: data && serialization.deserialize(data),
+    data: data && await withAppErrorStatusCode(400, () => serialization.deserialize(data)),
     headers: request.headers
   })
-}
-
-const withAppErrorStatusCode = async <T>(statusCode: number, inner: () => Promise<T>, isPublic=false): Promise<T> => {
-  try {
-    return await inner()
-  } catch (error) {
-    throw {
-      statusCode: statusCode,
-      isPublic: isPublic,
-      error: error,
-    }
-  }
 }
 
 // TODO: CACHING
@@ -124,7 +130,6 @@ const handleRoute = async (
   const request = await withAppErrorStatusCode(
     400,
     async () => validate(route.request, wildcardRequest, true),
-    true
   )
 
   // This cast is totally reasoanble because in the interface we exclude
