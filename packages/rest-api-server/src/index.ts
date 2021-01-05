@@ -1,4 +1,4 @@
-export { ServerConfig } from './handler-impl'
+export { ServerConfig } from './handler'
 export { Route } from './route'
 export {
   serve, withMethod,

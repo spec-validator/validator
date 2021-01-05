@@ -2,7 +2,7 @@ import http from 'http'
 import { URL } from 'url'
 import { StringMapping } from './route'
 
-import { ServerConfig, handle } from './handler-impl'
+import { ServerConfig, handle } from './handler'
 import { JsonSerialization } from './serialization'
 import { Route, RequestSpec, ResponseSpec } from './route'
 
