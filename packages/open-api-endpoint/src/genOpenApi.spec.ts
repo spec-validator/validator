@@ -21,7 +21,7 @@ test('fullRoute', () => {
         }
       },
       async () => ({
-        statusCode: 201 as const,
+        statusCode: 201,
       })
     ),
     GET($._('/item/')._('id', stringField()),
@@ -43,13 +43,14 @@ test('fullRoute', () => {
           })
         },
         response: {
+          statusCode: constantField(200),
           data: objectField({
             items: arrayField(numberField())
           })
         },
       },
       async () => ({
-        statusCode: 200 as const,
+        statusCode: 200,
         data: {
           items: [1, 2, 3]
         }

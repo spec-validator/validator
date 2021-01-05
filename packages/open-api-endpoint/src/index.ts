@@ -11,11 +11,11 @@ export default (config: ServerConfig & WithInfo, schemaRoot: '/open-api'): Serve
       {
         response: {
           data: stringField(),
-          statusCode: constantField(200 as const)
+          statusCode: constantField(200)
         }
       },
       async () => ({
-        statusCode: 200 as const,
+        statusCode: 200,
         data: JSON.stringify(genOpenApi(config))
       })
     )
