@@ -21,8 +21,8 @@ const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<st
   return record
 }
 
-type WithInfo = {
-  info: {
+export type WithInfo = {
+  info?: {
     title: string,
     version: string
   }
@@ -42,7 +42,6 @@ class OpenApiGenerator {
 
   constructor(
     readonly config: ServerConfig & WithInfo,
-    readonly routes: Route[],
     getSchema: GetRepresentation = getFieldSchema
   ) {
     this.getSchema = (field) => withoutOptional(getSchema(field))
@@ -50,13 +49,16 @@ class OpenApiGenerator {
 
   createOpenApiSpec = (): OpenAPI.Document => withoutOptional({
     openapi: '3.0.3',
-    info: this.config.info,
+    info: this.config.info || {
+      title: 'Test',
+      version: '0.0.1'
+    },
     servers: [
       {
         url: this.config.baseUrl
       }
     ],
-    paths: mergeValues(this.routes.map(this.createPath))
+    paths: mergeValues(this.config.routes.map(this.createPath))
   })
 
   createParameterBaseObject = (

@@ -43,7 +43,6 @@ test('fullRoute', () => {
           })
         },
         response: {
-          statusCode: constantField(200),
           data: objectField({
             items: arrayField(numberField())
           })
@@ -58,12 +57,14 @@ test('fullRoute', () => {
     )
   ]
 
-  expect(genOpenApi({
-    ...DEFAULT_SERVER_CONFIG,
-    info: {
-      title: 'Test',
-      version: '1.0.0'
-    }
-  }, routes)).toMatchSnapshot()
+  expect(genOpenApi(
+    {
+      ...DEFAULT_SERVER_CONFIG,
+      routes,
+      info: {
+        title: 'Test',
+        version: '1.0.0'
+      }
+    })).toMatchSnapshot()
 
 })
