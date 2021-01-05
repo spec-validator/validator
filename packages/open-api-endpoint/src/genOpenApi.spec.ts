@@ -66,5 +66,4 @@ test('fullRoute', () => {
     }
   }, routes)).toMatchSnapshot()
 
-
 })
