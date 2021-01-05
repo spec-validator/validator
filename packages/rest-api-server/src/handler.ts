@@ -113,7 +113,7 @@ const handleRoute = async (
 
   const request = await withAppErrorStatusCode(
     400,
-    async () => validate(route.request, wildcardRequest)
+    async () => validate(route.request, wildcardRequest, true)
   )
 
   // This cast is totally reasoanble because in the interface we exclude
@@ -142,10 +142,12 @@ const handleRoute = async (
     }
   }
 
-  response.write(
-    responseSerializationFormat.serialize(resp?.data),
-    config.encoding
-  )
+  if (resp.data !== undefined) {
+    response.write(
+      responseSerializationFormat.serialize(resp.data),
+      config.encoding
+    )
+  }
 }
 
 export const handle = async (

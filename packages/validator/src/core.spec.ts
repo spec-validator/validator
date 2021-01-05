@@ -124,4 +124,17 @@ test('validate with extra fields with Error', () => {
       'fieldThree',
     ],
   })
+
+})
+
+test('validate with extra allowed fields', () => {
+  expect(
+    validate({
+      fieldOne: stringField()
+    }, {
+      fieldOne: 'one',
+      fieldTwo: 'two',
+      fieldThree: 'three'
+    }, true)
+  ).toEqual({fieldOne: 'one'})
 })

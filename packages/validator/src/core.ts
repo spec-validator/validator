@@ -99,12 +99,13 @@ const ensureNoExtraFields = <DeserializedType extends Any, TSpec extends SpecUni
 export const validate = <TSpec extends SpecUnion<Any>> (
   validatorSpec: TSpec,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  value: any
+  value: any,
+  canHaveExtras = false
 ): TypeHint<TSpec> => {
   const result = mapSpec(validatorSpec,
     (validator, key) => validator.validate(key === undefined ? value : value[key])
   )
-  ensureNoExtraFields(validatorSpec, value)
+  !canHaveExtras && ensureNoExtraFields(validatorSpec, value)
   return result
 }
 
