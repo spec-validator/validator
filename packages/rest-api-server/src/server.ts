@@ -6,8 +6,9 @@ import { ServerConfig, handle } from './handler-impl'
 import { JsonSerialization } from './serialization'
 import { Route, RequestSpec, ResponseSpec } from './route'
 
-import { Field } from '@validator/validator'
+import { Field, TypeHint } from '@validator/validator'
 import { constantField, $, stringField } from '@validator/validator/fields'
+import { WithoutOptional } from '@validator/validator/util-types'
 import { ConstantField } from '@validator/validator/fields/constantField'
 
 type RequestSpecMethod = Omit<RequestSpec, 'method' | 'pathParams'>
@@ -19,53 +20,57 @@ type PathSpec<PathParams extends StringMapping> = typeof $ & Field<PathParams>
 // Make it fluid API - to make things work with autocomplete
 export const withMethod = <
   Method extends string,
-> (method: Method) => <
-  StatusCode extends number = 200,
+  OkStatusCode extends number
+> (method: Method, okStatusCode: OkStatusCode) => <
   PathParams extends StringMapping = StringMapping,
   ReqSpec extends RequestSpecMethod = RequestSpecMethod,
-  RespSpec extends ResponseSpecMethod = ResponseSpecMethod
+  RespSpec extends ResponseSpecMethod = ResponseSpecMethod,
   > (
       pathParams: PathSpec<PathParams>,
       spec: {
         request?: ReqSpec,
-        response?: RespSpec & {
-          readonly statusCode?: ConstantField<StatusCode>
-        }
+        response?: RespSpec
       },
-      handler: Route<ReqSpec & {
-        readonly method: ConstantField<string>,
-        readonly pathParams: PathSpec<PathParams>
-      }, RespSpec & {
-        readonly statusCode: ConstantField<StatusCode>
-      }>['handler']
-    ): Route => ({
-      request: {
-        ...(spec.request || {}),
-        method: constantField(method),
-        pathParams,
-      },
-      response: {
-        ...spec.response,
-        statusCode: spec.response?.statusCode || constantField(200)
-      },
-      handler: handler as unknown as Route['handler']
-    })
+      handler: (request: WithoutOptional<TypeHint<
+        ReqSpec
+        & {
+            readonly method: ConstantField<Method>,
+            readonly pathParams: PathSpec<PathParams>
+          }
+      >>) => Promise<
+        WithoutOptional<TypeHint<RespSpec>>
+      > | WithoutOptional<TypeHint<RespSpec>>
+    ): Route => {
+  const requestSchema = {
+    ...(spec.request || {}),
+    method: constantField(method),
+    pathParams,
+  }
+  return ({
+    request: requestSchema,
+    response: {
+      ...(spec.response || {}),
+      statusCode: constantField(okStatusCode)
+    },
+    handler: (async (request: Route['request']) => ({
+      ...await handler(request as any) as any,
+      statusCode: okStatusCode,
+    })) as unknown as Route['handler']
+  })
+}
 
-export const GET = withMethod('GET')
-export const HEAD = withMethod('HEAD')
-export const POST = withMethod('POST')
-export const PUT = withMethod('PUT')
-export const DELETE = withMethod('DELETE')
-export const CONNECT = withMethod('CONNECT')
-export const OPTIONS = withMethod('OPTIONS')
-export const TRACE = withMethod('TRACE')
-export const PATCH = withMethod('PATCH')
+export const GET = withMethod('GET', 200)
+export const HEAD = withMethod('HEAD', 200)
+export const POST = withMethod('POST', 201)
+export const PUT = withMethod('PUT', 204)
+export const DELETE = withMethod('DELETE', 204)
+export const PATCH = withMethod('PATCH', 204)
 
 export const DEFAULT_SERVER_CONFIG: ServerConfig = {
   baseUrl: 'http://localhost:8000',
   serializationFormats: [new JsonSerialization()],
   encoding: 'utf-8',
-  frameworkErrorStatusCode: 502,
+  frameworkErrorStatusCode: 503,
   appErrorStatusCode: 500,
   reportError: (error: unknown) => {
     console.error(error)
@@ -75,7 +80,6 @@ export const DEFAULT_SERVER_CONFIG: ServerConfig = {
     GET($._('/'),
       {
         response: {
-          statusCode: constantField(200),
           data: stringField()
         }
       },
@@ -111,6 +115,10 @@ const getPort = (baseUrl: string): number => {
   }
   return url.port ? Number.parseInt(url.port) : SUPPORTED_PROTOCOLS[url.protocol]
 }
+
+export const createServer = (
+  config: Partial<ServerConfig>,
+): http.Server => http.createServer(handle.bind(null, mergeServerConfigs(config)))
 
 export const serve = (
   config: Partial<ServerConfig>,

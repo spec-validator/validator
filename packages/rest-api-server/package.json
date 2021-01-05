@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "@types/qs": "^6.9.5",
+    "@types/supertest": "^2.0.10",
     "supertest": "^6.0.1"
   }
 }
