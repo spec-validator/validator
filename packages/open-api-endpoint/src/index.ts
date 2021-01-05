@@ -7,7 +7,6 @@ export default (routes: Route[], schemaRoot: '/open-api'): Route[] => [
   ...routes,
   GET($._(schemaRoot),
     {
-      request: {},
       response: {
         data: stringField(),
         statusCode: constantField(200 as const)

@@ -24,16 +24,16 @@ export const withMethod = <
   > (
       pathParams: PathSpec<PathParams>,
       spec: {
-      request: ReqSpec,
-      response: RespSpec
-    },
+        request?: ReqSpec,
+        response: RespSpec
+      },
       handler: Route<ReqSpec & {
         readonly method: ConstantField<string>,
         readonly pathParams: PathSpec<PathParams>
       }, RespSpec>['handler']
     ): Route => ({
       request: {
-        ...spec.request,
+        ...(spec.request || {}),
         method: constantField(method),
         pathParams,
       },
@@ -64,7 +64,6 @@ export const DEFAULT_SERVER_CONFIG: ServerConfig = {
   routes: [
     GET($._('/'),
       {
-        request: {},
         response: {
           statusCode: constantField(200),
           data: stringField()
