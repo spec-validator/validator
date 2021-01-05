@@ -43,7 +43,6 @@ test('fullRoute', () => {
           })
         },
         response: {
-          statusCode: constantField(200),
           data: objectField({
             items: arrayField(numberField())
           })

@@ -12,21 +12,25 @@ import { ConstantField } from '@validator/validator/fields/constantField'
 
 type RequestSpecMethod = Omit<RequestSpec, 'method' | 'pathParams'>
 
+type ResponseSpecMethod = Omit<ResponseSpec, 'statusCode'>
+
 type PathSpec<PathParams extends StringMapping> = typeof $ & Field<PathParams>
 
 // Make it fluid API - to make things work with autocomplete
 export const withMethod = <
   Method extends string,
 > (method: Method) => <
-  StatusCode extends number,
+  StatusCode extends number = 200,
   PathParams extends StringMapping = StringMapping,
   ReqSpec extends RequestSpecMethod = RequestSpecMethod,
-  RespSpec extends ResponseSpec = ResponseSpec
+  RespSpec extends ResponseSpecMethod = ResponseSpecMethod
   > (
       pathParams: PathSpec<PathParams>,
       spec: {
         request?: ReqSpec,
-        response?: RespSpec
+        response?: RespSpec & {
+          readonly statusCode?: ConstantField<StatusCode>
+        }
       },
       handler: Route<ReqSpec & {
         readonly method: ConstantField<string>,
