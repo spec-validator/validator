@@ -2,7 +2,7 @@ import { GET, POST, Route } from '@validator/rest-api-server'
 import {
   $, stringField, objectField, constantField, booleanField, numberField, arrayField
 } from '@validator/validator/fields'
-import genOpenApi from '.'
+import genOpenApi from './genOpenApi'
 import { DEFAULT_SERVER_CONFIG } from '@validator/rest-api-server/server'
 import withDoc from './withDoc'
 
