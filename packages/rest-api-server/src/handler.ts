@@ -69,12 +69,13 @@ const getWildcardRoute = async (
   })
 }
 
-const withAppErrorStatusCode = async <T>(statusCode: number, inner: () => Promise<T>): Promise<T> => {
+const withAppErrorStatusCode = async <T>(statusCode: number, inner: () => Promise<T>, isPublic=false): Promise<T> => {
   try {
     return await inner()
   } catch (error) {
     throw {
       statusCode: statusCode,
+      isPublic: isPublic,
       error: error,
     }
   }
@@ -107,13 +108,14 @@ const handleRoute = async (
   const serializationFormats = getSerializationMapping(config.serializationFormats)
 
   // default to the top-most media type
-  const contentType = firstHeader(requestIn.headers['Content-Type']) || config.serializationFormats[0].mediaType
+  const contentType = firstHeader(requestIn.headers['content-type']) || config.serializationFormats[0].mediaType
   const requestSerializationFormat = serializationFormats[contentType]
 
   if (!requestSerializationFormat) {
     throw {
       statusCode: 415,
-      reason: 'Not supported: Content-Type'
+      isPublic: true,
+      reason: 'Not supported: content-type'
     }
   }
 
@@ -121,7 +123,8 @@ const handleRoute = async (
 
   const request = await withAppErrorStatusCode(
     400,
-    async () => validate(route.request, wildcardRequest, true)
+    async () => validate(route.request, wildcardRequest, true),
+    true
   )
 
   // This cast is totally reasoanble because in the interface we exclude
@@ -146,11 +149,12 @@ const handleRoute = async (
   if (!responseSerializationFormat) {
     throw {
       statusCode: 415,
-      reason: 'Not supported: Accept'
+      isPublic: true,
+      reason: 'Not supported: accept'
     }
   }
 
-  response.setHeader('Content-Type', accept)
+  response.setHeader('content-type', accept)
 
   if (resp.data !== undefined) {
     response.write(
@@ -158,7 +162,6 @@ const handleRoute = async (
       config.encoding
     )
   }
-  response.end()
 }
 
 export const handle = async (
@@ -166,20 +169,42 @@ export const handle = async (
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
+  const serializationFormats = getSerializationMapping(config.serializationFormats)
   const route = config.routes.find(matchRoute.bind(null, request))
+
+  const reportError = async (error: unknown) => {
+    try {
+      await config.reportError(error)
+    } catch (reportingError) {
+      console.error(reportingError)
+    }
+  }
+
   if (route) {
     try {
       await handleRoute(config, route, request, response)
     } catch (error) {
-      try {
-        await config.reportError(error)
-      } catch (reportingError) {
-        console.error(reportingError)
+      if (error.isPublic) {
+        try {
+          const responseSerializationFormat =
+            firstHeader(request.headers.accept || request.headers['content-type'])
+            || config.serializationFormats[0].mediaType
+          const format = serializationFormats[responseSerializationFormat] || config.serializationFormats[0]
+          response.write(
+            format.serialize(error),
+            config.encoding
+          )
+        } catch (error2) {
+          reportError(error2)
+        }
+      } else {
+        reportError(error)
       }
       response.statusCode = error.statusCode || config.frameworkErrorStatusCode
     }
   } else {
     response.statusCode = 404
   }
+  console.log(response.statusCode)
   response.end()
 }
