@@ -64,11 +64,12 @@ const withAppErrorStatusCode = async <T>(
   try {
     return await inner()
   } catch (error) {
-    if (error.statusCode) {
+    if (error.statusCode && error.isPublic) {
       throw error
     } else {
       throw {
         statusCode,
+        isPublic: statusCode < 500,
         reason: error
       }
     }

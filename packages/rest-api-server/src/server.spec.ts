@@ -94,6 +94,7 @@ let oldLog: any = null
 
 beforeEach(() => {
   oldLog = console.error
+  console.error = jest.fn()
 })
 
 afterEach(() => {
@@ -131,10 +132,7 @@ test('if Accept media type is unsupported - 415 status code is returned', async 
   }))
 })
 
-test('if request is invalid - 400 status code is returned', async () => {
-  const resp = await request(server).post('/items').set('Content-Type', 'application/json').send('blob')
-  expect(resp.status).toEqual(400)
-})
+
 
 test('if handler fails with status code in an error - the status code is returned', async () => {
   const resp = await request(server).get('/expected-error')
@@ -144,4 +142,9 @@ test('if handler fails with status code in an error - the status code is returne
 test('if handler fails without status code - 500 status code is returned', async () => {
   const resp = await request(server).get('/unexpected-error')
   expect(resp.status).toEqual(500)
+})
+
+test('if request is invalid - 400 status code is returned', async () => {
+  const resp = await request(server).post('/items').set('Content-Type', 'application/json').send('blob')
+  expect(resp.status).toEqual(400)
 })
