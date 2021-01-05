@@ -72,13 +72,10 @@ const withAppErrorStatusCode = async <T>(statusCode: number, inner: () => Promis
 // TODO: CACHING
 const getSerializationMapping = (
   serializationFormats: SerializationFormat[],
-): Record<string, SerializationFormat> => {
-  const result: Record<string, SerializationFormat> = {}
-  serializationFormats.forEach(it => {
-    result[it.mediaType] = it
-  })
-  return result
-}
+): Record<string, SerializationFormat> =>
+  Object.fromEntries(serializationFormats.map(it =>
+    [it.mediaType,  it]
+  ))
 
 const firstHeader = (value: string | string[] | undefined): string | undefined => {
   if (!value) {
@@ -90,7 +87,7 @@ const firstHeader = (value: string | string[] | undefined): string | undefined =
   }
 }
 
-export const handleRoute = async (
+const handleRoute = async (
   config: ServerConfig,
   route: Route,
   requestIn: http.IncomingMessage,
@@ -111,7 +108,10 @@ export const handleRoute = async (
 
   const wildcardRequest = await getWildcardRoute(requestSerializationFormat, requestIn)
 
-  const request = validate(route.request, wildcardRequest)
+  const request = await withAppErrorStatusCode(
+    400,
+    async () => validate(route.request, wildcardRequest)
+  )
 
   // This cast is totally reasoanble because in the interface we exclude
   // null values.

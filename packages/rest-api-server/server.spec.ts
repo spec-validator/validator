@@ -18,4 +18,8 @@ describe('withMethod', () => {
       // TODO
     })
   })
+
+  test('injects method and path passed via a parameters into the spec', () => {
+    // TODO
+  })
 })
