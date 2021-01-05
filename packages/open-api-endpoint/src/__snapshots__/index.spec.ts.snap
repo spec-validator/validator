@@ -24,6 +24,7 @@ Object {
             "name": "id",
             "required": true,
             "schema": Object {
+              "pattern": ".*",
               "type": "string",
             },
           },

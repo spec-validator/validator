@@ -33,6 +33,7 @@ type RequestSpecMethod = Omit<RequestSpec, 'method' | 'pathParams'>
 
 type PathSpec<PathParams extends StringMapping> = typeof $ & Field<PathParams>
 
+// Make it fluid API - to make things work with autocomplete
 export const withMethod = <
   Method extends string,
 > (method: Method) => <

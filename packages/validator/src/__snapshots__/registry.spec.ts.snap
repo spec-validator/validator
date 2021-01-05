@@ -8,12 +8,12 @@ Object {
       "type": "number",
     },
     "subtitle": Object {
-      "regexp": undefined,
+      "regexp": ".*",
       "type": "string",
     },
   },
   "title": Object {
-    "regexp": undefined,
+    "regexp": ".*",
     "type": "string",
   },
 }

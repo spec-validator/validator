@@ -7,7 +7,7 @@ export default field('@validator/fields.StringField', (
   regex?: RegExp
 ): StringField => {
   const field = {
-    regex,
+    regex: regex || /.*/,
     validate: (value: any): string => {
       if (typeof value !== 'string') {
         throw 'Not a string'

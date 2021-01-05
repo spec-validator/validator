@@ -24,3 +24,12 @@ export type WithoutOptional<T, U extends T = T> =
   T extends unknown ? [U] extends [T] ? OneWithoutOptional<T> : EachWithoutOptional<T> : OneWithoutOptional<T>
 
 export type ConstructorArgs<T> = T extends new (...args: infer U) => any ? U : never
+
+type Impossible<K extends keyof any> = {
+  [P in K]: never;
+};
+
+// The secret sauce! Provide it the type that contains only the properties you want,
+// and then a type that extends that type, based on what the caller provided
+// using generics.
+export type WithoutExtraProperties<T, U extends T = T> = U & Impossible<Exclude<keyof U, keyof T>>;
