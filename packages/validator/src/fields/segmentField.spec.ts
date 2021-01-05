@@ -8,6 +8,12 @@ import { TypeHint } from '../core'
 
 
 describe('basics', () => {
+
+  it('validates plain string segment', () => {
+    const segmentSpec = $._('/items')
+    expect(segmentSpec.validate('/items')).toEqual({})
+  })
+
   it('validates the input correctly', () => {
     const segmentSpec = $
       ._('/')

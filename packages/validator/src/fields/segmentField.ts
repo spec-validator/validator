@@ -82,10 +82,11 @@ class SegmentField<
   }
 
   validate(value: string): DeserializedType {
-    const matches = value.match(this.getRegex())?.groups
-    if (!matches) {
+    const match = value.match(this.getRegex())
+    if (!match) {
       throw 'Didn\'t match'
     }
+    const matches = match.groups || {}
     const segments = this.getFieldSegments()
     const spec = Object.fromEntries(segments.map(segment => [segment.key, segment.field]))
     return validate(spec, matches)
