@@ -51,7 +51,7 @@ export type Route<
   readonly response: RespSpec,
   readonly handler: (request: WithoutOptional<TypeHint<ReqSpec>>) => Promise<
     WithoutOptional<TypeHint<RespSpec>>
-  > | WithoutOptional<TypeHint<RespSpec>>
+  >
 }
 
 export const isResponsesSpec = (spec: ResponsesSpec | ResponseSpec): spec is ResponsesSpec =>

@@ -30,6 +30,7 @@ const server = createServer({routes: [
     async () => {
       throw {
         statusCode: 442,
+        isPublic: true,
         reason: 'Boom!'
       }
     }
@@ -63,7 +64,7 @@ const server = createServer({routes: [
     {
       request: ofItems,
     },
-    async () => undefined
+    async () => Promise.resolve(undefined)
   ),
   GET($._('/items/')._('id', numberField()),
     {
@@ -81,13 +82,23 @@ const server = createServer({routes: [
     {
       request: ofItem
     },
-    async () => undefined
+    async () => Promise.resolve(undefined)
   ),
   DELETE($._('/items/')._('id', numberField()),
     {},
-    async () => undefined
+    async () => Promise.resolve(undefined)
   )
 ]})
+
+let oldLog: any = null
+
+beforeEach(() => {
+  oldLog = console.error
+})
+
+afterEach(() => {
+  console.error = oldLog
+})
 
 test('a handler with valid method & route is matched and executed', async () => {
   const resp = await request(server).get('/items')

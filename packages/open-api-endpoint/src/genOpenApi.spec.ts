@@ -1,6 +1,6 @@
 import { GET, POST, Route } from '@validator/rest-api-server'
 import {
-  $, stringField, objectField, constantField, booleanField, numberField, arrayField
+  $, stringField, objectField, booleanField, numberField, arrayField
 } from '@validator/validator/fields'
 import genOpenApi from './genOpenApi'
 import { DEFAULT_SERVER_CONFIG } from '@validator/rest-api-server/server'
@@ -16,13 +16,8 @@ test('fullRoute', () => {
             count: numberField()
           })
         },
-        response: {
-          statusCode: constantField(201)
-        }
       },
-      async () => ({
-        statusCode: 201,
-      })
+      async () => Promise.resolve(undefined)
     ),
     GET($._('/item/')._('id', stringField()),
       {
