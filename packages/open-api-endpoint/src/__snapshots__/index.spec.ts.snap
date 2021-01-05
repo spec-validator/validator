@@ -24,12 +24,32 @@ Object {
             "name": "id",
             "required": true,
             "schema": Object {
-              "pattern": undefined,
               "type": "string",
             },
           },
         ],
-        "responses": Object {},
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "properties": Object {
+                    "items": Object {
+                      "items": Object {
+                        "type": "integer",
+                      },
+                      "type": "array",
+                    },
+                  },
+                  "required": Array [
+                    "items",
+                  ],
+                },
+              },
+            },
+            "description": "",
+          },
+        },
       },
     },
     "/items": Object {
@@ -57,7 +77,11 @@ Object {
           },
           "required": true,
         },
-        "responses": Object {},
+        "responses": Object {
+          "201": Object {
+            "description": "",
+          },
+        },
       },
     },
   },

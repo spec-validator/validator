@@ -38,11 +38,15 @@ type ParameterType = 'query' | 'path'
 
 class OpenApiGenerator {
 
+  getSchema: GetRepresentation
+
   constructor(
     readonly config: ServerConfig & WithInfo,
     readonly routes: Route[],
-    readonly getSchema: GetRepresentation = getFieldSchema
-  ) {}
+    getSchema: GetRepresentation = getFieldSchema
+  ) {
+    this.getSchema = (field) => withoutOptional(getSchema(field))
+  }
 
   createOpenApiSpec = (): OpenAPI.Document => withoutOptional({
     openapi: '3.0.3',
@@ -109,7 +113,7 @@ class OpenApiGenerator {
         result[it.objectSpec.statusCode.constant.toString()] = this.createResponseObject(it.objectSpec)
       })
     } else {
-      this.createResponseObject(spec)
+      result[spec.statusCode.constant.toString()] = this.createResponseObject(spec)
     }
     return result
   }
