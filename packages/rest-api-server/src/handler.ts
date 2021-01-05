@@ -142,6 +142,8 @@ const handleRoute = async (
     }
   }
 
+  response.setHeader('Content-Type', accept)
+
   if (resp.data !== undefined) {
     console.log(responseSerializationFormat.serialize(resp.data))
     response.write(
@@ -149,6 +151,7 @@ const handleRoute = async (
       config.encoding
     )
   }
+  response.end()
 }
 
 export const handle = async (

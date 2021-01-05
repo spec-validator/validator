@@ -67,7 +67,7 @@ const server = createServer({routes: [
 test('a handler with valid method & route is matched and executed', async () => {
   const resp = await request(server).get('/items')
   expect(resp.status).toEqual(200)
-  expect(resp.body).toEqual('200')
+  expect(resp.body).toEqual([{'description': 'Description', 'title': 'Item N'}])
 })
 
 test('if no valid handler is matched - 404 status code is returned', () => {
