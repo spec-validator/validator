@@ -5,12 +5,17 @@ import genOpenApi from './genOpenApi'
 
 export default (routes: Route[], schemaRoot: '/open-api'): Route[] => [
   ...routes,
-  GET($._(schemaRoot), {
-    response: {
-      data: stringField(),
-      statusCode: constantField(200)
-    }
-  },
-  async () => Promise.resolve(JSON.stringify(genOpenApi(routes)))
+  GET($._(schemaRoot),
+    {
+      request: {},
+      response: {
+        data: stringField(),
+        statusCode: constantField(200 as const)
+      }
+    },
+    async () => ({
+      statusCode: 200 as const,
+      data: JSON.stringify(genOpenApi(routes))
+    })
   )
 ]

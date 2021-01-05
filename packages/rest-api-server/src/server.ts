@@ -7,27 +7,8 @@ import { JsonSerialization } from './serialization'
 import { Route, RequestSpec, ResponseSpec } from './route'
 
 import { Field } from '@validator/validator'
-import { constantField, $} from '@validator/validator/fields'
+import { constantField, $, stringField } from '@validator/validator/fields'
 import { ConstantField } from '@validator/validator/fields/constantField'
-
-export const DEFAULT_SERVER_CONFIG: ServerConfig = {
-  baseUrl: 'http://localhost:8000',
-  serializationFormats: [new JsonSerialization()],
-  encoding: 'utf-8',
-  frameworkErrorStatusCode: 502,
-  appErrorStatusCode: 500,
-  reportError: (error: unknown) => {
-    console.error(error)
-    return Promise.resolve(undefined)
-  },
-}
-
-const mergeServerConfigs = (
-  serverConfig: Partial<ServerConfig>
-): ServerConfig => ({
-  ...DEFAULT_SERVER_CONFIG,
-  ...serverConfig,
-})
 
 type RequestSpecMethod = Omit<RequestSpec, 'method' | 'pathParams'>
 
@@ -70,6 +51,40 @@ export const OPTIONS = withMethod('OPTIONS')
 export const TRACE = withMethod('TRACE')
 export const PATCH = withMethod('PATCH')
 
+export const DEFAULT_SERVER_CONFIG: ServerConfig = {
+  baseUrl: 'http://localhost:8000',
+  serializationFormats: [new JsonSerialization()],
+  encoding: 'utf-8',
+  frameworkErrorStatusCode: 502,
+  appErrorStatusCode: 500,
+  reportError: (error: unknown) => {
+    console.error(error)
+    return Promise.resolve(undefined)
+  },
+  routes: [
+    GET($._('/'),
+      {
+        request: {},
+        response: {
+          statusCode: constantField(200),
+          data: stringField()
+        }
+      },
+      async () => ({
+        statusCode: 200 as const,
+        data: 'ROOT'
+      })
+    )
+  ]
+}
+
+const mergeServerConfigs = (
+  serverConfig: Partial<ServerConfig>
+): ServerConfig => ({
+  ...DEFAULT_SERVER_CONFIG,
+  ...serverConfig,
+})
+
 const SUPPORTED_PROTOCOLS= {
   'http': 80,
   'https': 443
@@ -90,8 +105,7 @@ const getPort = (baseUrl: string): number => {
 
 export const serve = (
   config: Partial<ServerConfig>,
-  routes: Route[],
 ): void => {
   const merged = mergeServerConfigs(config)
-  http.createServer(handle.bind(null, merged, routes)).listen(getPort(merged.baseUrl))
+  http.createServer(handle.bind(null, merged)).listen(getPort(merged.baseUrl))
 }

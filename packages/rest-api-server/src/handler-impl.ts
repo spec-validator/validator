@@ -11,6 +11,7 @@ export type ServerConfig = {
   readonly frameworkErrorStatusCode: number,
   readonly appErrorStatusCode: number,
   readonly reportError: (error: unknown) => Promise<void>
+  readonly routes: Route[],
 }
 
 const splitPath = (url?: string) => {
@@ -146,11 +147,10 @@ export const handleRoute = async (
 
 export const handle = async (
   config: ServerConfig,
-  routes: Route[],
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const route = routes.find(getOrUndefined.bind(null, () => matchRoute.bind(null, request)))
+  const route = config.routes.find(getOrUndefined.bind(null, () => matchRoute.bind(null, request)))
   if (route) {
     try {
       await handleRoute(config, route, request, response)

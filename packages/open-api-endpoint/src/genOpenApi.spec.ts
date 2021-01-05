@@ -20,7 +20,7 @@ test('fullRoute', () => {
           statusCode: constantField(201)
         }
       },
-      async () => Promise.resolve({
+      async () => ({
         statusCode: 201 as const,
       })
     ),
@@ -49,7 +49,7 @@ test('fullRoute', () => {
           })
         },
       },
-      async () => Promise.resolve({
+      async () => ({
         statusCode: 200 as const,
         data: {
           items: [1, 2, 3]
