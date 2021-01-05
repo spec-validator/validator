@@ -52,11 +52,14 @@ const getData = async (msg: http.IncomingMessage): Promise<string> => new Promis
 const getWildcardRoute = async (
   serialization: SerializationFormat,
   request: http.IncomingMessage,
-) => ({
-  ...getWildcardRequestBase(request),
-  data: serialization.deserialize(await getData(request)),
-  headers: request.headers
-})
+) => {
+  const data = await getData(request)
+  return ({
+    ...getWildcardRequestBase(request),
+    data: data && serialization.deserialize(data),
+    headers: request.headers
+  })
+}
 
 const withAppErrorStatusCode = async <T>(statusCode: number, inner: () => Promise<T>): Promise<T> => {
   try {
