@@ -29,6 +29,12 @@ Object {
             },
           },
         ],
+        "responses": Object {},
+      },
+    },
+    "/items": Object {
+      "post": Object {
+        "parameters": Array [],
         "requestBody": Object {
           "content": Object {
             "application/json": Object {
