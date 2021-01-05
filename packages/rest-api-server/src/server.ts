@@ -110,10 +110,12 @@ const verifyProtocol = (protocol: string): protocol is keyof typeof SUPPORTED_PR
 
 const getPort = (baseUrl: string): number => {
   const url = new URL(baseUrl)
-  if (!verifyProtocol(url.protocol)) {
+  // Node's protocol has a trailing column
+  const protocol = url.protocol.replace(/:$/, '')
+  if (!verifyProtocol(protocol)) {
     throw `Protocol ${url.protocol} is not supported`
   }
-  return url.port ? Number.parseInt(url.port) : SUPPORTED_PROTOCOLS[url.protocol]
+  return url.port ? Number.parseInt(url.port) : SUPPORTED_PROTOCOLS[protocol]
 }
 
 export const createServer = (

@@ -78,13 +78,13 @@ test('if no valid handler is matched - 404 status code is returned', async () =>
 test('if Content-Type media type is unsupported - 415 status code is returned', async () => {
   const resp = await request(server).post('/items').set('Content-Type', 'application/xml')
   expect(resp.status).toEqual(415)
-  expect(resp.text).toEqual('Not supported: content-type')
+  expect(resp.text).toEqual('{"statusCode":415,"isPublic":true,"reason":"Not supported: content-type"}')
 })
 
 test('if Accept media type is unsupported - 415 status code is returned', async () => {
   const resp = await request(server).get('/items').set('Accept', 'application/xml')
   expect(resp.status).toEqual(415)
-  expect(resp.text).toEqual('Not supported: accept')
+  expect(resp.text).toEqual('{"statusCode":415,"isPublic":true,"reason":"Not supported: accept"}')
 })
 
 test('if request is invalid - 400 status code is returned', () => {

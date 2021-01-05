@@ -184,6 +184,7 @@ export const handle = async (
     try {
       await handleRoute(config, route, request, response)
     } catch (error) {
+      response.statusCode = error.statusCode || config.frameworkErrorStatusCode
       if (error.isPublic) {
         try {
           const responseSerializationFormat =
@@ -200,11 +201,9 @@ export const handle = async (
       } else {
         reportError(error)
       }
-      response.statusCode = error.statusCode || config.frameworkErrorStatusCode
     }
   } else {
     response.statusCode = 404
   }
-  console.log(response.statusCode)
   response.end()
 }

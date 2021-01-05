@@ -3,7 +3,7 @@
     "_lint": "eslint --config .eslintrc.json --ignore-path .gitignore './**/*.ts'",
     "lint": "yarn tsc --noEmit && yarn _lint",
     "fmt": "yarn lint --fix",
-    "test:unit": "jest --config ./jest.conf.js --passWithNoTests",
+    "test:unit": "jest --config ./jest.conf.js --passWithNoTests --detectOpenHandles",
     "test": "yarn lint && yarn test:unit",
     "launch": "ts-node -r tsconfig-paths/register"
   },
