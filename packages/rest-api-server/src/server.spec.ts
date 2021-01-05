@@ -87,8 +87,9 @@ test('if Accept media type is unsupported - 415 status code is returned', async 
   expect(resp.text).toEqual('{"statusCode":415,"isPublic":true,"reason":"Not supported: accept"}')
 })
 
-test('if request is invalid - 400 status code is returned', () => {
-  // TODO
+test('if request is invalid - 400 status code is returned', async () => {
+  const resp = await request(server).post('/items').set('Content-Type', 'application/json').send('blob')
+  expect(resp.status).toEqual(400)
 })
 
 test('if handler fails with status code in an eror - the status code is returned', () => {
