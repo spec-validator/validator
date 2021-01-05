@@ -143,6 +143,7 @@ const handleRoute = async (
   }
 
   if (resp.data !== undefined) {
+    console.log(responseSerializationFormat.serialize(resp.data))
     response.write(
       responseSerializationFormat.serialize(resp.data),
       config.encoding
