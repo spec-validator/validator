@@ -72,7 +72,7 @@ export const BASE_PAIRS = [
   })),
   $(stringField, (field): OpenAPI.NonArraySchemaObject => ({
     type: 'string',
-    pattern: field.regex?.source
+    pattern: field.regex.source
   })),
   $(unionField, (field, requestSchema): OpenAPI.SchemaObject => ({
     oneOf: field.variants.map(requestSchema)

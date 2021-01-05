@@ -3,7 +3,7 @@ import { Json } from '../Json'
 import { Any } from '../util-types'
 
 export interface FieldWithRegExp<Type> extends Field<Type> {
-  regex?: RegExp
+  regex: RegExp
 }
 
 export interface FieldWithStringInputSupport<Type> extends Field<Type> {
