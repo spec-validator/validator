@@ -64,7 +64,7 @@ export const BASE_PAIRS = [
       Object.entries(field.objectSpec).map(([key, value]) => [key, requestSchema(value)] )
     ),
     required: Object.entries(field.objectSpec).filter(
-      ([_, value]) => (value as any).type !== optional.type
+      ([_, value]) => (value as any).type !== optional.type && (value as any).type !== withDefault.type
     ).map(([key, _]) => key)
   })),
   $(optional, (field, requestSchema): OpenAPI.SchemaObject  => ({
