@@ -13,7 +13,7 @@ Object {
         "parameters": Array [
           Object {
             "in": "query",
-            "name": "full",
+            "name": "flag",
             "required": true,
             "schema": Object {
               "type": "boolean",
@@ -29,6 +29,28 @@ Object {
             },
           },
         ],
+        "requestBody": Object {
+          "content": Object {
+            "application/json": Object {
+              "schema": Object {
+                "properties": Object {
+                  "count": Object {
+                    "type": "integer",
+                  },
+                  "title": Object {
+                    "pattern": ".*",
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "title",
+                  "count",
+                ],
+              },
+            },
+          },
+          "required": true,
+        },
         "responses": Object {},
       },
     },
