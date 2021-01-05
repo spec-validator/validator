@@ -1,7 +1,7 @@
 import http from 'http'
 import { validate, serialize, TypeHint } from '@validator/validator'
 import { RequestSpec, ResponseSpec, Route } from './route'
-import { getOrUndefined, pick } from '@validator/validator/utils'
+import { pick } from '@validator/validator/utils'
 import { SerializationFormat } from './serialization'
 
 export type ServerConfig = {
@@ -30,13 +30,21 @@ const getWildcardRequestBase = (
 
 const ROUTE_KEYS = ['method' as const, 'pathParams' as const]
 
-const matchRoute = async (
+const matchRoute = (
   request: http.IncomingMessage,
   route: Route,
-): Promise<boolean> => !!validate(
-  pick(route.request, ROUTE_KEYS),
-  pick(getWildcardRequestBase(request), ROUTE_KEYS)
-)
+): boolean => {
+  try {
+    validate(
+      pick(route.request, ROUTE_KEYS),
+      pick(getWildcardRequestBase(request), ROUTE_KEYS)
+    )
+    return true
+  } catch (_) {
+    return false
+  }
+}
+
 
 const getData = async (msg: http.IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
   try {
@@ -145,7 +153,6 @@ const handleRoute = async (
   response.setHeader('Content-Type', accept)
 
   if (resp.data !== undefined) {
-    console.log(responseSerializationFormat.serialize(resp.data))
     response.write(
       responseSerializationFormat.serialize(resp.data),
       config.encoding
@@ -159,7 +166,7 @@ export const handle = async (
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const route = config.routes.find(getOrUndefined.bind(null, () => matchRoute.bind(null, request)))
+  const route = config.routes.find(matchRoute.bind(null, request))
   if (route) {
     try {
       await handleRoute(config, route, request, response)

@@ -19,7 +19,7 @@ const ofItem = {
   data: itemSpec
 }
 
-// TODO: disablable error on extra keys for validate function and object field
+// TODO: disablable error on extra keys for object field
 const server = createServer({routes: [
   GET($._('/items'),
     {
@@ -70,8 +70,9 @@ test('a handler with valid method & route is matched and executed', async () => 
   expect(resp.body).toEqual([{'description': 'Description', 'title': 'Item N'}])
 })
 
-test('if no valid handler is matched - 404 status code is returned', () => {
-  // TODO
+test('if no valid handler is matched - 404 status code is returned', async () => {
+  const resp = await request(server).get('/missing')
+  expect(resp.status).toEqual(404)
 })
 
 test('if Content-Type media type is unsupported - 415 status code is returned', () => {
