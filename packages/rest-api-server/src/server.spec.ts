@@ -1,8 +1,8 @@
 import request from 'supertest'
 
-import { $, arrayField, constantField, numberField, objectField, stringField } from '@validator/validator/fields'
+import { $, arrayField, constantField, numberField, objectField, optional, stringField } from '@validator/validator/fields'
 
-import { createServer } from './server'
+import { createServer, PATCH } from './server'
 
 import { GET, POST, PUT, DELETE } from './server'
 
@@ -62,9 +62,14 @@ const server = createServer({routes: [
   ),
   POST($._('/items'),
     {
-      request: ofItems,
+      request: ofItem,
+      response: {
+        data: numberField()
+      }
     },
-    async () => Promise.resolve(undefined)
+    async () => Promise.resolve({
+      data: 42
+    })
   ),
   GET($._('/items/')._('id', numberField()),
     {
@@ -81,6 +86,17 @@ const server = createServer({routes: [
   PUT($._('/items/')._('id', numberField()),
     {
       request: ofItem
+    },
+    async () => Promise.resolve(undefined)
+  ),
+  PATCH($._('/items/')._('id', numberField()),
+    {
+      request: {
+        data: objectField({
+          title: optional(stringField()),
+          description: optional(stringField())
+        })
+      }
     },
     async () => Promise.resolve(undefined)
   ),
@@ -132,8 +148,6 @@ test('if Accept media type is unsupported - 415 status code is returned', async 
   }))
 })
 
-
-
 test('if handler fails with status code in an error - the status code is returned', async () => {
   const resp = await request(server).get('/expected-error')
   expect(resp.status).toEqual(442)
@@ -148,3 +162,33 @@ test('if request is invalid - 400 status code is returned', async () => {
   const resp = await request(server).post('/items').set('Content-Type', 'application/json').send('blob')
   expect(resp.status).toEqual(400)
 })
+
+test('POST', async () => {
+  const resp = await request(server).post('/items').set('Content-Type', 'application/json').send({
+    title: 'Title',
+    description: 'Description'
+  })
+  expect(resp.status).toEqual(201)
+  expect(resp.body).toEqual(42)
+})
+
+test('PUT', async () => {
+  const resp = await request(server).put('/items/11').set('Content-Type', 'application/json').send({
+    title: 'Title',
+    description: 'Description'
+  })
+  expect(resp.status).toEqual(204)
+})
+
+test('DELETE', async () => {
+  const resp = await request(server).delete('/items/11')
+  expect(resp.status).toEqual(204)
+})
+
+test('PATCH', async () => {
+  const resp = await request(server).patch('/items/11').set('Content-Type', 'application/json').send({
+    title: 'Title-delta',
+  })
+  expect(resp.status).toEqual(204)
+})
+
