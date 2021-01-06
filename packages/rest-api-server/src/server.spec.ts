@@ -1,6 +1,8 @@
 import request from 'supertest'
 
-import { $, arrayField, constantField, numberField, objectField, optional, stringField } from '@validator/validator/fields'
+import {
+  $, arrayField, constantField, numberField, objectField, optional, stringField
+} from '@validator/validator/fields'
 
 import { createServer, PATCH } from './server'
 

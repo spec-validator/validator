@@ -108,31 +108,37 @@ const firstHeader = (value: string | string[] | undefined): string | undefined =
 
 const ANY_MEDIA_TYPE = '*/*'
 
+const getMediaType = (
+  config: ServerConfig,
+  requestIn: http.IncomingMessage,
+  headerKey: string,
+  fallback?: string
+) => {
+  const serializationFormats = getSerializationMapping(config.serializationFormats)
+  const types = firstHeader(requestIn.headers[headerKey]) || fallback || config.serializationFormats[0].mediaType
+  const ttype = types.split(',').map(it => it.split(';')[0]).find((it) => serializationFormats[it])
+  const eventualType  = ttype === ANY_MEDIA_TYPE || !ttype ? config.serializationFormats[0]
+    : ttype ? serializationFormats[ttype]
+      : undefined
+  if (!eventualType) {
+    throw {
+      statusCode: 415,
+      isPublic: true,
+      reason: `Not supported: ${headerKey}`
+    }
+  }
+  return eventualType
+}
+
 const handleRoute = async (
   config: ServerConfig,
   route: Route,
   requestIn: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const serializationFormats = getSerializationMapping(config.serializationFormats)
+  const _getMediaType = getMediaType.bind(null, config, requestIn)
 
-  const getMediaType = (headerKey: string, fallback?: string) => {
-    const types = firstHeader(requestIn.headers[headerKey]) || fallback || config.serializationFormats[0].mediaType
-    const ttype = types.split(',').map(it => it.split(';')[0]).find((it) => serializationFormats[it])
-    return ttype === ANY_MEDIA_TYPE || !ttype ? config.serializationFormats[0]
-      : ttype ? serializationFormats[ttype]
-        : undefined
-  }
-
-  const contentType = getMediaType('content-type')
-
-  if (!contentType) {
-    throw {
-      statusCode: 415,
-      isPublic: true,
-      reason: 'Not supported: content-type'
-    }
-  }
+  const contentType = _getMediaType('content-type')
 
   const wildcardRequest = await getWildcardRoute(contentType, requestIn)
 
@@ -156,15 +162,7 @@ const handleRoute = async (
 
   response.statusCode = resp.statusCode
 
-  const accept = getMediaType('accept', contentType.mediaType)
-
-  if (!accept) {
-    throw {
-      statusCode: 415,
-      isPublic: true,
-      reason: 'Not supported: accept'
-    }
-  }
+  const accept = _getMediaType('accept', contentType.mediaType)
 
   response.setHeader('content-type', accept.mediaType)
 
@@ -181,7 +179,6 @@ export const handle = async (
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const serializationFormats = getSerializationMapping(config.serializationFormats)
   const route = config.routes.find(matchRoute.bind(null, request))
 
   const reportError = async (error: unknown) => {
@@ -199,12 +196,12 @@ export const handle = async (
       response.statusCode = error.statusCode || config.frameworkErrorStatusCode
       if (error.isPublic) {
         try {
-          const responseSerializationFormat =
-            firstHeader(request.headers.accept || request.headers['content-type'])
-            || config.serializationFormats[0].mediaType
-          const format = serializationFormats[responseSerializationFormat] || config.serializationFormats[0]
+          const accept = getMediaType(
+            config, request, 'accept',
+            request.headers.accept || request.headers['content-type'] || config.serializationFormats[0].mediaType
+          )
           response.write(
-            format.serialize(error),
+            accept.serialize(error),
             config.encoding
           )
         } catch (error2) {
