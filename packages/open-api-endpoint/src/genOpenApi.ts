@@ -21,11 +21,18 @@ const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<st
   return record
 }
 
+export type Info = {
+  title: string,
+  version: string
+}
+
 export type WithInfo = {
-  info?: {
-    title: string,
-    version: string
-  }
+  info?: Info
+}
+
+export const DEFAULT_INFO: Info = {
+  title: 'Test',
+  version: '0.0.1'
 }
 
 const getDescription = (field: unknown): string | undefined =>
@@ -49,10 +56,7 @@ class OpenApiGenerator {
 
   createOpenApiSpec = (): OpenAPI.Document => withoutOptional({
     openapi: '3.0.3',
-    info: this.config.info || {
-      title: 'Test',
-      version: '0.0.1'
-    },
+    info: this.config.info || DEFAULT_INFO,
     servers: [
       {
         url: this.config.baseUrl

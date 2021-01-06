@@ -169,7 +169,9 @@ const handleRoute = async (
 
   const accept = _getMediaType('accept')
 
-  response.setHeader('content-type', accept.mediaType)
+  if (!response.getHeader('content-type')) {
+    response.setHeader('content-type', accept.mediaType)
+  }
 
   if (resp.data !== undefined) {
     response.write(

@@ -3,7 +3,7 @@ import { URL } from 'url'
 import { StringMapping } from './route'
 
 import { ServerConfig, handle } from './handler'
-import { JsonSerialization } from './serialization'
+import { HtmlSerialization, JsonSerialization } from './serialization'
 import { Route, RequestSpec, ResponseSpec } from './route'
 
 import { Field, TypeHint } from '@validator/validator'
@@ -68,7 +68,7 @@ export const PATCH = withMethod('PATCH', 204)
 
 export const DEFAULT_SERVER_CONFIG: ServerConfig = {
   baseUrl: 'http://localhost:8000',
-  serializationFormats: [new JsonSerialization()],
+  serializationFormats: [new JsonSerialization(), new HtmlSerialization()],
   encoding: 'utf-8',
   frameworkErrorStatusCode: 503,
   appErrorStatusCode: 500,

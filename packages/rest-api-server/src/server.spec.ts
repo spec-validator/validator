@@ -190,3 +190,7 @@ test('PATCH', async () => {
   })
   expect(resp.status).toEqual(204)
 })
+
+test('retains content-type if it is passed as a header from the handler', async () => {
+  // TODO
+})
