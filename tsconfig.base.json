@@ -8,6 +8,7 @@
       "strict": true,
       "noImplicitAny": true,
       "strictNullChecks": true,
+      "declarationMap": true,
       "sourceMap": true,
       "noImplicitThis": true,
       "alwaysStrict": true,
