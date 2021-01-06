@@ -3,6 +3,14 @@
     "compilerOptions": {
         "rootDir": "./src",
         "outDir": "./dist",
-        "composite": true
+        "composite": true,
+        "paths": {
+          "@validator/validator/*": ["../validator/src/*"],
+          "@validator/validator": ["../validator/src/index.ts"],
+          "@validator/rest-api-server/*": ["../rest-api-server/src/*"],
+          "@validator/rest-api-server": ["../rest-api-server/src/index.ts"],
+          "@validator/open-api-endpoint/*": ["../open-api-endpoint/src/*"],
+          "@validator/open-api-endpoint": ["../open-api-endpoint/src/index.ts"]
+        }
     }
 }
