@@ -126,7 +126,7 @@ const getMediaType = (
     throw {
       statusCode: 415,
       isPublic: true,
-      reason: `Not supported: ${headerKey}`
+      reason: `Not supported '${headerKey}': ${types}`
     }
   }
   return eventualType
