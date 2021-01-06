@@ -9,6 +9,7 @@ import optional from './optional'
 import unionField from './unionField'
 import constantField from './constantField'
 import $ from './segmentField'
+import wildcardObjectField from './wildcardObjectField'
 
 export {
   arrayField,
@@ -21,5 +22,6 @@ export {
   optional,
   unionField,
   constantField,
-  $
+  $,
+  wildcardObjectField
 }

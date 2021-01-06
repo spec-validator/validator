@@ -8,4 +8,3 @@ export default field('@validator/fields.WildcardObjectField', (): WildcardObject
   validate: (value: any): Record<string, Json> => JSON.parse(value),
   serialize: (deserialized: Json): Json => deserialized
 }))
-

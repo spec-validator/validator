@@ -2,7 +2,7 @@ import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import {
   arrayField, booleanField, choiceField, constantField,
-  numberField, objectField, optional, stringField, unionField, withDefault,
+  numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault,
 } from '@validator/validator/fields'
 import createRegistry, { $ } from '@validator/validator/registry'
 import withDoc from './withDoc'
@@ -56,6 +56,10 @@ export const BASE_PAIRS = [
   $(booleanField, (): OpenAPI.NonArraySchemaObject  => ({
     type: 'boolean',
   })),
+  $(wildcardObjectField, (): OpenAPI.NonArraySchemaObject => ({
+    type: 'object',
+    additionalProperties: true
+  })),
   $(choiceField, (field): OpenAPI.NonArraySchemaObject => splitOfOneOrMany(field.choices)),
   $(constantField, (field): OpenAPI.NonArraySchemaObject => splitOfOneOrMany([field.constant])),
   $(numberField, (field): OpenAPI.NonArraySchemaObject => ({
@@ -66,6 +70,8 @@ export const BASE_PAIRS = [
       ([_, value]) => (value as any).type !== optional.type && (value as any).type !== withDefault.type
     ).map(([key, _]) => key)
     const result: OpenAPI.NonArraySchemaObject = {
+      type: 'object',
+      additionalProperties: false,
       properties: Object.fromEntries(
         Object.entries(field.objectSpec).map(([key, value]) => [key, requestSchema(value)] )
       )

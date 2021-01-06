@@ -34,6 +34,7 @@ Object {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
+                  "additionalProperties": false,
                   "properties": Object {
                     "items": Object {
                       "items": Object {
@@ -45,10 +46,12 @@ Object {
                   "required": Array [
                     "items",
                   ],
+                  "type": "object",
                 },
               },
               "text/html": Object {
                 "schema": Object {
+                  "additionalProperties": false,
                   "properties": Object {
                     "items": Object {
                       "items": Object {
@@ -60,6 +63,7 @@ Object {
                   "required": Array [
                     "items",
                   ],
+                  "type": "object",
                 },
               },
             },
@@ -75,6 +79,7 @@ Object {
           "content": Object {
             "application/json": Object {
               "schema": Object {
+                "additionalProperties": false,
                 "properties": Object {
                   "count": Object {
                     "type": "integer",
@@ -88,10 +93,12 @@ Object {
                   "title",
                   "count",
                 ],
+                "type": "object",
               },
             },
             "text/html": Object {
               "schema": Object {
+                "additionalProperties": false,
                 "properties": Object {
                   "count": Object {
                     "type": "integer",
@@ -105,6 +112,7 @@ Object {
                   "title",
                   "count",
                 ],
+                "type": "object",
               },
             },
           },
