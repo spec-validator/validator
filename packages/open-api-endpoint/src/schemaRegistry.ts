@@ -1,7 +1,8 @@
 import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import {
-  arrayField, booleanField, choiceField, constantField, numberField, objectField, optional, stringField, unionField, withDefault,
+  arrayField, booleanField, choiceField, constantField,
+  numberField, objectField, optional, stringField, unionField, withDefault,
 } from '@validator/validator/fields'
 import createRegistry, { $ } from '@validator/validator/registry'
 import withDoc from './withDoc'
@@ -13,19 +14,19 @@ const splitIntoOneOfs = (choices: readonly Primitive[]): OpenAPI.NonArraySchemaO
   const strings = choices.filter(it => typeof it === 'string')
 
   const result: OpenAPI.NonArraySchemaObject[] = []
-  if (numbers) {
+  if (numbers.length) {
     result.push({
       type: 'number',
       enum: numbers
     })
   }
-  if (booleans) {
+  if (booleans.length) {
     result.push({
       type: 'boolean',
       enum: booleans
     })
   }
-  if (strings) {
+  if (strings.length) {
     result.push({
       type: 'string',
       enum: strings
@@ -60,14 +61,20 @@ export const BASE_PAIRS = [
   $(numberField, (field): OpenAPI.NonArraySchemaObject => ({
     type: field.params?.canBeFloat ? 'number' : 'integer'
   })),
-  $(objectField, (field, requestSchema): OpenAPI.NonArraySchemaObject  => ({
-    properties: Object.fromEntries(
-      Object.entries(field.objectSpec).map(([key, value]) => [key, requestSchema(value)] )
-    ),
-    required: Object.entries(field.objectSpec).filter(
+  $(objectField, (field, requestSchema): OpenAPI.NonArraySchemaObject  => {
+    const required = Object.entries(field.objectSpec).filter(
       ([_, value]) => (value as any).type !== optional.type && (value as any).type !== withDefault.type
     ).map(([key, _]) => key)
-  })),
+    const result: OpenAPI.NonArraySchemaObject = {
+      properties: Object.fromEntries(
+        Object.entries(field.objectSpec).map(([key, value]) => [key, requestSchema(value)] )
+      )
+    }
+    if (required.length) {
+      result.required = required
+    }
+    return result
+  }),
   $(optional, (field, requestSchema): OpenAPI.SchemaObject  => ({
     ...requestSchema(field.innerField)
   })),

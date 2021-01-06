@@ -18,6 +18,8 @@ const ofItem = {
   data: itemSpec
 }
 
+// http://localhost:8000/open-api
+// https://editor.swagger.io/
 serve(withOpenApi({
   ...DEFAULT_SERVER_CONFIG,
   routes: [
