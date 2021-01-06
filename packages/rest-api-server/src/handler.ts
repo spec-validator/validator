@@ -115,9 +115,9 @@ const getMediaType = (
   fallback?: string
 ) => {
   const serializationFormats = getSerializationMapping(config.serializationFormats)
-  const types = firstHeader(requestIn.headers[headerKey]) || fallback || config.serializationFormats[0].mediaType
-  const ttype = types.split(',').map(it => it.split(';')[0]).find((it) => serializationFormats[it])
-  const eventualType  = ttype === ANY_MEDIA_TYPE || !ttype ? config.serializationFormats[0]
+  const types = firstHeader(requestIn.headers[headerKey]) || config.serializationFormats[0].mediaType
+  const ttype = types.split(',').map(it => it.split(';')[0]).find((it) => serializationFormats[it]) || fallback
+  const eventualType = ttype === ANY_MEDIA_TYPE ? config.serializationFormats[0]
     : ttype ? serializationFormats[ttype]
       : undefined
   if (!eventualType) {
@@ -136,6 +136,8 @@ const handleRoute = async (
   requestIn: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
+  requestIn.headers['accept'] = requestIn.headers['accept'] || requestIn.headers['content-type']
+
   const _getMediaType = getMediaType.bind(null, config, requestIn)
 
   const contentType = _getMediaType('content-type')
@@ -162,7 +164,7 @@ const handleRoute = async (
 
   response.statusCode = resp.statusCode
 
-  const accept = _getMediaType('accept', contentType.mediaType)
+  const accept = _getMediaType('accept')
 
   response.setHeader('content-type', accept.mediaType)
 
@@ -198,7 +200,7 @@ export const handle = async (
         try {
           const accept = getMediaType(
             config, request, 'accept',
-            request.headers.accept || request.headers['content-type'] || config.serializationFormats[0].mediaType
+            config.serializationFormats[0].mediaType
           )
           response.write(
             accept.serialize(error),

@@ -119,16 +119,6 @@ afterEach(() => {
   console.error = oldLog
 })
 
-test('a handler with valid method & route is matched and executed', async () => {
-  const resp = await request(server).get('/items')
-  expect(resp.status).toEqual(200)
-  expect(resp.body).toEqual([{'description': 'Description', 'title': 'Item N'}])
-})
-
-test('if no valid handler is matched - 404 status code is returned', async () => {
-  const resp = await request(server).get('/missing')
-  expect(resp.status).toEqual(404)
-})
 
 test('if Content-Type media type is unsupported - 415 status code is returned', async () => {
   const resp = await request(server).post('/items').set('Content-Type', 'application/xml')
