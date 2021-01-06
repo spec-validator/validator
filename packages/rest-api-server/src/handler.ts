@@ -120,7 +120,8 @@ const getMediaType = (
     .split(',')
     .map(it => it.split(';')[0])
     .find((it) => it === ANY_MEDIA_TYPE || serializationFormats[it]) || fallback
-  const eventualType = ttype && serializationFormats[ttype]
+
+  const eventualType = ttype === ANY_MEDIA_TYPE ? config.serializationFormats[0] : ttype && serializationFormats[ttype]
   if (!eventualType) {
     throw {
       statusCode: 415,
