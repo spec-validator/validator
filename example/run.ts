@@ -3,7 +3,7 @@ import { DEFAULT_SERVER_CONFIG, _ } from '@validator/rest-api-server/server'
 import {
   $, arrayField, constantField, numberField, objectField, optional, stringField
 } from '@validator/validator/fields'
-import withOpenApi from './withOpenApi'
+import withOpenApi from '@validator/open-api-endpoint/withOpenApi'
 
 const itemSpec = objectField({
   title: stringField(),

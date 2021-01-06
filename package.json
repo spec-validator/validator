@@ -6,7 +6,7 @@
     "test:unit": "jest --config ./jest.conf.js --passWithNoTests --detectOpenHandles",
     "test": "yarn lint && yarn test:unit",
     "launch": "yarn ts-node-dev -r tsconfig-paths/register",
-    "start-demo": "yarn launch packages/open-api-endpoint/src/run.ts"
+    "start-demo": "yarn launch example/run.ts"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
