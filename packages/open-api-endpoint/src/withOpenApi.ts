@@ -1,4 +1,4 @@
-import { GET, ServerConfig } from '@validator/rest-api-server'
+import { _, ServerConfig } from '@validator/rest-api-server'
 import { Json } from '@validator/validator'
 import { $, constantField, objectField, stringField } from '@validator/validator/fields'
 import wildcardObjectField from '@validator/validator/fields/wildcardObjectField'
@@ -40,7 +40,7 @@ export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): Serv
 
   const routes = [
     ...config.routes,
-    GET($._(schemaRoot)).spec(
+    _.GET($._(schemaRoot)).spec(
       {
         response: {
           data: wildcardObjectField(),
@@ -51,7 +51,7 @@ export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): Serv
         data: genOpenApi(config) as unknown as Record<string, Json>
       })
     ),
-    GET($._(schemaRoot)._('-ui')).spec(
+    _.GET($._(schemaRoot)._('-ui')).spec(
       {
         response: {
           data: stringField(),

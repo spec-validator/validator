@@ -60,12 +60,14 @@ export const withMethod = <
       })
     }})})
 
-export const GET = withMethod('GET', 200)
-export const HEAD = withMethod('HEAD', 200)
-export const POST = withMethod('POST', 201)
-export const PUT = withMethod('PUT', 204)
-export const DELETE = withMethod('DELETE', 204)
-export const PATCH = withMethod('PATCH', 204)
+export const _ = {
+  GET: withMethod('GET', 200),
+  HEAD: withMethod('HEAD', 200),
+  POST: withMethod('POST', 201),
+  PUT: withMethod('PUT', 204),
+  DELETE: withMethod('DELETE', 204),
+  PATCH: withMethod('PATCH', 204)
+}
 
 export const DEFAULT_SERVER_CONFIG: ServerConfig = {
   baseUrl: 'http://localhost:8000',
@@ -78,7 +80,7 @@ export const DEFAULT_SERVER_CONFIG: ServerConfig = {
     return Promise.resolve(undefined)
   },
   routes: [
-    GET($._('/')).spec({
+    _.GET($._('/')).spec({
       response: {
         data: stringField()
       }

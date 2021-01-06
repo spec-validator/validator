@@ -5,7 +5,7 @@ import {
 } from '@validator/validator/fields'
 
 
-import { createServer, PATCH, GET, POST, PUT, DELETE } from './server'
+import { createServer, _ } from './server'
 
 const itemSpec = objectField({
   title: stringField(),
@@ -22,7 +22,7 @@ const ofItem = {
 
 // TODO: disablable error on extra keys for object field
 const server = createServer({routes: [
-  GET($._('/expected-error')).spec(
+  _.GET($._('/expected-error')).spec(
     {
       response: {
         data: constantField(42)
@@ -37,7 +37,7 @@ const server = createServer({routes: [
       }
     }
   ),
-  GET($._('/unexpected-error')).spec(
+  _.GET($._('/unexpected-error')).spec(
     {
       response: {
         data: constantField(42)
@@ -50,7 +50,7 @@ const server = createServer({routes: [
       }
     }
   ),
-  GET($._('/items')).spec(
+  _.GET($._('/items')).spec(
     {
       response: ofItems
     },
@@ -64,7 +64,7 @@ const server = createServer({routes: [
       ]
     })
   ),
-  POST($._('/items')).spec(
+  _.POST($._('/items')).spec(
     {
       request: ofItem,
       response: {
@@ -76,7 +76,7 @@ const server = createServer({routes: [
       data: 42
     })
   ),
-  GET($._('/items/')._('id', numberField())).spec(
+  _.GET($._('/items/')._('id', numberField())).spec(
     {
       response: ofItem
     },
@@ -89,14 +89,14 @@ const server = createServer({routes: [
         }
     })
   ),
-  PUT($._('/items/')._('id', numberField())).spec(
+  _.PUT($._('/items/')._('id', numberField())).spec(
     {
       request: ofItem
     },
   ).handler(
     async () => undefined
   ),
-  PATCH($._('/items/')._('id', numberField())).spec(
+  _.PATCH($._('/items/')._('id', numberField())).spec(
     {
       request: {
         data: objectField({
@@ -108,7 +108,7 @@ const server = createServer({routes: [
   ).handler(
     async () => undefined
   ),
-  DELETE($._('/items/')._('id', numberField())).spec({}).handler(
+  _.DELETE($._('/items/')._('id', numberField())).spec({}).handler(
     async () => undefined
   )
 ]})

@@ -1,5 +1,5 @@
 import { serve } from '@validator/rest-api-server'
-import { DEFAULT_SERVER_CONFIG, DELETE, GET, PATCH, POST, PUT } from '@validator/rest-api-server/server'
+import { DEFAULT_SERVER_CONFIG, _ } from '@validator/rest-api-server/server'
 import {
   $, arrayField, constantField, numberField, objectField, optional, stringField
 } from '@validator/validator/fields'
@@ -21,7 +21,7 @@ const ofItem = {
 serve(withOpenApi({
   ...DEFAULT_SERVER_CONFIG,
   routes: [
-    GET($._('/expected-error')).spec(
+    _.GET($._('/expected-error')).spec(
       {
         response: {
           data: constantField(42)
@@ -36,7 +36,7 @@ serve(withOpenApi({
         }
       }
     ),
-    GET($._('/unexpected-error')).spec(
+    _.GET($._('/unexpected-error')).spec(
       {
         response: {
           data: constantField(42)
@@ -49,7 +49,7 @@ serve(withOpenApi({
         }
       }
     ),
-    GET($._('/items')).spec(
+    _.GET($._('/items')).spec(
       {
         response: ofItems
       },
@@ -63,7 +63,7 @@ serve(withOpenApi({
         ]
       })
     ),
-    POST($._('/items')).spec(
+    _.POST($._('/items')).spec(
       {
         request: ofItem,
         response: {
@@ -75,7 +75,7 @@ serve(withOpenApi({
         data: 42
       })
     ),
-    GET($._('/items/')._('id', numberField())).spec(
+    _.GET($._('/items/')._('id', numberField())).spec(
       {
         response: ofItem
       },
@@ -88,19 +88,19 @@ serve(withOpenApi({
           }
       })
     ),
-    PUT($._('/items/')._('id', numberField())).spec(
+    _.PUT($._('/items/')._('id', numberField())).spec(
       {
         request: ofItem
       },
     ).handler(
       async () => undefined
     ),
-    DELETE($._('/items/')._('id', numberField())).spec(
+    _.DELETE($._('/items/')._('id', numberField())).spec(
       {}
     ).handler(
       async () => undefined
     ),
-    PATCH($._('/items/')._('id', numberField())).spec(
+    _.PATCH($._('/items/')._('id', numberField())).spec(
       {
         request: {
           data: objectField({

@@ -1,4 +1,4 @@
-import { GET, POST, Route } from '@validator/rest-api-server'
+import { _, Route } from '@validator/rest-api-server'
 import {
   $, stringField, objectField, booleanField, numberField, arrayField
 } from '@validator/validator/fields'
@@ -8,7 +8,7 @@ import withDoc from './withDoc'
 
 test('fullRoute', () => {
   const routes: Route[] = [
-    POST($._('/items')).spec(
+    _.POST($._('/items')).spec(
       {
         request: {
           data: objectField({
@@ -20,7 +20,7 @@ test('fullRoute', () => {
     ).handler(
       async () => Promise.resolve(undefined)
     ),
-    GET($._('/item/')._('id', stringField())).spec(
+    _.GET($._('/item/')._('id', stringField())).spec(
       {
         request: {
           headers: objectField({
