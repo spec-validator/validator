@@ -31,5 +31,10 @@
       "@validator/open-api-endpoint/*": ["open-api-endpoint/src/*"],
       "@validator/open-api-endpoint": ["open-api-endpoint/src/index.ts"]
     }
-  }
+  },
+  "references": [
+    { "path": "./packages/validator" },
+    { "path": "./packages/rest-api-server" },
+    { "path": "./packages/open-api-endpoint" }
+  ]
 }
