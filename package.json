@@ -7,7 +7,8 @@
     "test": "yarn lint && yarn test:unit",
     "launch": "yarn ts-node-dev -r tsconfig-paths/register",
     "start-demo": "yarn launch example/run.ts",
-    "build": "yarn tsc --build"
+    "build": "yarn tsc --build",
+    "clean": "rm -rf packages/**/dist"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
