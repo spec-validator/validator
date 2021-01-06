@@ -1,7 +1,7 @@
 import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import { ServerConfig, Route } from '@validator/rest-api-server'
-import { Field } from '@validator/validator'
+import { Field, Json } from '@validator/validator'
 import { $, optional } from '@validator/validator/fields'
 import { GetRepresentation, OfType } from '@validator/validator/registry'
 
@@ -138,5 +138,5 @@ class OpenApiGenerator {
 
 }
 
-export default (...params: ConstructorArgs<typeof OpenApiGenerator>): OpenAPI.Document =>
-  new OpenApiGenerator(...params).createOpenApiSpec()
+export default (...params: ConstructorArgs<typeof OpenApiGenerator>): Json =>
+  new OpenApiGenerator(...params).createOpenApiSpec() as unknown as Json

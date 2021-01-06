@@ -1,13 +1,13 @@
 import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import {
-  arrayField, booleanField, choiceField, numberField, objectField, optional, stringField, unionField, withDefault,
+  arrayField, booleanField, choiceField, constantField, numberField, objectField, optional, stringField, unionField, withDefault,
 } from '@validator/validator/fields'
 import createRegistry, { $ } from '@validator/validator/registry'
 import withDoc from './withDoc'
 import { Primitive } from '@validator/validator/Json'
 
-const splitIntoOnOfs = (choices: readonly Primitive[]): OpenAPI.NonArraySchemaObject [] => {
+const splitIntoOneOfs = (choices: readonly Primitive[]): OpenAPI.NonArraySchemaObject [] => {
   const numbers = choices.filter(it => typeof it === 'number')
   const booleans = choices.filter(it => typeof it === 'boolean')
   const strings = choices.filter(it => typeof it === 'string')
@@ -35,7 +35,7 @@ const splitIntoOnOfs = (choices: readonly Primitive[]): OpenAPI.NonArraySchemaOb
 }
 
 const splitOfOneOrMany = (choices: readonly Primitive[]): OpenAPI.NonArraySchemaObject => {
-  const result = splitIntoOnOfs(choices)
+  const result = splitIntoOneOfs(choices)
   if (result.length === 0) {
     return {}
   } else if (result.length === 1) {
@@ -56,6 +56,7 @@ export const BASE_PAIRS = [
     type: 'boolean',
   })),
   $(choiceField, (field): OpenAPI.NonArraySchemaObject => splitOfOneOrMany(field.choices)),
+  $(constantField, (field): OpenAPI.NonArraySchemaObject => splitOfOneOrMany([field.constant])),
   $(numberField, (field): OpenAPI.NonArraySchemaObject => ({
     type: field.params?.canBeFloat ? 'number' : 'integer'
   })),
@@ -68,7 +69,7 @@ export const BASE_PAIRS = [
     ).map(([key, _]) => key)
   })),
   $(optional, (field, requestSchema): OpenAPI.SchemaObject  => ({
-    ...requestSchema(field)
+    ...requestSchema(field.innerField)
   })),
   $(stringField, (field): OpenAPI.NonArraySchemaObject => ({
     type: 'string',

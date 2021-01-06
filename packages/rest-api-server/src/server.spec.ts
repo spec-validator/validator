@@ -69,7 +69,7 @@ const server = createServer({routes: [
         data: numberField()
       }
     },
-    async () => Promise.resolve({
+    async () => ({
       data: 42
     })
   ),
@@ -89,7 +89,7 @@ const server = createServer({routes: [
     {
       request: ofItem
     },
-    async () => Promise.resolve(undefined)
+    async () => undefined
   ),
   PATCH($._('/items/')._('id', numberField()),
     {
@@ -100,11 +100,11 @@ const server = createServer({routes: [
         })
       }
     },
-    async () => Promise.resolve(undefined)
+    async () => undefined
   ),
   DELETE($._('/items/')._('id', numberField()),
     {},
-    async () => Promise.resolve(undefined)
+    async () => undefined
   )
 ]})
 

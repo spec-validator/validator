@@ -1,20 +1,20 @@
 import { GET, ServerConfig } from '@validator/rest-api-server'
-import { $, stringField } from '@validator/validator/fields'
-
+import { Json } from '@validator/validator'
+import { $ } from '@validator/validator/fields'
+import wildcardObjectField from '@validator/validator/fields/wildcardObjectField'
 import genOpenApi, { WithInfo } from './genOpenApi'
 
 export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): ServerConfig => {
 
   const routes = [
-    ...config.routes,
     GET($._(schemaRoot),
       {
         response: {
-          data: stringField(),
+          data: wildcardObjectField(),
         }
       },
       async () => ({
-        data: JSON.stringify(genOpenApi(config))
+        data: genOpenApi(config) as unknown as Record<string, Json>
       })
     )
   ]
