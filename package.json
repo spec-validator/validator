@@ -5,7 +5,8 @@
     "fmt": "yarn lint --fix",
     "test:unit": "jest --config ./jest.conf.js --passWithNoTests --detectOpenHandles",
     "test": "yarn lint && yarn test:unit",
-    "launch": "ts-node -r tsconfig-paths/register"
+    "_start": "ts-node -r tsconfig-paths/register",
+    "start": "yarn _start packages/open-api-endpoint/src/run.ts"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",

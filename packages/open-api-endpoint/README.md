@@ -1,20 +1,14 @@
 # Demo
 
-## Start
-
-    yarn launch packages/open-api-endpoint/src/run.ts
-
-## CURL
-
-### POST OK
+## POST OK
 
     curl -X POST "http://localhost:8000/items" -H  "Content-Type: application/json" -d "{\"title\":\"string\",\"description\":\"string\"}"
 
-### POST NOK
+## POST NOK
 
     curl -X POST "http://localhost:8000/items" -H  "Content-Type: application/json" -d "{\"title\":true,\"description\":\"string\"}"
 
-### GET OK
+## GET OK
 
     curl -X GET "http://localhost:8000/items"
 
