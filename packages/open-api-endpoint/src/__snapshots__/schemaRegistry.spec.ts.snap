@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BASE_PAIRS 1`] = `
+Array [
+  Object {
+    "items": Object {
+      "type": "boolean",
+    },
+    "type": "array",
+  },
+  Object {
+    "type": "boolean",
+  },
+  Object {
+    "type": "integer",
+  },
+  Object {
+    "type": "number",
+  },
+  Object {
+    "additionalProperties": true,
+    "type": "object",
+  },
+  Object {
+    "enum": Array [
+      1,
+      2,
+      3,
+    ],
+    "type": "number",
+  },
+  Object {
+    "enum": Array [
+      42,
+    ],
+    "type": "number",
+  },
+  Object {
+    "additionalProperties": false,
+    "properties": Object {
+      "a": Object {
+        "type": "boolean",
+      },
+      "b": Object {
+        "type": "boolean",
+      },
+    },
+    "required": Array [
+      "a",
+      "b",
+    ],
+    "type": "object",
+  },
+  Object {
+    "type": "boolean",
+  },
+  Object {
+    "pattern": ".*",
+    "type": "string",
+  },
+  Object {
+    "pattern": "\\\\d+",
+    "type": "string",
+  },
+  Object {
+    "oneOf": Array [
+      Object {
+        "type": "integer",
+      },
+      Object {
+        "pattern": ".*",
+        "type": "string",
+      },
+      Object {
+        "enum": Array [
+          1,
+        ],
+        "type": "number",
+      },
+      Object {
+        "additionalProperties": false,
+        "properties": Object {
+          "a": Object {
+            "type": "boolean",
+          },
+          "b": Object {
+            "type": "boolean",
+          },
+        },
+        "required": Array [
+          "a",
+          "b",
+        ],
+        "type": "object",
+      },
+    ],
+  },
+  Object {
+    "default": true,
+    "type": "boolean",
+  },
+  Object {
+    "description": Object {
+      "description": "Answer",
+      "examples": Object {
+        "no": Object {
+          "summary": "negative",
+          "value": false,
+        },
+        "yes": Object {
+          "summary": "positive",
+          "value": true,
+        },
+      },
+      "format": "yes/no",
+    },
+    "type": "boolean",
+  },
+]
+`;

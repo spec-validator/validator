@@ -21,6 +21,7 @@ export default field('@validator/fields.ChoiceField', <Choice extends Primitive>
   const serialize = (deserialized: Choice): Json => deserialized
 
   const field = {
+    choices,
     validate,
     serialize,
   } as ChoiceField<Choice> & OfType<string>
