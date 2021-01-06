@@ -88,13 +88,17 @@ const getWildcardRoute = async (
   })
 }
 
+let formats: Record<string, SerializationFormat> | undefined = undefined
+
 // TODO: CACHING
 const getSerializationMapping = (
   serializationFormats: SerializationFormat[],
-): Record<string, SerializationFormat> =>
-  Object.fromEntries(serializationFormats.map(it =>
+): Record<string, SerializationFormat> => {
+  formats = formats || Object.fromEntries(serializationFormats.map(it =>
     [it.mediaType,  it]
   ))
+  return formats
+}
 
 const firstHeader = (value: string | string[] | undefined): string | undefined => {
   if (!value) {
