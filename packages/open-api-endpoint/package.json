@@ -6,8 +6,5 @@
     "@validator/rest-api-server": "0.0.1",
     "@validator/validator": "0.0.1",
     "openapi-types": "^7.0.1"
-  },
-  "scripts": {
-    "build": "yarn tsc -p ./tsconfig.build.json"
   }
 }
