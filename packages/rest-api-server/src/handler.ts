@@ -136,6 +136,7 @@ const handleRoute = async (
   requestIn: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
+
   requestIn.headers['accept'] = requestIn.headers['accept'] || requestIn.headers['content-type']
 
   const _getMediaType = getMediaType.bind(null, config, requestIn)
