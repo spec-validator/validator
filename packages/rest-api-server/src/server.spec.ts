@@ -138,7 +138,7 @@ test('if Content-Type media type is unsupported - 415 status code is returned', 
   expect(resp.text).toEqual(JSON.stringify({
     'statusCode':415,
     'isPublic':true,
-    'reason':'Not supported: content-type'
+    'reason': 'Not supported \'content-type\': application/xml'
   }))
 })
 
@@ -148,7 +148,7 @@ test('if Accept media type is unsupported - 415 status code is returned', async 
   expect(resp.text).toEqual(JSON.stringify({
     'statusCode':415,
     'isPublic':true,
-    'reason':'Not supported: accept'
+    'reason':'Not supported \'accept\': application/xml'
   }))
 })
 
