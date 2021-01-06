@@ -8,23 +8,30 @@ const getUI = (url: string, info: Info) => `
   <html>
   <head>
     <title>${info.title} : ${info.version}</title>
+
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@3.38.0/swagger-ui.css">
+  <body>
+
+    <div id="swagger-ui"></div>
+
     <script src="https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js" charset="UTF-8"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@3/swagger-ui-standalone-preset.js" charset="UTF-8"></script>
 
     <script>
-    var SwaggerUIBundle = require('swagger-ui-dist').SwaggerUIBundle
-    const ui = SwaggerUIBundle({
+    window.onload = function() {
+      const ui = SwaggerUIBundle({
         url: "${url}",
         dom_id: '#swagger-ui',
         presets: [
           SwaggerUIBundle.presets.apis,
-          SwaggerUIBundle.SwaggerUIStandalonePreset
-        ],
-        layout: "StandaloneLayout"
+          SwaggerUIStandalonePreset
+        ]
       })
+
+      window.ui = ui
+    }
     </script>
-  </head>
-  <body>
-    <div id='swagger-ui' />
+
   </body>
   </html>
 `
@@ -52,7 +59,7 @@ export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): Serv
         }
       },
       async () => ({
-        data: getUI(config.baseUrl, config.info || DEFAULT_INFO),
+        data: getUI(config.baseUrl + schemaRoot, config.info || DEFAULT_INFO),
         headers: {
           'content-type': 'text/html' as const
         }
