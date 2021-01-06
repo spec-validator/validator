@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.base.json",
-  "outDir": "./dist",
   "compilerOptions": {
+    "outDir": "./dist",
     "paths": {
       "@validator/validator/*": ["./packages/validator/src/*"],
       "@validator/validator": ["./packages/validator/src/index.ts"],
