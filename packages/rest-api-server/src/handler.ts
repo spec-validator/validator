@@ -116,10 +116,11 @@ const getMediaType = (
 ) => {
   const serializationFormats = getSerializationMapping(config.serializationFormats)
   const types = firstHeader(requestIn.headers[headerKey]) || config.serializationFormats[0].mediaType
-  const ttype = types.split(',').map(it => it.split(';')[0]).find((it) => serializationFormats[it]) || fallback
-  const eventualType = ttype === ANY_MEDIA_TYPE ? config.serializationFormats[0]
-    : ttype ? serializationFormats[ttype]
-      : undefined
+  const ttype = types
+    .split(',')
+    .map(it => it.split(';')[0])
+    .find((it) => it === ANY_MEDIA_TYPE || serializationFormats[it]) || fallback
+  const eventualType = ttype && serializationFormats[ttype]
   if (!eventualType) {
     throw {
       statusCode: 415,
