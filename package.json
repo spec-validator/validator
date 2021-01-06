@@ -5,8 +5,8 @@
     "fmt": "yarn lint --fix",
     "test:unit": "jest --config ./jest.conf.js --passWithNoTests --detectOpenHandles",
     "test": "yarn lint && yarn test:unit",
-    "_start": "ts-node -r tsconfig-paths/register",
-    "start-demo": "yarn _start packages/open-api-endpoint/src/run.ts"
+    "launch": "yarn ts-node-dev -r tsconfig-paths/register",
+    "start-demo": "yarn launch packages/open-api-endpoint/src/run.ts"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
@@ -16,9 +16,8 @@
     "eslint": "^7.14.0",
     "eslint-plugin-jest-formatting": "^2.0.0",
     "jest": "^26.6.3",
-    "nodemon": "^2.0.6",
     "ts-jest": "^26.4.4",
-    "ts-node": "^9.0.0",
+    "ts-node-dev": "^1.1.1",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.1.2"
   },
