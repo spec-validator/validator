@@ -106,6 +106,8 @@ const firstHeader = (value: string | string[] | undefined): string | undefined =
   }
 }
 
+const ANY_MEDIA_TYPE = '*/*'
+
 const handleRoute = async (
   config: ServerConfig,
   route: Route,
@@ -114,11 +116,17 @@ const handleRoute = async (
 ): Promise<void> => {
   const serializationFormats = getSerializationMapping(config.serializationFormats)
 
-  // default to the top-most media type
-  const contentType = firstHeader(requestIn.headers['content-type']) || config.serializationFormats[0].mediaType
-  const requestSerializationFormat = serializationFormats[contentType]
+  const getMediaType = (headerKey: string, fallback?: string) => {
+    const types = firstHeader(requestIn.headers[headerKey]) || fallback || config.serializationFormats[0].mediaType
+    const ttype = types.split(',').map(it => it.split(';')[0]).find((it) => serializationFormats[it])
+    return ttype === ANY_MEDIA_TYPE || !ttype ? config.serializationFormats[0]
+      : ttype ? serializationFormats[ttype]
+        : undefined
+  }
 
-  if (!requestSerializationFormat) {
+  const contentType = getMediaType('content-type')
+
+  if (!contentType) {
     throw {
       statusCode: 415,
       isPublic: true,
@@ -126,7 +134,7 @@ const handleRoute = async (
     }
   }
 
-  const wildcardRequest = await getWildcardRoute(requestSerializationFormat, requestIn)
+  const wildcardRequest = await getWildcardRoute(contentType, requestIn)
 
   const request = await withAppErrorStatusCode(
     400,
@@ -148,11 +156,9 @@ const handleRoute = async (
 
   response.statusCode = resp.statusCode
 
-  // default to the same media type as content
-  const accept = firstHeader(requestIn.headers.accept) || contentType
-  const responseSerializationFormat = serializationFormats[accept]
+  const accept = getMediaType('accept', contentType.mediaType)
 
-  if (!responseSerializationFormat) {
+  if (!accept) {
     throw {
       statusCode: 415,
       isPublic: true,
@@ -160,11 +166,11 @@ const handleRoute = async (
     }
   }
 
-  response.setHeader('content-type', accept)
+  response.setHeader('content-type', accept.mediaType)
 
   if (resp.data !== undefined) {
     response.write(
-      responseSerializationFormat.serialize(resp.data),
+      accept.serialize(resp.data),
       config.encoding
     )
   }

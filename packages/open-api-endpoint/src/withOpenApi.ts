@@ -3,7 +3,7 @@ import { $, stringField } from '@validator/validator/fields'
 
 import genOpenApi, { WithInfo } from './genOpenApi'
 
-export default (config: ServerConfig & WithInfo, schemaRoot: '/open-api'): ServerConfig => {
+export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): ServerConfig => {
 
   const routes = [
     ...config.routes,
