@@ -8,7 +8,7 @@ import withDoc from './withDoc'
 
 test('fullRoute', () => {
   const routes: Route[] = [
-    POST($._('/items'),
+    POST($._('/items')).spec(
       {
         request: {
           data: objectField({
@@ -16,10 +16,11 @@ test('fullRoute', () => {
             count: numberField()
           })
         },
-      },
+      }
+    ).handler(
       async () => Promise.resolve(undefined)
     ),
-    GET($._('/item/')._('id', stringField()),
+    GET($._('/item/')._('id', stringField())).spec(
       {
         request: {
           headers: objectField({
@@ -42,7 +43,8 @@ test('fullRoute', () => {
             items: arrayField(numberField())
           })
         },
-      },
+      }
+    ).handler(
       async () => ({
         statusCode: 200,
         data: {

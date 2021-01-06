@@ -21,12 +21,13 @@ const ofItem = {
 serve(withOpenApi({
   ...DEFAULT_SERVER_CONFIG,
   routes: [
-    GET($._('/expected-error'),
+    GET($._('/expected-error')).spec(
       {
         response: {
           data: constantField(42)
         }
-      },
+      }
+    ).handler(
       async () => {
         throw {
           statusCode: 442,
@@ -35,22 +36,24 @@ serve(withOpenApi({
         }
       }
     ),
-    GET($._('/unexpected-error'),
+    GET($._('/unexpected-error')).spec(
       {
         response: {
           data: constantField(42)
         }
       },
+    ).handler(
       async () => {
         throw {
           reason: 'Boom!'
         }
       }
     ),
-    GET($._('/items'),
+    GET($._('/items')).spec(
       {
         response: ofItems
       },
+    ).handler(
       async () => ({
         data: [
           {
@@ -60,21 +63,23 @@ serve(withOpenApi({
         ]
       })
     ),
-    POST($._('/items'),
+    POST($._('/items')).spec(
       {
         request: ofItem,
         response: {
           data: numberField()
         }
       },
+    ).handler(
       async () => ({
         data: 42
       })
     ),
-    GET($._('/items/')._('id', numberField()),
+    GET($._('/items/')._('id', numberField())).spec(
       {
         response: ofItem
       },
+    ).handler(
       async (request) => ({
         data:
           {
@@ -83,17 +88,19 @@ serve(withOpenApi({
           }
       })
     ),
-    PUT($._('/items/')._('id', numberField()),
+    PUT($._('/items/')._('id', numberField())).spec(
       {
         request: ofItem
       },
+    ).handler(
       async () => undefined
     ),
-    DELETE($._('/items/')._('id', numberField()),
-      {},
+    DELETE($._('/items/')._('id', numberField())).spec(
+      {}
+    ).handler(
       async () => undefined
     ),
-    PATCH($._('/items/')._('id', numberField()),
+    PATCH($._('/items/')._('id', numberField())).spec(
       {
         request: {
           data: objectField({
@@ -102,6 +109,7 @@ serve(withOpenApi({
           })
         }
       },
+    ).handler(
       async () => undefined
     ),
   ]

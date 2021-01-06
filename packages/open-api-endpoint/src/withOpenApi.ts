@@ -40,17 +40,18 @@ export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): Serv
 
   const routes = [
     ...config.routes,
-    GET($._(schemaRoot),
+    GET($._(schemaRoot)).spec(
       {
         response: {
           data: wildcardObjectField(),
         }
       },
+    ).handler(
       async () => ({
         data: genOpenApi(config) as unknown as Record<string, Json>
       })
     ),
-    GET($._(schemaRoot)._('-ui'),
+    GET($._(schemaRoot)._('-ui')).spec(
       {
         response: {
           data: stringField(),
@@ -59,6 +60,7 @@ export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): Serv
           })
         }
       },
+    ).handler(
       async () => ({
         data: getUI(config.baseUrl + schemaRoot, config.info || DEFAULT_INFO),
         headers: {

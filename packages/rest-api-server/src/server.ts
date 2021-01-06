@@ -21,17 +21,17 @@ type PathSpec<PathParams extends StringMapping> = typeof $ & Field<PathParams>
 export const withMethod = <
   Method extends string,
   OkStatusCode extends number
-> (method: Method, okStatusCode: OkStatusCode) => <
-  PathParams extends StringMapping = StringMapping,
-  ReqSpec extends RequestSpecMethod = RequestSpecMethod,
-  RespSpec extends ResponseSpecMethod = ResponseSpecMethod,
-  > (
-      pathParams: PathSpec<PathParams>,
-      spec: {
-        request?: ReqSpec,
-        response?: RespSpec
-      },
-      handler: (request: WithoutOptional<TypeHint<
+> (method: Method, okStatusCode: OkStatusCode) =>
+  <PathParams extends StringMapping = StringMapping> (pathParams: PathSpec<PathParams>): {
+    spec:  <
+      ReqSpec extends RequestSpecMethod = RequestSpecMethod,
+      RespSpec extends ResponseSpecMethod = ResponseSpecMethod,
+      > (spec: {
+      request?: ReqSpec,
+      response?: RespSpec
+    }) => ({
+      handler: (
+        handler: (request: WithoutOptional<TypeHint<
         ReqSpec
         & {
             readonly method: ConstantField<Method>,
@@ -39,25 +39,26 @@ export const withMethod = <
           }
       >>) => Promisable<
         WithoutOptional<TypeHint<RespSpec>>
-      >
-    ): Route => {
-  const requestSchema = {
-    ...(spec.request || {}),
-    method: constantField(method),
-    pathParams,
-  }
-  return ({
-    request: requestSchema,
-    response: {
-      ...(spec.response || {}),
-      statusCode: constantField(okStatusCode)
-    },
-    handler: (async (request: Route['request']) => ({
-      ...await handler(request as any) as any,
-      statusCode: okStatusCode,
-    })) as unknown as Route['handler']
-  })
-}
+      >) => Route
+    })
+  } => ({spec: (spec) => ({handler: ( handler ) => {
+      const requestSchema = {
+        ...(spec.request || {}),
+        method: constantField(method),
+        pathParams,
+      }
+      return ({
+        request: requestSchema,
+        response: {
+          ...(spec.response || {}),
+          statusCode: constantField(okStatusCode)
+        },
+        handler: (async (request: Route['request']) => ({
+          ...await handler(request as any) as any,
+          statusCode: okStatusCode,
+        })) as unknown as Route['handler']
+      })
+    }})})
 
 export const GET = withMethod('GET', 200)
 export const HEAD = withMethod('HEAD', 200)
@@ -77,14 +78,12 @@ export const DEFAULT_SERVER_CONFIG: ServerConfig = {
     return Promise.resolve(undefined)
   },
   routes: [
-    GET($._('/'),
-      {
-        response: {
-          data: stringField()
-        }
-      },
+    GET($._('/')).spec({
+      response: {
+        data: stringField()
+      }
+    }).handler(
       async () => ({
-        statusCode: 200 as const,
         data: 'ROOT'
       })
     )
