@@ -124,9 +124,6 @@ afterEach(() => {
   console.error = oldLog
 })
 
-
-
-
 test('if Accept media type is */* - default media type is used', async () => {
   const resp = await request(server).get('/items').set('Accept', '*/*')
   expect(resp.status).toEqual(200)
