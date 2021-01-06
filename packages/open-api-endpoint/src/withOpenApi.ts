@@ -39,6 +39,7 @@ const getUI = (url: string, info: Info) => `
 export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): ServerConfig => {
 
   const routes = [
+    ...config.routes,
     GET($._(schemaRoot),
       {
         response: {
