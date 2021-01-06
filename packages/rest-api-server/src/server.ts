@@ -8,7 +8,7 @@ import { Route, RequestSpec, ResponseSpec } from './route'
 
 import { Field, TypeHint } from '@validator/validator'
 import { constantField, $, stringField } from '@validator/validator/fields'
-import { WithoutOptional } from '@validator/validator/util-types'
+import { Promisable, WithoutOptional } from '@validator/validator/util-types'
 import { ConstantField } from '@validator/validator/fields/constantField'
 
 type RequestSpecMethod = Omit<RequestSpec, 'method' | 'pathParams'>
@@ -37,9 +37,9 @@ export const withMethod = <
             readonly method: ConstantField<Method>,
             readonly pathParams: PathSpec<PathParams>
           }
-      >>) => Promise<
+      >>) => Promisable<
         WithoutOptional<TypeHint<RespSpec>>
-      > | WithoutOptional<TypeHint<RespSpec>>
+      >
     ): Route => {
   const requestSchema = {
     ...(spec.request || {}),

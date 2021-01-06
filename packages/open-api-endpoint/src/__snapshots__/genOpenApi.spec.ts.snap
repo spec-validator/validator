@@ -47,6 +47,21 @@ Object {
                   ],
                 },
               },
+              "text/html": Object {
+                "schema": Object {
+                  "properties": Object {
+                    "items": Object {
+                      "items": Object {
+                        "type": "integer",
+                      },
+                      "type": "array",
+                    },
+                  },
+                  "required": Array [
+                    "items",
+                  ],
+                },
+              },
             },
             "description": "",
           },
@@ -59,6 +74,23 @@ Object {
         "requestBody": Object {
           "content": Object {
             "application/json": Object {
+              "schema": Object {
+                "properties": Object {
+                  "count": Object {
+                    "type": "integer",
+                  },
+                  "title": Object {
+                    "pattern": ".*",
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "title",
+                  "count",
+                ],
+              },
+            },
+            "text/html": Object {
               "schema": Object {
                 "properties": Object {
                   "count": Object {

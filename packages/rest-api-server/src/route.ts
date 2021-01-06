@@ -5,7 +5,7 @@ import { ConstantField } from '@validator/validator/fields/constantField'
 import { ObjectField } from '@validator/validator/fields/objectField'
 import { UnionField } from '@validator/validator/fields/unionField'
 import { OfType } from '@validator/validator/registry'
-import { Any, WithoutOptional } from '@validator/validator/util-types'
+import { Any, Promisable, WithoutOptional } from '@validator/validator/util-types'
 
 export type StringMapping = Record<string, Any>
 
@@ -49,9 +49,9 @@ export type Route<
 > = {
   readonly request: ReqSpec,
   readonly response: RespSpec,
-  readonly handler: (request: WithoutOptional<TypeHint<ReqSpec>>) => Promise<
+  readonly handler: (request: WithoutOptional<TypeHint<ReqSpec>>) => Promisable<
     WithoutOptional<TypeHint<RespSpec>>
-  > | WithoutOptional<TypeHint<RespSpec>>
+  >
 }
 
 export const isResponsesSpec = (spec: ResponsesSpec | ResponseSpec): spec is ResponsesSpec =>

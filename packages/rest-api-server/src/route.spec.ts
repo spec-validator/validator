@@ -3,6 +3,7 @@ import constantField from '@validator/validator/fields/constantField'
 import $ from '@validator/validator/fields/segmentField'
 
 import { expectType } from '@validator/validator/TypeTestUtils.test'
+import { Promisable } from '@validator/validator/util-types'
 import { Route } from './route'
 
 describe('Route', () => {
@@ -30,7 +31,7 @@ describe('Route', () => {
         method: 'GET',
         headers: { headerKey: string },
         pathParams: { pathKey: string },
-      }) => Promise<{
+      }) => Promisable<{
         statusCode: 201,
         data: string
       }>
@@ -54,7 +55,7 @@ describe('Route', () => {
       response: typeof respSpec,
       handler: (request: {
         method: 'GET',
-      }) => Promise<{
+      }) => Promisable<{
         statusCode: 201,
       }>
         }>(true)
@@ -84,7 +85,7 @@ describe('Route', () => {
       response: typeof respSpec,
       handler: (request: {
         method: 'GET',
-      }) => Promise<{
+      }) => Promisable<{
         statusCode: 201,
         data: number
       } | {
