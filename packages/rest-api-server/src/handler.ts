@@ -136,6 +136,7 @@ const getMediaType = (
   return eventualType
 }
 
+// eslint-disable-next-line max-statements
 const handleRoute = async (
   config: ServerConfig,
   route: Route,
@@ -185,6 +186,7 @@ const handleRoute = async (
   }
 }
 
+// eslint-disable-next-line max-statements
 export const handle = async (
   config: ServerConfig,
   request: http.IncomingMessage,

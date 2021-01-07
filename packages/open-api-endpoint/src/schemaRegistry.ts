@@ -8,30 +8,19 @@ import createRegistry, { $ } from '@validator/validator/registry'
 import withDoc from './withDoc'
 import { Primitive } from '@validator/validator/Json'
 
-const splitIntoOneOfs = (choices: readonly Primitive[]): OpenAPI.NonArraySchemaObject [] => {
-  const numbers = choices.filter(it => typeof it === 'number')
-  const booleans = choices.filter(it => typeof it === 'boolean')
-  const strings = choices.filter(it => typeof it === 'string')
+const TYPES = ['number' as const, 'boolean'as const, 'string'as const]
 
+const splitIntoOneOfs = (choices: readonly Primitive[]): OpenAPI.NonArraySchemaObject [] => {
   const result: OpenAPI.NonArraySchemaObject[] = []
-  if (numbers.length) {
-    result.push({
-      type: 'number',
-      enum: numbers,
-    })
-  }
-  if (booleans.length) {
-    result.push({
-      type: 'boolean',
-      enum: booleans,
-    })
-  }
-  if (strings.length) {
-    result.push({
-      type: 'string',
-      enum: strings,
-    })
-  }
+  TYPES.forEach(type => {
+    const items = choices.filter(it => typeof it === type)
+    if (items.length) {
+      result.push({
+        type,
+        enum: items,
+      })
+    }
+  })
   return result
 }
 
