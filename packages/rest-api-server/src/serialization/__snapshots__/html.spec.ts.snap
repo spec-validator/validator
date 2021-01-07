@@ -3,3 +3,5 @@
 exports[`deserialize 1`] = `"html"`;
 
 exports[`serialize 1`] = `"html"`;
+
+exports[`serialize 2`] = `""`;
