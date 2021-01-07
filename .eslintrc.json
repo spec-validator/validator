@@ -24,6 +24,7 @@
     "no-console": "off",
     "camelcase": "error",
     "quotes": ["error", "single"],
+    "eol-last": "error",
     "max-len": ["error", 120],
     "keyword-spacing": "error",
     "comma-dangle": ["error", "always-multiline"],
