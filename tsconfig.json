@@ -3,7 +3,6 @@
   "compilerOptions": {
     "baseUrl": "./packages",
     "outDir": "./dist",
-    "noEmit": true,
     "paths": {
       "@validator/validator/*": ["validator/src/*"],
       "@validator/validator": ["validator/src/index.ts"],
