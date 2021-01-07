@@ -8,6 +8,7 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:jest-formatting/recommended"
   ],
+  "ignorePatterns": ["dist", "node_modules"],
   "plugins": [
     "@typescript-eslint",
     "unused-imports"
