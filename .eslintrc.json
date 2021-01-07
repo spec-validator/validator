@@ -20,6 +20,7 @@
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "@typescript-eslint/no-explicit-any": 0,
     "no-console": "off",
+    "camelcase": "error",
     "quotes": ["error", "single"],
     "max-len": ["error", 120],
     "keyword-spacing": "error",
