@@ -1,4 +1,10 @@
-all: clean build
+all: install test clean build
+
+install:
+	yarn install
+
+test:
+	yarn test
 
 compile:
 	yarn tsc --build
@@ -17,4 +23,4 @@ clean:
 	yarn tsc --build --clean
 	rm -rf packages/**/dist dist
 
-.PHONY: build clean compile all.postcompile all
+.PHONY: build clean compile all.postcompile all test install
