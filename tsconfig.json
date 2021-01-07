@@ -2,6 +2,7 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
+    "noEmit": true,
     "paths": {
       "@validator/validator/*": ["./packages/validator/src/*"],
       "@validator/validator": ["./packages/validator/src/index.ts"],
