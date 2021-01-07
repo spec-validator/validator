@@ -81,10 +81,10 @@ const server = createServer({routes: [
       response: ofItem,
     },
   ).handler(
-    async (request) => ({
+    async (req) => ({
       data:
         {
-          title: `Item ${request.pathParams.id}`,
+          title: `Item ${req.pathParams.id}`,
           description: 'Description',
         },
     })

@@ -20,14 +20,14 @@ export default field('@validator/fields.ChoiceField', <Choice extends Primitive>
   }
   const serialize = (deserialized: Choice): Json => deserialized
 
-  const field = {
+  const result = {
     choices,
     validate,
     serialize,
   } as ChoiceField<Choice> & OfType<string>
 
-  field.getFieldWithRegExp = (): Omit<ChoiceField<Choice>, 'getFieldWithRegExp'> &
-    FieldWithRegExp<Choice> & OfType<string> => {
+  result.getFieldWithRegExp = ():
+    Omit<ChoiceField<Choice>, 'getFieldWithRegExp'> & FieldWithRegExp<Choice> & OfType<string> => {
 
     const fullChoiceMap: Map<any, Primitive> = new Map<any, Primitive>()
     choices.forEach(it => {
@@ -36,7 +36,7 @@ export default field('@validator/fields.ChoiceField', <Choice extends Primitive>
     })
 
     return {
-      type: field.type,
+      type: result.type,
       choices,
       regex: new RegExp(
         Object.keys(choices)
@@ -49,5 +49,5 @@ export default field('@validator/fields.ChoiceField', <Choice extends Primitive>
     }
   }
 
-  return field
+  return result
 })

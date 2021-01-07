@@ -6,7 +6,7 @@ export interface StringField extends FieldWithStringInputSupport<string>, FieldW
 export default field('@validator/fields.StringField', (
   regex?: RegExp
 ): StringField => {
-  const field = {
+  const result = {
     regex: regex || /.*/,
     validate: (value: any): string => {
       if (typeof value !== 'string') {
@@ -23,7 +23,7 @@ export default field('@validator/fields.StringField', (
     serialize: (deserialized: string) => deserialized,
   } as StringField & OfType<string>
 
-  field.getFieldWithRegExp = () => field
+  result.getFieldWithRegExp = () => result
 
-  return field
+  return result
 })

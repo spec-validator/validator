@@ -13,14 +13,14 @@ export default field('@validator/fields.BooleanField', (): BooleanField => {
   }
   const serialize = (deserialized: boolean): Json => deserialized
 
-  const field = {
+  const result = {
     validate,
     serialize,
   } as BooleanField & OfType<string>
 
-  field.getFieldWithRegExp = (): Omit<BooleanField, 'getFieldWithRegExp'> &
-    FieldWithRegExp<boolean> & OfType<string> => ({
-    type: field.type,
+  result.getFieldWithRegExp = ():
+    Omit<BooleanField, 'getFieldWithRegExp'> & FieldWithRegExp<boolean> & OfType<string> => ({
+    type: result.type,
     validate: (value: any) => {
       if (value === 'true' || value === '1') {
         value = true
@@ -34,5 +34,5 @@ export default field('@validator/fields.BooleanField', (): BooleanField => {
     regex: /true|false|1|0/,
   })
 
-  return field
+  return result
 })

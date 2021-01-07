@@ -23,6 +23,7 @@
     "@typescript-eslint/no-explicit-any": 0,
     "no-console": "off",
     "camelcase": "error",
+    "no-shadow": "error",
     "quotes": ["error", "single"],
     "eol-last": "error",
     "max-len": ["error", 120],

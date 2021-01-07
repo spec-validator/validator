@@ -55,7 +55,7 @@ describe('WithoutOptional', () => {
   })
 
   it('filters out all optional keys from unionized objects', () => {
-    type Input = WithoutOptional<{
+    type UnionInput = WithoutOptional<{
       oneRequired: number,
       oneOptional?: string
     } | {
@@ -63,11 +63,11 @@ describe('WithoutOptional', () => {
       twoOptional: string | undefined
     }>
 
-    expectType<Input, {
+    expectType<UnionInput, {
       oneRequired: number;
     }>(true)
 
-    expectType<Input, {
+    expectType<UnionInput, {
       twoRequired: boolean;
     }>(true)
   })

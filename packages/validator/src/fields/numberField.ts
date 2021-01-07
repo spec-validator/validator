@@ -22,13 +22,14 @@ export default field('@validator/fields.NumberField', (params?: {
   }
   const serialize = (deserialized: number): Json => deserialized
 
-  const field = {
+  const result = {
     params,
     validate,
     serialize,
   } as NumberField & OfType<string>
 
-  field.getFieldWithRegExp = (): Omit<NumberField, 'getFieldWithRegExp'> & FieldWithRegExp<number> & OfType<string> => {
+  result.getFieldWithRegExp = ():
+    Omit<NumberField, 'getFieldWithRegExp'> & FieldWithRegExp<number> & OfType<string> => {
     const parts: string[] = []
     parts.push('-?')
     parts.push('\\d+')
@@ -38,12 +39,12 @@ export default field('@validator/fields.NumberField', (params?: {
 
     return {
       params,
-      type: field.type,
+      type: result.type,
       validate: (value: any) => validate(Number.parseFloat(value)),
       serialize: (value: number) => value.toString(),
       regex: RegExp(parts.join('')),
     }
   }
 
-  return field
+  return result
 })

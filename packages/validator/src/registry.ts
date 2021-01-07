@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+
 import { Field } from '.'
 export type OfType<Type extends string> = {
   readonly type: Type
@@ -103,7 +105,7 @@ const createRegistry = (
     withNoDuplicates(pairs, (pair) => pair[0].type).map(([key, value]) => ([key.type, value]))
   )
   const getRepresentation: GetRepresentation =
-    (field) => getValue(mapping, (field as unknown as OfType<string>).type)(field, getRepresentation)
+    (it) => getValue(mapping, (field as unknown as OfType<string>).type)(it, getRepresentation)
   return getRepresentation
 }
 
