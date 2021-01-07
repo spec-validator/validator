@@ -1,3 +1,4 @@
+import { Field } from '.'
 import { numberField, stringField, objectField, booleanField } from './fields'
 import createRegistry, { $, FieldPair } from './registry'
 
@@ -42,5 +43,15 @@ describe('createRegistry', () => {
     })
     expect(() => registry(schema))
       .toThrow(`Could not find field of type '${booleanField.type}'`)
+  })
+
+  it('throws an error if the field has no type', () => {
+    const registry = createRegistry(normalRegistryPairs)
+    const schema: Field<42> = {
+      validate: () => 42,
+      serialize: () => 42,
+    }
+    expect(() => registry(schema))
+      .toThrow('Fields without \'type\' are not supported')
   })
 })

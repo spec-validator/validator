@@ -1,23 +1,7 @@
-import { Optional, WithoutOptional } from './util-types'
+import { WithoutOptional } from './util-types'
 
 // eslint-disable-next-line no-useless-escape
 export const escapeRegex = (value: string): string => value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
-
-export const getOrUndefined = <R>(get: () => R): Optional<R> => {
-  try {
-    return get()
-  } catch (err) {
-    return undefined
-  }
-}
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const withParentFields = <T>(parent: any, child: T, fields: string[]): T => {
-  fields.forEach(it => {
-    (child as any)[it] = (parent as any)[it]
-  })
-  return child
-}
 
 export const omit = <T, K extends keyof T>(full: T, keys: K[]): Omit<T, K> => {
   const toDrop = new Set(keys)
@@ -32,8 +16,6 @@ export const pick = <T, K extends keyof T>(full: T, keys: K[]): Pick<T, K> => {
     Object.entries(full).filter(it => toPick.has(it[0] as K))
   ) as Pick<T, K>
 }
-
-export const keys = <T>(o: T): Array<keyof T> => <Array<keyof T>>Object.keys(o)
 
 export const withoutOptional = <T> (item: T): WithoutOptional<T> =>
   Object.fromEntries(Object.entries(item).filter(([_, value]) => value !== undefined)) as WithoutOptional<T>
