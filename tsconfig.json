@@ -1,15 +1,16 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
+    "baseUrl": "./packages",
     "outDir": "./dist",
     "noEmit": true,
     "paths": {
-      "@validator/validator/*": ["./packages/validator/src/*"],
-      "@validator/validator": ["./packages/validator/src/index.ts"],
-      "@validator/rest-api-server/*": ["./packages/rest-api-server/src/*"],
-      "@validator/rest-api-server": ["./packages/rest-api-server/src/index.ts"],
-      "@validator/open-api-endpoint/*": ["./packages/open-api-endpoint/src/*"],
-      "@validator/open-api-endpoint": ["./packages/open-api-endpoint/src/index.ts"]
+      "@validator/validator/*": ["validator/src/*"],
+      "@validator/validator": ["validator/src/index.ts"],
+      "@validator/rest-api-server/*": ["rest-api-server/src/*"],
+      "@validator/rest-api-server": ["rest-api-server/src/index.ts"],
+      "@validator/open-api-endpoint/*": ["open-api-endpoint/src/*"],
+      "@validator/open-api-endpoint": ["open-api-endpoint/src/index.ts"]
     }
   },
   "references": [

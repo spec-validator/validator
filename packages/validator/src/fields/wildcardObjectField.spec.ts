@@ -12,7 +12,7 @@ test('types', () => {
 
 test('blocks invalid value', () => {
   expect(() => validate(field, new Date())).toThrow(
-    new Error('Unexpected token W in JSON at position 0')
+    new Error('Unexpected token T in JSON at position 0')
   )
 })
 
