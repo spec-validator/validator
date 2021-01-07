@@ -7,7 +7,7 @@ test:
 	yarn test
 
 compile:
-	yarn tsc -p tsconfig.build.json --build
+	yarn tsc --build tsconfig.build.json
 
 %.postcompile:
 	cp packages/$*/package.json packages/$*/dist/
