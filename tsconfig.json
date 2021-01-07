@@ -14,8 +14,8 @@
     }
   },
   "references": [
-    { "path": "./packages/validator" },
-    { "path": "./packages/rest-api-server" },
-    { "path": "./packages/open-api-endpoint" }
+    { "path": "./packages/validator/tsconfig.build.json" },
+    { "path": "./packages/rest-api-server/tsconfig.build.json" },
+    { "path": "./packages/open-api-endpoint/tsconfig.build.json" }
   ]
 }

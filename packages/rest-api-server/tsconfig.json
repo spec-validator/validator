@@ -12,6 +12,5 @@
   "references": [
     { "path": "../validator" }
   ],
-  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
-  "include": ["src/**/*"]
+  "include": ["src/**/*.ts"]
 }
