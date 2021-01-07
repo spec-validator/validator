@@ -1,4 +1,4 @@
-import { Field, validate, TypeHint, Json, serialize, $ } from '.'
+import { Field, validate, TypeHint, Json, serialize } from '.'
 
 import { expectType } from './TypeTestUtils.test'
 
@@ -8,7 +8,6 @@ const sampleField = (): Field<'sample'> => ({
 })
 
 test('imports', () => {
-  expect($).toBeTruthy()
   expect(validate).toBeTruthy()
   expect(serialize).toBeTruthy()
 

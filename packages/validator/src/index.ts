@@ -1,4 +1,6 @@
 export { Field, validate, TypeHint, serialize, FieldDecorator } from './core'
-import $ from './fields/segmentField'
-export { Json } from './Json'
-export { $ }
+export { Json, Primitive } from './Json'
+
+import createRegistry from './registry'
+
+export { createRegistry }

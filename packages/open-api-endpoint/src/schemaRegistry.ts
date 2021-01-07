@@ -4,9 +4,10 @@ import {
   arrayField, booleanField, choiceField, constantField,
   numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault,
 } from '@validator/validator/fields'
-import createRegistry, { $ } from '@validator/validator/registry'
+import createRegistry, { registryDeclaration as $ } from '@validator/validator/registry'
+import { Primitive } from '@validator/validator'
+
 import withDoc from './withDoc'
-import { Primitive } from '@validator/validator/Json'
 
 const TYPES = ['number' as const, 'boolean'as const, 'string'as const]
 

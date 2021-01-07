@@ -51,7 +51,7 @@ export type FieldPair<
 > =
   [Declaration, ProvideRepresentation<ReturnType<Declaration>>]
 
-export const $ = <
+export const registryDeclaration = <
   Declaration extends FieldDeclaration<string, any[], Field<unknown>>
 >(
     fieldDeclaration: Declaration,

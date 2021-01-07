@@ -1,6 +1,6 @@
 import { Field } from '.'
 import { numberField, stringField, objectField, booleanField } from './fields'
-import createRegistry, { $, FieldPair } from './registry'
+import createRegistry, { registryDeclaration as $, FieldPair } from './registry'
 
 const normalRegistryPairs: FieldPair[] = [
   $(stringField, (field) => ({
