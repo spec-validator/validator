@@ -1,0 +1,8 @@
+
+{
+  "extends": "./tsconfig.json",
+  "references": [
+    { "path": "../validator/tsconfig.build.json" },
+  ],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"]
+}

@@ -12,5 +12,9 @@
       "@validator/rest-api-server": ["../rest-api-server/src/index.ts"]
     }
   },
+  "references": [
+    { "path": "../validator" },
+    { "path": "../rest-api-server" }
+  ],
   "include": ["src/**/*.ts"]
 }
