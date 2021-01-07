@@ -9,9 +9,9 @@ const field = withDoc(numberField(), {
   examples: {
     zero: {
       value: 14 as number,
-      summary: 'Sample value'
-    }
-  }
+      summary: 'Sample value',
+    },
+  },
 })
 
 describe('field', () => {

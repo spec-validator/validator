@@ -17,6 +17,6 @@ export default field('@validator/fields.Optional', <T extends Any> (
       return innerField.validate(value)
     },
     serialize: (deserialized: Optional<T>) =>
-      deserialized === undefined ? deserialized : innerField.serialize(deserialized) as any
+      deserialized === undefined ? deserialized : innerField.serialize(deserialized) as any,
   }))
 

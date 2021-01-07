@@ -1,7 +1,7 @@
 import request from 'supertest'
 
 import {
-  $, arrayField, constantField, numberField, objectField, optional, stringField
+  $, arrayField, constantField, numberField, objectField, optional, stringField,
 } from '@validator/validator/fields'
 
 
@@ -9,15 +9,15 @@ import { createServer, _ } from './server'
 
 const itemSpec = objectField({
   title: stringField(),
-  description: stringField()
+  description: stringField(),
 })
 
 const ofItems = {
-  data: arrayField(itemSpec)
+  data: arrayField(itemSpec),
 }
 
 const ofItem = {
-  data: itemSpec
+  data: itemSpec,
 }
 
 // TODO: disablable error on extra keys for object field
@@ -25,73 +25,73 @@ const server = createServer({routes: [
   _.GET($._('/expected-error')).spec(
     {
       response: {
-        data: constantField(42)
-      }
+        data: constantField(42),
+      },
     }
   ).handler(
     async () => {
       throw {
         statusCode: 442,
         isPublic: true,
-        reason: 'Boom!'
+        reason: 'Boom!',
       }
     }
   ),
   _.GET($._('/unexpected-error')).spec(
     {
       response: {
-        data: constantField(42)
-      }
+        data: constantField(42),
+      },
     }
   ).handler(
     async () => {
       throw {
-        reason: 'Boom!'
+        reason: 'Boom!',
       }
     }
   ),
   _.GET($._('/items')).spec(
     {
-      response: ofItems
+      response: ofItems,
     },
   ).handler(
     async () => ({
       data: [
         {
           title: 'Item N',
-          description: 'Description'
-        }
-      ]
+          description: 'Description',
+        },
+      ],
     })
   ),
   _.POST($._('/items')).spec(
     {
       request: ofItem,
       response: {
-        data: numberField()
-      }
+        data: numberField(),
+      },
     },
   ).handler(
     async () => ({
-      data: 42
+      data: 42,
     })
   ),
   _.GET($._('/items/')._('id', numberField())).spec(
     {
-      response: ofItem
+      response: ofItem,
     },
   ).handler(
     async (request) => ({
       data:
         {
           title: `Item ${request.pathParams.id}`,
-          description: 'Description'
-        }
+          description: 'Description',
+        },
     })
   ),
   _.PUT($._('/items/')._('id', numberField())).spec(
     {
-      request: ofItem
+      request: ofItem,
     },
   ).handler(
     async () => undefined
@@ -101,16 +101,16 @@ const server = createServer({routes: [
       request: {
         data: objectField({
           title: optional(stringField()),
-          description: optional(stringField())
-        })
-      }
+          description: optional(stringField()),
+        }),
+      },
     },
   ).handler(
     async () => undefined
   ),
   _.DELETE($._('/items/')._('id', numberField())).spec({}).handler(
     async () => undefined
-  )
+  ),
 ]})
 
 let oldLog: any = null
@@ -135,7 +135,7 @@ test('if Content-Type media type is unsupported - 415 status code is returned', 
   expect(resp.text).toEqual(JSON.stringify({
     'statusCode':415,
     'isPublic':true,
-    'reason': 'Not supported \'content-type\': application/xml'
+    'reason': 'Not supported \'content-type\': application/xml',
   }))
 })
 
@@ -145,7 +145,7 @@ test('if Accept media type is unsupported - 415 status code is returned', async 
   expect(resp.text).toEqual(JSON.stringify({
     'statusCode':415,
     'isPublic':true,
-    'reason':'Not supported \'accept\': application/xml'
+    'reason':'Not supported \'accept\': application/xml',
   }))
 })
 
@@ -167,7 +167,7 @@ test('if request is invalid - 400 status code is returned', async () => {
 test('POST', async () => {
   const resp = await request(server).post('/items').set('Content-Type', 'application/json').send({
     title: 'Title',
-    description: 'Description'
+    description: 'Description',
   })
   expect(resp.status).toEqual(201)
   expect(resp.body).toEqual(42)
@@ -176,7 +176,7 @@ test('POST', async () => {
 test('PUT', async () => {
   const resp = await request(server).put('/items/11').set('Content-Type', 'application/json').send({
     title: 'Title',
-    description: 'Description'
+    description: 'Description',
   })
   expect(resp.status).toEqual(204)
 })

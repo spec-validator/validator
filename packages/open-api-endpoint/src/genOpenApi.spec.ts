@@ -1,6 +1,6 @@
 import { _, Route } from '@validator/rest-api-server'
 import {
-  $, stringField, objectField, booleanField, numberField, arrayField
+  $, stringField, objectField, booleanField, numberField, arrayField,
 } from '@validator/validator/fields'
 import genOpenApi from './genOpenApi'
 import { DEFAULT_SERVER_CONFIG } from '@validator/rest-api-server/server'
@@ -13,8 +13,8 @@ test('fullRoute', () => {
         request: {
           data: objectField({
             title: stringField(/.*/),
-            count: numberField()
-          })
+            count: numberField(),
+          }),
         },
       }
     ).handler(
@@ -29,29 +29,29 @@ test('fullRoute', () => {
               examples: {
                 sampleKey: {
                   value: 13 as number,
-                  summary: 'Sample value'
-                }
-              }
-            })
+                  summary: 'Sample value',
+                },
+              },
+            }),
           }),
           queryParams: objectField({
             flag: booleanField(),
-          })
+          }),
         },
         response: {
           data: objectField({
-            items: arrayField(numberField())
-          })
+            items: arrayField(numberField()),
+          }),
         },
       }
     ).handler(
       async () => ({
         statusCode: 200,
         data: {
-          items: [1, 2, 3]
-        }
+          items: [1, 2, 3],
+        },
       })
-    )
+    ),
   ]
 
   expect(genOpenApi(
@@ -60,8 +60,8 @@ test('fullRoute', () => {
       routes,
       info: {
         title: 'Test',
-        version: '1.0.0'
-      }
+        version: '1.0.0',
+      },
     })).toMatchSnapshot()
 
 })

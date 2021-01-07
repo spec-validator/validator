@@ -8,7 +8,7 @@ const field = unionField(
   choiceField(1, 2, 3),
   booleanField(),
   objectField({
-    innerField: stringField()
+    innerField: stringField(),
   })
 )
 
@@ -18,9 +18,9 @@ test('validation', () => {
   expect(validate(field, true)).toEqual(true)
   expect(validate(field, 'foo')).toEqual('foo')
   expect(validate(field, {
-    innerField: 'foo'
+    innerField: 'foo',
   })).toEqual({
-    innerField: 'foo'
+    innerField: 'foo',
   })
 })
 
@@ -30,9 +30,9 @@ test('serialization', () => {
   expect(serialize(field, true)).toEqual(true)
   expect(serialize(field, 'foo')).toEqual('foo')
   expect(serialize(field, {
-    innerField: 'foo'
+    innerField: 'foo',
   })).toEqual({
-    innerField: 'foo'
+    innerField: 'foo',
   })
 })
 

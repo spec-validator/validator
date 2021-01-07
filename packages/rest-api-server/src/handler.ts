@@ -17,7 +17,7 @@ export type ServerConfig = {
 const splitPath = (url?: string) => {
   const [pathParams, queryParams] = (url || '').split('?', 2)
   return {
-    pathParams, queryParams
+    pathParams, queryParams,
   }
 }
 
@@ -70,7 +70,7 @@ const withAppErrorStatusCode = async <T>(
       throw {
         statusCode,
         isPublic: statusCode < 500,
-        reason: error
+        reason: error,
       }
     }
   }
@@ -84,7 +84,7 @@ const getWildcardRoute = async (
   return ({
     ...getWildcardRequestBase(request),
     data: data && await withAppErrorStatusCode(400, () => serialization.deserialize(data)),
-    headers: request.headers
+    headers: request.headers,
   })
 }
 
@@ -130,7 +130,7 @@ const getMediaType = (
     throw {
       statusCode: 415,
       isPublic: true,
-      reason: `Not supported '${headerKey}': ${types}`
+      reason: `Not supported '${headerKey}': ${types}`,
     }
   }
   return eventualType

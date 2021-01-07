@@ -12,9 +12,9 @@ describe('Route', () => {
     const reqSpec = {
       method: constantField('GET'),
       headers: objectField({
-        headerKey: stringField()
+        headerKey: stringField(),
       }),
-      pathParams: $._('pathKey', stringField())
+      pathParams: $._('pathKey', stringField()),
     }
 
     const respSpec = {
@@ -41,7 +41,7 @@ describe('Route', () => {
   it('always contains a method in a request and statusCode in a response', () => {
     const reqSpec = {
       method: constantField('GET'),
-      pathParams: $
+      pathParams: $,
     }
 
     const respSpec = {
@@ -64,18 +64,18 @@ describe('Route', () => {
   it('works with a union of responses', () => {
     const reqSpec = {
       method: constantField('GET'),
-      pathParams: $
+      pathParams: $,
     }
 
     const respSpec = unionField(objectField({
       statusCode: constantField(201),
-      data: numberField()
+      data: numberField(),
     }), objectField({
       statusCode: constantField(202),
       data: choiceField('one', 'two'),
       headers: objectField({
-        headerKey: stringField()
-      })
+        headerKey: stringField(),
+      }),
     }))
 
     type Decor = Route<typeof reqSpec, typeof respSpec>

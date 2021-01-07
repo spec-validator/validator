@@ -51,12 +51,12 @@ export const withMethod = <
         request: requestSchema,
         response: {
           ...(spec.response || {}),
-          statusCode: constantField(okStatusCode)
+          statusCode: constantField(okStatusCode),
         },
         handler: (async (request: Route['request']) => ({
           ...await handler(request as any) as any,
           statusCode: okStatusCode,
-        })) as unknown as Route['handler']
+        })) as unknown as Route['handler'],
       })
     }})})
 
@@ -66,7 +66,7 @@ export const _ = {
   POST: withMethod('POST', 201),
   PUT: withMethod('PUT', 204),
   DELETE: withMethod('DELETE', 204),
-  PATCH: withMethod('PATCH', 204)
+  PATCH: withMethod('PATCH', 204),
 }
 
 export const DEFAULT_SERVER_CONFIG: ServerConfig = {
@@ -82,14 +82,14 @@ export const DEFAULT_SERVER_CONFIG: ServerConfig = {
   routes: [
     _.GET($._('/')).spec({
       response: {
-        data: stringField()
-      }
+        data: stringField(),
+      },
     }).handler(
       async () => ({
-        data: 'ROOT'
+        data: 'ROOT',
       })
-    )
-  ]
+    ),
+  ],
 }
 
 const mergeServerConfigs = (
@@ -101,7 +101,7 @@ const mergeServerConfigs = (
 
 const SUPPORTED_PROTOCOLS= {
   'http': 80,
-  'https': 443
+  'https': 443,
 } as const
 
 const supportedProtocols = new Set(Object.keys(SUPPORTED_PROTOCOLS))

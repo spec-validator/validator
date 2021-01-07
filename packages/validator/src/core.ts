@@ -88,7 +88,7 @@ const ensureNoExtraFields = <DeserializedType extends Any, TSpec extends SpecUni
     Object.keys(validatorSpec as ValidatorSpec<DeserializedType>).forEach((it) => extraKeys.delete(it))
     if (extraKeys.size !== 0) {
       throw {
-        extraKeys: Array.from(extraKeys)
+        extraKeys: Array.from(extraKeys),
       }
     }
   }

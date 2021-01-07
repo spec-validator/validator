@@ -27,6 +27,6 @@ export default field('@validator/fields.ObjectField', <
       }
       return validate(objectSpec, value) as TypeHint<Spec>
     },
-    serialize: (deserialized: TypeHint<Spec>): Json => serialize(objectSpec, deserialized as any)
+    serialize: (deserialized: TypeHint<Spec>): Json => serialize(objectSpec, deserialized as any),
   }))
 

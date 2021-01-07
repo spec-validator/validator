@@ -1,6 +1,6 @@
 import {
   arrayField, booleanField, choiceField, constantField,
-  numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault
+  numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault,
 } from '@validator/validator/fields'
 import getSchema from './schemaRegistry'
 import withDoc from './withDoc'
@@ -16,7 +16,7 @@ test('BASE_PAIRS', () => {
     constantField(42),
     objectField({
       a: booleanField(),
-      b: booleanField()
+      b: booleanField(),
     }),
     optional(booleanField()),
     stringField(),
@@ -27,7 +27,7 @@ test('BASE_PAIRS', () => {
       constantField(1),
       objectField({
         a: booleanField(),
-        b: booleanField()
+        b: booleanField(),
       })
     ),
     withDefault(booleanField(), true),
@@ -37,12 +37,12 @@ test('BASE_PAIRS', () => {
       examples: {
         'yes':{
           summary: 'positive',
-          value: true
+          value: true,
         },
         'no': {
           summary: 'negative',
-          value: false
-        }}
-    })
+          value: false,
+        }},
+    }),
   ].map(field => getSchema(field))).toMatchSnapshot()
 })

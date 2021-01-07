@@ -44,11 +44,11 @@ export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): Serv
       {
         response: {
           data: wildcardObjectField(),
-        }
+        },
       },
     ).handler(
       async () => ({
-        data: genOpenApi(config) as unknown as Record<string, Json>
+        data: genOpenApi(config) as unknown as Record<string, Json>,
       })
     ),
     _.GET($._(schemaRoot)._('-ui')).spec(
@@ -56,22 +56,22 @@ export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): Serv
         response: {
           data: stringField(),
           headers: objectField({
-            'content-type': constantField('text/html')
-          })
-        }
+            'content-type': constantField('text/html'),
+          }),
+        },
       },
     ).handler(
       async () => ({
         data: getUI(config.baseUrl + schemaRoot, config.info || DEFAULT_INFO),
         headers: {
-          'content-type': 'text/html' as const
-        }
+          'content-type': 'text/html' as const,
+        },
       })
-    )
+    ),
   ]
 
   return {
     ...config,
-    routes
+    routes,
   }
 }

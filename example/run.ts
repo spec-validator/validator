@@ -1,21 +1,21 @@
 import { serve } from '@validator/rest-api-server'
 import { DEFAULT_SERVER_CONFIG, _ } from '@validator/rest-api-server/server'
 import {
-  $, arrayField, constantField, numberField, objectField, optional, stringField
+  $, arrayField, constantField, numberField, objectField, optional, stringField,
 } from '@validator/validator/fields'
 import withOpenApi from '@validator/open-api-endpoint/withOpenApi'
 
 const itemSpec = objectField({
   title: stringField(),
-  description: stringField()
+  description: stringField(),
 })
 
 const ofItems = {
-  data: arrayField(itemSpec)
+  data: arrayField(itemSpec),
 }
 
 const ofItem = {
-  data: itemSpec
+  data: itemSpec,
 }
 
 serve(withOpenApi({
@@ -24,73 +24,73 @@ serve(withOpenApi({
     _.GET($._('/expected-error')).spec(
       {
         response: {
-          data: constantField(42)
-        }
+          data: constantField(42),
+        },
       }
     ).handler(
       async () => {
         throw {
           statusCode: 442,
           isPublic: true,
-          reason: 'Boom!'
+          reason: 'Boom!',
         }
       }
     ),
     _.GET($._('/unexpected-error')).spec(
       {
         response: {
-          data: constantField(42)
-        }
+          data: constantField(42),
+        },
       },
     ).handler(
       async () => {
         throw {
-          reason: 'Boom!'
+          reason: 'Boom!',
         }
       }
     ),
     _.GET($._('/items')).spec(
       {
-        response: ofItems
+        response: ofItems,
       },
     ).handler(
       async () => ({
         data: [
           {
             title: 'Item N',
-            description: 'Description'
-          }
-        ]
+            description: 'Description',
+          },
+        ],
       })
     ),
     _.POST($._('/items')).spec(
       {
         request: ofItem,
         response: {
-          data: numberField()
-        }
+          data: numberField(),
+        },
       },
     ).handler(
       async () => ({
-        data: 42
+        data: 42,
       })
     ),
     _.GET($._('/items/')._('id', numberField())).spec(
       {
-        response: ofItem
+        response: ofItem,
       },
     ).handler(
       async (request) => ({
         data:
           {
             title: `Item ${request.pathParams.id}`,
-            description: 'Description'
-          }
+            description: 'Description',
+          },
       })
     ),
     _.PUT($._('/items/')._('id', numberField())).spec(
       {
-        request: ofItem
+        request: ofItem,
       },
     ).handler(
       async () => undefined
@@ -105,13 +105,13 @@ serve(withOpenApi({
         request: {
           data: objectField({
             title: optional(stringField()),
-            description: optional(stringField())
-          })
-        }
+            description: optional(stringField()),
+          }),
+        },
       },
     ).handler(
       async () => undefined
     ),
-  ]
+  ],
 
 }))

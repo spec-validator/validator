@@ -20,7 +20,7 @@ export default field('@validator/fields.StringField', (
       }
       return value
     },
-    serialize: (deserialized: string) => deserialized
+    serialize: (deserialized: string) => deserialized,
   } as StringField & OfType<string>
 
   field.getFieldWithRegExp = () => field

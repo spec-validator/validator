@@ -15,7 +15,7 @@ const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<st
   pairs.forEach(([a, b]) => {
     record[a] = {
       ...(record[a] || {}),
-      ...b
+      ...b,
     }
   })
   return record
@@ -32,7 +32,7 @@ export type WithInfo = {
 
 export const DEFAULT_INFO: Info = {
   title: 'Test',
-  version: '0.0.1'
+  version: '0.0.1',
 }
 
 const getDescription = (field: unknown): string | undefined =>
@@ -59,10 +59,10 @@ class OpenApiGenerator {
     info: this.config.info || DEFAULT_INFO,
     servers: [
       {
-        url: this.config.baseUrl
-      }
+        url: this.config.baseUrl,
+      },
     ],
-    paths: mergeValues(this.config.routes.map(this.createPath))
+    paths: mergeValues(this.config.routes.map(this.createPath)),
   })
 
   createParameterBaseObject = (
@@ -70,7 +70,7 @@ class OpenApiGenerator {
   ): OpenAPI.ParameterBaseObject => withoutOptional({
     description: getDescription(field),
     required: isRequired(field),
-    schema: this.getSchema(field)
+    schema: this.getSchema(field),
   })
 
   createParameter = (
@@ -80,7 +80,7 @@ class OpenApiGenerator {
   ): OpenAPI.ParameterObject => withoutOptional({
     name: name,
     in: type,
-    ...this.createParameterBaseObject(field)
+    ...this.createParameterBaseObject(field),
   })
 
   specToParams = (
@@ -94,14 +94,14 @@ class OpenApiGenerator {
     [media: string]: OpenAPI.MediaTypeObject
   } => Object.fromEntries(this.config.serializationFormats.map(
     it => [it.mediaType, {
-      schema: this.getSchema(data)
+      schema: this.getSchema(data),
     }]
   ))
 
   createResponseObject = (response: ResponseSpec): OpenAPI.ResponseObject => withoutOptional({
     headers: response.headers && Object.fromEntries(Object.entries(response.headers).map(([name, value]) => [
       name,
-      this.createParameterBaseObject(value)
+      this.createParameterBaseObject(value),
     ])),
     description: getDescription(response) || '',
     content: response.data && this.createContentObject(response.data),
@@ -109,7 +109,7 @@ class OpenApiGenerator {
 
   createRequestBodyObject = (data: Field<Any>): OpenAPI.RequestBodyObject => withoutOptional({
     content: this.createContentObject(data),
-    required: isRequired(data)
+    required: isRequired(data),
   })
 
   createResponses = (spec: Route['response']) => {
@@ -127,17 +127,17 @@ class OpenApiGenerator {
   createOperationObject = (route: Route): OpenAPI.OperationObject => withoutOptional({
     parameters: [
       ...this.specToParams('query', route.request.queryParams?.objectSpec),
-      ...this.specToParams('path', route.request.pathParams.getObjectSpec())
+      ...this.specToParams('path', route.request.pathParams.getObjectSpec()),
     ],
     requestBody: route.request.data && this.createRequestBodyObject(route.request.data),
-    responses: this.createResponses(route.response)
+    responses: this.createResponses(route.response),
   })
 
   createPathString = (pathParams: typeof $): string =>
     pathParams.getSegments().map(it => it.field ? `{${it.key || ''}}` : it.key || '').join('')
 
   createPath = (route: Route): [string, OpenAPI.PathItemObject] => [this.createPathString(route.request.pathParams), {
-    [(route.request.method.constant as string).toLowerCase()]: this.createOperationObject(route)
+    [(route.request.method.constant as string).toLowerCase()]: this.createOperationObject(route),
   }]
 
 }

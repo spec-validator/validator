@@ -23,5 +23,5 @@ export {
   unionField,
   constantField,
   $,
-  wildcardObjectField
+  wildcardObjectField,
 }

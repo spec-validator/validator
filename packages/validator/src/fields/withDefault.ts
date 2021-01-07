@@ -19,5 +19,5 @@ export default field('@validator/fields.WithDefault', <T extends Any> (
       }
       return innerField.validate(value)
     },
-    serialize: (deserialized: T) => innerField.serialize(deserialized)
+    serialize: (deserialized: T) => innerField.serialize(deserialized),
   }))

@@ -23,6 +23,7 @@
     "quotes": ["error", "single"],
     "max-len": ["error", 120],
     "keyword-spacing": "error",
+    "comma-dangle": ["error", "always-multiline"],
     "func-style": ["error", "expression"],
     "arrow-body-style": ["error", "as-needed"],
     "semi": ["error", "never"],

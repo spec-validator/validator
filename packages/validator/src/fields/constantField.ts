@@ -16,5 +16,5 @@ export default field('@validator/fields.ConstantField', <Constant extends Primit
       }
       return constant
     },
-    serialize: () => constant
+    serialize: () => constant,
   }))

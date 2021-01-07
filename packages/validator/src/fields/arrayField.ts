@@ -19,5 +19,5 @@ export default field('@validator/fields.ArrayField', <T>(itemField: Field<T>): A
   serialize: (deserialized: T[]): Json =>
     deserialized.map(
       (it, index) => withErrorDecoration(index, () => itemField.serialize(it) as unknown as Json)
-    )
+    ),
 }))

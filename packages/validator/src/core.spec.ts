@@ -93,7 +93,7 @@ test('nested validate with Error', () => {
   }
   expect(error).toEqual({
     path: [ 'innerList', 0, 'fl' ],
-    inner: 'Not a number'
+    inner: 'Not a number',
   })
 })
 
@@ -109,11 +109,11 @@ test('validate with extra fields with Error', () => {
   let error: unknown
   try {
     validate({
-      fieldOne: stringField()
+      fieldOne: stringField(),
     }, {
       fieldOne: 'one',
       fieldTwo: 'two',
-      fieldThree: 'three'
+      fieldThree: 'three',
     })
   } catch (err) {
     error = err
@@ -130,11 +130,11 @@ test('validate with extra fields with Error', () => {
 test('validate with extra allowed fields', () => {
   expect(
     validate({
-      fieldOne: stringField()
+      fieldOne: stringField(),
     }, {
       fieldOne: 'one',
       fieldTwo: 'two',
-      fieldThree: 'three'
+      fieldThree: 'three',
     }, true)
   ).toEqual({fieldOne: 'one'})
 })

@@ -24,5 +24,5 @@ export default field('@validator/fields.WithDoc', <T extends Any, F extends Fiel
 ): WithDoc<T, F> => ({
     ...innerField,
     innerField,
-    doc
+    doc,
   }))

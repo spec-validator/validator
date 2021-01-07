@@ -59,7 +59,7 @@ export const $ = <
     ) => any
   ): FieldPair<FieldDeclaration<string, any[], Field<unknown>>> => [
     fieldDeclaration,
-    provideRepresentation as any
+    provideRepresentation as any,
   ]
 
 const withNoDuplicates = <T extends any[]>(items: T, by: (item: T[number]) => string): T => {

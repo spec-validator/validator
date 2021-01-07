@@ -45,7 +45,7 @@ export default field('@validator/fields.ChoiceField', <Choice extends Primitive>
           .join('|')
       ),
       serialize: (value: Choice) => value.toString(),
-      validate: (value: any): Choice => validate(fullChoiceMap.get(value))
+      validate: (value: any): Choice => validate(fullChoiceMap.get(value)),
     }
   }
 

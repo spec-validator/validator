@@ -32,5 +32,5 @@ export default field('@validator/fields.UnionField', <Variants extends Field<any
         }
       }
       throw 'Invalid variant - should have matched'
-    }
+    },
   }))

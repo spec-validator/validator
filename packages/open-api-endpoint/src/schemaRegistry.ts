@@ -17,19 +17,19 @@ const splitIntoOneOfs = (choices: readonly Primitive[]): OpenAPI.NonArraySchemaO
   if (numbers.length) {
     result.push({
       type: 'number',
-      enum: numbers
+      enum: numbers,
     })
   }
   if (booleans.length) {
     result.push({
       type: 'boolean',
-      enum: booleans
+      enum: booleans,
     })
   }
   if (strings.length) {
     result.push({
       type: 'string',
-      enum: strings
+      enum: strings,
     })
   }
   return result
@@ -43,7 +43,7 @@ const splitOfOneOrMany = (choices: readonly Primitive[]): OpenAPI.NonArraySchema
     return result[0]
   } else {
     return {
-      oneOf: result
+      oneOf: result,
     }
   }
 }
@@ -51,19 +51,19 @@ const splitOfOneOrMany = (choices: readonly Primitive[]): OpenAPI.NonArraySchema
 export const BASE_PAIRS = [
   $(arrayField, (field, requestSchema): OpenAPI.ArraySchemaObject => ({
     items: requestSchema(field.itemField),
-    type: 'array'
+    type: 'array',
   })),
   $(booleanField, (): OpenAPI.NonArraySchemaObject  => ({
     type: 'boolean',
   })),
   $(wildcardObjectField, (): OpenAPI.NonArraySchemaObject => ({
     type: 'object',
-    additionalProperties: true
+    additionalProperties: true,
   })),
   $(choiceField, (field): OpenAPI.NonArraySchemaObject => splitOfOneOrMany(field.choices)),
   $(constantField, (field): OpenAPI.NonArraySchemaObject => splitOfOneOrMany([field.constant])),
   $(numberField, (field): OpenAPI.NonArraySchemaObject => ({
-    type: field.params?.canBeFloat ? 'number' : 'integer'
+    type: field.params?.canBeFloat ? 'number' : 'integer',
   })),
   $(objectField, (field, requestSchema): OpenAPI.NonArraySchemaObject  => {
     const required = Object.entries(field.objectSpec).filter(
@@ -74,7 +74,7 @@ export const BASE_PAIRS = [
       additionalProperties: false,
       properties: Object.fromEntries(
         Object.entries(field.objectSpec).map(([key, value]) => [key, requestSchema(value)] )
-      )
+      ),
     }
     if (required.length) {
       result.required = required
@@ -82,22 +82,22 @@ export const BASE_PAIRS = [
     return result
   }),
   $(optional, (field, requestSchema): OpenAPI.SchemaObject  => ({
-    ...requestSchema(field.innerField)
+    ...requestSchema(field.innerField),
   })),
   $(stringField, (field): OpenAPI.NonArraySchemaObject => ({
     type: 'string',
-    pattern: field.regex.source
+    pattern: field.regex.source,
   })),
   $(unionField, (field, requestSchema): OpenAPI.SchemaObject => ({
-    oneOf: field.variants.map(requestSchema)
+    oneOf: field.variants.map(requestSchema),
   })),
   $(withDefault, (field, requestSchema): OpenAPI.SchemaObject => ({
     ...requestSchema(field.innerField),
-    default: field.defaultValue
+    default: field.defaultValue,
   })),
   $(withDoc, (field, requestSchema): OpenAPI.SchemaObject  => ({
     ...requestSchema(field.innerField),
-    description: field.doc
+    description: field.doc,
   })),
 ]
 

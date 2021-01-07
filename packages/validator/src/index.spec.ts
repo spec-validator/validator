@@ -4,7 +4,7 @@ import { expectType } from './TypeTestUtils.test'
 
 const sampleField = (): Field<'sample'> => ({
   validate: (): 'sample'  => 'sample',
-  serialize: (): Json  => 'sample'
+  serialize: (): Json  => 'sample',
 })
 
 test('imports', () => {
@@ -13,7 +13,7 @@ test('imports', () => {
   expect(serialize).toBeTruthy()
 
   const schema = {
-    key: sampleField()
+    key: sampleField(),
   }
 
   type Schema = TypeHint<typeof schema>

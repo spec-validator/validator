@@ -4,17 +4,17 @@ import createRegistry, { $, FieldPair } from './registry'
 const normalRegistryPairs: FieldPair[] = [
   $(stringField, (field) => ({
     regexp: field.regex?.source,
-    type: 'string'
+    type: 'string',
   })),
   $(numberField, (field) => ({
     canBeFloat: field.params?.canBeFloat || false,
-    type: 'number'
+    type: 'number',
   })),
   $(objectField, (field, requestRepresentation) => Object.fromEntries(
     Object.entries(field.objectSpec).map(
       ([key, subfield]) => [key, requestRepresentation(subfield)]
     )
-  ))
+  )),
 ]
 
 describe('createRegistry', () => {
@@ -24,8 +24,8 @@ describe('createRegistry', () => {
       title: stringField(),
       page: objectField({
         subtitle: stringField(),
-        pageCount: numberField()
-      })
+        pageCount: numberField(),
+      }),
     })
     expect(registry(schema)).toMatchSnapshot()
   })
@@ -38,7 +38,7 @@ describe('createRegistry', () => {
   it('throws an error if field type is unknown', () => {
     const registry = createRegistry(normalRegistryPairs)
     const schema = objectField({
-      flag: booleanField()
+      flag: booleanField(),
     })
     expect(() => registry(schema))
       .toThrow(`Could not find field of type '${booleanField.type}'`)
