@@ -15,5 +15,7 @@
   "references": [
     { "path": "../validator" },
     { "path": "../rest-api-server" }
-  ]
+  ],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
+  "include": ["src/**/*"]
 }
