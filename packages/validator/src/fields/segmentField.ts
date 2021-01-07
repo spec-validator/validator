@@ -47,7 +47,7 @@ class SegmentField<
     const segments: SegmentField<unknown>[] = []
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let cursor: SegmentField<unknown> | undefined = this
-    while(cursor) {
+    while (cursor) {
       segments.push(cursor)
       cursor = cursor.parent
     }
