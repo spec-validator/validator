@@ -105,7 +105,7 @@ const createRegistry = (
     withNoDuplicates(pairs, (pair) => pair[0].type).map(([key, value]) => ([key.type, value]))
   )
   const getRepresentation: GetRepresentation =
-    (it) => getValue(mapping, (field as unknown as OfType<string>).type)(it, getRepresentation)
+    (it) => getValue(mapping, (it as unknown as OfType<string>).type)(it, getRepresentation)
   return getRepresentation
 }
 
