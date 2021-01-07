@@ -1,16 +1,12 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "composite": true,
     "paths": {
       "@validator/validator/*": ["../validator/src/*"],
       "@validator/validator": ["../validator/src/index.ts"]
     }
   },
-  "references": [
-    { "path": "../validator" }
-  ],
   "include": ["src/**/*.ts"]
 }

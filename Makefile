@@ -1,4 +1,4 @@
-all: install test clean build
+all: install clean test build
 
 install:
 	yarn install
@@ -7,7 +7,7 @@ test:
 	yarn test
 
 compile:
-	yarn tsc --build
+	yarn tsc -p tsconfig.build.json --build
 
 %.postcompile:
 	cp packages/$*/package.json packages/$*/dist/

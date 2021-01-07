@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "./packages/tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "./packages",
     "outDir": "./dist",
@@ -12,10 +12,5 @@
       "@validator/open-api-endpoint/*": ["open-api-endpoint/src/*"],
       "@validator/open-api-endpoint": ["open-api-endpoint/src/index.ts"]
     }
-  },
-  "references": [
-    { "path": "./packages/validator/tsconfig.build.json" },
-    { "path": "./packages/rest-api-server/tsconfig.build.json" },
-    { "path": "./packages/open-api-endpoint/tsconfig.build.json" }
-  ]
+  }
 }

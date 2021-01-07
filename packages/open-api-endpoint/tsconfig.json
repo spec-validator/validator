@@ -1,10 +1,9 @@
 
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "composite": true,
     "paths": {
       "@validator/validator/*": ["../validator/src/*"],
       "@validator/validator": ["../validator/src/index.ts"],
@@ -12,9 +11,5 @@
       "@validator/rest-api-server": ["../rest-api-server/src/index.ts"]
     }
   },
-  "references": [
-    { "path": "../validator" },
-    { "path": "../rest-api-server" }
-  ],
   "include": ["src/**/*.ts"]
 }

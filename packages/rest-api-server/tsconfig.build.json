@@ -1,6 +1,9 @@
 
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+  },
   "references": [
     { "path": "../validator/tsconfig.build.json" },
   ],
