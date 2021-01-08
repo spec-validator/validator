@@ -77,7 +77,7 @@ const withNoDuplicates = <T extends any[]>(items: T, by: (item: T[number]) => st
 
 const getValue = <V> (mapping: Record<string, V>, rawTypeRef: any, type?: string): V => {
   if (!type) {
-    throw `Fields without 'type' are not supported: ${Object.keys(rawTypeRef)}`
+    throw `Fields without 'type' are not supported: ${rawTypeRef}`
   }
   const value = mapping[type]
   if (value === undefined) {
