@@ -14,6 +14,8 @@ export type ObjectSpec<DeserializedType> = {
   [P in keyof DeserializedType]: Field<DeserializedType[P]>
 };
 
+export type ArraySpec<DeserializedType> = [Field<DeserializedType>]
+
 export type WildcardObjectSpec = {
   [key: string]: Optional<Field<unknown>>
 };
@@ -51,8 +53,35 @@ export const withErrorDecoration = <R> (key: any, call: () => R): R => {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const isField = <DeserializedType extends Any>(obj: any): obj is Field<DeserializedType> =>
+export const isFieldSpec = <DeserializedType>(obj: any): obj is Field<DeserializedType> =>
   typeof obj.validate === 'function' && typeof obj.serialize === 'function'
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const isObjectSpec = <DeserializedType>(obj: any): obj is ObjectSpec<DeserializedType> => {
+  for (const key in Object.keys(obj)) {
+    if (typeof key !== 'string') {
+      return false
+    }
+    if (!isFieldSpec(obj[key])) {
+      return false
+    }
+  }
+  return true
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const isArraySpec = <DeserializedType>(obj: any): obj is ArraySpec<DeserializedType> => {
+  if (!Array.isArray(obj)) {
+    return false
+  }
+  if (obj.length !== 1) {
+    return false
+  }
+  if (!isFieldSpec(obj[0])) {
+    return false
+  }
+  return true
+}
 
 const mapSpec = <DeserializedType extends Any, TSpec extends SpecUnion<DeserializedType>, R> (
   validatorSpec: TSpec,
@@ -63,10 +92,8 @@ const mapSpec = <DeserializedType extends Any, TSpec extends SpecUnion<Deseriali
 ): any => {
   if (validatorSpec === undefined) {
     return undefined
-  } else if (isField<DeserializedType>(validatorSpec)) {
+  } else if (isFieldSpec<DeserializedType>(validatorSpec)) {
     return transform(validatorSpec, undefined)
-  } else if (Array.isArray(validatorSpec)) {
-    return (validatorSpec as any).map(transform)
   } else {
     return Object.fromEntries(
       Object.entries(validatorSpec as ObjectSpec<{ [property: string]: Any }>).map(
@@ -81,7 +108,7 @@ const ensureNoExtraFields = <DeserializedType extends Any, TSpec extends SpecUni
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   value: any
 ) => {
-  if (validatorSpec === undefined || isField<DeserializedType>(validatorSpec)|| Array.isArray(validatorSpec)) {
+  if (validatorSpec === undefined || isFieldSpec<DeserializedType>(validatorSpec)|| Array.isArray(validatorSpec)) {
     // OK
   } else {
     const extraKeys = new Set(Object.keys(value))

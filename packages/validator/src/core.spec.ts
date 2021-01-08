@@ -101,9 +101,6 @@ test('validate with undefined spec', () => {
   expect(validate(undefined, 'Some value')).toEqual(undefined)
 })
 
-test('validate with a tuple', () => {
-  expect(validate([numberField(), stringField()], [14, 'Val'])).toEqual([14, 'Val'])
-})
 
 test('validate with extra fields with Error', () => {
   let error: unknown

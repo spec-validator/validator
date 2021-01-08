@@ -1,5 +1,5 @@
 import { TypeHint } from '@validator/validator'
-import { Field, isField, ObjectSpec } from '@validator/validator/core'
+import { Field, isFieldSpec, ObjectSpec } from '@validator/validator/core'
 import { $, unionField } from '@validator/validator/fields'
 import { ConstantField } from '@validator/validator/fields/constantField'
 import { ObjectField } from '@validator/validator/fields/objectField'
@@ -55,4 +55,4 @@ export type Route<
 }
 
 export const isResponsesSpec = (spec: ResponsesSpec | ResponseSpec): spec is ResponsesSpec =>
-  isField(spec) && (spec as unknown as OfType<string>).type !== unionField.type
+  isFieldSpec(spec) && (spec as unknown as OfType<string>).type !== unionField.type
