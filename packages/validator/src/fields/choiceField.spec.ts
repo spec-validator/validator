@@ -22,10 +22,6 @@ describe('spec', () => {
     testValidateSpecError(field, 4, 'Invalid choice')
   })
 
-  it('serializes data properly', () => {
-    // pass
-  })
-
 })
 
 describe('segmentChain', () => {

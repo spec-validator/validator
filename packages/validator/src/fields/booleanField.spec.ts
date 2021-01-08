@@ -27,8 +27,8 @@ describe('field', () => {
 describe('segmentChain', () => {
 
   it('allows valid choices to get throw', () => {
-    ['1', 'true'].forEach(it => testValidateSegmentChainOK(field, it, true));
-    ['0', 'false'].forEach(it => testValidateSegmentChainOK(field, it, false))
+    ['1', 'true'].forEach(it => testValidateSegmentChainOK(field, it, true, 'true'));
+    ['0', 'false'].forEach(it => testValidateSegmentChainOK(field, it, false, 'false'))
   })
 
   it('prevents invalid choices from getting through', () => {

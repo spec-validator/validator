@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type Any = undefined | null | object | string | boolean | symbol | number | { [property: string]: Any }
+export type AnyNonNull = object | string | boolean | symbol | number | { [property: string]: Any }
+
+export type Any = undefined | null | AnyNonNull
 
 export type Optional<T> = T | undefined;
 

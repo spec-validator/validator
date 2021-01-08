@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Field, serialize, TypeHint, validate } from '../core'
+import { Field, serialize, SpecUnion, validate } from '../core'
 import $, { FieldWithStringInputSupport } from './segmentField'
 import { Any } from '../util-types'
 
-export const testValidateSpecOk = <T extends Any> (field: Field<T>, input: any, expected: T): void => {
+export const testValidateSpecOk = <T extends Any> (field: SpecUnion<T>, input: any, expected: T): void => {
   expect(validate(field, input)).toEqual(expected)
-}
+  expect(serialize(field, expected as any)).toEqual(input)
 
-export const testSerializeSpecOk = <T extends Any> (
-  field: Field<T>, input: TypeHint<Field<T>>, expected: any
-): void => {
-  expect(serialize(field, input)).toEqual(expected)
 }
 
 export const testValidateSpecError = <T extends Any> (field: Field<T>, input: any, expectedError: any) => {
@@ -26,15 +22,21 @@ export const testValidateSpecError = <T extends Any> (field: Field<T>, input: an
 export const testValidateSegmentChainOK = <T extends Any> (
   field: FieldWithStringInputSupport<T>,
   input: string,
-  expected: T
+  expected: T,
+  expectedSerialized?: string
 ): void => {
   const spec = $
     ._('/')
     ._('field', field)
     ._('/suffix')
 
-  const valid = spec.validate('/' + input + '/suffix')
-  expect((valid as any).field).toEqual(expected)
+  const value = '/' + input + '/suffix'
+
+  const valid = validate(spec, value)
+  expect(valid).toEqual({
+    field: expected,
+  })
+  expect(serialize(spec, { field: expected } as any)).toEqual('/' + (expectedSerialized || input) + '/suffix')
 }
 
 export const testValidateSegmentChainError = <T extends Any> (

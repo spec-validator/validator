@@ -1,7 +1,7 @@
 import { expectType } from '../TypeTestUtils.test'
 
 import { arrayField } from '.'
-import { TypeHint, serialize } from '../core'
+import { TypeHint } from '../core'
 import numberField from './numberField'
 
 import {
@@ -22,10 +22,6 @@ describe('validate', () => {
     testValidateSpecError(field, 11, 'Not an array')
   })
 
-})
-
-test('serialize', () => {
-  expect(serialize(field, [1])).toEqual([1])
 })
 
 test('types', () => {

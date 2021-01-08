@@ -1,30 +1,34 @@
 import optional from './optional'
 import numberField from './numberField'
-import { TypeHint, validate } from '../core'
+import { TypeHint } from '../core'
 import { expectType } from '../TypeTestUtils.test'
+import { testValidateSpecOk } from './TestUtils.test'
 
 const field = optional(numberField())
 
 describe('field', () => {
   it('should allow undefined value go through', () => {
-    const value = validate(field, undefined)
-    expect(value).toEqual(undefined)
+    testValidateSpecOk(field, undefined, undefined)
   })
 
   it('should allow undefined nested value go through', () => {
-    const value = validate({
+    testValidateSpecOk({
       inner: field,
-    }, {})
-    expect(value.inner).toEqual(undefined)
+    }, {
+      inner: undefined,
+    }, {
+      inner: undefined,
+    })
   })
 
   it('should allow defined nested value go through', () => {
-    const value = validate({
+    testValidateSpecOk({
       inner: field,
     }, {
       inner: 57,
+    }, {
+      inner: 57,
     })
-    expect(value.inner).toEqual(57)
   })
 })
 
