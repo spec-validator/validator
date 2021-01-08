@@ -28,11 +28,11 @@ export type RequestSpec<
 
 export type ResponseSpec<
   StatusCode extends number = number,
-  Data extends Any = Any,
+  Data extends any = Any,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
   readonly statusCode: ConstantField<StatusCode>,
-  readonly data?: Field<Data>,
+  readonly data?: SpecUnion<Data>,
   readonly headers?: SpecUnion<Headers>,
 }
 

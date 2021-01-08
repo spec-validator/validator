@@ -2,7 +2,10 @@ import { Json } from './Json'
 import { Field, TypeHint, SpecUnion, isArraySpec, isFieldSpec, isObjectSpec } from './core'
 import { undefinedField, arrayField, objectField } from './fields'
 
-const getFieldForSpec = <DeserializedType> (spec: SpecUnion<DeserializedType>): Field<DeserializedType> => {
+const getFieldForSpec = <DeserializedType> (
+  spec: SpecUnion<DeserializedType>,
+  allowExtraFields = false
+): Field<DeserializedType> => {
   if (spec === undefined) {
     return undefinedField()
   } else if (isFieldSpec(spec)) {
@@ -12,7 +15,7 @@ const getFieldForSpec = <DeserializedType> (spec: SpecUnion<DeserializedType>): 
   } else if (isObjectSpec(spec)) {
     return objectField(Object.fromEntries(
       Object.entries(spec).map(([key, value]) => [key, getFieldForSpec(value)])
-    )) as unknown as Field<DeserializedType>
+    ), allowExtraFields) as unknown as Field<DeserializedType>
   } else {
     return undefinedField()
   }
@@ -24,7 +27,8 @@ export const validate = <TSpec extends SpecUnion<unknown>> (
   spec: TSpec,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   value: any,
-): TypeHint<TSpec> => getFieldForSpec(spec).validate(value) as unknown as TypeHint<TSpec>
+  allowExtraFields = false
+): TypeHint<TSpec> => getFieldForSpec(spec, allowExtraFields).validate(value) as unknown as TypeHint<TSpec>
 
 export const serialize = <TSpec extends SpecUnion<unknown>> (
   spec: TSpec,

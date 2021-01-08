@@ -52,7 +52,12 @@ const server = createServer({routes: [
   ),
   _.GET($._('/items')).spec(
     {
-      response: ofItems,
+      response: {
+        data: [objectField({
+          title: stringField(),
+          description: stringField(),
+        })],
+      },
     },
   ).handler(
     async () => ({
