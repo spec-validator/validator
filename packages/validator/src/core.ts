@@ -11,11 +11,11 @@ export interface Field<DeserializedType> {
 }
 
 export type ValidatorSpec<DeserializedType> = {
-  [P in keyof DeserializedType]: SpecUnion<DeserializedType[P]>
+  [P in keyof DeserializedType]: Field<DeserializedType[P]>
 };
 
 export type WildcardSpec = {
-  [key: string]: Optional<SpecUnion<unknown>>
+  [key: string]: Optional<Field<unknown>>
 };
 
 export type SpecUnion<DeserializedType> =
