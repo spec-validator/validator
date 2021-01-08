@@ -6,7 +6,6 @@ import {
 
 
 import { createServer, _ } from './server'
-import { TypeHint } from '@validator/validator'
 
 const itemSpec = {
   title: stringField(),
@@ -20,17 +19,6 @@ const ofItems = {
 const ofItem = {
   data: itemSpec,
 }
-
-const one = {
-  data: [objectField({
-    title: stringField(),
-    description: stringField(),
-  })],
-}
-
-type One = TypeHint<typeof one>
-
-type Two = TypeHint<typeof ofItems>
 
 // TODO: disablable error on extra keys for object field
 const server = createServer({routes: [
@@ -64,12 +52,7 @@ const server = createServer({routes: [
   ),
   _.GET($._('/items')).spec(
     {
-      response: {
-        data: [objectField({
-          title: stringField(),
-          description: stringField(),
-        })],
-      },
+      response: ofItems,
     },
   ).handler(
     async () => ({

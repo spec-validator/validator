@@ -1,5 +1,5 @@
 import { Json } from './Json'
-import { Any, Optional } from './util-types'
+import { Any } from './util-types'
 
 export interface Field<DeserializedType> {
   validate(value: any): DeserializedType;
@@ -10,14 +10,10 @@ export type ObjectSpec<DeserializedType extends Record<string, Any> = Record<str
   [P in keyof DeserializedType]: SpecUnion<DeserializedType[P]>
 }
 
-export type WildcardObjectSpec = {
-  [key: string]: Optional<SpecUnion<unknown>>
-};
-
-export type ArraySpec<DeserializedType extends Any[] = Any[]> = Field<DeserializedType[number]>[]
+export type ArraySpec<DeserializedType extends Any[] = Any[]> = SpecUnion<DeserializedType[number]>[]
 
 export type SpecUnion<DeserializedType> =
-  WildcardObjectSpec | ObjectSpec | ArraySpec | Field<DeserializedType> | undefined;
+   ObjectSpec | ArraySpec | Field<DeserializedType> | undefined;
 
 export type TypeHint<Spec extends SpecUnion<unknown>> =
   Spec extends ArraySpec ?
