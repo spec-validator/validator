@@ -134,7 +134,7 @@ class OpenApiGenerator {
   })
 
   createPathString = (pathParams: typeof $): string =>
-    pathParams.getSegments().map(it => it.field ? `{${it.key || ''}}` : it.key || '').join('')
+    pathParams.getSegments().map(it => it.field ? `{${it.key}}` : it.key || '').join('')
 
   createPath = (route: Route): [string, OpenAPI.PathItemObject] => [this.createPathString(route.request.pathParams), {
     [(route.request.method.constant as string).toLowerCase()]: this.createOperationObject(route),
