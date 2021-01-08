@@ -39,6 +39,17 @@ test('fullRoute', () => {
           }),
         },
         response: {
+          headers: objectField({
+            key: withDoc(numberField(), {
+              description: 'key header',
+              examples: {
+                sampleKey: {
+                  value: 13 as number,
+                  summary: 'Sample value',
+                },
+              },
+            }),
+          }),
           data: objectField({
             items: arrayField(numberField()),
           }),
@@ -47,6 +58,9 @@ test('fullRoute', () => {
     ).handler(
       async () => ({
         statusCode: 200,
+        headers: {
+          key: 13,
+        },
         data: {
           items: [1, 2, 3],
         },
