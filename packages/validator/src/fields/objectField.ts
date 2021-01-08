@@ -1,4 +1,4 @@
-import { Field, TypeHint } from '../core'
+import { Field, TypeHint, withErrorDecoration } from '../core'
 import { field } from '../registry'
 import { Json } from '../Json'
 import { Any } from '../util-types'
@@ -25,12 +25,12 @@ export default field('@validator/fields.ObjectField', <
         throw 'Not an object'
       }
       return Object.fromEntries(Object.entries(objectSpec).map(([key, valueSpec]) => [
-        key, valueSpec.validate(value[key]),
+        key, withErrorDecoration(key, () => valueSpec.validate(value[key])),
       ])) as TypeHint<Spec>
     },
     serialize: (deserialized: TypeHint<Spec>): Json =>
     Object.fromEntries(Object.entries(objectSpec).map(([key, valueSpec]) => [
-      key, valueSpec.serialize(deserialized[key]),
+      key, withErrorDecoration(key, () => valueSpec.serialize(deserialized[key])),
     ])) as Json,
   }))
 

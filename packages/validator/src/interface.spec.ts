@@ -21,6 +21,10 @@ const sampleField2: Field<false> = {
   serialize: (it: false) => it,
 }
 
+test('undefined', () => {
+  testValidateSpecOk(undefined, undefined)
+})
+
 test('field', () => {
   testValidateSpecOk(sampleField, true)
   testValidateSpecError(sampleField, false, 'Boom!')
@@ -63,20 +67,22 @@ describe('object', () => {
     testValidateSpecError(spec, {
       key: false,
       key2: false,
-    }, 'Boom!')
+    }, {'inner': 'Boom!', 'path': ['key']})
   })
 })
 
 describe('nested object', () => {
-  test('valid input', () => {
-    testValidateSpecOk({
-      lvl1: {
-        key: sampleField2,
-        lvl2: {
-          value: sampleField,
-        },
+  const spec = {
+    lvl1: {
+      key: sampleField2,
+      lvl2: {
+        value: sampleField,
       },
-    }, {
+    },
+  }
+
+  test('valid input', () => {
+    testValidateSpecOk(spec, {
       lvl1: {
         key: false,
         lvl2: {
@@ -86,21 +92,34 @@ describe('nested object', () => {
     })
   })
 
+  test('invalid item type', () => {
+    testValidateSpecError(spec, {
+      lvl1: {
+        key: false,
+        lvl2: {
+          value: false,
+        },
+      },
+    }, {'inner': 'Boom!', 'path': ['lvl1', 'lvl2', 'value']})
+  })
+
 })
 
 describe('deeply nested object', () => {
-  test('valid input', () => {
-    testValidateSpecOk({
-      lvl1: {
-        key: sampleField,
-        lvl2: {
-          key2: sampleField2,
-          lvl3: {
-            value: sampleField,
-          },
+  const spec = {
+    lvl1: {
+      key: sampleField,
+      lvl2: {
+        key2: sampleField2,
+        lvl3: {
+          value: sampleField,
         },
       },
-    }, {
+    },
+  }
+
+  test('valid input', () => {
+    testValidateSpecOk(spec, {
       lvl1: {
         key: true,
         lvl2: {
@@ -112,34 +131,50 @@ describe('deeply nested object', () => {
       },
     })
   })
+
+  test('invalid item type', () => {
+    testValidateSpecError(spec, {
+      lvl1: {
+        key: true,
+        lvl2: {
+          key2: false,
+          lvl3: {
+            value: false,
+          },
+        },
+      },
+    }, {'inner': 'Boom!', 'path': ['lvl1', 'lvl2', 'lvl3', 'value']})
+  })
+
+  test('invalid item type', () => {
+    testValidateSpecError(spec, {
+      lvl1: {
+        key: true,
+        lvl2: {
+          key2: false,
+          lvl3: {
+            value: false,
+          },
+        },
+      },
+    }, {'inner': 'Boom!', 'path': ['lvl1', 'lvl2', 'lvl3', 'value']})
+  })
+
+  test('noested not an object', () => {
+    testValidateSpecError(spec, {
+      lvl1: {
+        key: true,
+        lvl2: {
+          key2: false,
+          lvl3: 'boo',
+        },
+      },
+    }, {'inner': 'Not an object', 'path': ['lvl1', 'lvl2', 'lvl3']})
+  })
 })
 
 
 /*
-test('nested validate with Error', () => {
-  let error: unknown
-  try {
-    validate(schema, {
-      innerSchema: {
-        str: 'string',
-        num: 12,
-      },
-      innerList: [{
-        fl: 'Some random payload',
-      }],
-    })
-  } catch (err) {
-    error = err
-  }
-  expect(error).toEqual({
-    path: [ 'innerList', 0, 'fl' ],
-    inner: 'Not a number',
-  })
-})
-
-test('validate with undefined spec', () => {
-  expect(validate(undefined, 'Some value')).toEqual(undefined)
-})
 
 
 test('validate with extra fields with Error', () => {
