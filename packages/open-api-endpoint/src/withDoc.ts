@@ -22,7 +22,8 @@ export default field('@validator/fields.WithDoc', <T extends Any, F extends Fiel
   innerField: F,
   doc: Doc<T>
 ): WithDoc<T, F> => ({
-    ...innerField,
     innerField,
     doc,
+    validate: (it) => innerField.validate(it),
+    serialize: (it) => innerField.serialize(it),
   }))

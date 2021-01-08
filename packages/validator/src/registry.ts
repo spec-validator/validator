@@ -75,9 +75,9 @@ const withNoDuplicates = <T extends any[]>(items: T, by: (item: T[number]) => st
   return items
 }
 
-const getValue = <V> (mapping: Record<string, V>, type?: string): V => {
+const getValue = <V> (mapping: Record<string, V>, rawTypeRef: any, type?: string): V => {
   if (!type) {
-    throw 'Fields without \'type\' are not supported'
+    throw `Fields without 'type' are not supported: ${Object.keys(rawTypeRef)}`
   }
   const value = mapping[type]
   if (value === undefined) {
@@ -105,7 +105,7 @@ const createRegistry = (
     withNoDuplicates(pairs, (pair) => pair[0].type).map(([key, value]) => ([key.type, value]))
   )
   const getRepresentation: GetRepresentation =
-    (it) => getValue(mapping, (it as unknown as OfType<string>).type)(it, getRepresentation)
+    (it) => getValue(mapping, it, (it as unknown as OfType<string>).type)(it, getRepresentation)
   return getRepresentation
 }
 
