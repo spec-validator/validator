@@ -14,15 +14,46 @@ const field = objectField({
 
 describe('field', () => {
 
+  /*
+
+
+test('validate with extra fields with Error', () => {
+  let error: unknown
+  try {
+    validate({
+      fieldOne: stringField(),
+    }, {
+      fieldOne: 'one',
+      fieldTwo: 'two',
+      fieldThree: 'three',
+    })
+  } catch (err) {
+    error = err
+  }
+  expect(error).toEqual({
+    'extraKeys': [
+      'fieldTwo',
+      'fieldThree',
+    ],
+  })
+
+})
+
+test('validate with extra allowed fields', () => {
+  expect(
+    validate({
+      fieldOne: stringField(),
+    }, {
+      fieldOne: 'one',
+      fieldTwo: 'two',
+      fieldThree: 'three',
+    }, true)
+  ).toEqual({fieldOne: 'one'})
+})
+*/
+
   it('allows valid choices to get throw', () => {
     testValidateSpecOk(field, {
-      field: {
-        num: 42,
-        subField: {
-          subSubField: 11,
-        },
-      },
-    }, {
       field: {
         num: 42,
         subField: {

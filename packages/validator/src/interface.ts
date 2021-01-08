@@ -1,40 +1,7 @@
 import { Json } from './Json'
-import { Field, TypeHint, ObjectSpec, ArraySpec, SpecUnion } from './core'
+import { Field, TypeHint, SpecUnion, isArraySpec, isFieldSpec, isObjectSpec } from './core'
 import { undefinedField, arrayField, objectField } from './fields'
 import { Any } from './util-types'
-
-const isFieldSpec = <DeserializedType>(obj: any): obj is Field<DeserializedType> =>
-  obj && typeof obj.validate === 'function' && typeof obj.serialize === 'function'
-
-const isObjectSpec = (obj: any): obj is ObjectSpec => {
-  const keys = Object.keys(obj)
-  for (const i in keys) {
-    const key = keys[i]
-    if (typeof key !== 'string') {
-      return false
-    }
-    if (!isValidChild(obj[key])) {
-      return false
-    }
-  }
-  return true
-}
-
-const isArraySpec = (obj: any): obj is ArraySpec => {
-  if (!Array.isArray(obj)) {
-    return false
-  }
-  if (obj.length !== 1) {
-    return false
-  }
-  if (!isValidChild(obj[0])) {
-    return false
-  }
-  return true
-}
-
-const isValidChild = (obj: any) =>
-  isFieldSpec(obj) || isArraySpec(obj) || isObjectSpec(obj)
 
 // eslint-disable-next-line max-statements
 const getFieldForSpec = <DeserializedType> (spec: SpecUnion<DeserializedType>): Field<DeserializedType> => {
