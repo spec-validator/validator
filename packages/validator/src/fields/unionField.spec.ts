@@ -1,5 +1,5 @@
 import unionField from './unionField'
-import { TypeHint } from '../core'
+import { serialize, TypeHint } from '../core'
 import { expectType } from '../TypeTestUtils.test'
 import { objectField, booleanField , choiceField, stringField } from '.'
 import { testValidateSpecError, testValidateSpecOk } from './TestUtils.test'
@@ -22,6 +22,7 @@ test('field', () => {
     innerField: 'foo',
   })
   testValidateSpecError(field, undefined, 'Invalid variant')
+  expect(() => serialize(field, [11] as any)).toThrowError('Invalid variant - should have matched')
 })
 
 test('types', () => {

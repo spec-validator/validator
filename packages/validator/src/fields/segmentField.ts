@@ -55,9 +55,8 @@ class SegmentField<
     return segments
   }
 
-  private getFieldSegments(): SegmentField<unknown>[] {
-    return this.getSegments().filter(segment => segment.field)
-  }
+  private getFieldSegments = (): SegmentField<unknown>[] =>
+    this.getSegments().filter(segment => segment.field)
 
   private getRegex(): string {
     if (!this.regex) {
@@ -104,9 +103,7 @@ class SegmentField<
     return result.join('')
   }
 
-  toString(): string {
-    return this.getRegex()
-  }
+  toString = (): string => this.getRegex()
 }
 
 export default new SegmentField<unknown>()

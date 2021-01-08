@@ -14,6 +14,14 @@ describe('field', () => {
     testValidateSpecOk($._('/items'), '/items', {})
   })
 
+  it('toString', () => {
+    expect($
+      ._('/')
+      ._('username', stringField())
+      .toString()
+    ).toEqual('^/(?<username>.*)$')
+  })
+
   it('validates the input correctly', () => {
     const segmentSpec = $
       ._('/')
