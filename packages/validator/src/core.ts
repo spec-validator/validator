@@ -17,7 +17,7 @@ export type WildcardObjectSpec = {
 export type ArraySpec<DeserializedType extends Any[] = Any[]> = SpecUnion<DeserializedType[number]>[]
 
 export type SpecUnion<DeserializedType> =
-   ObjectSpec | ArraySpec | Field<DeserializedType> | undefined;
+  WildcardObjectSpec | ObjectSpec | ArraySpec | Field<DeserializedType> | undefined;
 
 export type TypeHint<Spec extends SpecUnion<unknown>> =
   Spec extends WildcardObjectSpec ?
