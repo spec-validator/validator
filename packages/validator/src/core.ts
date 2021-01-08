@@ -51,8 +51,8 @@ export const withErrorDecoration = <R> (key: any, call: () => R): R => {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const isField = <DeserializedType extends Any>(object: any): object is Field<DeserializedType> =>
-  'validate' in object && 'serialize' in object
+export const isField = <DeserializedType extends Any>(obj: any): obj is Field<DeserializedType> =>
+  typeof obj.validate === 'function' && typeof obj.serialize === 'function'
 
 const mapSpec = <DeserializedType extends Any, TSpec extends SpecUnion<DeserializedType>, R> (
   validatorSpec: TSpec,
