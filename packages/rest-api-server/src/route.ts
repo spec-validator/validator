@@ -28,7 +28,7 @@ export type RequestSpec<
 
 export type ResponseSpec<
   StatusCode extends number = number,
-  Data extends any = Any,
+  Data extends Any = Any,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
   readonly statusCode: ConstantField<StatusCode>,
