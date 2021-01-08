@@ -99,7 +99,7 @@ class OpenApiGenerator {
   ))
 
   createResponseObject = (response: ResponseSpec): OpenAPI.ResponseObject => withoutOptional({
-    headers: response.headers && Object.fromEntries(Object.entries(response.headers).map(([name, value]) => [
+    headers: response.headers && Object.fromEntries(Object.entries(response.headers.objectSpec).map(([name, value]) => [
       name,
       this.createParameterBaseObject(value),
     ])),

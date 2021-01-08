@@ -38,14 +38,9 @@ const splitOfOneOrMany = (choices: readonly Primitive[]): OpenAPI.NonArraySchema
   }
 }
 
-const log = <T>(it: T, msg?: any): T => {
-  console.log(it, msg)
-  return it
-}
-
 export const BASE_PAIRS = [
   $(arrayField, (field, requestSchema): OpenAPI.ArraySchemaObject => ({
-    items: requestSchema(log(field.itemField, 'AAA')),
+    items: requestSchema(field.itemField),
     type: 'array',
   })),
   $(booleanField, (): OpenAPI.NonArraySchemaObject  => ({
@@ -68,7 +63,7 @@ export const BASE_PAIRS = [
       type: 'object',
       additionalProperties: false,
       properties: Object.fromEntries(
-        Object.entries(field.objectSpec).map(([key, value]) => [key, requestSchema(log(value, 'VAL'))] )
+        Object.entries(field.objectSpec).map(([key, value]) => [key, requestSchema(value)] )
       ),
     }
     if (required.length) {
@@ -91,7 +86,7 @@ export const BASE_PAIRS = [
     default: field.defaultValue,
   })),
   $(withDoc, (field, requestSchema): OpenAPI.SchemaObject => ({
-    ...requestSchema(log(field.innerField, 'withDoc')),
+    ...requestSchema(field.innerField),
     description: field.doc,
   })),
 ]

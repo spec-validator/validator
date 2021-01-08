@@ -68,6 +68,23 @@ Object {
               },
             },
             "description": "",
+            "headers": Object {
+              "key": Object {
+                "required": true,
+                "schema": Object {
+                  "description": Object {
+                    "description": "key header",
+                    "examples": Object {
+                      "sampleKey": Object {
+                        "summary": "Sample value",
+                        "value": 13,
+                      },
+                    },
+                  },
+                  "type": "integer",
+                },
+              },
+            },
           },
         },
       },
