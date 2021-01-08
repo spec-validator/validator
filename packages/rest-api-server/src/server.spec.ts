@@ -1,19 +1,19 @@
 import request from 'supertest'
 
 import {
-  $, arrayField, constantField, numberField, objectField, optional, stringField,
+  $, constantField, numberField, objectField, optional, stringField,
 } from '@validator/validator/fields'
 
 
 import { createServer, _ } from './server'
 
-const itemSpec = objectField({
+const itemSpec = {
   title: stringField(),
   description: stringField(),
-})
+}
 
 const ofItems = {
-  data: arrayField(itemSpec),
+  data: [itemSpec],
 }
 
 const ofItem = {

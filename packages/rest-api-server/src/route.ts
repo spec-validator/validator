@@ -1,8 +1,7 @@
 import { TypeHint } from '@validator/validator'
-import { Field, isFieldSpec, ObjectSpec } from '@validator/validator/core'
+import { Field, isFieldSpec, SpecUnion } from '@validator/validator/core'
 import { $, unionField } from '@validator/validator/fields'
 import { ConstantField } from '@validator/validator/fields/constantField'
-import { ObjectField } from '@validator/validator/fields/objectField'
 import { UnionField } from '@validator/validator/fields/unionField'
 import { OfType } from '@validator/validator/registry'
 import { Any, Promisable, WithoutOptional } from '@validator/validator/util-types'
@@ -22,9 +21,9 @@ export type RequestSpec<
 > = {
   readonly method: ConstantField<Method>,
   readonly pathParams: typeof $ & Field<PathParams>,
-  readonly data?: Field<Data>,
-  readonly headers?: ObjectField<ObjectSpec<Headers>>,
-  readonly queryParams?: ObjectField<ObjectSpec<QueryParams>>
+  readonly data?: SpecUnion<Data>,
+  readonly headers?: SpecUnion<Headers>,
+  readonly queryParams?: SpecUnion<QueryParams>
 }
 
 export type ResponseSpec<
@@ -34,10 +33,10 @@ export type ResponseSpec<
 > = {
   readonly statusCode: ConstantField<StatusCode>,
   readonly data?: Field<Data>,
-  readonly headers?: ObjectField<ObjectSpec<Headers>>,
+  readonly headers?: SpecUnion<Headers>,
 }
 
-type ResponseField<Spec extends ResponseSpec=ResponseSpec> = ObjectField<WithoutOptional<Spec>>
+type ResponseField<Spec extends ResponseSpec=ResponseSpec> = WithoutOptional<Spec>
 
 // TODO: how to extract schema from
 type ResponsesSpec<ResponseVariants extends ResponseField[] = ResponseField[]> =
