@@ -17,14 +17,14 @@ class SegmentField<
   private parent?: SegmentField<unknown>
   private regex?: string
 
-  readonly key?: string;
+  readonly key: string;
   readonly field?: FieldWithRegExp<Any>
 
   // Here we actually do want to have a constructor parameter as 'any' since it is not going
   // to be used outside of this file
   constructor(parent?: SegmentField<unknown>, key?: string, field?: FieldWithStringInputSupport<any>) {
     this.parent = parent
-    this.key = key
+    this.key = key || ''
     this.field = field?.getFieldWithRegExp()
   }
 
@@ -55,8 +55,9 @@ class SegmentField<
     return segments
   }
 
-  private getFieldSegments = (): SegmentField<unknown>[] =>
-    this.getSegments().filter(segment => segment.field)
+  private getFieldSegments(): SegmentField<unknown>[] {
+    return this.getSegments().filter(segment => segment.field)
+  }
 
   private getRegex(): string {
     if (!this.regex) {
@@ -87,7 +88,7 @@ class SegmentField<
     }
     const matches = match.groups || {}
     const segments = this.getFieldSegments()
-    const spec = Object.fromEntries(segments.map(segment => [segment.key, segment.field]))
+    const spec = Object.fromEntries(segments.map(segment => [segment.key, segment.field])) as any
     return validate(spec, matches)
   }
 
@@ -103,7 +104,9 @@ class SegmentField<
     return result.join('')
   }
 
-  toString = (): string => this.getRegex()
+  toString(): string {
+    return this.getRegex()
+  }
 }
 
 export default new SegmentField<unknown>()
