@@ -14,7 +14,7 @@ export const testValidateSegmentChainOK = <T extends Any> (
     ._('field', field)
     ._('/suffix')
 
-  type FF = typeof spec
+  type ff = typeof spec
 
   const value = '/' + input + '/suffix'
 
