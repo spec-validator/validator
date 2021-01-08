@@ -1,24 +1,42 @@
 import { numberField, objectField } from '.'
-import { TypeHint, validate } from '../core'
+import { testValidateSpecError, testValidateSpecOk } from './TestUtils.test'
 
-test('placeholder', () => {
-  const spec = objectField({
-    field: objectField({
-      num: numberField(),
-      subField: objectField({
-        subSubField: numberField(),
-      }),
+const field = objectField({
+  field: objectField({
+    num: numberField(),
+    subField: objectField({
+      subSubField: numberField(),
     }),
+  }),
+})
+
+describe('field', () => {
+
+  it('allows valid choices to get throw', () => {
+    testValidateSpecOk(field, {
+      field: {
+        num: 42,
+        subField: {
+          subSubField: 11,
+        },
+      },
+    }, {
+      field: {
+        num: 42,
+        subField: {
+          subSubField: 11,
+        },
+      },
+    })
   })
 
-  type Spec = TypeHint<typeof spec>
-  const valid: Spec = validate(spec, {
-    field: {
-      num: 42,
-      subField: {
-        subSubField: 11,
-      },
-    },
+  it('prevents non object go through', () => {
+    testValidateSpecError(field, 'foo', 'Not an object')
   })
-  expect(valid.field.subField.subSubField).toEqual(11)
+
+  it('prevents null (it is also an object) go through', () => {
+    testValidateSpecError(field, null, 'Not an object')
+  })
+
 })
+
