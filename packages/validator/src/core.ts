@@ -1,33 +1,29 @@
 import { Json } from './Json'
-import { Any, Optional } from './util-types'
+import { Any } from './util-types'
 
 export interface Field<DeserializedType> {
   validate(value: any): DeserializedType;
   serialize(deserialized: DeserializedType): Json
 }
 
-export type ObjectSpec<DeserializedType> = {
-  [P in keyof DeserializedType]: Field<DeserializedType[P]>
-};
+export type ObjectSpec<DeserializedType extends Record<string, Any> = Record<string, Any>> = {
+  [P in keyof DeserializedType]: SpecUnion<DeserializedType[P]>
+}
 
-export type ArraySpec<DeserializedType> = [Field<DeserializedType>]
-
-export type WildcardObjectSpec = {
-  [key: string]: Optional<Field<unknown>>
-};
+export type ArraySpec<DeserializedType extends Any[] = Any[]> = Field<DeserializedType[number]>[]
 
 export type SpecUnion<DeserializedType> =
-  WildcardObjectSpec | ObjectSpec<DeserializedType> | Field<DeserializedType> | undefined;
+  ObjectSpec | ArraySpec | Field<DeserializedType> | undefined;
 
-export type TypeHint<Spec extends SpecUnion<Any> | undefined> =
-  Spec extends WildcardObjectSpec ?
-    { [P in keyof Spec]: TypeHint<Spec[P]>; }
-  : Spec extends ObjectSpec<Record<string, Any>> ?
+export type TypeHint<Spec extends SpecUnion<Any>> =
+  Spec extends ArraySpec ?
+    TypeHint<Spec[0]>[]
+  : Spec extends ObjectSpec ?
     { [P in keyof Spec]: TypeHint<Spec[P]>; }
   : Spec extends Field<Any> ?
     ReturnType<Spec['validate']>
   :
-    undefined;
+    undefined
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const withErrorDecoration = <R> (key: any, call: () => R): R => {

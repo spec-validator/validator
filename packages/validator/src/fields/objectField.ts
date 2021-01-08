@@ -1,22 +1,21 @@
-import {
-  Field,
-  ObjectSpec,
-  validate,
-  serialize,
-  TypeHint,
-} from '../core'
+import { Field, TypeHint } from '../core'
 import { field } from '../registry'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 
+export type ObjectFields<DeserializedType extends Record<string, Any> = Record<string, Any>> = {
+  [P in keyof DeserializedType]: Field<DeserializedType[P]>
+}
+
+
 export interface ObjectField<
-  Spec extends ObjectSpec<Record<string, Any>> = ObjectSpec<Record<string, Any>>
+  Spec extends ObjectFields = ObjectFields
 > extends Field<TypeHint<Spec>> {
   readonly objectSpec: Spec
 }
 
 export default field('@validator/fields.ObjectField', <
-  Spec extends ObjectSpec<Record<string, Any>> = ObjectSpec<Record<string, Any>>
+  Spec extends ObjectFields = ObjectFields
 > (
     objectSpec: Spec
   ): ObjectField<Spec> => ({

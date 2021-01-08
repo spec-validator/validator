@@ -1,19 +1,44 @@
-import { validate, serialize } from './interface'
-import { stringField } from './fields'
+import { booleanField, numberField, optional, stringField, withDefault } from './fields'
+import { validate } from './interface'
 
 const schema = {
-  innerSchema: objectField({
+  innerSchema: {
     str: stringField(),
     num: withDefault(numberField(), 42),
-  }),
-  innerList: arrayField(objectField({
+  },
+  innerList: [{
     bool: optional(booleanField()),
-    fl: numberField({
-      canBeFloat: false,
-    }),
-  })),
+    fl: numberField({ canBeFloat: false }),
+  }],
 }
 
+describe('validate', () => {
+
+  test('field', () => {
+    expect(validate(stringField(), 'foo')).toEqual('foo')
+  })
+
+  test('array', () => {
+    expect(validate([stringField()], ['foo'])).toEqual(['foo'])
+    expect(validate([numberField()], [1, 2, 3])).toEqual([1, 2, 3])
+  })
+
+  test('object', () => {
+    expect(validate({
+      key: stringField(),
+      key2: numberField(),
+    }, {
+      key: 'string',
+      key2: 'number',
+    })).toEqual({
+      key: 'string',
+      key2: 'number',
+    })
+  })
+
+})
+
+/*
 test('nested serialize', () => {
   expect(serialize(schema, {
     innerSchema: {
@@ -119,3 +144,4 @@ test('validate with extra allowed fields', () => {
     }, true)
   ).toEqual({fieldOne: 'one'})
 })
+*/

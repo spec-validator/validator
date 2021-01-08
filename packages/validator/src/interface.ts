@@ -5,11 +5,14 @@ import { Any } from './util-types'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const isFieldSpec = <DeserializedType>(obj: any): obj is Field<DeserializedType> =>
-  typeof obj.validate === 'function' && typeof obj.serialize === 'function'
+  obj && typeof obj.validate === 'function' && typeof obj.serialize === 'function'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const isObjectSpec = <DeserializedType>(obj: any): obj is ObjectSpec<DeserializedType> => {
-  for (const key in Object.keys(obj)) {
+export const isObjectSpec = (obj: any): obj is ObjectSpec => {
+  console.log(obj)
+  const keys = Object.keys(obj)
+  for (const i in keys) {
+    const key = keys[i]
     if (typeof key !== 'string') {
       return false
     }
@@ -21,7 +24,7 @@ export const isObjectSpec = <DeserializedType>(obj: any): obj is ObjectSpec<Dese
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const isArraySpec = <DeserializedType>(obj: any): obj is ArraySpec<DeserializedType> => {
+export const isArraySpec = (obj: any): obj is ArraySpec => {
   if (!Array.isArray(obj)) {
     return false
   }
@@ -34,15 +37,19 @@ export const isArraySpec = <DeserializedType>(obj: any): obj is ArraySpec<Deseri
   return true
 }
 
-export const getFieldForSpec = <DeserializedType> (spec: SpecUnion<DeserializedType>): Field<DeserializedType> => {
+const getFieldForSpec = <DeserializedType> (spec: SpecUnion<DeserializedType>): Field<DeserializedType> => {
   if (spec === undefined) {
     return undefinedField()
   } else if (isFieldSpec<DeserializedType>(spec)) {
     return spec
-  } else if (isArraySpec<DeserializedType>(spec)) {
-    return arrayField<DeserializedType[number]>(getFieldForSpec(spec[0]))
-  } else if (isObjectSpec<DeserializedType>(spec)) {
-    return objectField<DeserializedType>(getFieldForSpec(spec))
+  } else if (isArraySpec(spec)) {
+    return arrayField(getFieldForSpec(spec[0])) as unknown as Field<DeserializedType>
+  } else if (isObjectSpec(spec)) {
+    return objectField(Object.fromEntries(
+      Object.entries(spec).map(([key, value]) => [key, getFieldForSpec(value)])
+    )) as unknown as Field<DeserializedType>
+  } else {
+    return undefinedField()
   }
 }
 
@@ -52,7 +59,7 @@ export const validate = <TSpec extends SpecUnion<Any>> (
   spec: TSpec,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   value: any,
-): TypeHint<TSpec> => getFieldForSpec(spec).validate(value)
+): TypeHint<TSpec> => getFieldForSpec(spec).validate(value) as unknown as TypeHint<TSpec>
 
 export const serialize = <TSpec extends SpecUnion<Any>> (
   spec: TSpec,

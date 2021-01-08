@@ -25,8 +25,6 @@ type EachWithoutOptional<T> = EachInArrayWithoutOptional<UnionToTuple<T>>[number
 export type WithoutOptional<T, U extends T = T> =
   T extends unknown ? [U] extends [T] ? OneWithoutOptional<T> : EachWithoutOptional<T> : OneWithoutOptional<T>
 
-export type ConstructorArgs<T> = T extends new (...args: infer U) => any ? U : never
-
 type Impossible<K extends keyof any> = {
   [P in K]: never;
 };
