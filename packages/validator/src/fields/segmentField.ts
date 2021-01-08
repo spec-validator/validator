@@ -1,4 +1,5 @@
-import { Field, validate } from '../core'
+import { objectField } from '.'
+import { Field } from '../core'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 
@@ -89,7 +90,7 @@ class SegmentField<
     const matches = match.groups || {}
     const segments = this.getFieldSegments()
     const spec = Object.fromEntries(segments.map(segment => [segment.key, segment.field])) as any
-    return validate(spec, matches)
+    return objectField(spec).validate(matches)
   }
 
   serialize(deserialized: DeserializedType): Json {

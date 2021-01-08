@@ -1,7 +1,7 @@
 import { numberField, objectField } from '.'
 import { TypeHint } from '..'
 import { expectType } from '../TypeTestUtils.test'
-import { testValidateSpecError, testValidateSpecOk } from './TestUtils.test'
+import { testValidateSpecError, testValidateSpecOk } from '../TestUtils.test'
 
 const field = objectField({
   field: objectField({
