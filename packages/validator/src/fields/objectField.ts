@@ -1,6 +1,6 @@
 import {
   Field,
-  ValidatorSpec,
+  ObjectSpec,
   validate,
   serialize,
   TypeHint,
@@ -10,13 +10,13 @@ import { Json } from '../Json'
 import { Any } from '../util-types'
 
 export interface ObjectField<
-  Spec extends ValidatorSpec<Record<string, Any>> = ValidatorSpec<Record<string, Any>>
+  Spec extends ObjectSpec<Record<string, Any>> = ObjectSpec<Record<string, Any>>
 > extends Field<TypeHint<Spec>> {
   readonly objectSpec: Spec
 }
 
 export default field('@validator/fields.ObjectField', <
-  Spec extends ValidatorSpec<Record<string, Any>> = ValidatorSpec<Record<string, Any>>
+  Spec extends ObjectSpec<Record<string, Any>> = ObjectSpec<Record<string, Any>>
 > (
     objectSpec: Spec
   ): ObjectField<Spec> => ({

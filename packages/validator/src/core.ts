@@ -10,21 +10,21 @@ export interface Field<DeserializedType> {
   serialize(deserialized: DeserializedType): Json
 }
 
-export type ValidatorSpec<DeserializedType> = {
+export type ObjectSpec<DeserializedType> = {
   [P in keyof DeserializedType]: Field<DeserializedType[P]>
 };
 
-export type WildcardSpec = {
+export type WildcardObjectSpec = {
   [key: string]: Optional<Field<unknown>>
 };
 
 export type SpecUnion<DeserializedType> =
-  WildcardSpec | ValidatorSpec<DeserializedType> | Field<DeserializedType> | undefined;
+  WildcardObjectSpec | ObjectSpec<DeserializedType> | Field<DeserializedType> | undefined;
 
 export type TypeHint<Spec extends SpecUnion<Any> | undefined> =
-  Spec extends WildcardSpec ?
+  Spec extends WildcardObjectSpec ?
     { [P in keyof Spec]: TypeHint<Spec[P]>; }
-  : Spec extends ValidatorSpec<Record<string, Any>> ?
+  : Spec extends ObjectSpec<Record<string, Any>> ?
     { [P in keyof Spec]: TypeHint<Spec[P]>; }
   : Spec extends Field<Any> ?
     ReturnType<Spec['validate']>
@@ -69,7 +69,7 @@ const mapSpec = <DeserializedType extends Any, TSpec extends SpecUnion<Deseriali
     return (validatorSpec as any).map(transform)
   } else {
     return Object.fromEntries(
-      Object.entries(validatorSpec as ValidatorSpec<{ [property: string]: Any }>).map(
+      Object.entries(validatorSpec as ObjectSpec<{ [property: string]: Any }>).map(
         ([key, validator]: [string, any]) => [key, withErrorDecoration(key, () => transform(validator, key))]
       )
     )
@@ -85,7 +85,7 @@ const ensureNoExtraFields = <DeserializedType extends Any, TSpec extends SpecUni
     // OK
   } else {
     const extraKeys = new Set(Object.keys(value))
-    Object.keys(validatorSpec as ValidatorSpec<DeserializedType>).forEach((it) => extraKeys.delete(it))
+    Object.keys(validatorSpec as ObjectSpec<DeserializedType>).forEach((it) => extraKeys.delete(it))
     if (extraKeys.size !== 0) {
       throw {
         extraKeys: Array.from(extraKeys),

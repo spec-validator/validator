@@ -1,5 +1,5 @@
 import { TypeHint } from '@validator/validator'
-import { Field, isField, ValidatorSpec } from '@validator/validator/core'
+import { Field, isField, ObjectSpec } from '@validator/validator/core'
 import { $, unionField } from '@validator/validator/fields'
 import { ConstantField } from '@validator/validator/fields/constantField'
 import { ObjectField } from '@validator/validator/fields/objectField'
@@ -23,8 +23,8 @@ export type RequestSpec<
   readonly method: ConstantField<Method>,
   readonly pathParams: typeof $ & Field<PathParams>,
   readonly data?: Field<Data>,
-  readonly headers?: ObjectField<ValidatorSpec<Headers>>,
-  readonly queryParams?: ObjectField<ValidatorSpec<QueryParams>>
+  readonly headers?: ObjectField<ObjectSpec<Headers>>,
+  readonly queryParams?: ObjectField<ObjectSpec<QueryParams>>
 }
 
 export type ResponseSpec<
@@ -34,7 +34,7 @@ export type ResponseSpec<
 > = {
   readonly statusCode: ConstantField<StatusCode>,
   readonly data?: Field<Data>,
-  readonly headers?: ObjectField<ValidatorSpec<Headers>>,
+  readonly headers?: ObjectField<ObjectSpec<Headers>>,
 }
 
 type ResponseField<Spec extends ResponseSpec=ResponseSpec> = ObjectField<WithoutOptional<Spec>>
