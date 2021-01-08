@@ -3,11 +3,7 @@ import { expectType } from '../TypeTestUtils.test'
 import { arrayField } from '.'
 import { TypeHint } from '../core'
 import numberField from './numberField'
-
-import {
-  testValidateSpecError,
-  testValidateSpecOk,
-} from './TestUtils.test'
+import { testValidateSpecOk, testValidateSpecError } from '../TestUtils.test'
 
 const field = arrayField(numberField())
 

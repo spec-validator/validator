@@ -3,12 +3,11 @@ import { TypeHint } from '../core'
 import $ from './segmentField'
 
 import {
-  testValidateSpecOk,
-  testValidateSpecError,
   testValidateSegmentChainOK,
   testValidateSegmentChainError,
 } from './TestUtils.test'
 import { expectType } from '../TypeTestUtils.test'
+import { testValidateSpecOk, testValidateSpecError } from '../TestUtils.test'
 
 const field = choiceField(1, 2, 3)
 

@@ -44,7 +44,7 @@ export default field('@validator/fields.ObjectField', <
         key, withErrorDecoration(key, () => valueSpec.validate(value[key])),
       ])) as TypeHint<Spec>
       if (!canHaveExtraKeys) {
-        ensureNoExtraFields(objectSpec, result)
+        ensureNoExtraFields(objectSpec, value)
       }
       return result
     },

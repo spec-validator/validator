@@ -1,9 +1,7 @@
 import { Json } from './Json'
 import { Field, TypeHint, SpecUnion, isArraySpec, isFieldSpec, isObjectSpec } from './core'
 import { undefinedField, arrayField, objectField } from './fields'
-import { Any } from './util-types'
 
-// eslint-disable-next-line max-statements
 const getFieldForSpec = <DeserializedType> (spec: SpecUnion<DeserializedType>): Field<DeserializedType> => {
   if (spec === undefined) {
     return undefinedField()
@@ -22,13 +20,13 @@ const getFieldForSpec = <DeserializedType> (spec: SpecUnion<DeserializedType>): 
 
 // The whole point of the library is to validate wildcard objects
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const validate = <TSpec extends SpecUnion<Any>> (
+export const validate = <TSpec extends SpecUnion<unknown>> (
   spec: TSpec,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   value: any,
 ): TypeHint<TSpec> => getFieldForSpec(spec).validate(value) as unknown as TypeHint<TSpec>
 
-export const serialize = <TSpec extends SpecUnion<Any>> (
+export const serialize = <TSpec extends SpecUnion<unknown>> (
   spec: TSpec,
   value: TypeHint<TSpec>
 ): Json => getFieldForSpec(spec).serialize(value)

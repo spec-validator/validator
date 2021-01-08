@@ -1,8 +1,9 @@
 import unionField from './unionField'
-import { serialize, TypeHint } from '../core'
+import { TypeHint } from '../core'
 import { expectType } from '../TypeTestUtils.test'
 import { objectField, booleanField , choiceField, stringField } from '.'
-import { testValidateSpecError, testValidateSpecOk } from './TestUtils.test'
+import { testValidateSpecOk, testValidateSpecError } from '../TestUtils.test'
+import { serialize } from '../interface'
 
 const field = unionField(
   stringField(),

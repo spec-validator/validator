@@ -15,7 +15,7 @@ export type ArraySpec<DeserializedType extends Any[] = Any[]> = Field<Deserializ
 export type SpecUnion<DeserializedType> =
   ObjectSpec | ArraySpec | Field<DeserializedType> | undefined;
 
-export type TypeHint<Spec extends SpecUnion<Any>> =
+export type TypeHint<Spec extends SpecUnion<unknown>> =
   Spec extends ArraySpec ?
     TypeHint<Spec[0]>[]
   : Spec extends ObjectSpec ?

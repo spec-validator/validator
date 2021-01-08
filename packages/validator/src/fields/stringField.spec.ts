@@ -6,9 +6,8 @@ import stringField from './stringField'
 import {
   testValidateSegmentChainError,
   testValidateSegmentChainOK,
-  testValidateSpecError,
-  testValidateSpecOk,
 } from './TestUtils.test'
+import { testValidateSpecOk, testValidateSpecError } from '../TestUtils.test'
 
 const field = stringField(/[A-Z]+/)
 

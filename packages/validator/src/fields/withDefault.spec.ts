@@ -1,8 +1,9 @@
 import withDefault from './withDefault'
-import { TypeHint, validate } from '../core'
+import { TypeHint } from '../core'
 import { expectType } from '../TypeTestUtils.test'
 import numberField from './numberField'
-import { testValidateSpecOk } from './TestUtils.test'
+import { validate } from '..'
+import { testValidateSpecOk } from '../TestUtils.test'
 
 const field = withDefault(numberField(), 42)
 

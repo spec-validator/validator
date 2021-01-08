@@ -1,7 +1,7 @@
 import { TypeHint } from '..'
+import { testValidateSpecOk, testValidateSpecError } from '../TestUtils.test'
 import { expectType } from '../TypeTestUtils.test'
 import constantField from './constantField'
-import { testValidateSpecError, testValidateSpecOk } from './TestUtils.test'
 
 const field = constantField(42)
 

@@ -5,7 +5,7 @@ import numberField from './numberField'
 import $ from './segmentField'
 import { expectType } from '../TypeTestUtils.test'
 import { TypeHint } from '../core'
-import { testValidateSpecOk } from './TestUtils.test'
+import { testValidateSpecOk } from '../TestUtils.test'
 
 
 describe('field', () => {

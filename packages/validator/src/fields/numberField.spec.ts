@@ -6,9 +6,8 @@ import numberField from './numberField'
 import {
   testValidateSegmentChainError,
   testValidateSegmentChainOK,
-  testValidateSpecError,
-  testValidateSpecOk,
 } from './TestUtils.test'
+import { testValidateSpecOk, testValidateSpecError } from '../TestUtils.test'
 
 describe('spec', () => {
 
