@@ -1,4 +1,6 @@
 import { numberField, objectField } from '.'
+import { TypeHint } from '..'
+import { expectType } from '../TypeTestUtils.test'
 import { testValidateSpecError, testValidateSpecOk } from './TestUtils.test'
 
 const field = objectField({
@@ -40,3 +42,17 @@ describe('field', () => {
 
 })
 
+test('types', () => {
+
+  type Spec = TypeHint<typeof field>;
+
+  expectType<Spec, {
+    field: {
+      num: number;
+      subField: {
+          subSubField: number;
+      };
+    };
+  }>(true)
+
+})
