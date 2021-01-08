@@ -24,8 +24,13 @@ export default field('@validator/fields.ObjectField', <
       if (typeof value !== 'object' || value === null) {
         throw 'Not an object'
       }
-      return validate(objectSpec, value) as TypeHint<Spec>
+      return Object.fromEntries(Object.entries(objectSpec).map(([key, valueSpec]) => [
+        key, valueSpec.validate(value[key]),
+      ])) as TypeHint<Spec>
     },
-    serialize: (deserialized: TypeHint<Spec>): Json => serialize(objectSpec, deserialized as any),
+    serialize: (deserialized: TypeHint<Spec>): Json =>
+    Object.fromEntries(Object.entries(objectSpec).map(([key, valueSpec]) => [
+      key, valueSpec.serialize(deserialized[key]),
+    ])) as Json,
   }))
 

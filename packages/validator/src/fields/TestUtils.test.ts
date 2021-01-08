@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Field, serialize, SpecUnion, validate } from '../core'
+import { Field, SpecUnion } from '../core'
 import $, { FieldWithStringInputSupport } from './segmentField'
 import { Any } from '../util-types'
+import { validate } from '../interface'
 
 export const testValidateSpecOk = <T extends Any> (field: SpecUnion<T>, input: any, expected?: T): void => {
   // Test deserialization + validation

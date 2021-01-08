@@ -1,90 +1,121 @@
-import { booleanField, numberField, optional, stringField, withDefault } from './fields'
-import { validate } from './interface'
+import { Field } from './core'
+import { testValidateSpecError, testValidateSpecOk } from './TestUtils.test'
 
-const schema = {
-  innerSchema: {
-    str: stringField(),
-    num: withDefault(numberField(), 42),
+const sampleField: Field<true> = {
+  validate: (it: any): true => {
+    if (it === true) {
+      return true
+    }
+    throw 'Boom!'
   },
-  innerList: [{
-    bool: optional(booleanField()),
-    fl: numberField({ canBeFloat: false }),
-  }],
+  serialize: (it: true) => it,
 }
 
-describe('validate', () => {
+const sampleField2: Field<false> = {
+  validate: (it: any): false => {
+    if (it === false) {
+      return false
+    }
+    throw 'Boom!'
+  },
+  serialize: (it: false) => it,
+}
 
-  test('field', () => {
-    expect(validate(stringField(), 'foo')).toEqual('foo')
+test('field', () => {
+  testValidateSpecOk(sampleField, true)
+  testValidateSpecError(sampleField, false, 'Boom!')
+})
+
+describe('array', () => {
+  const spec = [sampleField]
+
+  test('valid input', () => {
+    testValidateSpecOk(spec, [true])
   })
 
-  test('array', () => {
-    expect(validate([stringField()], ['foo'])).toEqual(['foo'])
-    expect(validate([numberField()], [1, 2, 3])).toEqual([1, 2, 3])
+  test('not an array', () => {
+    testValidateSpecError(spec, false, 'Not an array')
   })
 
-  test('object', () => {
-    expect(validate({
-      key: stringField(),
-      key2: numberField(),
+  test('invalid item type', () => {
+    testValidateSpecError(spec, [false], {'inner': 'Boom!', 'path': [0]})
+  })
+})
+
+describe('object', () => {
+  const spec = {
+    key: sampleField,
+    key2: sampleField2,
+  }
+
+  test('valid input', () => {
+    testValidateSpecOk(spec, {
+      key: true,
+      key2: false,
+    })
+  })
+
+  test('not an object', () => {
+    testValidateSpecError(spec, false, 'Not an object')
+  })
+
+  test('invalid item type', () => {
+    testValidateSpecError(spec, {
+      key: false,
+      key2: false,
+    }, 'Boom!')
+  })
+})
+
+describe('nested object', () => {
+  test('valid input', () => {
+    testValidateSpecOk({
+      lvl1: {
+        key: sampleField2,
+        lvl2: {
+          value: sampleField,
+        },
+      },
     }, {
-      key: 'string',
-      key2: 'number',
-    })).toEqual({
-      key: 'string',
-      key2: 'number',
+      lvl1: {
+        key: false,
+        lvl2: {
+          value: true,
+        },
+      },
     })
   })
 
 })
 
+describe('deeply nested object', () => {
+  test('valid input', () => {
+    testValidateSpecOk({
+      lvl1: {
+        key: sampleField,
+        lvl2: {
+          key2: sampleField2,
+          lvl3: {
+            value: sampleField,
+          },
+        },
+      },
+    }, {
+      lvl1: {
+        key: true,
+        lvl2: {
+          key2: false,
+          lvl3: {
+            value: true,
+          },
+        },
+      },
+    })
+  })
+})
+
+
 /*
-test('nested serialize', () => {
-  expect(serialize(schema, {
-    innerSchema: {
-      str: 'string',
-      num: 12,
-    },
-    innerList: [{
-      bool: true,
-      fl: 11,
-    }],
-  })).toEqual({
-    'innerList': [
-      {
-        'bool': true,
-        'fl': 11,
-      },
-    ],
-    'innerSchema':  {
-      'num': 12,
-      'str': 'string',
-    },
-  })
-})
-
-test('nested validate', () => {
-  expect(validate(schema, {
-    innerSchema: {
-      str: 'string',
-      num: 12,
-    },
-    innerList: [{
-      fl: 11,
-    }],
-  })).toEqual({
-    'innerList': [
-      {
-        'fl': 11,
-      },
-    ],
-    'innerSchema':  {
-      'num': 12,
-      'str': 'string',
-    },
-  })
-})
-
 test('nested validate with Error', () => {
   let error: unknown
   try {
