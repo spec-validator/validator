@@ -8,6 +8,24 @@ export interface NumberField extends FieldWithStringInputSupport<number> {
   }
 }
 
+const ensureNoExtraFields = <DeserializedType extends Any, TSpec extends SpecUnion<DeserializedType>> (
+  validatorSpec: TSpec,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  value: any
+) => {
+  if (validatorSpec === undefined || isFieldSpec<DeserializedType>(validatorSpec)|| Array.isArray(validatorSpec)) {
+    // OK
+  } else {
+    const extraKeys = new Set(Object.keys(value))
+    Object.keys(validatorSpec as ObjectSpec<DeserializedType>).forEach((it) => extraKeys.delete(it))
+    if (extraKeys.size !== 0) {
+      throw {
+        extraKeys: Array.from(extraKeys),
+      }
+    }
+  }
+}
+
 export default field('@validator/fields.NumberField', (params?: {
   canBeFloat?: boolean
 }): NumberField => {

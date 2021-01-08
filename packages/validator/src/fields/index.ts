@@ -10,6 +10,7 @@ import unionField from './unionField'
 import constantField from './constantField'
 import $ from './segmentField'
 import wildcardObjectField from './wildcardObjectField'
+import undefinedField from './undefinedField'
 
 export {
   arrayField,
@@ -24,4 +25,5 @@ export {
   constantField,
   $,
   wildcardObjectField,
+  undefinedField,
 }
