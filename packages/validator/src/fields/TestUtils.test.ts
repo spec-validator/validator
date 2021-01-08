@@ -3,9 +3,11 @@ import { Field, serialize, SpecUnion, validate } from '../core'
 import $, { FieldWithStringInputSupport } from './segmentField'
 import { Any } from '../util-types'
 
-export const testValidateSpecOk = <T extends Any> (field: SpecUnion<T>, input: any, expected: T): void => {
-  expect(validate(field, input)).toEqual(expected)
-  expect(serialize(field, expected as any)).toEqual(input)
+export const testValidateSpecOk = <T extends Any> (field: SpecUnion<T>, input: any, expected?: T): void => {
+  // Test deserialization + validation
+  expect(validate(field, input)).toEqual(expected || input)
+  // And serialization as well
+  expect(serialize(field, (expected || input) as any)).toEqual(input)
 
 }
 
@@ -14,9 +16,17 @@ export const testValidateSpecError = <T extends Any> (field: Field<T>, input: an
   try {
     validate(field, input)
   } catch (err) {
-    error = err
+    if (err instanceof Error) {
+      error = err.message
+    } else {
+      error = err
+    }
   }
-  expect(error).toEqual(expectedError)
+  if (expectedError instanceof RegExp) {
+    expect((error as string).match(expectedError)).toBeTruthy()
+  } else {
+    expect(error).toEqual(expectedError)
+  }
 }
 
 export const testValidateSegmentChainOK = <T extends Any> (

@@ -11,17 +11,19 @@ import {
 
 const field = arrayField(numberField())
 
-describe('validate', () => {
+describe('field', () => {
 
-  it('allows valid choices to get throw', () => {
-    testValidateSpecOk(field, [1], [1])
+  it('valid', () => {
+    testValidateSpecOk(field, [1])
   })
 
-  it('prevents invalid choices from getting through', () => {
-    testValidateSpecError(field, [1, 2, false], {'inner': 'Not a number', 'path': [2]})
+  it('not an array', () => {
     testValidateSpecError(field, 11, 'Not an array')
   })
 
+  it('invalid item', () => {
+    testValidateSpecError(field, [1, 2, false], {'inner': 'Not a number', 'path': [2]})
+  })
 })
 
 test('types', () => {

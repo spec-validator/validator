@@ -5,13 +5,13 @@ import numberField from './numberField'
 import $ from './segmentField'
 import { expectType } from '../TypeTestUtils.test'
 import { TypeHint } from '../core'
+import { testValidateSpecOk } from './TestUtils.test'
 
 
-describe('basics', () => {
+describe('field', () => {
 
   it('validates plain string segment', () => {
-    const segmentSpec = $._('/items')
-    expect(segmentSpec.validate('/items')).toEqual({})
+    testValidateSpecOk($._('/items'), '/items', {})
   })
 
   it('validates the input correctly', () => {
@@ -23,14 +23,11 @@ describe('basics', () => {
       ._('/subtodos/')
       ._('suid', numberField())
 
-    const valid = segmentSpec.validate('/john-sick/todos/11/subtodos/42')
-
-    expect(valid).toEqual({
+    testValidateSpecOk(segmentSpec, '/john-sick/todos/11/subtodos/42', {
       username: 'john-sick',
       uid: 11,
       suid: 42,
     })
-
   })
 
   it('leverages regexp cache (coverage) when validateing twice', () => {
@@ -38,26 +35,8 @@ describe('basics', () => {
       ._('/')
       ._('username', stringField())
 
-    segmentSpec.validate('/john-sick')
-    segmentSpec.validate('/john-woo')
-  })
-
-  it('serializes an object back into a string', () => {
-    const segmentSpec = $
-      ._('/')
-      ._('username', stringField())
-      ._('/todos/')
-      ._('uid', numberField())
-      ._('/subtodos/')
-      ._('suid', numberField())
-
-    const valid = segmentSpec.serialize({
-      username: 'john-sick',
-      uid: 11,
-      suid: 42,
-    })
-
-    expect(valid).toEqual('/john-sick/todos/11/subtodos/42')
+    testValidateSpecOk(segmentSpec, '/john-sick', { 'username': 'john-sick'})
+    testValidateSpecOk(segmentSpec, '/john-woo', { 'username': 'john-woo'})
   })
 
 })

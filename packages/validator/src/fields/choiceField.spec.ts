@@ -12,27 +12,14 @@ import { expectType } from '../TypeTestUtils.test'
 
 const field = choiceField(1, 2, 3)
 
-describe('spec', () => {
-
-  it('allows valid choices to get throw', () => {
-    testValidateSpecOk(field, 1, 1)
-  })
-
-  it('prevents invalid choices from getting through', () => {
-    testValidateSpecError(field, 4, 'Invalid choice')
-  })
-
+test('field', () => {
+  testValidateSpecOk(field, 1)
+  testValidateSpecError(field, 4, 'Invalid choice')
 })
 
-describe('segmentChain', () => {
-  it('allows valid choices to get throw', () => {
-    testValidateSegmentChainOK(field, '1', 1)
-  })
-
-  it('prevents invalid choices from getting through', () => {
-    testValidateSegmentChainError(field, '12', 'Didn\'t match')
-  })
-
+test('segmentChain', () => {
+  testValidateSegmentChainOK(field, '1', 1)
+  testValidateSegmentChainError(field, '12', 'Didn\'t match')
 })
 
 test('types', () => {

@@ -11,30 +11,16 @@ import {
 
 const field = booleanField()
 
-describe('field', () => {
-
-  it('allows valid choices to get throw', () => {
-    testValidateSpecOk(field, true, true)
-    testValidateSpecOk(field, false, false)
-  })
-
-  it('prevents invalid choices from getting through', () => {
-    testValidateSpecError(field, 'foo', 'Not a boolean')
-  })
-
+test('field', () => {
+  testValidateSpecOk(field, true)
+  testValidateSpecOk(field, false)
+  testValidateSpecError(field, 'foo', 'Not a boolean')
 })
 
-describe('segmentChain', () => {
-
-  it('allows valid choices to get throw', () => {
-    ['1', 'true'].forEach(it => testValidateSegmentChainOK(field, it, true, 'true'));
-    ['0', 'false'].forEach(it => testValidateSegmentChainOK(field, it, false, 'false'))
-  })
-
-  it('prevents invalid choices from getting through', () => {
-    testValidateSegmentChainError(field, 'foo', 'Didn\'t match')
-  })
-
+test('segmentChain', () => {
+  ['1', 'true'].forEach(it => testValidateSegmentChainOK(field, it, true, 'true'));
+  ['0', 'false'].forEach(it => testValidateSegmentChainOK(field, it, false, 'false'))
+  testValidateSegmentChainError(field, 'foo', 'Didn\'t match')
 })
 
 test('types', () => {

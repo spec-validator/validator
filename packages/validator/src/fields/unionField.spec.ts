@@ -1,7 +1,8 @@
 import unionField from './unionField'
-import { serialize, TypeHint, validate } from '../core'
+import { TypeHint } from '../core'
 import { expectType } from '../TypeTestUtils.test'
 import { objectField, booleanField , choiceField, stringField } from '.'
+import { testValidateSpecError, testValidateSpecOk } from './TestUtils.test'
 
 const field = unionField(
   stringField(),
@@ -12,28 +13,15 @@ const field = unionField(
   })
 )
 
-test('validation', () => {
-  expect(validate(field, 1)).toEqual(1)
-  expect(validate(field, 3)).toEqual(3)
-  expect(validate(field, true)).toEqual(true)
-  expect(validate(field, 'foo')).toEqual('foo')
-  expect(validate(field, {
-    innerField: 'foo',
-  })).toEqual({
+test('field', () => {
+  testValidateSpecOk(field, 1)
+  testValidateSpecOk(field, 3)
+  testValidateSpecOk(field, true)
+  testValidateSpecOk(field, 'foo')
+  testValidateSpecOk(field, {
     innerField: 'foo',
   })
-})
-
-test('serialization', () => {
-  expect(serialize(field, 1)).toEqual(1)
-  expect(serialize(field, 3)).toEqual(3)
-  expect(serialize(field, true)).toEqual(true)
-  expect(serialize(field, 'foo')).toEqual('foo')
-  expect(serialize(field, {
-    innerField: 'foo',
-  })).toEqual({
-    innerField: 'foo',
-  })
+  testValidateSpecError(field, undefined, 'Invalid variant')
 })
 
 test('types', () => {

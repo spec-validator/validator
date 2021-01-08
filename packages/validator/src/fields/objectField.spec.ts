@@ -40,6 +40,17 @@ describe('field', () => {
     testValidateSpecError(field, null, 'Not an object')
   })
 
+  it('prevents bad value deep inside from going through', () => {
+    testValidateSpecError(field, {
+      field: {
+        num: 42,
+        subField: {
+          subSubField: true,
+        },
+      },
+    }, {'inner': 'Not a number', 'path': ['field', 'subField', 'subSubField']})
+  })
+
 })
 
 test('types', () => {
