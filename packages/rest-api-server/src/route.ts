@@ -36,7 +36,7 @@ export type ResponseSpec<
   readonly headers?: SpecUnion<Headers>,
 }
 
-type ResponseField<Spec extends ResponseSpec=ResponseSpec> = WithoutOptional<Spec>
+type ResponseField<Spec extends ResponseSpec=ResponseSpec > = WithoutOptional<Spec>
 
 // TODO: how to extract schema from
 type ResponsesSpec<ResponseVariants extends ResponseField[] = ResponseField[]> =
