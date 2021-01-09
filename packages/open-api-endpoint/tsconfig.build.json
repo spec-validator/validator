@@ -2,15 +2,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "resolveJsonModule": true
+    "composite": true
   },
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
-  "files": [
-    "src/package.json"
-  ],
   "references": [
     { "path": "../validator/tsconfig.build.json" },
     { "path": "../rest-api-server/tsconfig.build.json" }
-  ],
+  ]
 }

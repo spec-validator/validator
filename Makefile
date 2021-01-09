@@ -7,7 +7,9 @@ test:
 	yarn test
 
 compile:
-	yarn tsc --build tsconfig.build.json
+	yarn tsc --build packages/validator/tsconfig.build.json
+	yarn tsc --build packages/rest-api-server/tsconfig.build.json
+	yarn tsc --build packages/open-api-endpoint/tsconfig.build.json
 
 build: compile
 
@@ -16,7 +18,9 @@ publish:
 
 clean:
 	yarn tsc --build --clean
-	yarn tsc --build tsconfig.build.json --clean
+	yarn tsc --build packages/validator/tsconfig.build.json --clean
+	yarn tsc --build packages/rest-api-server/tsconfig.build.json --clean
+	yarn tsc --build packages/open-api-endpoint/tsconfig.build.json --clean
 	rm -rf packages/**/dist dist
 
 .PHONY: build clean compile all test install
