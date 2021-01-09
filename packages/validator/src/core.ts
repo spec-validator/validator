@@ -1,8 +1,8 @@
 import { Json } from './Json'
 import { Any, Optional } from './util-types'
 
-export interface Field<DeserializedType> {
-  validate(value: any): DeserializedType;
+export interface Field<DeserializedType, InputType=any> {
+  validate(value: InputType): DeserializedType;
   serialize(deserialized: DeserializedType): Json
 }
 
