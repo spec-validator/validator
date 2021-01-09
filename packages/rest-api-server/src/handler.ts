@@ -187,9 +187,7 @@ export const handle = async (
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const routes = cached('routes', () => config.routes)
-
-  const route = routes.find(matchRoute.bind(null, request))
+  const route = config.routes.find(matchRoute.bind(null, request))
 
   const reportError = async (error: unknown) => {
     try {
