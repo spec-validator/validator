@@ -11,9 +11,9 @@ describe('Route', () => {
   it('always contains the fields that are defined', () => {
     const reqSpec = {
       method: constantField('GET'),
-      headers: objectField({
+      headers: {
         headerKey: stringField(),
-      }),
+      },
       pathParams: $._('pathKey', stringField()),
     }
 
