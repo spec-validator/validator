@@ -3,13 +3,13 @@ import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 import { ServerConfig, Route } from '@validator/rest-api-server'
 import { Json } from '@validator/validator'
 import { $, optional } from '@validator/validator/fields'
-import { GetRepresentation, OfType } from '@validator/validator/registry'
+import { GetRepresentation } from '@validator/validator/registry'
 
 import getFieldSchema from './schemaRegistry'
 import { Any, ConstructorArgs } from '@validator/validator/util-types'
 import { isResponsesSpec, ResponseSpec } from '@validator/rest-api-server/route'
 import { withoutOptional } from '@validator/validator/utils'
-import { SpecUnion } from '@validator/validator/core'
+import { SpecUnion, OfType } from '@validator/validator/core'
 
 const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<string, OpenAPI.PathItemObject> => {
   const record: Record<string, OpenAPI.PathItemObject>  = {}

@@ -1,9 +1,8 @@
 import { TypeHint } from '@validator/validator'
-import { Field, isFieldSpec, ObjectSpec, SpecUnion } from '@validator/validator/core'
+import { Field, isFieldSpec, ObjectSpec, SpecUnion, OfType } from '@validator/validator/core'
 import { $, unionField } from '@validator/validator/fields'
 import { ConstantField } from '@validator/validator/fields/constantField'
 import { UnionField } from '@validator/validator/fields/unionField'
-import { OfType } from '@validator/validator/registry'
 import { Any, Promisable, WithoutOptional } from '@validator/validator/util-types'
 
 export type StringMapping = Record<string, Any>
