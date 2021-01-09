@@ -3,6 +3,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
+    "resolveJsonModule": true,
     "paths": {
       "@validator/validator/*": ["../validator/src/*"],
       "@validator/validator": ["../validator/src/index.ts"]
