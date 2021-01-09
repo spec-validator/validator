@@ -8,7 +8,6 @@ import createRegistry, { registryDeclaration as $ } from '@validator/validator/r
 import { Primitive } from '@validator/validator'
 
 import withDoc from './withDoc'
-import { getFieldForSpec } from '@validator/validator/interface'
 
 const TYPES = ['number' as const, 'boolean'as const, 'string'as const]
 
@@ -80,7 +79,7 @@ export const BASE_PAIRS = [
     pattern: field.regex.source,
   })),
   $(unionField, (field, requestSchema): OpenAPI.SchemaObject => ({
-    oneOf: field.variants.map(it => requestSchema(getFieldForSpec(it))),
+    oneOf: field.variants.map(it => requestSchema(it)),
   })),
   $(withDefault, (field, requestSchema): OpenAPI.SchemaObject => ({
     ...requestSchema(field.innerField),

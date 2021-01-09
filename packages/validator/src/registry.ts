@@ -1,7 +1,6 @@
 /* eslint-disable no-shadow */
 
-import { Field } from '.'
-import { SpecUnion } from './core'
+import { SpecUnion, Field } from './core'
 import { getFieldForSpec } from './interface'
 export type OfType<Type extends string> = {
   readonly type: Type
@@ -33,7 +32,7 @@ export const field = <
 }
 
 type RequestRepresentation =
-  (field: Field<unknown>) => any
+  (field: SpecUnion<unknown>) => any
 
 type ProvideRepresentation<
   RepresentationType,
