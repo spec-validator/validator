@@ -1,5 +1,5 @@
 import { Field } from '../core'
-import { field } from '../registry'
+import { declareField } from '../registry'
 import { Any } from '../util-types'
 
 export interface WithDefault<T extends Any> extends Field<T> {
@@ -7,7 +7,7 @@ export interface WithDefault<T extends Any> extends Field<T> {
   readonly defaultValue: T
 }
 
-export default field('@validator/fields.WithDefault', <T extends Any> (
+export default declareField('@validator/fields.WithDefault', <T extends Any> (
   innerField: Field<T>,
   defaultValue: T
 ): WithDefault<T> => ({

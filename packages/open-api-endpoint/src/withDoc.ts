@@ -1,5 +1,5 @@
 import { Field } from '@validator/validator'
-import { field } from '@validator/validator/registry'
+import { declareField } from '@validator/validator/registry'
 import { Any } from '@validator/validator/util-types'
 
 type Example<T extends Any> = {
@@ -18,7 +18,7 @@ export interface WithDoc<T extends Any, F extends Field<T>> extends Field<T> {
   readonly doc: Doc<T>
 }
 
-export default field('@validator/fields.WithDoc', <T extends Any, F extends Field<T>> (
+export default declareField('@validator/fields.WithDoc', <T extends Any, F extends Field<T>> (
   innerField: F,
   doc: Doc<T>
 ): WithDoc<T, F> => ({

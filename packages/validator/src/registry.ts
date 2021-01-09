@@ -1,5 +1,3 @@
-/* eslint-disable no-shadow */
-
 import { SpecUnion, Field } from './core'
 import { getFieldForSpec } from './interface'
 export type OfType<Type extends string> = {
@@ -13,7 +11,7 @@ export type FieldDeclaration<
   Constructor extends (...params: Params) => FieldType = (...params: Params) => FieldType
 > = Constructor & OfType<Type>
 
-export const field = <
+export const declareField = <
   Type extends string,
   Params extends any[],
   FieldType extends Field<unknown>,
@@ -42,7 +40,7 @@ type ProvideRepresentation<
   (
     field: FieldType,
     provideRepresentation: (
-      field: FieldType & OfType<Type>,
+      innerField: FieldType & OfType<Type>,
       requestRepresentation: RepresentationType
     ) => RepresentationType
   ) => RepresentationType

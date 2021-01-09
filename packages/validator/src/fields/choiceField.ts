@@ -1,13 +1,13 @@
 import { escapeRegex } from '../utils'
 import { Primitive, Json } from '../Json'
-import { field, OfType } from '../registry'
+import { declareField, OfType } from '../registry'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
 export interface ChoiceField<Choice extends Primitive> extends FieldWithStringInputSupport<Choice> {
   choices: readonly Choice[]
 }
 
-export default field('@validator/fields.ChoiceField', <Choice extends Primitive>(
+export default declareField('@validator/fields.ChoiceField', <Choice extends Primitive>(
   ...choices: readonly Choice[]
 ): ChoiceField<Choice> => {
   const choicesSet = new Set(choices)

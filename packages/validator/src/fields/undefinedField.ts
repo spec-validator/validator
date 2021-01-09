@@ -1,8 +1,8 @@
 import { Field } from '../core'
-import { field } from '../registry'
+import { declareField } from '../registry'
 
 
-export default field('@validator/fields.UndefinedField', (
+export default declareField('@validator/fields.UndefinedField', (
 ): Field<any> => ({
   validate: (): undefined => undefined,
   serialize: () => undefined,

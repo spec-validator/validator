@@ -1,5 +1,5 @@
 import { Field, TypeHint, withErrorDecoration } from '../core'
-import { field } from '../registry'
+import { declareField } from '../registry'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 
@@ -28,7 +28,7 @@ const ensureNoExtraFields = (
   }
 }
 
-export default field('@validator/fields.ObjectField', <
+export default declareField('@validator/fields.ObjectField', <
   Spec extends ObjectFields = ObjectFields
 > (
     objectSpec: Spec,

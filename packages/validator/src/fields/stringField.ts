@@ -1,9 +1,9 @@
-import { field, OfType } from '../registry'
+import { declareField, OfType } from '../registry'
 import { FieldWithStringInputSupport, FieldWithRegExp } from './segmentField'
 
 export interface StringField extends FieldWithStringInputSupport<string>, FieldWithRegExp<string> {}
 
-export default field('@validator/fields.StringField', (
+export default declareField('@validator/fields.StringField', (
   regex?: RegExp
 ): StringField => {
   const result = {

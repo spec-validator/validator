@@ -1,6 +1,6 @@
 import { serialize, validate } from '..'
 import { Field, SpecUnion, TypeHint } from '../core'
-import { field } from '../registry'
+import { declareField } from '../registry'
 
 export type Unioned<T extends SpecUnion<unknown>[]> = {
   [P in keyof T]: T[P] extends SpecUnion<unknown> ? TypeHint<T[P]> : never
@@ -10,7 +10,7 @@ export interface UnionField<Variants extends SpecUnion<any>[]> extends Field<Uni
   readonly variants: Variants
 }
 
-export default field('@validator/fields.UnionField', <Variants extends SpecUnion<unknown>[]> (
+export default declareField('@validator/fields.UnionField', <Variants extends SpecUnion<unknown>[]> (
   ...variants: Variants
 ): UnionField<Variants> => ({
     variants,

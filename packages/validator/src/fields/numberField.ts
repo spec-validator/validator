@@ -1,4 +1,4 @@
-import { field, OfType } from '../registry'
+import { declareField, OfType } from '../registry'
 import { Json } from '../Json'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
@@ -8,7 +8,7 @@ export interface NumberField extends FieldWithStringInputSupport<number> {
   }
 }
 
-export default field('@validator/fields.NumberField', (params?: {
+export default declareField('@validator/fields.NumberField', (params?: {
   canBeFloat?: boolean
 }): NumberField => {
   const validate = (value: any): number => {

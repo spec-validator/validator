@@ -1,12 +1,12 @@
 import { Field } from '../core'
 import { Primitive } from '../Json'
-import { field } from '../registry'
+import { declareField } from '../registry'
 
 export interface ConstantField<Constant extends Primitive> extends Field<Constant> {
   readonly constant: Constant
 }
 
-export default field('@validator/fields.ConstantField', <Constant extends Primitive> (
+export default declareField('@validator/fields.ConstantField', <Constant extends Primitive> (
   constant: Constant
 ): ConstantField<Constant> => ({
     constant,

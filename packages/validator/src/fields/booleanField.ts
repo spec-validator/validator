@@ -1,10 +1,10 @@
-import { field, OfType } from '../registry'
+import { declareField, OfType } from '../registry'
 import { Json } from '../Json'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
 export type BooleanField = FieldWithStringInputSupport<boolean>
 
-export default field('@validator/fields.BooleanField', (): BooleanField => {
+export default declareField('@validator/fields.BooleanField', (): BooleanField => {
   const validate = (value: any): boolean => {
     if (value !== true && value !== false) {
       throw 'Not a boolean'
