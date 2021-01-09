@@ -1,12 +1,12 @@
 import { Field, withErrorDecoration } from '../core'
-import * as registry from '../registry'
+import { declareField } from '../registry'
 import { Json } from '../Json'
 
 export interface ArrayField<T> extends Field<T[]> {
   readonly itemField: Field<T>,
 }
 
-export default registry.declareField('@validator/fields.ArrayField', <T>(itemField: Field<T>): ArrayField<T> => ({
+export default declareField('@validator/fields.ArrayField', <T>(itemField: Field<T>): ArrayField<T> => ({
   itemField,
   validate: (value: any): T[] => {
     if (!Array.isArray(value)) {
