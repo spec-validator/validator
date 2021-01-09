@@ -3,6 +3,7 @@ import { validate, serialize, TypeHint } from '@validator/validator'
 import { RequestSpec, ResponseSpec, Route } from './route'
 import { cached, pick } from '@validator/validator/utils'
 import { SerializationFormat } from './serialization'
+import { getFieldForSpec } from '@validator/validator/interface'
 
 export type ServerConfig = {
   readonly baseUrl: string,
@@ -32,11 +33,11 @@ const ROUTE_KEYS = ['method' as const, 'pathParams' as const]
 
 const matchRoute = (
   request: http.IncomingMessage,
-  route: Route,
+  route: any,
 ): boolean => {
   try {
     validate(
-      pick(route.request, ROUTE_KEYS),
+      route.path,
       pick(getWildcardRequestBase(request), ROUTE_KEYS)
     )
     return true
@@ -91,9 +92,11 @@ const getWildcardRoute = async (
 
 const getSerializationMapping = (
   serializationFormats: SerializationFormat[],
-): Record<string, SerializationFormat> => cached('formats', () => Object.fromEntries(serializationFormats.map(it =>
-  [it.mediaType,  it]
-)))
+): Record<string, SerializationFormat> =>
+  // To prevent serialization mapping construction on every request
+  cached('formats', () => Object.fromEntries(serializationFormats.map(it =>
+    [it.mediaType,  it]
+  )))
 
 const firstHeader = (value: string | string[] | undefined): string | undefined => {
   if (!value) {
@@ -187,7 +190,17 @@ export const handle = async (
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const route = config.routes.find(matchRoute.bind(null, request))
+
+  // An optimization tecnique to prevent a deep spec transformation
+  // on each request
+  const routes = cached('routes', () => config.routes.map(it => ({
+    path: getFieldForSpec(pick(it.request, ROUTE_KEYS)),
+    request: getFieldForSpec(it.request, true),
+    response: getFieldForSpec(it.response),
+    handler: it.handler,
+  }))) as any
+
+  const route = routes.find(matchRoute.bind(null, request))
 
   const reportError = async (error: unknown) => {
     try {
