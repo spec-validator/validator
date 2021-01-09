@@ -1,6 +1,6 @@
 import { escapeRegex } from '../utils'
 import { Primitive, Json } from '../Json'
-import { declareField, OfType } from '../registry'
+import { declareField, OfType } from '../core'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
 export interface ChoiceField<Choice extends Primitive> extends FieldWithStringInputSupport<Choice> {

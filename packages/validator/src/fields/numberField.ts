@@ -1,4 +1,4 @@
-import { declareField, OfType } from '../registry'
+import { declareField, OfType } from '../core'
 import { Json } from '../Json'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 

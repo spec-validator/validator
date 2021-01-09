@@ -1,5 +1,4 @@
-import { Field, TypeHint, withErrorDecoration } from '../core'
-import { declareField } from '../registry'
+import { Field, TypeHint, withErrorDecoration, declareField } from '../core'
 import { Json } from '../Json'
 import { Any } from '../util-types'
 

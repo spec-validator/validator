@@ -1,6 +1,5 @@
-import { Field } from '../core'
 import { Primitive } from '../Json'
-import { declareField } from '../registry'
+import { declareField, Field } from '../core'
 
 export interface ConstantField<Constant extends Primitive> extends Field<Constant> {
   readonly constant: Constant

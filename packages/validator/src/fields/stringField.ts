@@ -1,4 +1,4 @@
-import { declareField, OfType } from '../registry'
+import { declareField, OfType } from '../core'
 import { FieldWithStringInputSupport, FieldWithRegExp } from './segmentField'
 
 export interface StringField extends FieldWithStringInputSupport<string>, FieldWithRegExp<string> {}

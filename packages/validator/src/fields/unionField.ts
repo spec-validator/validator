@@ -1,6 +1,6 @@
-import { serialize, validate } from '..'
+import { serialize, validate } from '../interface'
 import { Field, SpecUnion, TypeHint } from '../core'
-import { declareField } from '../registry'
+import { declareField } from '../core'
 
 export type Unioned<T extends SpecUnion<unknown>[]> = {
   [P in keyof T]: T[P] extends SpecUnion<unknown> ? TypeHint<T[P]> : never

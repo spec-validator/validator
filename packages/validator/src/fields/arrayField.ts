@@ -1,5 +1,4 @@
-import { Field, withErrorDecoration } from '../core'
-import { declareField } from '../registry'
+import { Field, withErrorDecoration, declareField } from '../core'
 import { Json } from '../Json'
 
 export interface ArrayField<T> extends Field<T[]> {

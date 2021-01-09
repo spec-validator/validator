@@ -86,3 +86,25 @@ export const isArraySpec = (obj: any): obj is ArraySpec => {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const isValidChild = (obj: any) =>
   isFieldSpec(obj) || isArraySpec(obj) || isObjectSpec(obj)
+
+export type OfType<Type extends string> = {
+  readonly type: Type
+}
+
+export const declareField = <
+  Type extends string,
+  Params extends any[],
+  FieldType extends Field<unknown>,
+  Constructor extends (...params: Params) => FieldType
+> (
+    type: Type,
+    constructor: Constructor
+  ): (Constructor) & OfType<Type>  => {
+  const wrapper = (...params: any[]) => {
+    const result = (constructor as any)(...params)
+    result.type = type
+    return result
+  }
+  wrapper.type = type
+  return wrapper as (Constructor) & OfType<Type>
+}

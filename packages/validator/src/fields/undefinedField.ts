@@ -1,5 +1,4 @@
-import { Field } from '../core'
-import { declareField } from '../registry'
+import { declareField, Field } from '../core'
 
 
 export default declareField('@validator/fields.UndefinedField', (

@@ -1,5 +1,4 @@
-import { Field } from '../core'
-import { declareField } from '../registry'
+import { declareField, Field } from '../core'
 import { Any } from '../util-types'
 
 export interface WithDefault<T extends Any> extends Field<T> {
