@@ -1,7 +1,7 @@
 import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import { ServerConfig, Route } from '@validator/rest-api-server'
-import { Field, Json } from '@validator/validator'
+import { Json } from '@validator/validator'
 import { $, optional } from '@validator/validator/fields'
 import { GetRepresentation, OfType } from '@validator/validator/registry'
 
@@ -9,6 +9,7 @@ import getFieldSchema from './schemaRegistry'
 import { Any, ConstructorArgs } from '@validator/validator/util-types'
 import { isResponsesSpec, ResponseSpec } from '@validator/rest-api-server/route'
 import { withoutOptional } from '@validator/validator/utils'
+import { SpecUnion } from '@validator/validator/core'
 
 const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<string, OpenAPI.PathItemObject> => {
   const record: Record<string, OpenAPI.PathItemObject>  = {}
@@ -66,7 +67,7 @@ class OpenApiGenerator {
   })
 
   createParameterBaseObject = (
-    field: Field<unknown>
+    field: SpecUnion<unknown>
   ): OpenAPI.ParameterBaseObject => withoutOptional({
     description: getDescription(field),
     required: isRequired(field),
@@ -76,7 +77,7 @@ class OpenApiGenerator {
   createParameter = (
     type: ParameterType,
     name: string,
-    field: Field<unknown>
+    field: SpecUnion<unknown>
   ): OpenAPI.ParameterObject => withoutOptional({
     name: name,
     in: type,
@@ -85,12 +86,12 @@ class OpenApiGenerator {
 
   specToParams = (
     type: ParameterType,
-    spec?: Record<string, Field<unknown>>
+    spec?: Record<string, SpecUnion<unknown>>
   ): OpenAPI.ParameterObject[] => Object.entries(spec || {}).map(
     ([name, field]) => this.createParameter(type, name, field)
   )
 
-  createContentObject = (data: Field<unknown>): {
+  createContentObject = (data: SpecUnion<unknown>): {
     [media: string]: OpenAPI.MediaTypeObject
   } => Object.fromEntries(this.config.serializationFormats.map(
     it => [it.mediaType, {
@@ -99,7 +100,7 @@ class OpenApiGenerator {
   ))
 
   createResponseObject = (response: ResponseSpec): OpenAPI.ResponseObject => withoutOptional({
-    headers: response.headers && Object.fromEntries(Object.entries(response.headers.objectSpec).map(([name, value]) => [
+    headers: response.headers && Object.fromEntries(Object.entries(response.headers).map(([name, value]) => [
       name,
       this.createParameterBaseObject(value),
     ])),
@@ -107,7 +108,7 @@ class OpenApiGenerator {
     content: response.data && this.createContentObject(response.data),
   })
 
-  createRequestBodyObject = (data: Field<Any>): OpenAPI.RequestBodyObject => withoutOptional({
+  createRequestBodyObject = (data: SpecUnion<Any>): OpenAPI.RequestBodyObject => withoutOptional({
     content: this.createContentObject(data),
     required: isRequired(data),
   })
@@ -116,7 +117,7 @@ class OpenApiGenerator {
     const result: Record<string, OpenAPI.ResponseObject> = {}
     if (isResponsesSpec(spec)) {
       spec.variants.forEach((it) => {
-        result[it.objectSpec.statusCode.constant.toString()] = this.createResponseObject(it.objectSpec)
+        result[it.statusCode.constant.toString()] = this.createResponseObject(it)
       })
     } else {
       result[spec.statusCode.constant.toString()] = this.createResponseObject(spec)
@@ -126,7 +127,7 @@ class OpenApiGenerator {
 
   createOperationObject = (route: Route): OpenAPI.OperationObject => withoutOptional({
     parameters: [
-      ...this.specToParams('query', route.request.queryParams?.objectSpec),
+      ...this.specToParams('query', route.request.queryParams),
       ...this.specToParams('path', route.request.pathParams.getObjectSpec()),
     ],
     requestBody: route.request.data && this.createRequestBodyObject(route.request.data),

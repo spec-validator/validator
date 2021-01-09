@@ -1,6 +1,6 @@
 import { _, Route } from '@validator/rest-api-server'
 import {
-  $, stringField, objectField, booleanField, numberField, arrayField,
+  $, stringField, booleanField, numberField, arrayField,
 } from '@validator/validator/fields'
 import genOpenApi from './genOpenApi'
 import { DEFAULT_SERVER_CONFIG } from '@validator/rest-api-server/server'
@@ -11,10 +11,10 @@ test('fullRoute', () => {
     _.POST($._('/items')).spec(
       {
         request: {
-          data: objectField({
+          data: {
             title: stringField(/.*/),
             count: numberField(),
-          }),
+          },
         },
       }
     ).handler(
@@ -23,7 +23,7 @@ test('fullRoute', () => {
     _.GET($._('/item/')._('id', stringField())).spec(
       {
         request: {
-          headers: objectField({
+          headers: {
             key: withDoc(numberField(), {
               description: 'key header',
               examples: {
@@ -33,13 +33,13 @@ test('fullRoute', () => {
                 },
               },
             }),
-          }),
-          queryParams: objectField({
+          },
+          queryParams: {
             flag: booleanField(),
-          }),
+          },
         },
         response: {
-          headers: objectField({
+          headers: {
             key: withDoc(numberField(), {
               description: 'key header',
               examples: {
@@ -49,10 +49,10 @@ test('fullRoute', () => {
                 },
               },
             }),
-          }),
-          data: objectField({
+          },
+          data: {
             items: arrayField(numberField()),
-          }),
+          },
         },
       }
     ).handler(

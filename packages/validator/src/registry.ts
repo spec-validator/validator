@@ -1,6 +1,8 @@
 /* eslint-disable no-shadow */
 
 import { Field } from '.'
+import { SpecUnion } from './core'
+import { getFieldForSpec } from './interface'
 export type OfType<Type extends string> = {
   readonly type: Type
 }
@@ -86,7 +88,7 @@ const getValue = <V> (mapping: Record<string, V>, rawTypeRef: any, type?: string
   return value
 }
 
-export type GetRepresentation = (field: Field<unknown>) => any
+export type GetRepresentation = (field: SpecUnion<unknown>) => any
 
 /**
  * This is a generic solution to provide a virtually unlimited number
@@ -105,7 +107,7 @@ const createRegistry = (
     withNoDuplicates(pairs, (pair) => pair[0].type).map(([key, value]) => ([key.type, value]))
   )
   const getRepresentation: GetRepresentation =
-    (it) => getValue(mapping, it, (it as unknown as OfType<string>).type)(it, getRepresentation)
+    (it) => getValue(mapping, it, (it as unknown as OfType<string>).type)(getFieldForSpec(it), getRepresentation)
   return getRepresentation
 }
 

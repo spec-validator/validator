@@ -2,7 +2,7 @@ import { Json } from './Json'
 import { Field, TypeHint, SpecUnion, isArraySpec, isFieldSpec, isObjectSpec } from './core'
 import { undefinedField, arrayField, objectField } from './fields'
 
-const getFieldForSpec = <DeserializedType> (
+export const getFieldForSpec = <DeserializedType> (
   spec: SpecUnion<DeserializedType>,
   allowExtraFields = false
 ): Field<DeserializedType> => {
