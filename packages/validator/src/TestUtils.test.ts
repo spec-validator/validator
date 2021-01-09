@@ -3,6 +3,16 @@ import { SpecUnion } from './core'
 import { Any } from './util-types'
 import { serialize, validate } from './interface'
 
+export const sampleField = {
+  validate: (it: any): true => {
+    if (it === true) {
+      return true
+    }
+    throw 'Boom!'
+  },
+  serialize: (it: true) => it,
+}
+
 export const testValidateSpecOk = <T> (
   field: SpecUnion<T>, input: any, expected?: T, expectedSerialized?: T
 ): void => {

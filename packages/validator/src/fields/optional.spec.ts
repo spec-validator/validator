@@ -1,10 +1,9 @@
 import optional from './optional'
-import numberField from './numberField'
 import { TypeHint } from '../core'
 import { expectType } from '../TypeTestUtils.test'
-import { testValidateSpecOk } from '../TestUtils.test'
+import { sampleField, testValidateSpecOk } from '../TestUtils.test'
 
-const field = optional(numberField())
+const field = optional(sampleField)
 
 describe('field', () => {
   it('should allow undefined value go through', () => {
@@ -23,7 +22,7 @@ describe('field', () => {
     testValidateSpecOk({
       inner: field,
     }, {
-      inner: 57,
+      inner: true,
     })
   })
 })
@@ -31,5 +30,5 @@ describe('field', () => {
 test('types', () => {
   type Spec = TypeHint<typeof field>
 
-  expectType<Spec, number | undefined>(true)
+  expectType<Spec, true | undefined>(true)
 })

@@ -2,28 +2,27 @@ import { expectType } from '../TypeTestUtils.test'
 
 import arrayField from './arrayField'
 import { TypeHint } from '../core'
-import numberField from './numberField'
-import { testValidateSpecOk, testValidateSpecError } from '../TestUtils.test'
+import { testValidateSpecOk, testValidateSpecError, sampleField } from '../TestUtils.test'
 
-const field = arrayField(numberField())
+const field = arrayField(sampleField)
 
 describe('field', () => {
 
   it('valid', () => {
-    testValidateSpecOk(field, [1])
+    testValidateSpecOk(field, [true])
   })
 
   it('not an array', () => {
-    testValidateSpecError(field, 11, 'Not an array')
+    testValidateSpecError(field, true, 'Not an array')
   })
 
   it('invalid item', () => {
-    testValidateSpecError(field, [1, 2, false], {'inner': 'Not a number', 'path': [2]})
+    testValidateSpecError(field, [true, true, false], {'inner': 'Boom!', 'path': [2]})
   })
 })
 
 test('types', () => {
   type Spec = TypeHint<typeof field>;
 
-  expectType<Spec, number[]>(true)
+  expectType<Spec, true[]>(true)
 })
