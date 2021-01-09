@@ -1,17 +1,17 @@
 import { serve } from '@validator/rest-api-server'
 import { DEFAULT_SERVER_CONFIG, _ } from '@validator/rest-api-server/server'
 import {
-  $, arrayField, constantField, numberField, objectField, optional, stringField,
+  $, constantField, numberField, optional, stringField,
 } from '@validator/validator/fields'
 import withOpenApi from '@validator/open-api-endpoint/withOpenApi'
 
-const itemSpec = objectField({
+const itemSpec = {
   title: stringField(),
   description: stringField(),
-})
+}
 
 const ofItems = {
-  data: arrayField(itemSpec),
+  data: [itemSpec],
 }
 
 const ofItem = {
@@ -103,10 +103,10 @@ serve(withOpenApi({
     _.PATCH($._('/items/')._('id', numberField())).spec(
       {
         request: {
-          data: objectField({
+          data: {
             title: optional(stringField()),
             description: optional(stringField()),
-          }),
+          },
         },
       },
     ).handler(
