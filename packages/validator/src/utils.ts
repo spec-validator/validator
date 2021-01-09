@@ -19,3 +19,12 @@ export const pick = <T, K extends keyof T>(full: T, keys: K[]): Pick<T, K> => {
 
 export const withoutOptional = <T> (item: T): WithoutOptional<T> =>
   Object.fromEntries(Object.entries(item).filter(([_, value]) => value !== undefined)) as WithoutOptional<T>
+
+const cache = {} as Record<string, unknown>
+
+export const cached = <T>(key: string, call:() => T): T => {
+  if (!cache[key]) {
+    cache[key] = call()
+  }
+  return cache[key] as T
+}

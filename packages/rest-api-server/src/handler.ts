@@ -1,7 +1,7 @@
 import http from 'http'
 import { validate, serialize, TypeHint } from '@validator/validator'
 import { RequestSpec, ResponseSpec, Route } from './route'
-import { pick } from '@validator/validator/utils'
+import { cached, pick } from '@validator/validator/utils'
 import { SerializationFormat } from './serialization'
 
 export type ServerConfig = {
@@ -88,17 +88,12 @@ const getWildcardRoute = async (
   })
 }
 
-let formats: Record<string, SerializationFormat> | undefined = undefined
 
-// TODO: CACHING
 const getSerializationMapping = (
   serializationFormats: SerializationFormat[],
-): Record<string, SerializationFormat> => {
-  formats = formats || Object.fromEntries(serializationFormats.map(it =>
-    [it.mediaType,  it]
-  ))
-  return formats
-}
+): Record<string, SerializationFormat> => cached('formats', () => Object.fromEntries(serializationFormats.map(it =>
+  [it.mediaType,  it]
+)))
 
 const firstHeader = (value: string | string[] | undefined): string | undefined => {
   if (!value) {
@@ -192,7 +187,9 @@ export const handle = async (
   request: http.IncomingMessage,
   response: http.ServerResponse
 ): Promise<void> => {
-  const route = config.routes.find(matchRoute.bind(null, request))
+  const routes = cached('routes', () => config.routes)
+
+  const route = routes.find(matchRoute.bind(null, request))
 
   const reportError = async (error: unknown) => {
     try {
