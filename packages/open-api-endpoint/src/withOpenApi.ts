@@ -1,6 +1,6 @@
 import { _, ServerConfig } from '@validator/rest-api-server'
 import { Json } from '@validator/validator'
-import { $, constantField, objectField, stringField } from '@validator/validator/fields'
+import { $, constantField, stringField } from '@validator/validator/fields'
 import wildcardObjectField from '@validator/validator/fields/wildcardObjectField'
 import genOpenApi, { DEFAULT_INFO, Info, WithInfo } from './genOpenApi'
 
@@ -55,9 +55,9 @@ export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): Serv
       {
         response: {
           data: stringField(),
-          headers: objectField({
+          headers: {
             'content-type': constantField('text/html'),
-          }),
+          },
         },
       },
     ).handler(
