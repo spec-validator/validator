@@ -1,5 +1,5 @@
 import { numberField, objectField, stringField } from '.'
-import { TypeHint } from '..'
+import { TypeHint } from '../core'
 import { expectType } from '../TypeTestUtils.test'
 import { testValidateSpecError, testValidateSpecOk } from '../TestUtils.test'
 
