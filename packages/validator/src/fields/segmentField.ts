@@ -1,4 +1,4 @@
-import { objectField } from '.'
+import objectField from './objectField'
 import { Field } from '../core'
 import { Json } from '../Json'
 import { Any } from '../util-types'
