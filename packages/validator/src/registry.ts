@@ -108,7 +108,7 @@ const createRegistry = (
   const getRepresentation: GetRepresentation =
     (it) => {
       const itF = getFieldForSpec(it)
-      getValue(mapping, itF, (itF as unknown as OfType<string>).type)(itF, getRepresentation)
+      return getValue(mapping, itF, (itF as unknown as OfType<string>).type)(itF, getRepresentation)
     }
   return getRepresentation
 }
