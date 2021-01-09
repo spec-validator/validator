@@ -1,5 +1,4 @@
-import { Field } from '@validator/validator'
-import { declareField } from '@validator/validator/registry'
+import { declareField, Field } from '@validator/validator/core'
 import { Any } from '@validator/validator/util-types'
 
 type Example<T extends Any> = {
