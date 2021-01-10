@@ -7,7 +7,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
-    "url": "git+https://github.com/gurunars/validator.git",
+    "url": "git+https://github.com/spec-validator/validator.git",
     "type": "git"
   },
   "devDependencies": {
