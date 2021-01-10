@@ -55,33 +55,12 @@ export const isFieldSpec = <DeserializedType>(obj: any): obj is Field<Deserializ
   obj && typeof obj.validate === 'function' && typeof obj.serialize === 'function'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const isObjectSpec = (obj: any): obj is ObjectSpec => {
-  const keys = Object.keys(obj)
-  for (const i in keys) {
-    const key = keys[i]
-    if (typeof key !== 'string') {
-      return false
-    }
-    if (!isValidChild(obj[key])) {
-      return false
-    }
-  }
-  return true
-}
+export const isObjectSpec = (obj: any): obj is ObjectSpec =>
+  !Object.keys(obj).find(key => typeof key !== 'string' || !isValidChild(obj[key]))
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const isArraySpec = (obj: any): obj is ArraySpec => {
-  if (!Array.isArray(obj)) {
-    return false
-  }
-  if (obj.length !== 1) {
-    return false
-  }
-  if (!isValidChild(obj[0])) {
-    return false
-  }
-  return true
-}
+export const isArraySpec = (obj: any): obj is ArraySpec =>
+  Array.isArray(obj) && obj.length === 1 && isValidChild(obj[0])
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const isValidChild = (obj: any) =>
