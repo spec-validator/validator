@@ -23,7 +23,7 @@ const lint = async (...extras: string[]) => {
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
 }
 
-task('compile', series(...forAll(compile)))
+task('build', series(...forAll(compile)))
 
 task('test', async () => {
   exec('jest', '--config', './jest.conf.js', '--passWithNoTests', '--detectOpenHandles')
@@ -43,4 +43,19 @@ task('start-demo', () => {
 task('clean', parallel(
   () => exec('yarn', 'tsc', '--build', '--clean'),
   ...forAll((name: string) => compile(name, '--clean')),
+  ...forAll(async (name: string) => {
+    exec('rm', '-rf', `packages/${name}/dist`)
+    exec('rm', '-f', `packages/${name}/tsconfig.build.tsbuildinfo`)
+  }),
+  () => {
+    exec('rm', '-f', 'packages/tsconfig.build.tsbuildinfo')
+  }
+))
+
+task('all', series(
+  () => exec('yarn', 'install'),
+  'clean',
+  'lint',
+  'test',
+  'build'
 ))
