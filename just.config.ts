@@ -16,8 +16,7 @@ task('test',
   exec('jest', '--config', './jest.conf.js', '--passWithNoTests', '--detectOpenHandles')
 )
 
-task('lint', lint()
-)
+task('lint', lint())
 
 task('fmt', lint('--fix'))
 
