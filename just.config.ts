@@ -20,6 +20,7 @@ task('build', series(
   () => exec('yarn', 'tsc', '--build', 'tsconfig.build.json'),
   parallel(...forAll(async (name: string) => {
     generatePackageJsonRaw(
+      __dirname,
       name,
       '@validator'
     )
