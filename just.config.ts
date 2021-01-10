@@ -19,8 +19,8 @@ const validateTs = async (name: string) => {
   exec('yarn', 'tsc', '--noEmit', '--project', `packages/${name}/tsconfig.build.json`)
 }
 
-const lint = async () => {
-  exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'')
+const lint = async (...extras: string[]) => {
+  exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
 }
 
 task('compile', series(...forAll(compile)))
@@ -31,5 +31,11 @@ task('test', async () => {
 
 task('lint', series(
   ...forAll(validateTs),
-  lint,
+  () => lint()
 ))
+
+task('fmt', () => lint('--fix'))
+
+task('start-demo', () => {
+  exec('yarn', 'ts-node-dev', '-r', 'tsconfig-paths/register', 'example/run.ts')
+})
