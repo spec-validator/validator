@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 
-export default (projectPath: string): void => {
+export default async (projectPath: string): Promise<void> => {
   const { version, license, namespace } = JSON.parse(
     fs.readFileSync('package.json').toString()
   )

@@ -1,7 +1,7 @@
 import { task, series, Task, parallel } from 'just-task'
 
 import exec from './build/exec'
-import generatePackageJsonRaw from './build/generatePackageJson'
+import generatePackageJson from './build/generatePackageJson'
 
 const getProjectsInBuildOrder = (): string[] => [
   'packages/validator',
@@ -18,12 +18,7 @@ const lint = async (...extras: string[]) => {
 
 task('build', series(
   () => exec('yarn', 'tsc', '--build', 'tsconfig.build.json'),
-  parallel(...forAll(async (name: string) => {
-    generatePackageJsonRaw(
-      name,
-      '@validator'
-    )
-  }))
+  parallel(...forAll(generatePackageJson))
 ))
 
 task('test', async () => {
