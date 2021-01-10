@@ -1,9 +1,9 @@
-import { _, Route } from '@validator/rest-api-server'
+import { _, Route } from '@spec-validator/rest-api-server'
 import {
   $, stringField, booleanField, numberField, arrayField,
-} from '@validator/validator/fields'
+} from '@spec-validator/validator/fields'
 import genOpenApi from './genOpenApi'
-import { DEFAULT_SERVER_CONFIG } from '@validator/rest-api-server/server'
+import { DEFAULT_SERVER_CONFIG } from '@spec-validator/rest-api-server/server'
 import withDoc from './withDoc'
 
 test('fullRoute', () => {

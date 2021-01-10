@@ -1,9 +1,9 @@
 import http from 'http'
-import { validate, serialize, TypeHint } from '@validator/validator'
+import { validate, serialize, TypeHint } from '@spec-validator/validator'
 import { RequestSpec, ResponseSpec, Route } from './route'
-import { cached, pick } from '@validator/validator/utils'
+import { cached, pick } from '@spec-validator/validator/utils'
 import { SerializationFormat } from './serialization'
-import { getFieldForSpec } from '@validator/validator/interface'
+import { getFieldForSpec } from '@spec-validator/validator/interface'
 
 export type ServerConfig = {
   readonly baseUrl: string,

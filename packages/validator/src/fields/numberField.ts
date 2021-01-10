@@ -8,7 +8,7 @@ export interface NumberField extends FieldWithStringInputSupport<number> {
   }
 }
 
-export default declareField('@validator/fields.NumberField', (params?: {
+export default declareField('@spec-validator/fields.NumberField', (params?: {
   canBeFloat?: boolean
 }): NumberField => {
   const validate = (value: any): number => {

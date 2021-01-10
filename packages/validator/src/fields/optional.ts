@@ -5,7 +5,7 @@ export interface OptionalField<T extends Any> extends Field<Optional<T>> {
   readonly innerField: Field<T>
 }
 
-export default declareField('@validator/fields.Optional', <T extends Any> (
+export default declareField('@spec-validator/fields.Optional', <T extends Any> (
   innerField: Field<T>
 ): OptionalField<T> => ({
     innerField,

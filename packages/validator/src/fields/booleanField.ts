@@ -4,7 +4,7 @@ import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
 export type BooleanField = FieldWithStringInputSupport<boolean>
 
-export default declareField('@validator/fields.BooleanField', (): BooleanField => {
+export default declareField('@spec-validator/fields.BooleanField', (): BooleanField => {
   const validate = (value: any): boolean => {
     if (value !== true && value !== false) {
       throw 'Not a boolean'

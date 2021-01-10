@@ -3,7 +3,7 @@ import { FieldWithStringInputSupport, FieldWithRegExp } from './segmentField'
 
 export interface StringField extends FieldWithStringInputSupport<string>, FieldWithRegExp<string> {}
 
-export default declareField('@validator/fields.StringField', (
+export default declareField('@spec-validator/fields.StringField', (
   regex?: RegExp
 ): StringField => {
   const result = {

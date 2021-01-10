@@ -1,7 +1,7 @@
 import {
   arrayField, booleanField, choiceField, constantField,
   numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault,
-} from '@validator/validator/fields'
+} from '@spec-validator/validator/fields'
 import getSchema from './schemaRegistry'
 import withDoc from './withDoc'
 

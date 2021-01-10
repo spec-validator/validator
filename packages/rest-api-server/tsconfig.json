@@ -4,8 +4,8 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "paths": {
-      "@validator/validator/*": ["../validator/src/*"],
-      "@validator/validator": ["../validator/src/index.ts"]
+      "@spec-validator/validator/*": ["../validator/src/*"],
+      "@spec-validator/validator": ["../validator/src/index.ts"]
     }
   },
   "include": ["src/**/*.ts"]

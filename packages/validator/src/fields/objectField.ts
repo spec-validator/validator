@@ -27,7 +27,7 @@ const ensureNoExtraFields = (
   }
 }
 
-export default declareField('@validator/fields.ObjectField', <
+export default declareField('@spec-validator/fields.ObjectField', <
   Spec extends ObjectFields = ObjectFields
 > (
     objectSpec: Spec,

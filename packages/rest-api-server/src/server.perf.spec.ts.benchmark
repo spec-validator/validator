@@ -1,7 +1,7 @@
 import request from 'supertest'
 import express from 'express'
 
-import { $, objectField, stringField } from '@validator/validator/fields'
+import { $, objectField, stringField } from '@spec-validator/validator/fields'
 import { createServer, _ } from './server'
 
 /**

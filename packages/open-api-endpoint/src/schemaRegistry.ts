@@ -3,9 +3,9 @@ import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 import {
   arrayField, booleanField, choiceField, constantField,
   numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault,
-} from '@validator/validator/fields'
-import createRegistry, { registryDeclaration as $ } from '@validator/validator/registry'
-import { Primitive } from '@validator/validator'
+} from '@spec-validator/validator/fields'
+import createRegistry, { registryDeclaration as $ } from '@spec-validator/validator/registry'
+import { Primitive } from '@spec-validator/validator'
 
 import withDoc from './withDoc'
 

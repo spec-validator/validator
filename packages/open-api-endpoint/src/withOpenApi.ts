@@ -1,7 +1,7 @@
-import { _, ServerConfig } from '@validator/rest-api-server'
-import { Json } from '@validator/validator'
-import { $, constantField, stringField } from '@validator/validator/fields'
-import wildcardObjectField from '@validator/validator/fields/wildcardObjectField'
+import { _, ServerConfig } from '@spec-validator/rest-api-server'
+import { Json } from '@spec-validator/validator'
+import { $, constantField, stringField } from '@spec-validator/validator/fields'
+import wildcardObjectField from '@spec-validator/validator/fields/wildcardObjectField'
 import genOpenApi, { DEFAULT_INFO, Info, WithInfo } from './genOpenApi'
 
 const getUI = (url: string, info: Info) => `

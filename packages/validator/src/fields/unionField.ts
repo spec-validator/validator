@@ -10,7 +10,7 @@ export interface UnionField<Variants extends SpecUnion<any>[]> extends Field<Uni
   readonly variants: Variants
 }
 
-export default declareField('@validator/fields.UnionField', <Variants extends SpecUnion<unknown>[]> (
+export default declareField('@spec-validator/fields.UnionField', <Variants extends SpecUnion<unknown>[]> (
   ...variants: Variants
 ): UnionField<Variants> => ({
     variants,

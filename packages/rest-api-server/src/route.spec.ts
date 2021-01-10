@@ -1,9 +1,9 @@
-import { choiceField, numberField, objectField, stringField, unionField } from '@validator/validator/fields'
-import constantField from '@validator/validator/fields/constantField'
-import $ from '@validator/validator/fields/segmentField'
+import { choiceField, numberField, objectField, stringField, unionField } from '@spec-validator/validator/fields'
+import constantField from '@spec-validator/validator/fields/constantField'
+import $ from '@spec-validator/validator/fields/segmentField'
 
-import { expectType } from '@validator/validator/TypeTestUtils.test'
-import { Promisable } from '@validator/validator/util-types'
+import { expectType } from '@spec-validator/validator/TypeTestUtils.test'
+import { Promisable } from '@spec-validator/validator/util-types'
 import { Route } from './route'
 
 describe('Route', () => {

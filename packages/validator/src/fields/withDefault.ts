@@ -6,7 +6,7 @@ export interface WithDefault<T extends Any> extends Field<T> {
   readonly defaultValue: T
 }
 
-export default declareField('@validator/fields.WithDefault', <T extends Any> (
+export default declareField('@spec-validator/fields.WithDefault', <T extends Any> (
   innerField: Field<T>,
   defaultValue: T
 ): WithDefault<T> => ({

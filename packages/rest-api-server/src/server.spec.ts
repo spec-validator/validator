@@ -2,7 +2,7 @@ import request from 'supertest'
 
 import {
   $, constantField, numberField, objectField, optional, stringField,
-} from '@validator/validator/fields'
+} from '@spec-validator/validator/fields'
 
 
 import { createServer, _ } from './server'

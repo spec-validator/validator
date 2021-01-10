@@ -1,8 +1,8 @@
 {
-  "name": "@validator/rest-api-server",
+  "name": "@spec-validator/rest-api-server",
   "version": "0.0.1",
   "dependencies": {
-    "@validator/validator": "0.0.1",
+    "@spec-validator/validator": "0.0.1",
     "qs": "^6.9.4"
   },
   "devDependencies": {

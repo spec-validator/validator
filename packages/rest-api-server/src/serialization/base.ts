@@ -1,4 +1,4 @@
-import { Json } from '@validator/validator/Json'
+import { Json } from '@spec-validator/validator/Json'
 
 export default interface SerializationFormat {
   mediaType: string
