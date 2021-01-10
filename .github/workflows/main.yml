@@ -22,33 +22,17 @@ jobs:
         run: yarn install
 
       - name: Lint
-        run: yarn lint
+        run: yarn just lint
 
       - name: Test
-        run: yarn test
+        run: yarn just test
 
       - name: Build
-        run: yarn build
+        run: yarn just build
 
       - name: Prepare GITHUB_TOKEN
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
 
-      - name: Prepare GIT
-        run: |
-          git config --global user.email "<>"
-          git config --global user.name ${GITHUB_ACTOR}
       - name: Publish
-        run: yarn publish
+        run: yarn just publish
 
-      - name: Publish Storybook
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          mv ./storybook-static /tmp
-          cd /tmp/storybook-static
-          git init
-          git checkout -b gh-pages
-          echo spikard.gurunars.com > CNAME
-          git add .
-          git commit -am "Storybook build ${GITHUB_SHA}"
-          git push --force https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git gh-pages
