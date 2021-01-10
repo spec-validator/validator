@@ -11,10 +11,6 @@ const getProjectsInBuildOrder = (): string[] => [
 const forAll = (item: (name: string) => Promise<void>): Task[] =>
   getProjectsInBuildOrder().map(it => item.bind(null, it))
 
-const compile = async (name: string, ...extras: string[]) => {
-  exec('yarn', 'tsc', '--build', `packages/${name}/tsconfig.build.json`, ...extras)
-}
-
 const validateTs = async (name: string) => {
   exec('yarn', 'tsc', '--noEmit', '--project', `packages/${name}/tsconfig.build.json`)
 }
@@ -42,7 +38,9 @@ task('start-demo', () => {
 
 task('clean', parallel(
   () => exec('yarn', 'tsc', '--build', '--clean'),
-  ...forAll((name: string) => compile(name, '--clean')),
+  ...forAll(async (name: string) => {
+    exec('yarn', 'tsc', '--build', `packages/${name}/tsconfig.build.json`, '--clean')
+  }),
   ...forAll(async (name: string) => {
     exec('rm', '-rf', `packages/${name}/dist`)
     exec('rm', '-f', `packages/${name}/tsconfig.build.tsbuildinfo`)
