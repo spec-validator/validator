@@ -1,4 +1,4 @@
-import { task, series, Task, parallel } from 'just-scripts'
+import { task, series, Task, parallel } from 'just-task'
 
 import exec from './build/exec'
 
