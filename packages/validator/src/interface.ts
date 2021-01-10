@@ -6,9 +6,7 @@ export const getFieldForSpec = <DeserializedType> (
   spec: SpecUnion<DeserializedType>,
   allowExtraFields = false
 ): Field<DeserializedType> => {
-  if (spec === undefined) {
-    return undefinedField()
-  } else if (isFieldSpec(spec)) {
+  if (isFieldSpec(spec)) {
     return spec
   } else if (isArraySpec(spec)) {
     return arrayField(getFieldForSpec(spec[0])) as unknown as Field<DeserializedType>

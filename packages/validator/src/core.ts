@@ -56,7 +56,7 @@ export const isFieldSpec = <DeserializedType>(obj: any): obj is Field<Deserializ
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const isObjectSpec = (obj: any): obj is ObjectSpec =>
-  !Object.keys(obj).find(key => typeof key !== 'string' || !isValidChild(obj[key]))
+  obj && !Object.keys(obj).find(key => typeof key !== 'string' || !isValidChild(obj[key]))
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const isArraySpec = (obj: any): obj is ArraySpec =>
