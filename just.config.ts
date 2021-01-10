@@ -3,6 +3,7 @@ import { task, series, Task, parallel } from 'just-task'
 import exec from './build/exec'
 import generatePackageJson from './build/generatePackageJson'
 
+// TODO: obtain the packages from a namespace
 const getProjectsInBuildOrder = (): string[] => [
   'packages/validator',
   'packages/rest-api-server',
