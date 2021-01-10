@@ -25,7 +25,7 @@ export default async (projectPath: string): Promise<void> => {
   const workspacePackages = new Set(getPackageNamesInBuildOrder())
 
   if (newPackageJson.dependencies) {
-    Object.keys(newPackageJson.dependencies).filter(workspacePackages.has).forEach(it => {
+    Object.keys(newPackageJson.dependencies).filter(it => workspacePackages.has(it)).forEach(it => {
       newPackageJson.dependencies[it] = version
     })
   }
