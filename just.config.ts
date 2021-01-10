@@ -1,14 +1,26 @@
 import { task, series, Task, parallel } from 'just-task'
 
 import exec from './build/exec'
+import getOutput from './build/getOutput'
 import generatePackageJson from './build/generatePackageJson'
+import dfs from './build/dfs'
+import cached from './build/cached'
 
-// TODO: obtain the packages from a namespace
-const getProjectsInBuildOrder = (): string[] => [
-  'packages/validator',
-  'packages/rest-api-server',
-  'packages/open-api-endpoint',
-]
+const getWorkspaceInfo = () => cached(
+  'workspaceInfo',
+  () => JSON.parse(getOutput('yarn', 'workspaces', 'info').toString())
+)
+
+const getGraph = (): Record<string, string[]> => Object.fromEntries(Object.entries(
+  getWorkspaceInfo()
+).map(([parent, config]) => [parent, (config as any).workspaceDependencies]))
+
+const getPackageNamesInBuildOrder = (): string[] => dfs(getGraph())
+
+const getProjectsInBuildOrder = (): string[] => {
+  const info = getWorkspaceInfo()
+  return getPackageNamesInBuildOrder().map(name => info[name].location)
+}
 
 const forAll = (item: (name: string) => Promise<void>): Task[] =>
   getProjectsInBuildOrder().map(it => item.bind(null, it))
