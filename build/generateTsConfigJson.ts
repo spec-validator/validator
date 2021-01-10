@@ -12,20 +12,10 @@ const generateRootConfig = (): void => {
     'compilerOptions': {
       'noEmit': true,
     },
-    'references': paths.map(path => ({
-      'path': `${path}/tsconfig.build.json`,
+    'references': paths.map(it => ({
+      'path': `${it}/tsconfig.build.json`,
     })),
   })
-}
-
-const getPathGraph = (): Record<string, string[]> => {
-  const info = getWorkspaceInfo()
-  return Object.entries(getGraph()).map(
-    ([parent, children]) => [
-      info[parent].location,
-      children.map(child => info[child].location),
-    ]
-  ) as unknown as Record<string, string[]>
 }
 
 const relativePath = (parent: string, child: string) => {
@@ -36,6 +26,17 @@ const relativePath = (parent: string, child: string) => {
   }
   dots.push(child)
   return dots.join('/')
+}
+
+
+const getPathGraph = (): Record<string, string[]> => {
+  const info = getWorkspaceInfo()
+  return Object.entries(getGraph()).map(
+    ([parent, children]) => [
+      info[parent].location,
+      children.map(child => relativePath(parent, info[child].location)),
+    ]
+  ) as unknown as Record<string, string[]>
 }
 
 const generateProjectConfigs = (): void => {
@@ -49,7 +50,7 @@ const generateProjectConfigs = (): void => {
       },
       'exclude': ['src/**/*.spec.ts', 'src/**/*.test.ts'],
       'references': children.map(child => (
-        { 'path': `${relativePath(parent, child)}/tsconfig.build.json` }
+        { 'path': `${child}/tsconfig.build.json` }
       )),
     })
   })
