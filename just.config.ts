@@ -31,10 +31,19 @@ task('clean', series(
     ...forAllPackages(
       (path: string) => exec('yarn', 'tsc', '--build', `${path}/tsconfig.build.json`, '--clean'),
       (path: string) => exec('rm', '-f', `${path}/tsconfig.build.tsbuildinfo`),
+      (path: string) => exec('rm', '-f', `${path}/tsconfig.tsbuildinfo`),
       (path: string) => exec('rm', '-rf', `${path}/dist`)
     ),
-    exec('rm', '-f', 'tsconfig.build.tsbuildinfo')
-  )))
+    exec('rm', '-f', 'tsconfig.build.tsbuildinfo'),
+    exec('rm', '-f', 'tsconfig.tsbuildinfo')
+  ),
+  parallel(
+    ...forAllPackages(
+      (path: string) => exec('rm', '-f', `${path}/tsconfig.build.json`),
+    ),
+    exec('rm', '-f', 'tsconfig.build.json')
+  )
+))
 
 task('publish', parallel(...forAllPackages(
   (path: string) => exec('yarn', 'publish', `${path}/dist`, '--new-version', read('package.json').version)
