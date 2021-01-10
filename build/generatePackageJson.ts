@@ -1,25 +1,19 @@
 import { Task } from 'just-task'
 
-import * as fs from 'fs'
 
 import { getPackageNamesInBuildOrder } from './buildOrder'
+import { read, write } from './readAndWrite'
 
 const EXCLUDE = new Set(['devDependencies'])
 const COPY_FROM_PARENT = [
   'version', 'license', 'author', 'publishConfig', 'repository',
 ]
 
-export const getParentPackageJson = (): Record<string, any> => JSON.parse(
-  fs.readFileSync('package.json').toString()
-)
-
 export default (projectPath: string): Task => async () => {
-  const parentConfig: Record<string, any> = getParentPackageJson()
+  const parentConfig: Record<string, any> = read('package.json')
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const packageJson: Record<string, any> = JSON.parse(
-    fs.readFileSync(`${projectPath}/package.json`).toString()
-  )
+  const packageJson: Record<string, any> = read(`${projectPath}/package.json`)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const newPackageJson: Record<string, any> = Object.fromEntries(
@@ -40,8 +34,5 @@ export default (projectPath: string): Task => async () => {
     })
   }
 
-  fs.writeFileSync(
-    `${projectPath}/dist/package.json`,
-    JSON.stringify(newPackageJson, null, 2)
-  )
+  write(`${projectPath}/dist/package.json`, newPackageJson)
 }
