@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Configure node
+        uses: actions/setup-node@master
+        with:
+          node-version: "12.x"
+
+      - name: Install
+        run: yarn install
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Test
+        run: yarn test
+
+      - name: Build
+        run: yarn build
+
+      - name: Prepare GITHUB_TOKEN
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
+
+      - name: Prepare GIT
+        run: |
+          git config --global user.email "<>"
+          git config --global user.name ${GITHUB_ACTOR}
+      - name: Publish
+        run: yarn publish
+
+      - name: Publish Storybook
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mv ./storybook-static /tmp
+          cd /tmp/storybook-static
+          git init
+          git checkout -b gh-pages
+          echo spikard.gurunars.com > CNAME
+          git add .
+          git commit -am "Storybook build ${GITHUB_SHA}"
+          git push --force https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git gh-pages
