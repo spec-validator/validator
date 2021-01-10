@@ -9,10 +9,12 @@ const COPY_FROM_PARENT = [
   'version', 'license', 'author', 'publishConfig', 'repository',
 ]
 
+export const getParentPackageJson = (): Record<string, any> => JSON.parse(
+  fs.readFileSync('package.json').toString()
+)
+
 export default (projectPath: string): Task => async () => {
-  const parentConfig = JSON.parse(
-    fs.readFileSync('package.json').toString()
-  )
+  const parentConfig: Record<string, any> = getParentPackageJson()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const packageJson: Record<string, any> = JSON.parse(

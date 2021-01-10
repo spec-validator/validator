@@ -2,7 +2,7 @@ import { task, series, parallel } from 'just-task'
 import { forAll as forAllPackages } from './build/buildOrder'
 
 import exec from './build/exec'
-import generatePackageJson from './build/generatePackageJson'
+import generatePackageJson, { getParentPackageJson } from './build/generatePackageJson'
 
 const lint = (...extras: string[]) =>
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
@@ -32,7 +32,7 @@ task('clean', parallel(
 ))
 
 task('publish', parallel(...forAllPackages(
-  (path: string) => exec('yarn', '--cwd', `${path}/dist`, 'publish')
+  (path: string) => exec('yarn', '--cwd', `${path}/dist`, 'publish', '--new-version', getParentPackageJson().version)
 )))
 
 task('all', series(
