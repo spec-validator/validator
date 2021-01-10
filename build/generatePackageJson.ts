@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 
-export default (projectPath: string, dependencyPrefix: string): void => {
-  const { version, license } = JSON.parse(
+export default (projectPath: string): void => {
+  const { version, license, namespace } = JSON.parse(
     fs.readFileSync('package.json').toString()
   )
 
@@ -11,6 +11,7 @@ export default (projectPath: string, dependencyPrefix: string): void => {
   const packageJson: Record<string, any> = JSON.parse(
     fs.readFileSync(`${projectPath}/package.json`).toString()
   )
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const newPackageJson: Record<string, any> = Object.fromEntries(
     Object.entries(packageJson).filter(it => !EXCLUDE.has(it[0]))
@@ -20,7 +21,7 @@ export default (projectPath: string, dependencyPrefix: string): void => {
   newPackageJson.license = license
 
   if (newPackageJson.dependencies) {
-    Object.keys(newPackageJson.dependencies).filter(it => it.startsWith(dependencyPrefix)).forEach(it => {
+    Object.keys(newPackageJson.dependencies).filter(it => it.startsWith(namespace)).forEach(it => {
       newPackageJson.dependencies[it] = version
     })
   }
