@@ -28,7 +28,6 @@ task('clean', parallel(
     (path: string) => exec('rm', '-f', `${path}/tsconfig.build.tsbuildinfo`),
     (path: string) => exec('rm', '-rf', `${path}/dist`)
   ),
-  exec('rm', '-f', 'tsconfig.tsbuildinfo'),
   exec('rm', '-f', 'tsconfig.build.tsbuildinfo')
 ))
 
