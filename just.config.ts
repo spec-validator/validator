@@ -43,6 +43,7 @@ task('all', series(
   () => exec('yarn', 'install'),
   'clean',
   'lint',
+  'clean',
   'test',
   'build'
 ))
