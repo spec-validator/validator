@@ -6,11 +6,6 @@ install:
 test:
 	yarn test
 
-compile:
-	yarn tsc --build packages/validator/tsconfig.build.json
-	yarn tsc --build packages/rest-api-server/tsconfig.build.json
-	yarn tsc --build packages/open-api-endpoint/tsconfig.build.json
-
 build: compile
 
 publish:

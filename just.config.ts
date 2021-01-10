@@ -1,4 +1,4 @@
-import { task, series, Task } from 'just-scripts'
+import { task, series, Task, parallel } from 'just-scripts'
 
 import exec from './build/exec'
 
@@ -11,8 +11,8 @@ const getProjectsInBuildOrder = (): string[] => [
 const forAll = (item: (name: string) => Promise<void>): Task[] =>
   getProjectsInBuildOrder().map(it => item.bind(null, it))
 
-const compile = async (name: string) => {
-  exec('yarn', 'tsc', '--build', `packages/${name}/tsconfig.build.json`)
+const compile = async (name: string, ...extras: string[]) => {
+  exec('yarn', 'tsc', '--build', `packages/${name}/tsconfig.build.json`, ...extras)
 }
 
 const validateTs = async (name: string) => {
@@ -39,3 +39,8 @@ task('fmt', () => lint('--fix'))
 task('start-demo', () => {
   exec('yarn', 'ts-node-dev', '-r', 'tsconfig-paths/register', 'example/run.ts')
 })
+
+task('clean', parallel(
+  () => exec('yarn', 'tsc', '--build', '--clean'),
+  ...forAll((name: string) => compile(name, '--clean')),
+))
