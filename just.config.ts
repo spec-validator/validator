@@ -1,6 +1,7 @@
 import { task, series, Task, parallel } from 'just-task'
 
 import exec from './build/exec'
+import generatePackageJsonRaw from './build/generatePackageJson'
 
 const getProjectsInBuildOrder = (): string[] => [
   'packages/validator',
@@ -11,22 +12,28 @@ const getProjectsInBuildOrder = (): string[] => [
 const forAll = (item: (name: string) => Promise<void>): Task[] =>
   getProjectsInBuildOrder().map(it => item.bind(null, it))
 
-const validateTs = async (name: string) => {
-  exec('yarn', 'tsc', '--noEmit', '--project', `${name}/tsconfig.build.json`)
-}
-
 const lint = async (...extras: string[]) => {
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
 }
 
-task('build', () => exec('yarn', 'tsc', '--build', 'tsconfig.build.json'))
+task('build', series(
+  () => exec('yarn', 'tsc', '--build', 'tsconfig.build.json'),
+  parallel(...forAll(async (name: string) => {
+    generatePackageJsonRaw(
+      name,
+      '@validator'
+    )
+  }))
+))
 
 task('test', async () => {
   exec('jest', '--config', './jest.conf.js', '--passWithNoTests', '--detectOpenHandles')
 })
 
 task('lint', series(
-  ...forAll(validateTs),
+  ...forAll(async (name: string) => {
+    exec('yarn', 'tsc', '--noEmit', '--project', `${name}/tsconfig.build.json`)
+  }),
   () => lint()
 ))
 
