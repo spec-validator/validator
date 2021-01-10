@@ -1,29 +1,8 @@
-import { task, series, Task, parallel } from 'just-task'
+import { task, series, parallel } from 'just-task'
+import { forAll } from './build/buildOrder'
 
 import exec from './build/exec'
-import getOutput from './build/getOutput'
 import generatePackageJson from './build/generatePackageJson'
-import dfs from './build/dfs'
-import cached from './build/cached'
-
-const getWorkspaceInfo = () => cached(
-  'workspaceInfo',
-  () => JSON.parse(getOutput('yarn', 'workspaces', 'info').toString())
-)
-
-const getGraph = (): Record<string, string[]> => Object.fromEntries(Object.entries(
-  getWorkspaceInfo()
-).map(([parent, config]) => [parent, (config as any).workspaceDependencies]))
-
-const getPackageNamesInBuildOrder = (): string[] => dfs(getGraph())
-
-const getProjectsInBuildOrder = (): string[] => {
-  const info = getWorkspaceInfo()
-  return getPackageNamesInBuildOrder().map(name => info[name].location)
-}
-
-const forAll = (item: (name: string) => Promise<void>): Task[] =>
-  getProjectsInBuildOrder().map(it => item.bind(null, it))
 
 const lint = async (...extras: string[]) => {
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)

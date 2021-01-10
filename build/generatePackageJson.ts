@@ -1,7 +1,9 @@
 import * as fs from 'fs'
 
+import { getPackageNamesInBuildOrder } from './buildOrder'
+
 export default async (projectPath: string): Promise<void> => {
-  const { version, license, namespace } = JSON.parse(
+  const { version, license } = JSON.parse(
     fs.readFileSync('package.json').toString()
   )
 
@@ -20,8 +22,10 @@ export default async (projectPath: string): Promise<void> => {
   newPackageJson.version = version
   newPackageJson.license = license
 
+  const workspacePackages = new Set(getPackageNamesInBuildOrder())
+
   if (newPackageJson.dependencies) {
-    Object.keys(newPackageJson.dependencies).filter(it => it.startsWith(namespace)).forEach(it => {
+    Object.keys(newPackageJson.dependencies).filter(workspacePackages.has).forEach(it => {
       newPackageJson.dependencies[it] = version
     })
   }
