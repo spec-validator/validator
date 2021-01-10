@@ -37,12 +37,10 @@ task('start-demo', () => {
 })
 
 task('clean', parallel(
-  () => exec('yarn', 'tsc', '--build', '--clean'),
   ...forAll(async (name: string) => {
     exec('yarn', 'tsc', '--build', `packages/${name}/tsconfig.build.json`, '--clean')
   }),
   ...forAll(async (name: string) => {
-    exec('rm', '-rf', `packages/${name}/dist`)
     exec('rm', '-f', `packages/${name}/tsconfig.build.tsbuildinfo`)
   }),
   () => {
