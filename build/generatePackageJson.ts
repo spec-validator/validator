@@ -4,12 +4,15 @@ import * as fs from 'fs'
 
 import { getPackageNamesInBuildOrder } from './buildOrder'
 
+const EXCLUDE = new Set(['devDependencies'])
+const COPY_FROM_PARENT = [
+  'version', 'license', 'author', 'publishConfig', 'repository',
+]
+
 export default (projectPath: string): Task => async () => {
-  const { version, license } = JSON.parse(
+  const parentConfig = JSON.parse(
     fs.readFileSync('package.json').toString()
   )
-
-  const EXCLUDE = new Set(['devDependencies'])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const packageJson: Record<string, any> = JSON.parse(
@@ -21,14 +24,17 @@ export default (projectPath: string): Task => async () => {
     Object.entries(packageJson).filter(it => !EXCLUDE.has(it[0]))
   )
 
-  newPackageJson.version = version
-  newPackageJson.license = license
+  COPY_FROM_PARENT.forEach(key => {
+    newPackageJson[key] = parentConfig[key]
+  })
+
+  newPackageJson.private = false
 
   const workspacePackages = new Set(getPackageNamesInBuildOrder())
 
   if (newPackageJson.dependencies) {
     Object.keys(newPackageJson.dependencies).filter(it => workspacePackages.has(it)).forEach(it => {
-      newPackageJson.dependencies[it] = version
+      newPackageJson.dependencies[it] = parentConfig.version
     })
   }
 

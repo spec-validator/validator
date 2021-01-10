@@ -4,9 +4,8 @@ import { forAll as forAllPackages } from './build/buildOrder'
 import exec from './build/exec'
 import generatePackageJson from './build/generatePackageJson'
 
-const lint = async (...extras: string[]) => {
+const lint = (...extras: string[]) =>
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
-}
 
 task('build', series(
   exec('yarn', 'tsc', '--build', 'tsconfig.build.json'),
@@ -17,12 +16,10 @@ task('test',
   exec('jest', '--config', './jest.conf.js', '--passWithNoTests', '--detectOpenHandles')
 )
 
-task('lint', series(
-  ...forAllPackages((name: string) => exec('yarn', 'tsc', '--noEmit', '--project', `${name}/tsconfig.build.json`)),
-  () => lint()
-))
+task('lint', lint()
+)
 
-task('fmt', () => lint('--fix'))
+task('fmt', lint('--fix'))
 
 task('start-demo', exec('yarn', 'ts-node-dev', '-r', 'tsconfig-paths/register', 'example/run.ts'))
 
