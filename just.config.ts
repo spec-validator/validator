@@ -23,7 +23,7 @@ const lint = async (...extras: string[]) => {
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
 }
 
-task('build', series(...forAll(compile)))
+task('build', () => exec('yarn', 'tsc', '--build', 'tsconfig.build.json'))
 
 task('test', async () => {
   exec('jest', '--config', './jest.conf.js', '--passWithNoTests', '--detectOpenHandles')
