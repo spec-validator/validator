@@ -31,12 +31,12 @@ const relativePath = (parent: string, child: string) => {
 
 const getPathGraph = (): Record<string, string[]> => {
   const info = getWorkspaceInfo()
-  return Object.entries(getGraph()).map(
+  return Object.fromEntries(Object.entries(getGraph()).map(
     ([parent, children]) => [
       info[parent].location,
       children.map(child => relativePath(parent, info[child].location)),
     ]
-  ) as unknown as Record<string, string[]>
+  ))
 }
 
 const generateProjectConfigs = (): void => {
