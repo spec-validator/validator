@@ -3,16 +3,16 @@ import { task, series, Task, parallel } from 'just-task'
 import exec from './build/exec'
 
 const getProjectsInBuildOrder = (): string[] => [
-  'validator',
-  'rest-api-server',
-  'open-api-endpoint',
+  'packages/validator',
+  'packages/rest-api-server',
+  'packages/open-api-endpoint',
 ]
 
 const forAll = (item: (name: string) => Promise<void>): Task[] =>
   getProjectsInBuildOrder().map(it => item.bind(null, it))
 
 const validateTs = async (name: string) => {
-  exec('yarn', 'tsc', '--noEmit', '--project', `packages/${name}/tsconfig.build.json`)
+  exec('yarn', 'tsc', '--noEmit', '--project', `${name}/tsconfig.build.json`)
 }
 
 const lint = async (...extras: string[]) => {
@@ -38,14 +38,11 @@ task('start-demo', () => {
 
 task('clean', parallel(
   ...forAll(async (name: string) => {
-    exec('yarn', 'tsc', '--build', `packages/${name}/tsconfig.build.json`, '--clean')
+    exec('yarn', 'tsc', '--build', `${name}/tsconfig.build.json`, '--clean')
   }),
   ...forAll(async (name: string) => {
-    exec('rm', '-f', `packages/${name}/tsconfig.build.tsbuildinfo`)
-  }),
-  () => {
-    exec('rm', '-f', 'packages/tsconfig.build.tsbuildinfo')
-  }
+    exec('rm', '-f', `${name}/tsconfig.build.tsbuildinfo`)
+  })
 ))
 
 task('all', series(
