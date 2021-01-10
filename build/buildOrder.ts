@@ -5,18 +5,18 @@ import dfs from './dfs'
 import flatMap from './flatMap'
 import getOutput from './getOutput'
 
-const getWorkspaceInfo = () => cached(
+export const getWorkspaceInfo = (): any => cached(
   'workspaceInfo',
   () => JSON.parse(getOutput('yarn', 'workspaces', 'info').toString())
 )
 
-const getGraph = (): Record<string, string[]> => Object.fromEntries(Object.entries(
+export const getGraph = (): Record<string, string[]> => Object.fromEntries(Object.entries(
   getWorkspaceInfo()
 ).map(([parent, config]) => [parent, (config as any).workspaceDependencies]))
 
 export const getPackageNamesInBuildOrder = (): string[] => dfs(getGraph())
 
-const getProjectsPathsInBuildOrder = (): string[] => {
+export const getProjectsPathsInBuildOrder = (): string[] => {
   const info = getWorkspaceInfo()
   return getPackageNamesInBuildOrder().map(name => info[name].location)
 }
