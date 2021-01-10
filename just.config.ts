@@ -25,18 +25,22 @@ task('start-demo', exec('yarn', 'ts-node-dev', '-r', 'tsconfig-paths/register', 
 
 task('clean', parallel(
   ...forAllPackages(
-    (name: string) => exec('yarn', 'tsc', '--build', `${name}/tsconfig.build.json`, '--clean'),
-    (name: string) => exec('rm', '-f', `${name}/tsconfig.build.tsbuildinfo`),
-    (name: string) => exec('rm', '-rf', `${name}/dist`)
+    (path: string) => exec('yarn', 'tsc', '--build', `${path}/tsconfig.build.json`, '--clean'),
+    (path: string) => exec('rm', '-f', `${path}/tsconfig.build.tsbuildinfo`),
+    (path: string) => exec('rm', '-rf', `${path}/dist`)
   ),
   exec('rm', '-f', 'tsconfig.tsbuildinfo'),
   exec('rm', '-f', 'tsconfig.build.tsbuildinfo')
 ))
+
+task('publish', parallel(...forAllPackages(
+  (path: string) => exec('yarn', '--cwd', `${path}/dist`, 'publish')
+)))
 
 task('all', series(
   exec('yarn', 'install'),
   'clean',
   'lint',
   'test',
-  'build'
+  'build',
 ))
