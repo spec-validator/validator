@@ -1,9 +1,10 @@
+import { Task } from 'just-task'
 import path from 'path'
 
 import { getGraph, getProjectsPathsInBuildOrder, getWorkspaceInfo } from './buildOrder'
 import { write } from './readAndWrite'
 
-export const generateRootConfig = (): void => {
+const generateRootConfig = (): void => {
   const paths = getProjectsPathsInBuildOrder()
 
   write('tsconfig.build.json', {
@@ -37,7 +38,7 @@ const relativePath = (parent: string, child: string) => {
   return dots.join('/')
 }
 
-export const generateProjectConfigs = (): void => {
+const generateProjectConfigs = (): void => {
   const graph = getPathGraph()
 
   Object.entries(graph).forEach(([parent, children]) => {
@@ -53,4 +54,9 @@ export const generateProjectConfigs = (): void => {
     })
   })
 
+}
+
+export default (): Task => async () => {
+  generateProjectConfigs()
+  generateRootConfig()
 }
