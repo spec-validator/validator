@@ -32,7 +32,7 @@ task('clean', parallel(
 ))
 
 task('publish', parallel(...forAllPackages(
-  (path: string) => exec('yarn', '--cwd', `${path}/dist`, 'publish', '--new-version', getParentPackageJson().version)
+  (path: string) => exec('yarn', 'publish', `${path}/dist`, '--new-version', getParentPackageJson().version)
 )))
 
 task('all', series(
