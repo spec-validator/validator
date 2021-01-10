@@ -1,8 +1,10 @@
+import { Task } from 'just-task'
+
 import * as fs from 'fs'
 
 import { getPackageNamesInBuildOrder } from './buildOrder'
 
-export default async (projectPath: string): Promise<void> => {
+export default (projectPath: string): Task => async () => {
   const { version, license } = JSON.parse(
     fs.readFileSync('package.json').toString()
   )
