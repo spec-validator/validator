@@ -1,4 +1,5 @@
-import { numberField, stringField, objectField } from './fields'
+import { Field } from '.'
+import { numberField, stringField, objectField, booleanField } from './fields'
 import createRegistry, { registryDeclaration as $, FieldPair } from './registry'
 
 const normalRegistryPairs: FieldPair[] = [
@@ -30,7 +31,6 @@ describe('createRegistry', () => {
     expect(registry(schema)).toMatchSnapshot()
   })
 
-  /*
   it('throws an error if a duplicate type is registered', () => {
     expect(() => createRegistry([...normalRegistryPairs, $(stringField, () => undefined)]))
       .toThrow(`Found duplicate of type declaration '${stringField.type}'`)
@@ -54,5 +54,4 @@ describe('createRegistry', () => {
     expect(() => registry(schema))
       .toThrow('Fields without \'type\' are not supported')
   })
-  */
 })
