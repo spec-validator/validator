@@ -1,3 +1,0 @@
-# TODO
-
-- Aspect oriented programming
