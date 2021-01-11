@@ -46,7 +46,12 @@ task('clean', series(
 ))
 
 task('publish', parallel(...forAllPackages(
-  (path: string) => exec('yarn', 'publish', `${path}/dist`, '--new-version', read('package.json').version)
+  (path: string) => exec(
+    'yarn', 'publish',
+    '--access', 'public',
+    `${path}/dist`,
+    '--new-version', read('package.json').version
+  )
 )))
 
 task('all', series(
