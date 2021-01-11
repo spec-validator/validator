@@ -1,4 +1,4 @@
-import { serialize, validate } from '../interface'
+import { getFieldForSpec } from '../interface'
 import { Field, SpecUnion, TypeHint } from '../core'
 import { declareField } from '../core'
 
@@ -12,12 +12,14 @@ export interface UnionField<Variants extends SpecUnion<any>[]> extends Field<Uni
 
 export default declareField('@spec-validator/fields.UnionField', <Variants extends SpecUnion<unknown>[]> (
   ...variants: Variants
-): UnionField<Variants> => ({
+): UnionField<Variants> => {
+  const fieldVariants = variants.map(it => getFieldForSpec(it))
+  return {
     variants,
     validate: (value: any): Unioned<Variants> => {
-      for (const variant of variants) {
+      for (const variant of fieldVariants) {
         try {
-          return validate(variant, value) as Unioned<Variants>
+          return variant.validate(value) as Unioned<Variants>
         } catch {
           // SKIP
         }
@@ -25,13 +27,14 @@ export default declareField('@spec-validator/fields.UnionField', <Variants exten
       throw 'Invalid variant'
     },
     serialize: (deserialized: Unioned<Variants>) => {
-      for (const variant of variants) {
+      for (const variant of fieldVariants) {
         try {
-          return serialize(variant, validate(variant, deserialized))
+          return variant.serialize(variant.validate(deserialized))
         } catch {
           // SKIP
         }
       }
       throw 'Invalid variant - should have matched'
     },
-  }))
+  }
+})
