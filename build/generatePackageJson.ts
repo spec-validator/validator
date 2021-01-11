@@ -1,5 +1,7 @@
-import { Task } from 'just-task'
+import fs from 'fs'
+import util from 'util'
 
+import { Task } from 'just-task'
 
 import { getPackageNamesInBuildOrder } from './buildOrder'
 import getOutput from './getOutput'
@@ -14,6 +16,8 @@ const COPY_FROM_PARENT = [
   'bugs',
   'homepage',
 ]
+
+const copyFile = util.promisify(fs.copyFile)
 
 // eslint-disable-next-line max-statements
 export default (projectPath: string): Task => async () => {
@@ -59,4 +63,6 @@ export default (projectPath: string): Task => async () => {
   }
 
   write(`${projectPath}/dist/package.json`, newPackageJson)
+
+  copyFile(`${projectPath}/README.md`, `${projectPath}/dist/README.md`)
 }
