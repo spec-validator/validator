@@ -82,7 +82,7 @@ export const BASE_PAIRS = [
     oneOf: field.variants.map(it => requestSchema(it)),
   })),
   $(withDefault, (field, requestSchema): OpenAPI.SchemaObject => ({
-    ...requestSchema(field.innerField),
+    ...requestSchema(field.innerSpec),
     default: field.defaultValue,
   })),
   $(withDoc, (field, requestSchema): OpenAPI.SchemaObject => ({

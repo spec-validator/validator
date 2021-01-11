@@ -1,16 +1,19 @@
-import { declareField, Field } from '../core'
+import { declareField, Field, SpecUnion } from '../core'
+import { getFieldForSpec } from '../interface'
 import { Any } from '../util-types'
 
 export interface WithDefault<T extends Any> extends Field<T> {
-  readonly innerField: Field<T>,
+  readonly innerSpec: SpecUnion<T>,
   readonly defaultValue: T
 }
 
 export default declareField('@spec-validator/fields.WithDefault', <T extends Any> (
-  innerField: Field<T>,
+  innerSpec: SpecUnion<T>,
   defaultValue: T
-): WithDefault<T> => ({
-    innerField,
+): WithDefault<T> => {
+  const innerField = getFieldForSpec(innerSpec)
+  return {
+    innerSpec,
     defaultValue,
     validate: (value: any): T => {
       if (value === undefined) {
@@ -19,4 +22,5 @@ export default declareField('@spec-validator/fields.WithDefault', <T extends Any
       return innerField.validate(value)
     },
     serialize: (deserialized: T) => innerField.serialize(deserialized),
-  }))
+  }
+})
