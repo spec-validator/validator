@@ -72,7 +72,7 @@ export const BASE_PAIRS = [
     return result
   }),
   $(optional, (field, requestSchema): OpenAPI.SchemaObject  => ({
-    ...requestSchema(field.innerField),
+    ...requestSchema(field.innerSpec),
   })),
   $(stringField, (field): OpenAPI.NonArraySchemaObject => ({
     type: 'string',

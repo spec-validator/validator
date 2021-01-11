@@ -1,14 +1,17 @@
-import { declareField, Field } from '../core'
+import { declareField, Field, SpecUnion } from '../core'
+import { getFieldForSpec } from '../interface'
 import { Any, Optional } from '../util-types'
 
 export interface OptionalField<T extends Any> extends Field<Optional<T>> {
-  readonly innerField: Field<T>
+  readonly innerSpec: SpecUnion<T>
 }
 
 export default declareField('@spec-validator/fields.Optional', <T extends Any> (
-  innerField: Field<T>
-): OptionalField<T> => ({
-    innerField,
+  innerSpec: SpecUnion<T>
+): OptionalField<T> => {
+  const innerField = getFieldForSpec(innerSpec)
+  return {
+    innerSpec,
     validate: (value: any): Optional<T> => {
       if (value === undefined) {
         return value
@@ -17,5 +20,5 @@ export default declareField('@spec-validator/fields.Optional', <T extends Any> (
     },
     serialize: (deserialized: Optional<T>) =>
       deserialized === undefined ? deserialized : innerField.serialize(deserialized) as any,
-  }))
-
+  }
+})
