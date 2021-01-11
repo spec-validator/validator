@@ -2,11 +2,11 @@ import { Task } from 'just-task'
 
 
 import { getPackageNamesInBuildOrder } from './buildOrder'
+import getOutput from './getOutput'
 import { read, write } from './readAndWrite'
 
 const EXCLUDE = new Set(['devDependencies'])
 const COPY_FROM_PARENT = [
-  'version',
   'license',
   'author',
   'publishConfig',
@@ -15,6 +15,7 @@ const COPY_FROM_PARENT = [
   'homepage',
 ]
 
+// eslint-disable-next-line max-statements
 export default (projectPath: string): Task => async () => {
   const parentConfig: Record<string, any> = read('package.json')
 
@@ -32,7 +33,15 @@ export default (projectPath: string): Task => async () => {
     }
   })
 
+  const version = getOutput('git', 'tag', '--points-at', 'HEAD').toString()
+    .split('\n')
+    .find(it => it.match(/^v([0-9]+)\.([0-9]+)\.([0-9]+)$/))
+  if (!version) {
+    throw 'Commit doesn\'t point at any semver tag - can\'t publish'
+  }
+
   newPackageJson.private = false
+  newPackageJson.version = version
 
   const workspacePackages = new Set(getPackageNamesInBuildOrder())
 
