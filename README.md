@@ -16,17 +16,17 @@ and do so entirely with TypeScript in one place without wrtitng even a single li
 
 ## Packages
 
-- [validator](packages/validator/README.md)
+- [@spec-validator/validator](packages/validator/README.md)
 
   Core validation logic - the necessary bits to glue
   payload specifications with TypeScript datastructures.
 
-- [rest-api-server](packages/rest-api-server/README.md)
+- [@spec-validator/rest-api-server](packages/rest-api-server/README.md)
 
   REST API primitives such as a binding to node's http server
   and type-safe specification of HTTP protocol.
 
-- [open-api-endpoint](packages/open-api-endpoint/README.md)
+- [@spec-validator/open-api-endpoint](packages/open-api-endpoint/README.md)
 
   Two endpoints to generate Open API based documentation for
   the routes defined using the `rest-api-server`.
