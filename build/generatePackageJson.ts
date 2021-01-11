@@ -6,7 +6,13 @@ import { read, write } from './readAndWrite'
 
 const EXCLUDE = new Set(['devDependencies'])
 const COPY_FROM_PARENT = [
-  'version', 'license', 'author', 'publishConfig', 'repository',
+  'version',
+  'license',
+  'author',
+  'publishConfig',
+  'repository',
+  'bugs',
+  'homepage',
 ]
 
 export default (projectPath: string): Task => async () => {
@@ -21,7 +27,9 @@ export default (projectPath: string): Task => async () => {
   )
 
   COPY_FROM_PARENT.forEach(key => {
-    newPackageJson[key] = parentConfig[key]
+    if (parentConfig[key]) {
+      newPackageJson[key] = parentConfig[key]
+    }
   })
 
   newPackageJson.private = false
