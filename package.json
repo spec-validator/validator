@@ -1,15 +1,15 @@
 {
   "private": true,
-  "version": "0.2.1",
+  "version": "0.2.2",
   "license": "Apache-2.0",
   "author": {
-    "name" : "Anton Berezin",
-    "email" : "gurunars@gmail.com",
-    "url" : "https://gurunars.com"
+    "name": "Anton Berezin",
+    "email": "gurunars@gmail.com",
+    "url": "https://gurunars.com"
   },
   "homepage": "https://github.com/spec-validator/validator",
   "bugs": {
-    "url" : "https://github.com/spec-validator/validator/issues"
+    "url": "https://github.com/spec-validator/validator/issues"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
