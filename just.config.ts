@@ -4,7 +4,6 @@ import { forAll as forAllPackages } from './build/buildOrder'
 import exec from './build/exec'
 import generatePackageJson from './build/generatePackageJson'
 import generateTsConfigJson from './build/generateTsConfigJson'
-import { read } from './build/readAndWrite'
 
 const lint = (...extras: string[]) =>
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
@@ -48,9 +47,9 @@ task('clean', series(
 task('publish', parallel(...forAllPackages(
   (path: string) => exec(
     'yarn', 'publish',
+    '--non-interactive',
     '--access', 'public',
     `${path}/dist`,
-    '--new-version', read('package.json').version
   )
 )))
 
