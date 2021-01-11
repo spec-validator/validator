@@ -3,7 +3,7 @@ name: pull-request
 on: pull_request
 
 jobs:
-  build:
+  pull-request:
     runs-on: ubuntu-latest
 
     steps:
