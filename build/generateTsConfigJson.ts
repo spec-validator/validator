@@ -41,9 +41,6 @@ const getPathGraph = (): Record<string, string[]> => {
 
 const generateProjectConfigs = (): void => {
   const graph = getPathGraph()
-
-  console.log(graph)
-
   Object.entries(graph).forEach(([parent, children]) => {
     write(`${parent}/tsconfig.build.json`, {
       'extends': './tsconfig.json',

@@ -47,7 +47,7 @@ export default (projectPath: string): Task => async () => {
 
   if (newPackageJson.dependencies) {
     Object.keys(newPackageJson.dependencies).filter(it => workspacePackages.has(it)).forEach(it => {
-      newPackageJson.dependencies[it] = parentConfig.version
+      newPackageJson.dependencies[it] = version
     })
   }
 
