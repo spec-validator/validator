@@ -98,3 +98,36 @@ And using these types with the schema outlined just above will look as follows:
 type Person = TypeHint<typeof personSchema>
 ```
 
+When using functions as the low level building blocks there is a disadvantate though.
+There is no non-redundant way to outline the reverse of validation/deserialization -
+aka serialization.
+
+When explicit would serialization be meaningful if most of JavaScript primitives are
+also Json primitives? When the structure you want to operate with in the implementation
+is e.g. a `Date` object.
+
+To enable it, the low level block should be extended into an aggregate of a validation
+and a serialization function.
+
+Let's call this aggregate a `Field`.
+
+```ts
+export interface Field<DeserializedType> {
+  validate(value: any): DeserializedType;
+  serialize(deserialized: DeserializedType): Json
+}
+
+type ValidatorObject<DeserializedType extends Record<string, unknown> = Record<string, unknown>> = {
+  [P in keyof DeserializedType]: ValidatorSpecUnion<DeserializedType[P]>
+}
+
+type ValidatorSpecUnion<DeserializedType> = ValidatorFunction<DeserializedType> | ValidatorObject
+
+type TypeHint<Spec extends ValidatorSpecUnion<unknown>> =
+  Spec extends ValidatorObject ?
+    { [P in keyof Spec]: TypeHint<Spec[P]> }
+  : Spec extends ValidatorFunction<unknown> ?
+    ReturnType<Spec>
+  :
+    undefined
+```

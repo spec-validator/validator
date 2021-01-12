@@ -15,6 +15,8 @@ class SegmentField<
   DeserializedType = undefined
 > implements Field<DeserializedType> {
 
+  type = '@spec-validator/fields.SegmentField'
+
   private parent?: SegmentField<unknown>
   private regex?: string
 

@@ -5,8 +5,8 @@ export type OfType<Type extends string> = {
   readonly type: Type
 }
 
-export interface Field<DeserializedType, Type extends string=string, InputType=any> extends OfType<Type> {
-  validate(value: InputType): DeserializedType;
+export interface Field<DeserializedType, Type extends string=string> extends OfType<Type> {
+  validate(value: any): DeserializedType;
   serialize(deserialized: DeserializedType): Json
 }
 
