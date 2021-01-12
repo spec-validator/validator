@@ -32,11 +32,11 @@ In TypeScript it is possible to obtain a type of the return value of a function
 via `ReturnType` built-in auxilary type:
 
 ```ts
-const validateString = (input: any): string => {
-  if (typeof input !== 'string') {
+const validateString = (serialized: any): string => {
+  if (typeof serialized !== 'string') {
     throw 'Not a string'
   }
-  return input
+  return serialized
 }
 type ActuallyAString = ReturnType<typeof validateString>
 ```
@@ -109,25 +109,69 @@ is e.g. a `Date` object.
 To enable it, the low level block should be extended into an aggregate of a validation
 and a serialization function.
 
-Let's call this aggregate a `Field`.
+Let's call this aggregate a `Field`:
 
 ```ts
 export interface Field<DeserializedType> {
-  validate(value: any): DeserializedType;
-  serialize(deserialized: DeserializedType): Json
+  validate(serialized: any): DeserializedType;
+  serialize(deserialized: DeserializedType): any
 }
 
 type ValidatorObject<DeserializedType extends Record<string, unknown> = Record<string, unknown>> = {
   [P in keyof DeserializedType]: ValidatorSpecUnion<DeserializedType[P]>
 }
 
-type ValidatorSpecUnion<DeserializedType> = ValidatorFunction<DeserializedType> | ValidatorObject
+type ValidatorSpecUnion<DeserializedType> = Field<DeserializedType> | ValidatorObject
 
 type TypeHint<Spec extends ValidatorSpecUnion<unknown>> =
   Spec extends ValidatorObject ?
     { [P in keyof Spec]: TypeHint<Spec[P]> }
-  : Spec extends ValidatorFunction<unknown> ?
-    ReturnType<Spec>
+  : Spec extends Field<unknown> ?
+    ReturnType<Spec['validate']>
   :
     undefined
 ```
+
+String field may look like:
+
+```ts
+const stringField = (): Field<string> => ({
+  validate: (serialized: any) => {
+    if (typeof serialized !== 'string') {
+      throw 'Not a string'
+    }
+    return serialized
+  },
+  serialize: (deseriealized: string) => deseriealized,
+})
+```
+
+With the schema defined as:
+
+```ts
+const personSchema = {
+  firstName: stringField(),
+  lastName: stringField(),
+}
+```
+
+And type inference working as follows:
+
+```ts
+type Person = TypeHint<typeof personSchema>
+```
+
+## Schema extension using [aspect oriented programming](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
+
+Since the schema is formalized in a form of JS primitives
+rather than types that stripped away in the final artifact the schema
+can be used to generate a variety of other hierarcical structures:
+OpenAPI specs, JSON schemas, Postman configs, to name but a few.
+
+Inroducing support of any of the above mentioned representation
+formats will bloat the core logic of the toolkit. Thus less
+redundant and more dynamic apporach is needed.
+
+Within this library aspect oriented programming is leveraged to
+dynamically extend the fields as base types thus enabling a variety
+of hierarchical schema representations in a loosely-coupled way.

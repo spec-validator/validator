@@ -5,7 +5,8 @@ import {
   numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault,
 } from '@spec-validator/validator/fields'
 import createRegistry, { registryDeclaration as $ } from '@spec-validator/validator/registry'
-import { Primitive } from '@spec-validator/validator'
+
+import { Primitive } from '@spec-validator/validator/Json'
 
 import withDoc from './withDoc'
 
