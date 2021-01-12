@@ -6,10 +6,11 @@ import { ServerConfig, handle } from './handler'
 import { HtmlSerialization, JsonSerialization } from './serialization'
 import { Route, RequestSpec, ResponseSpec } from './route'
 
-import { Field, TypeHint } from '@spec-validator/validator'
+import { TypeHint } from '@spec-validator/validator'
 import { constantField, $ } from '@spec-validator/validator/fields'
 import { WithoutOptional } from '@spec-validator/validator/util-types'
 import { ConstantField } from '@spec-validator/validator/fields/constantField'
+import { Field } from '@spec-validator/validator/core'
 
 type RequestSpecMethod = Omit<RequestSpec, 'method' | 'pathParams'>
 

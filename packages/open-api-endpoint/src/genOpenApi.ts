@@ -1,7 +1,6 @@
 import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import { ServerConfig, Route } from '@spec-validator/rest-api-server'
-import { Json } from '@spec-validator/validator'
 import { $, optional } from '@spec-validator/validator/fields'
 import { GetRepresentation } from '@spec-validator/validator/registry'
 
@@ -10,6 +9,7 @@ import { Any, ConstructorArgs } from '@spec-validator/validator/util-types'
 import { isResponsesSpec, ResponseSpec } from '@spec-validator/rest-api-server/route'
 import { withoutOptional } from '@spec-validator/validator/utils'
 import { isFieldSpec, SpecUnion } from '@spec-validator/validator/core'
+import { Json } from '@spec-validator/validator/Json'
 
 const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<string, OpenAPI.PathItemObject> => {
   const record: Record<string, OpenAPI.PathItemObject>  = {}
@@ -41,7 +41,7 @@ const getDescription = (field: unknown): string | undefined =>
 
 const isRequired = (spec: SpecUnion<unknown>) => {
   if (isFieldSpec(spec)) {
-    return spec.type !== optional.type
+    return (spec as any).type !== optional.type
   } else {
     return !!spec
   }

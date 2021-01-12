@@ -5,7 +5,7 @@ import exec from './build/exec'
 import generatePackageJson from './build/generatePackageJson'
 import generateTsConfigJson from './build/generateTsConfigJson'
 
-option('u', { default: false })
+option('u', { default: false } as any)
 
 const lint = (...extras: string[]) =>
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)

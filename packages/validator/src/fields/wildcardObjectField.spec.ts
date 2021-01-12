@@ -1,4 +1,5 @@
-import { Json, TypeHint } from '..'
+import { TypeHint } from '..'
+import { Json } from '../Json'
 import { testValidateSpecError, testValidateSpecOk } from '../TestUtils.test'
 import { expectType } from '../TypeTestUtils.test'
 import wildcardObjectField from './wildcardObjectField'

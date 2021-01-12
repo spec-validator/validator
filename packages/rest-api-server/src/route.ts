@@ -18,7 +18,7 @@ export type RequestSpec<
   QueryParams extends StringMapping = StringMapping,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
-  readonly method?: ConstantField<Method>,
+  readonly method: ConstantField<Method>,
   readonly pathParams: typeof $ & Field<PathParams>,
   readonly data?: SpecUnion<Data>,
   readonly headers?: ObjectSpec<Headers>,

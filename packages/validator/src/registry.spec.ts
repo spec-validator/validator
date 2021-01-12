@@ -1,4 +1,4 @@
-import { Field } from '.'
+import { Field } from './core'
 import { numberField, stringField, objectField, booleanField } from './fields'
 import createRegistry, { registryDeclaration as $, FieldPair } from './registry'
 
