@@ -1,4 +1,4 @@
-export { Field, TypeHint } from './core'
+export { SpecUnion, Field, TypeHint } from './core'
 export { Json, Primitive } from './Json'
 
 export { validate, serialize } from './interface'

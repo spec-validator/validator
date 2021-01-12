@@ -1,15 +1,24 @@
 # @spec-validator/validator
 
+## Core blocks
+
+The main blocks of the API are:
+
+```ts
+import { numberField } from '@spec-validator/validator/fields'
+
+
+```
+
 
 ## Schema definition
 
 ```ts
 
-import { integerField } from './fields'
+import { numberField } from '@spec-validator/validator/fields'
 
-const intField = integerField()
-
-
+const intField = numberField()
+const floatField = numberField(true)
 
 ```
 
