@@ -43,7 +43,7 @@ export const withMethod = <
       >) => Route
     })
   } => ({
-      spec: (spec) => ({handler: ( handler ) =>
+      spec: (spec) => ({ handler: ( handler ) =>
         route.spec({
           request: {
             ...(spec.request || {}),
