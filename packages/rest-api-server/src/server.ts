@@ -7,7 +7,7 @@ import { HtmlSerialization, JsonSerialization } from './serialization'
 import { Route, RequestSpec, ResponseSpec } from './route'
 
 import { Field, TypeHint } from '@spec-validator/validator'
-import { constantField, $, stringField } from '@spec-validator/validator/fields'
+import { constantField, $ } from '@spec-validator/validator/fields'
 import { Promisable, WithoutOptional } from '@spec-validator/validator/util-types'
 import { ConstantField } from '@spec-validator/validator/fields/constantField'
 
@@ -79,17 +79,7 @@ export const DEFAULT_SERVER_CONFIG: ServerConfig = {
     console.error(error)
     return Promise.resolve(undefined)
   },
-  routes: [
-    _.GET($._('/')).spec({
-      response: {
-        data: stringField(),
-      },
-    }).handler(
-      async () => ({
-        data: 'ROOT',
-      })
-    ),
-  ],
+  routes: [],
 }
 
 const mergeServerConfigs = (
