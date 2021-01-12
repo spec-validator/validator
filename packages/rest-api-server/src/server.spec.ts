@@ -49,7 +49,7 @@ const server = createServer({routes: [
       statusCode: constantField(400),
     }),
     handler: async () => ({
-      statusCode: 201,
+      statusCode: 200,
     }),
   }),
   _.GET($._('/unexpected-error')).spec(
