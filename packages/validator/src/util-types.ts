@@ -31,6 +31,4 @@ type Impossible<K extends keyof any> = {
 
 export type WithoutExtraProperties<T, U extends T = T> = U & Impossible<Exclude<keyof U, keyof T>>;
 
-export type Promisable<T> = Promise<T> | T
-
 export type ConstructorArgs<T> = T extends new (...args: infer U) => any ? U : never
