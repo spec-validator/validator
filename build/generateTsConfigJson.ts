@@ -46,6 +46,7 @@ const generateProjectConfigs = (): void => {
       'extends': './tsconfig.json',
       'compilerOptions': {
         'composite': true,
+        'noEmit': false,
       },
       'exclude': ['src/**/*.spec.ts', 'src/**/*.test.ts'],
       'references': children.map(child => (
