@@ -9,7 +9,7 @@ import { Primitive } from '@spec-validator/validator'
 
 import withDoc from './withDoc'
 
-const TYPES = ['number' as const, 'boolean'as const, 'string'as const]
+const TYPES = ['number' as const, 'boolean' as const, 'string' as const]
 
 const splitIntoOneOfs = (choices: readonly Primitive[]): OpenAPI.NonArraySchemaObject [] => {
   const result: OpenAPI.NonArraySchemaObject[] = []

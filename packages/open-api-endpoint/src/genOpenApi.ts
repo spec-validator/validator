@@ -37,7 +37,7 @@ export const DEFAULT_INFO: Info = {
 }
 
 const getDescription = (field: unknown): string | undefined =>
-  (field as { description?: string })?.description?.toString()
+  (field as { description?: string }).description?.toString()
 
 const isRequired = (field: unknown) =>
   (field as OfType<string>).type !== optional.type
@@ -57,7 +57,10 @@ class OpenApiGenerator {
 
   createOpenApiSpec = (): OpenAPI.Document => withoutOptional({
     openapi: '3.0.3',
-    info: this.config.info || DEFAULT_INFO,
+    info: {
+      ...DEFAULT_INFO,
+      ...this.config.info,
+    },
     servers: [
       {
         url: this.config.baseUrl,

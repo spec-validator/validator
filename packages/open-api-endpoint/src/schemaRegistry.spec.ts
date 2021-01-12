@@ -2,6 +2,7 @@ import {
   arrayField, booleanField, choiceField, constantField,
   numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault,
 } from '@spec-validator/validator/fields'
+import { Primitive } from '@spec-validator/validator/Json'
 import getSchema from './schemaRegistry'
 import withDoc from './withDoc'
 
@@ -13,11 +14,15 @@ test('BASE_PAIRS', () => {
     numberField({canBeFloat: true}),
     wildcardObjectField(),
     choiceField(1, 2, 3),
+    choiceField<Primitive>(1, true),
+    choiceField(),
     constantField(42),
     objectField({
       a: booleanField(),
       b: booleanField(),
-      c: optional(stringField()),
+    }),
+    objectField({
+      opt: optional(stringField()),
     }),
     optional(booleanField()),
     stringField(),

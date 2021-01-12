@@ -30,6 +30,23 @@ Array [
     "type": "number",
   },
   Object {
+    "oneOf": Array [
+      Object {
+        "enum": Array [
+          1,
+        ],
+        "type": "number",
+      },
+      Object {
+        "enum": Array [
+          true,
+        ],
+        "type": "boolean",
+      },
+    ],
+  },
+  Object {},
+  Object {
     "enum": Array [
       42,
     ],
@@ -44,15 +61,21 @@ Array [
       "b": Object {
         "type": "boolean",
       },
-      "c": Object {
-        "pattern": ".*",
-        "type": "string",
-      },
     },
     "required": Array [
       "a",
       "b",
     ],
+    "type": "object",
+  },
+  Object {
+    "additionalProperties": false,
+    "properties": Object {
+      "opt": Object {
+        "pattern": ".*",
+        "type": "string",
+      },
+    },
     "type": "object",
   },
   Object {
