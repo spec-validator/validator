@@ -1,6 +1,6 @@
 import { TypeHint } from '@spec-validator/validator'
 import { Field, isFieldSpec, ObjectSpec, SpecUnion, OfType } from '@spec-validator/validator/core'
-import { unionField } from '@spec-validator/validator/fields'
+import { $, unionField } from '@spec-validator/validator/fields'
 import { ConstantField } from '@spec-validator/validator/fields/constantField'
 import { UnionField } from '@spec-validator/validator/fields/unionField'
 import { Any, WithoutOptional } from '@spec-validator/validator/util-types'
@@ -19,7 +19,7 @@ export type RequestSpec<
   Headers extends HeaderMapping = HeaderMapping,
 > = {
   readonly method?: ConstantField<Method>,
-  readonly pathParams: Field<PathParams>,
+  readonly pathParams: typeof $ & Field<PathParams>,
   readonly data?: SpecUnion<Data>,
   readonly headers?: ObjectSpec<Headers>,
   readonly queryParams?: ObjectSpec<QueryParams>

@@ -9,7 +9,7 @@ import getFieldSchema from './schemaRegistry'
 import { Any, ConstructorArgs } from '@spec-validator/validator/util-types'
 import { isResponsesSpec, ResponseSpec } from '@spec-validator/rest-api-server/route'
 import { withoutOptional } from '@spec-validator/validator/utils'
-import { SpecUnion, OfType } from '@spec-validator/validator/core'
+import { isFieldSpec, SpecUnion } from '@spec-validator/validator/core'
 
 const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<string, OpenAPI.PathItemObject> => {
   const record: Record<string, OpenAPI.PathItemObject>  = {}
@@ -39,8 +39,13 @@ export const DEFAULT_INFO: Info = {
 const getDescription = (field: unknown): string | undefined =>
   (field as { description?: string }).description?.toString()
 
-const isRequired = (field: unknown) =>
-  (field as OfType<string>).type !== optional.type
+const isRequired = (spec: SpecUnion<unknown>) => {
+  if (isFieldSpec(spec)) {
+    return spec.type !== optional.type
+  } else {
+    return !!spec
+  }
+}
 
 type ParameterType = 'query' | 'path'
 
@@ -70,21 +75,21 @@ class OpenApiGenerator {
   })
 
   createParameterBaseObject = (
-    field: SpecUnion<unknown>
+    spec: SpecUnion<unknown>
   ): OpenAPI.ParameterBaseObject => withoutOptional({
-    description: getDescription(field),
-    required: isRequired(field),
-    schema: this.getSchema(field),
+    description: getDescription(spec),
+    required: isRequired(spec),
+    schema: this.getSchema(spec),
   })
 
   createParameter = (
     type: ParameterType,
     name: string,
-    field: SpecUnion<unknown>
+    spec: SpecUnion<unknown>
   ): OpenAPI.ParameterObject => withoutOptional({
     name: name,
     in: type,
-    ...this.createParameterBaseObject(field),
+    ...this.createParameterBaseObject(spec),
   })
 
   specToParams = (

@@ -1,7 +1,11 @@
 import { Json } from './Json'
 import { Any, Optional } from './util-types'
 
-export interface Field<DeserializedType, InputType=any> {
+export type OfType<Type extends string> = {
+  readonly type: Type
+}
+
+export interface Field<DeserializedType, Type extends string=string, InputType=any> extends OfType<Type> {
   validate(value: InputType): DeserializedType;
   serialize(deserialized: DeserializedType): Json
 }
@@ -66,15 +70,11 @@ export const isArraySpec = (obj: any): obj is ArraySpec =>
 export const isValidChild = (obj: any) =>
   isFieldSpec(obj) || isArraySpec(obj) || isObjectSpec(obj)
 
-export type OfType<Type extends string> = {
-  readonly type: Type
-}
-
 export const declareField = <
   Type extends string,
   Params extends any[],
   FieldType extends Field<unknown>,
-  Constructor extends (...params: Params) => FieldType
+  Constructor extends (...params: Params) => Omit<FieldType, 'type'>
 > (
     type: Type,
     constructor: Constructor
