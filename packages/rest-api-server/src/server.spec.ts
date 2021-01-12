@@ -56,7 +56,6 @@ const server = createServer({routes: [
     },
   ).handler(
     async () => ({
-
       data: [
         {
           title: 'Item N',
@@ -70,11 +69,17 @@ const server = createServer({routes: [
       request: ofItem,
       response: {
         data: numberField(),
+        headers: {
+          title: stringField(),
+        },
       },
     },
   ).handler(
     async () => ({
       data: 42,
+      headers: {
+        title: 'Foo',
+      },
     })
   ),
   _.GET($._('/items/')._('id', numberField())).spec(

@@ -164,7 +164,7 @@ const handleRoute = async (
     () => handler(request)
   )) as any
 
-  Object.entries(resp?.headers || {}).forEach(([key, value]) => {
+  Object.entries(resp.headers || {}).forEach(([key, value]) => {
     response.setHeader(key, value as any)
   })
 
