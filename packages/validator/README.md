@@ -1,15 +1,12 @@
 # @spec-validator/validator
 
-## Core blocks
+## Core API
 
 The main blocks of the API are:
 
 ```ts
-import { SpecUnion, Type } from '@spec-validator/validator'
-
-
+import { TypeHint, validate, serialize } from '@spec-validator/validator'
 ```
-
 
 ## Schema definition
 

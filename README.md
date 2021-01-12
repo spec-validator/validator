@@ -14,6 +14,8 @@ A developer can create a type safe REST API with:
 
 and do so entirely with TypeScript in one place without wrtitng even a single line of JSON schemas or YAML based specs (though those are generated at runtime later on).
 
+Please got through the [ideas' document](IDEAS.md) before diving into the API.
+
 ## Packages
 
 - [@spec-validator/validator](packages/validator/README.md)
