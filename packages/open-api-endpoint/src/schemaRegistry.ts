@@ -53,7 +53,7 @@ export const BASE_PAIRS = [
   $(choiceField, (field): OpenAPI.NonArraySchemaObject => splitOfOneOrMany(field.choices)),
   $(constantField, (field): OpenAPI.NonArraySchemaObject => splitOfOneOrMany([field.constant])),
   $(numberField, (field): OpenAPI.NonArraySchemaObject => ({
-    type: field.params?.canBeFloat ? 'number' : 'integer',
+    type: field.canBeFloat ? 'number' : 'integer',
   })),
   $(objectField, (field, requestSchema): OpenAPI.NonArraySchemaObject  => {
     const required = Object.entries(field.objectSpec).filter(

@@ -8,7 +8,7 @@ const normalRegistryPairs: FieldPair[] = [
     type: 'string',
   })),
   $(numberField, (field) => ({
-    canBeFloat: field.params?.canBeFloat || false,
+    canBeFloat: field.canBeFloat,
     type: 'number',
   })),
   $(objectField, (field, requestRepresentation) => Object.fromEntries(

@@ -23,9 +23,7 @@ describe('spec', () => {
   })
 
   it('floatField signed', () => {
-    const field = numberField({
-      canBeFloat: true,
-    })
+    const field = numberField(true)
     testValidateSpecOk(field, 12, 12)
     testValidateSpecOk(field, 0, 0)
     testValidateSpecOk(field, -1, -1)
@@ -50,9 +48,7 @@ describe('segmentChain', () => {
   })
 
   it('floatField', () => {
-    const field = numberField({
-      canBeFloat: true,
-    })
+    const field = numberField(true)
     testValidateSegmentChainOK(field, '12', 12)
     testValidateSegmentChainOK(field, '0', 0)
     testValidateSegmentChainOK(field, '-1', -1)

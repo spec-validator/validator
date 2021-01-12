@@ -3,19 +3,17 @@ import { Json } from '../Json'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
 export interface NumberField extends FieldWithStringInputSupport<number> {
-  readonly params?: {
-    canBeFloat?: boolean
-  }
+  canBeFloat: boolean
 }
 
-export default declareField('@spec-validator/fields.NumberField', (params?: {
-  canBeFloat?: boolean
-}): NumberField => {
+export default declareField('@spec-validator/fields.NumberField', (
+  canBeFloat = false
+): NumberField => {
   const validate = (value: any): number => {
     if (typeof value !== 'number') {
       throw 'Not a number'
     }
-    if (!params?.canBeFloat && value !== Math.floor(value)) {
+    if (!canBeFloat && value !== Math.floor(value)) {
       throw 'Not an int'
     }
     return value
@@ -23,7 +21,7 @@ export default declareField('@spec-validator/fields.NumberField', (params?: {
   const serialize = (deserialized: number): Json => deserialized
 
   const result = {
-    params,
+    canBeFloat,
     validate,
     serialize,
   } as NumberField & OfType<string>
@@ -33,12 +31,12 @@ export default declareField('@spec-validator/fields.NumberField', (params?: {
     const parts: string[] = []
     parts.push('-?')
     parts.push('\\d+')
-    if (params?.canBeFloat) {
+    if (canBeFloat) {
       parts.push('(\\.\\d+)?')
     }
 
     return {
-      params,
+      canBeFloat,
       type: result.type,
       validate: (value: any) => validate(Number.parseFloat(value)),
       serialize: (value: number) => value.toString(),

@@ -1,14 +1,13 @@
 # @spec-validator/validator
 
-## Schema definition
 
-Numbers:
+## Schema definition
 
 ```ts
 
-import {
-  numberField,
-} from './fields'
+import { integerField } from './fields'
+
+const intField = integerField()
 
 
 
