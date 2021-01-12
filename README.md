@@ -12,7 +12,9 @@ A developer can create a type safe REST API with:
 - dynamic API docs' generation (e.g. OpenAPI)
 - type inference and autocompletion in the editor
 
-and do so entirely with TypeScript in one place without wrtitng even a single line of JSON schemas or YAML based specs (though those are generated at runtime later on).
+and do so entirely with TypeScript in one place without wrtitng even a single
+line of JSON schemas or YAML based specs (though those are generated at runtime
+later on).
 
 Please got through the [ideas' document](IDEAS.md) before diving into the API.
 
