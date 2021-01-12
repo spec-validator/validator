@@ -32,12 +32,13 @@ export const withMethod = <
     }) => ({
       handler: (
         handler: (request: WithoutOptional<TypeHint<
-        ReqSpec
-        & {
-            readonly method: ConstantField<Method>,
-            readonly pathParams: PathSpec<PathParams>
-          }
-      >>) => Promise<
+          ReqSpec
+          & {
+              readonly method: ConstantField<Method>,
+              readonly pathParams: PathSpec<PathParams>
+            }
+        >>
+      ) => Promise<
         WithoutOptional<TypeHint<RespSpec>>
       >) => Route
     })
@@ -53,7 +54,9 @@ export const withMethod = <
             ...(spec.response || {}),
             statusCode: constantField(okStatusCode),
           },
-        }).handler(handler as any),
+        }).handler(
+          async (req) => ({ ...((await handler(req as any)) as any), statusCode: okStatusCode })
+        ),
       }),
     })
 
