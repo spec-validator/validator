@@ -1,9 +1,11 @@
-import { task, series, parallel } from 'just-task'
+import { task, series, parallel, option, argv } from 'just-task'
 import { forAll as forAllPackages } from './build/buildOrder'
 
 import exec from './build/exec'
 import generatePackageJson from './build/generatePackageJson'
 import generateTsConfigJson from './build/generateTsConfigJson'
+
+option('u', { default: false })
 
 const lint = (...extras: string[]) =>
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
@@ -15,7 +17,10 @@ task('build', series(
 ))
 
 task('test',
-  exec('jest', '--config', './jest.conf.js', '--passWithNoTests', '--detectOpenHandles')
+  exec(
+    'jest', '--config', './jest.conf.js', '--passWithNoTests', '--detectOpenHandles',
+    ...(argv().u ? ['-u'] : [])
+  )
 )
 
 task('lint', lint())

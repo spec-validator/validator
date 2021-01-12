@@ -17,6 +17,7 @@ test('BASE_PAIRS', () => {
     objectField({
       a: booleanField(),
       b: booleanField(),
+      c: optional(stringField()),
     }),
     optional(booleanField()),
     stringField(),

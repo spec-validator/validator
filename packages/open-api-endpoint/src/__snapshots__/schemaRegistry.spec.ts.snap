@@ -44,6 +44,10 @@ Array [
       "b": Object {
         "type": "boolean",
       },
+      "c": Object {
+        "pattern": ".*",
+        "type": "string",
+      },
     },
     "required": Array [
       "a",
