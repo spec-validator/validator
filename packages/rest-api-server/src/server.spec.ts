@@ -38,20 +38,20 @@ const server = createServer({routes: [
       }
     }
   ),
-  route({
+  route.spec({
     request: {
       method: constantField('GET'),
       pathParams: $._('/multi-response'),
     },
     response: unionField({
-      statusCode: constantField(200),
-    }, {
       statusCode: constantField(400),
+    }, {
+      statusCode: constantField(200),
     }),
-    handler: async () => ({
-      statusCode: 200,
-    }),
+  }).handler( async () => ({
+    statusCode: 200,
   }),
+  ),
   _.GET($._('/unexpected-error')).spec(
     {
       response: {

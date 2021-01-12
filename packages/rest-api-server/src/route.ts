@@ -1,6 +1,6 @@
 import { TypeHint } from '@spec-validator/validator'
 import { Field, isFieldSpec, ObjectSpec, SpecUnion, OfType } from '@spec-validator/validator/core'
-import { $, unionField } from '@spec-validator/validator/fields'
+import { unionField } from '@spec-validator/validator/fields'
 import { ConstantField } from '@spec-validator/validator/fields/constantField'
 import { UnionField } from '@spec-validator/validator/fields/unionField'
 import { Any, WithoutOptional } from '@spec-validator/validator/util-types'
@@ -18,8 +18,8 @@ export type RequestSpec<
   QueryParams extends StringMapping = StringMapping,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
-  readonly method: ConstantField<Method>,
-  readonly pathParams: typeof $ & Field<PathParams>,
+  readonly method?: ConstantField<Method>,
+  readonly pathParams: Field<PathParams>,
   readonly data?: SpecUnion<Data>,
   readonly headers?: ObjectSpec<Headers>,
   readonly queryParams?: ObjectSpec<QueryParams>
@@ -55,6 +55,21 @@ export type Route<
 export const isResponsesSpec = (spec: ResponsesSpec | ResponseSpec): spec is ResponsesSpec =>
   isFieldSpec(spec) && (spec as unknown as OfType<string>).type !== unionField.type
 
-export const route = <
-  Spec extends Route
->(spec: Spec): Spec => spec
+export const route = ({
+  spec: <
+    ReqSpec extends RequestSpec = RequestSpec,
+    RespSpec extends ResponsesSpec | ResponseSpec = ResponsesSpec | ResponseSpec,
+    >(spec: {
+      request: ReqSpec,
+      response: RespSpec
+    }): {
+      handler: (handler:
+        (request: WithoutOptional<TypeHint<ReqSpec>>) => Promise<WithoutOptional<TypeHint<RespSpec>>>
+      ) => Route
+    } => ({
+    handler: (handler): Route => ({
+      ...spec,
+      handler: async (request) => await handler(request as any),
+    }),
+  }),
+})

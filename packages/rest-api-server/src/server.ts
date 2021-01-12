@@ -1,6 +1,6 @@
 import http from 'http'
 import { URL } from 'url'
-import { StringMapping } from './route'
+import { route, StringMapping } from './route'
 
 import { ServerConfig, handle } from './handler'
 import { HtmlSerialization, JsonSerialization } from './serialization'
@@ -41,24 +41,21 @@ export const withMethod = <
         WithoutOptional<TypeHint<RespSpec>>
       >) => Route
     })
-  } => ({spec: (spec) => ({handler: ( handler ) => {
-      const requestSchema = {
-        ...(spec.request || {}),
-        method: constantField(method),
-        pathParams,
-      }
-      return ({
-        request: requestSchema,
-        response: {
-          ...(spec.response || {}),
-          statusCode: constantField(okStatusCode),
-        },
-        handler: (async (request: Route['request']) => ({
-          ...await handler(request as any) as any,
-          statusCode: okStatusCode,
-        })) as unknown as Route['handler'],
-      })
-    }})})
+  } => ({
+      spec: (spec) => ({handler: ( handler ) =>
+        route.spec({
+          request: {
+            ...(spec.request || {}),
+            method: constantField(method),
+            pathParams,
+          },
+          response: {
+            ...(spec.response || {}),
+            statusCode: constantField(okStatusCode),
+          },
+        }).handler(handler as any),
+      }),
+    })
 
 export const _ = {
   GET: withMethod('GET', 200),
