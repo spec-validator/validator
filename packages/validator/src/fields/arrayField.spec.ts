@@ -22,7 +22,7 @@ describe('field', () => {
 })
 
 test('types', () => {
-  type Spec = TypeHint<typeof field>;
+  type Spec = TypeHint<typeof field>
 
   expectType<Spec, true[]>(true)
 })
