@@ -22,7 +22,7 @@ test('segmentChain', () => {
 })
 
 test('types', () => {
-  type Spec = TypeHint<typeof field>;
+  type Spec = TypeHint<typeof field>
 
   expectType<Spec, 1 | 2 | 3>(true)
 

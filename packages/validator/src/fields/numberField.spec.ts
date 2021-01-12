@@ -62,7 +62,7 @@ describe('segmentChain', () => {
 test('types', () => {
   const field = numberField()
 
-  type Spec = TypeHint<typeof field>;
+  type Spec = TypeHint<typeof field>
 
   expectType<Spec, number>(true)
 

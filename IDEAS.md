@@ -28,6 +28,8 @@ not impose any of the requirements outlined above.
 
 ## Implementation of the ideas
 
+### Function as a schema
+
 In TypeScript it is possible to obtain a type of the return value of a function
 via `ReturnType` built-in auxilary type:
 
@@ -41,12 +43,11 @@ const validateString = (serialized: any): string => {
 type ActuallyAString = ReturnType<typeof validateString>
 ```
 
-Given that the hierarchical schema is outlined in a non-pure form via native
-JS collections such as **arrays** and **objects** the type of a valid payload
-can be derived using [recursive types](https://github.com/microsoft/TypeScript/pull/33050).
+### Non-pure vs pure schema definition
 
-The rationale behind using a non-pure form to describe schemas is to avoid
-syntax redundancy:
+Dogmatically sticking to raw functional programming inevitably leads
+to substantial redundancy and declaration duplication in schema
+validation domain.
 
 Compare:
 
@@ -71,6 +72,12 @@ const personSchema = {
   lastName: validateString,
 }
 ```
+
+### Recursive types
+
+A sensible alternative to outline hierarchical schemas composed of native
+JS collections such as **arrays** and **objects** is to use
+[recursive types](https://github.com/microsoft/TypeScript/pull/33050).
 
 For the exemplary schemas outlined above the recursive types would look as follows:
 
@@ -98,22 +105,24 @@ And using these types with the schema outlined just above will look as follows:
 type Person = TypeHint<typeof personSchema>
 ```
 
+### Limitation of functions as the low level blocks
+
 When using functions as the low level building blocks there is a disadvantate though.
 There is no non-redundant way to outline the reverse of validation/deserialization -
 aka serialization.
 
-When explicit would serialization be meaningful if most of JavaScript primitives are
-also Json primitives? When the structure you want to operate with in the implementation
+When explicit serialization would be meaningful if most of JavaScript primitives are
+also Json primitives? When the structure you want to operate with within the implementation
 is e.g. a `Date` object.
 
-To enable it, the low level block should be extended into an aggregate of a validation
-and a serialization function.
+To enable such behavior, the low level block should be extended into an aggregate of a
+validation and a serialization function.
 
 Let's call this aggregate a `Field`:
 
 ```ts
 export interface Field<DeserializedType> {
-  validate(serialized: any): DeserializedType;
+  validate(serialized: any): DeserializedType
   serialize(deserialized: DeserializedType): any
 }
 
@@ -132,7 +141,7 @@ type TypeHint<Spec extends ValidatorSpecUnion<unknown>> =
     undefined
 ```
 
-String field may look like:
+The fields may look like:
 
 ```ts
 const stringField = (): Field<string> => ({
@@ -144,6 +153,16 @@ const stringField = (): Field<string> => ({
   },
   serialize: (deseriealized: string) => deseriealized,
 })
+
+const numberField = (): Field<number> => ({
+  validate: (serialized: any) => {
+    if (typeof serialized !== 'number') {
+      throw 'Not a number'
+    }
+    return serialized
+  },
+  serialize: (deseriealized: number) => deseriealized,
+})
 ```
 
 With the schema defined as:
@@ -152,6 +171,8 @@ With the schema defined as:
 const personSchema = {
   firstName: stringField(),
   lastName: stringField(),
+  height: numberField(),
+  weight: numberField(),
 }
 ```
 
@@ -160,6 +181,10 @@ And type inference working as follows:
 ```ts
 type Person = TypeHint<typeof personSchema>
 ```
+
+### `serialize` and `validate` functions
+
+
 
 ## Schema extension using [aspect oriented programming](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
 
@@ -175,3 +200,37 @@ redundant and more dynamic apporach is needed.
 Within this library aspect oriented programming is leveraged to
 dynamically extend the fields as base types thus enabling a variety
 of hierarchical schema representations in a loosely-coupled way.
+
+To enable aspects in general a common practice is to use an
+**aspect [registry](https://martinfowler.com/eaaCatalog/registry.html)**.
+
+On a surface a registry can be a simple function that is able
+to return an aspect for an instance of arbitrary type.
+
+Since JavaScript does not have reflection, each instance of a type
+must be annotated with a reference to its type.
+
+```ts
+const stringField = (): Field<string> => ({
+  type: 'stringField',
+  validate: (serialized: any) => {
+    if (typeof serialized !== 'string') {
+      throw 'Not a string'
+    }
+    return serialized
+  },
+  serialize: (deseriealized: string) => deseriealized,
+})
+
+const numberField = (): Field<number> => ({
+  type: 'numberField',
+  validate: (serialized: any) => {
+    if (typeof serialized !== 'number') {
+      throw 'Not a number'
+    }
+    return serialized
+  },
+  serialize: (deseriealized: number) => deseriealized,
+})
+```
+

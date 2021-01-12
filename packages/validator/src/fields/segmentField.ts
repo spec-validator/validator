@@ -20,7 +20,7 @@ class SegmentField<
   private parent?: SegmentField<unknown>
   private regex?: string
 
-  readonly key: string;
+  readonly key: string
   readonly field?: FieldWithRegExp<Any>
 
   // Here we actually do want to have a constructor parameter as 'any' since it is not going

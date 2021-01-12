@@ -76,15 +76,15 @@ describe('field', () => {
 
 test('types', () => {
 
-  type Spec = TypeHint<typeof field>;
+  type Spec = TypeHint<typeof field>
 
   expectType<Spec, {
     field: {
-      num: number;
+      num: number
       subField: {
-          subSubField: number;
-      };
-    };
+          subSubField: number
+      }
+    }
   }>(true)
 
 })

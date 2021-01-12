@@ -49,8 +49,8 @@ describe('WithoutOptional', () => {
     type Clean = WithoutOptional<Input>
 
     expectType<Clean, {
-      boolNonNull: boolean;
-      numNonNull: number;
+      boolNonNull: boolean
+      numNonNull: number
     }>(true)
   })
 
@@ -64,11 +64,11 @@ describe('WithoutOptional', () => {
     }>
 
     expectType<UnionInput, {
-      oneRequired: number;
+      oneRequired: number
     }>(true)
 
     expectType<UnionInput, {
-      twoRequired: boolean;
+      twoRequired: boolean
     }>(true)
   })
 

@@ -6,7 +6,7 @@ export type OfType<Type extends string> = {
 }
 
 export interface Field<DeserializedType> {
-  validate(value: any): DeserializedType;
+  validate(value: any): DeserializedType
   serialize(deserialized: DeserializedType): Json
 }
 
@@ -16,20 +16,20 @@ export type ObjectSpec<DeserializedType extends Record<string, Any> = Record<str
 
 export type WildcardObjectSpec = {
   [key: string]: Optional<SpecUnion<unknown>>
-};
+}
 
 export type ArraySpec<DeserializedType extends Any[] = Any[]> = SpecUnion<DeserializedType[number]>[]
 
 export type SpecUnion<DeserializedType> =
-  WildcardObjectSpec | ObjectSpec | ArraySpec | Field<DeserializedType> | undefined;
+  WildcardObjectSpec | ObjectSpec | ArraySpec | Field<DeserializedType> | undefined
 
 export type TypeHint<Spec extends SpecUnion<unknown>> =
   Spec extends WildcardObjectSpec ?
-    { [P in keyof Spec]: TypeHint<Spec[P]>; }
+    { [P in keyof Spec]: TypeHint<Spec[P]> }
   : Spec extends ArraySpec ?
     TypeHint<Spec[0]>[]
   : Spec extends ObjectSpec ?
-    { [P in keyof Spec]: TypeHint<Spec[P]>; }
+    { [P in keyof Spec]: TypeHint<Spec[P]> }
   : Spec extends Field<Any> ?
     ReturnType<Spec['validate']>
   :

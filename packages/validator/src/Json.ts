@@ -1,14 +1,14 @@
 export type Primitive =
 | string
 | number
-| boolean;
+| boolean
 
 export type Nothing =
 | null
-| undefined;
+| undefined
 
 export type Json =
 | Primitive
 | Nothing
 | { [property: string]: Json }
-| readonly Json[];
+| readonly Json[]
