@@ -5,7 +5,7 @@
 The main blocks of the API are:
 
 ```ts
-import { numberField } from '@spec-validator/validator/fields'
+import { SpecUnion, Type } from '@spec-validator/validator'
 
 
 ```
