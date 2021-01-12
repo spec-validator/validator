@@ -184,7 +184,16 @@ type Person = TypeHint<typeof personSchema>
 
 ### `serialize` and `validate` functions
 
+To actually leverage the schemas and validate or serialize
+payloads using them two functions are needed with the respective
+names and the following interfaces:
 
+```ts
+const serialize = <T>(spec: ValidatorSpecUnion<T>, deserialized: T): any
+const validate = <T>(spec: ValidatorSpecUnion<T>, serialized: any): T
+```
+
+Their implementation is a mental exerceise for the reader ;)
 
 ## Schema extension using [aspect oriented programming](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
 
@@ -252,6 +261,9 @@ const getHumanReadableName = (field: Field<unknown>) => {
 }
 ```
 
-or to make the process of crafting aspect registries generic:
+## Notes
 
-
+Further nuances and implementation details are better to be obtained
+by reading the source code. There is obviously a bunch of corner-cases
+that were intentionally ommited in this brief introduction to the
+concept.

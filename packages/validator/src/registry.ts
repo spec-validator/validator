@@ -8,8 +8,7 @@ export type FieldDeclaration<
   Constructor extends (...params: Params) => FieldType = (...params: Params) => FieldType
 > = Constructor & OfType<Type>
 
-type RequestRepresentation =
-  (field: SpecUnion<unknown>) => any
+export type GetRepresentation = (field: SpecUnion<unknown>) => any
 
 type ProvideRepresentation<
   RepresentationType,
@@ -35,7 +34,7 @@ export const registryDeclaration = <
     fieldDeclaration: Declaration,
     provideRepresentation: (
       field: ReturnType<Declaration>,
-      requestRepresentation: RequestRepresentation
+      requestRepresentation: GetRepresentation
     ) => any
   ): FieldPair<FieldDeclaration<string, any[], Field<unknown>>> => [
     fieldDeclaration,
@@ -63,8 +62,6 @@ const getValue = <V> (mapping: Record<string, V>, rawTypeRef: any, type?: string
   }
   return value
 }
-
-export type GetRepresentation = (field: SpecUnion<unknown>) => any
 
 /**
  * This is a generic solution to provide a virtually unlimited number
