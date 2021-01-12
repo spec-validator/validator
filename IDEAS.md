@@ -234,3 +234,24 @@ const numberField = (): Field<number> => ({
 })
 ```
 
+The function representing a registry pattern can be implemented
+via a mapping between the type and the aspect:
+
+```ts
+const MAPPING = {
+  numberField: 'Number field',
+  stringField: 'String field'
+}
+
+const getHumanReadableName = (field: Field<unknown>) => {
+  const type = (field as any).type
+  if (!type) {
+    throw 'Field type is not defined'
+  }
+  return MAPPING[type]
+}
+```
+
+or to make the process of crafting aspect registries generic:
+
+

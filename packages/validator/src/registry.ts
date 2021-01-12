@@ -4,7 +4,7 @@ import { getFieldForSpec } from './interface'
 export type FieldDeclaration<
   Type extends string = string,
   Params extends any[] = any[],
-  FieldType extends Field<unknown, Type> = Field<unknown, Type>,
+  FieldType extends Field<unknown> = Field<unknown>,
   Constructor extends (...params: Params) => FieldType = (...params: Params) => FieldType
 > = Constructor & OfType<Type>
 
