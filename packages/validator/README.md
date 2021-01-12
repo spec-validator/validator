@@ -24,7 +24,7 @@ const shortStringField = declareField('ShortStringField', (): Field<string> => (
 The spec can be defined as follows:
 
 ```ts
-const spec = {
+const schema = {
     title: shortStringField()
 }
 ```
@@ -34,9 +34,8 @@ Validate and serialize payload:
 ```ts
 import { validate, serialize } from '@spec-validator/validator'
 
-const validated = validate({ title: 'valid' })
-const serialized =
-
+const deserialized = validate(schema, { title: 'valid' })
+const serialized = serialize(schema, deserialized)
 ```
 
 
