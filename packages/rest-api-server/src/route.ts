@@ -54,3 +54,7 @@ export type Route<
 
 export const isResponsesSpec = (spec: ResponsesSpec | ResponseSpec): spec is ResponsesSpec =>
   isFieldSpec(spec) && (spec as unknown as OfType<string>).type !== unionField.type
+
+export const route = <
+  Spec extends Route
+>(spec: Spec): Spec => spec

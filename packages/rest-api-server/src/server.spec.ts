@@ -1,11 +1,12 @@
 import request from 'supertest'
 
 import {
-  $, constantField, numberField, objectField, optional, stringField,
+  $, constantField, numberField, objectField, optional, stringField, unionField,
 } from '@spec-validator/validator/fields'
 
 
 import { createServer, _ } from './server'
+import { route } from './route'
 
 const itemSpec = {
   title: stringField(),
@@ -37,6 +38,20 @@ const server = createServer({routes: [
       }
     }
   ),
+  route({
+    request: {
+      method: constantField('GET'),
+      pathParams: $._('/multi-response'),
+    },
+    response: unionField({
+      statusCode: constantField(200),
+    }, {
+      statusCode: constantField(400),
+    }),
+    handler: async () => ({
+      statusCode: 201,
+    }),
+  }),
   _.GET($._('/unexpected-error')).spec(
     {
       response: {
