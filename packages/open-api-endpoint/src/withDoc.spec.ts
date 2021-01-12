@@ -1,6 +1,7 @@
 import { TypeHint } from '@spec-validator/validator'
 import { numberField } from '@spec-validator/validator/fields'
 import { expectType } from '@spec-validator/validator/TypeTestUtils.test'
+import { testValidateSpecOk } from '@spec-validator/validator/TestUtils.test'
 
 import withDoc from './withDoc'
 
@@ -16,7 +17,7 @@ const field = withDoc(numberField(), {
 
 describe('field', () => {
   it('should proxy the value to the inner field', () => {
-    expect(field.validate(42)).toEqual(42)
+    testValidateSpecOk(field, 42)
   })
 })
 
