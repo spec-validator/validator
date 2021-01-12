@@ -6,7 +6,7 @@ export type OfType<Type extends string> = {
 }
 
 export interface Field<DeserializedType> {
-  validate(value: any): DeserializedType
+  validate(serialized: any): DeserializedType
   serialize(deserialized: DeserializedType): Json
 }
 
