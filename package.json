@@ -37,5 +37,8 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "remove": "^0.1.5"
+  }
 }
