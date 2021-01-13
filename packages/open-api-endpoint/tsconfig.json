@@ -3,7 +3,6 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./dist",
     "noEmit": true,
     "paths": {
       "@spec-validator/validator/*": ["../validator/src/*"],

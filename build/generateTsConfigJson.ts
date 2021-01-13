@@ -47,6 +47,7 @@ const generateProjectConfigs = (): void => {
       'compilerOptions': {
         'composite': true,
         'noEmit': false,
+        'outDir': './dist',
       },
       'exclude': ['src/**/*.spec.ts', 'src/**/*.test.ts'],
       'references': children.map(child => (
