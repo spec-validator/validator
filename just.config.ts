@@ -11,7 +11,7 @@ const lint = (...extras: string[]) =>
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
 
 task('build', series(
-  generateTsConfigJson(),
+  //generateTsConfigJson(),
   exec('yarn', 'tsc', '--build', 'tsconfig.build.json'),
   parallel(...forAllPackages(generatePackageJson))
 ))
