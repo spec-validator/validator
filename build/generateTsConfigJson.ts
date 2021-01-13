@@ -29,17 +29,19 @@ const relativePath = (parent: string, child: string) => {
   return dots.join('/')
 }
 
-
-const getRelativePath = (parent: string, child: string): string => {
+const getRelativePath = (parent: string, child?: string): string => {
   const info = getWorkspaceInfo()
-  return relativePath(info[parent].location, info[child].location)
+  if (child) {
+    return relativePath(info[parent].location, info[child].location)
+  } else {
+    return info[parent].location
+  }
 }
-
 
 const generateProjectConfigs = (): void => {
   const graph = getGraph()
   Object.entries(graph).forEach(([parent, children]) => {
-    write(`${parent}/tsconfig.build.json`, {
+    write(`${getRelativePath(parent)}/tsconfig.build.json`, {
       'extends': '../../tsconfig.base.json',
       'compilerOptions': {
         'composite': true,
@@ -50,15 +52,15 @@ const generateProjectConfigs = (): void => {
       'include': ['src/**/*.ts'],
       'exclude': ['src/**/*.spec.ts', 'src/**/*.test.ts'],
       'references': children.map(child => (
-        { 'path': `${child}/tsconfig.build.json` }
+        { 'path': `${getRelativePath(parent, child)}/tsconfig.build.json` }
       )),
-      'paths': flatMap(children.map(child => {
+      'paths': Object.fromEntries(flatMap(children.map(child => {
         const rel = getRelativePath(parent, child)
         return [
           [child, `${rel}/src/index.ts`],
           [`${child}`, `${rel}/src/*`],
         ]
-      })),
+      }))),
     })
   })
 
