@@ -20,7 +20,7 @@ const generateRootConfig = (): void => {
 }
 
 const relativePath = (parent: string, child: string) => {
-  const count = path.posix.normalize(parent).split('/').length - 1
+  const count = path.posix.normalize(parent).split('/').length
   const dots = []
   for (let i=0; i< count; i++) {
     dots.push('..')
@@ -32,7 +32,7 @@ const relativePath = (parent: string, child: string) => {
 const getRelativePath = (parent: string, child?: string): string => {
   const info = getWorkspaceInfo()
   if (child) {
-    return relativePath(info[parent].location, info[child].location.split('/').slice(1).join('/'))
+    return relativePath(info[parent].location, info[child].location)
   } else {
     return info[parent].location
   }
@@ -48,19 +48,19 @@ const generateProjectConfigs = (): void => {
         'noEmit': false,
         'rootDir': './src',
         'outDir': './dist',
+        'paths': Object.fromEntries(flatMap(children.map(child => {
+          const rel = getRelativePath(parent, child)
+          return [
+            [child, [`${rel}/src/index.ts`]],
+            [`${child}/*`, [`${rel}/src/*`]],
+          ]
+        }))),
       },
       'include': ['src/**/*.ts'],
       'exclude': ['src/**/*.spec.ts', 'src/**/*.test.ts'],
       'references': children.map(child => (
         { 'path': `${getRelativePath(parent, child)}/tsconfig.build.json` }
       )),
-      'paths': Object.fromEntries(flatMap(children.map(child => {
-        const rel = getRelativePath(parent, child)
-        return [
-          [child, `${rel}/src/index.ts`],
-          [`${child}/*`, `${rel}/src/*`],
-        ]
-      }))),
     })
   })
 
