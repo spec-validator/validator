@@ -2,6 +2,7 @@ import { Task } from 'just-task'
 import path from 'path'
 
 import { getGraph, getProjectsPathsInBuildOrder, getWorkspaceInfo } from './buildOrder'
+import flatMap from './flatMap'
 import { write } from './readAndWrite'
 
 const generateRootConfig = (): void => {
@@ -29,18 +30,14 @@ const relativePath = (parent: string, child: string) => {
 }
 
 
-const getPathGraph = (): Record<string, string[]> => {
+const getRelativePath = (parent: string, child: string): string => {
   const info = getWorkspaceInfo()
-  return Object.fromEntries(Object.entries(getGraph()).map(
-    ([parent, children]) => [
-      info[parent].location,
-      children.map(child => relativePath(parent, info[child].location)),
-    ]
-  ))
+  return relativePath(info[parent].location, info[child].location)
 }
 
+
 const generateProjectConfigs = (): void => {
-  const graph = getPathGraph()
+  const graph = getGraph()
   Object.entries(graph).forEach(([parent, children]) => {
     write(`${parent}/tsconfig.build.json`, {
       'extends': '../../tsconfig.base.json',
@@ -55,6 +52,13 @@ const generateProjectConfigs = (): void => {
       'references': children.map(child => (
         { 'path': `${child}/tsconfig.build.json` }
       )),
+      'paths': flatMap(children.map(child => {
+        const rel = getRelativePath(parent, child)
+        return [
+          [child, `${rel}/src/index.ts`],
+          [`${child}`, `${rel}/src/*`],
+        ]
+      })),
     })
   })
 

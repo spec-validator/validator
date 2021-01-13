@@ -5,7 +5,12 @@ import dfs from './dfs'
 import flatMap from './flatMap'
 import getOutput from './getOutput'
 
-export const getWorkspaceInfo = (): any => cached(
+type PackageName = string
+
+export const getWorkspaceInfo = (): Record<PackageName, {
+  location: string,
+  workspaceDependencies: PackageName[]
+}> => cached(
   'workspaceInfo',
   () => JSON.parse(getOutput('yarn', 'workspaces', 'info').toString())
 )
