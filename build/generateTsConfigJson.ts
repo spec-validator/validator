@@ -43,12 +43,14 @@ const generateProjectConfigs = (): void => {
   const graph = getPathGraph()
   Object.entries(graph).forEach(([parent, children]) => {
     write(`${parent}/tsconfig.build.json`, {
-      'extends': './tsconfig.json',
+      'extends': '../../tsconfig.base.json',
       'compilerOptions': {
         'composite': true,
         'noEmit': false,
+        'rootDir': './src',
         'outDir': './dist',
       },
+      'include': ['src/**/*.ts'],
       'exclude': ['src/**/*.spec.ts', 'src/**/*.test.ts'],
       'references': children.map(child => (
         { 'path': `${child}/tsconfig.build.json` }
