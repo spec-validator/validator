@@ -20,7 +20,7 @@ const generateRootConfig = (): void => {
 }
 
 const relativePath = (parent: string, child: string) => {
-  const count = path.posix.normalize(parent).split('/').length
+  const count = path.posix.normalize(parent).split('/').length - 1
   const dots = []
   for (let i=0; i< count; i++) {
     dots.push('..')
@@ -32,7 +32,7 @@ const relativePath = (parent: string, child: string) => {
 const getRelativePath = (parent: string, child?: string): string => {
   const info = getWorkspaceInfo()
   if (child) {
-    return relativePath(info[parent].location, info[child].location)
+    return relativePath(info[parent].location, info[child].location.split('/').slice(1).join('/'))
   } else {
     return info[parent].location
   }
