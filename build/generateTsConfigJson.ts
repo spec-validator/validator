@@ -58,7 +58,7 @@ const generateProjectConfigs = (): void => {
         const rel = getRelativePath(parent, child)
         return [
           [child, `${rel}/src/index.ts`],
-          [`${child}`, `${rel}/src/*`],
+          [`${child}/*`, `${rel}/src/*`],
         ]
       }))),
     })
