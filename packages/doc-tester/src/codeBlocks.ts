@@ -9,7 +9,7 @@ type Block = CodeBlock | undefined
 const hasDelimiter = (line: string): boolean => line.trim().startsWith('```')
 
 const extractType = (line: string): string =>
-  line.match(/```(?<type>.+)/)?.groups?.type?.trim() || ''
+  line.match(/```(?<type>.+)/)?.groups?.type?.trim()?.toLowerCase() || ''
 
 /**
  * Really primitive FSM based README parser aiming to extract code snippets
