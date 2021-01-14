@@ -28,7 +28,7 @@ not impose any of the requirements outlined above.
 
 ## Implementation of the ideas
 
-### Function as a schema
+### Functions as a schema
 
 In TypeScript it is possible to obtain a type of the return value of a function
 via `ReturnType` built-in auxilary type:
@@ -43,10 +43,8 @@ const validateString = (serialized: any): string => {
 type ActuallyAString = ReturnType<typeof validateString>
 ```
 
-### Non-pure vs pure schema definition
-
-Dogmatically sticking to raw functional programming inevitably leads
-to substantial redundancy and declaration duplication in schema
+Dogmatically sticking, though, to raw functional programming inevitably
+leads to substantial redundancy and declaration duplication in schema
 validation domain.
 
 Compare:
@@ -186,8 +184,6 @@ And type inference working as follows:
 ```ts
 type Person = TypeHint<typeof personSchema>
 ```
-
-### `serialize` and `validate` functions
 
 To actually leverage the schemas and validate or serialize
 payloads using them two functions are needed with the respective
