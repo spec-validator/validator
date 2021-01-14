@@ -5,6 +5,8 @@ import exec from './build/exec'
 import generatePackageJson from './build/generatePackageJson'
 import generateTsConfigJson from './build/generateTsConfigJson'
 
+import generateCodeBlocks from './packages/doc-tester/src/generateCodeBlocks'
+
 option('u', { default: false } as any)
 
 const lint = (...extras: string[]) =>
@@ -15,6 +17,8 @@ task('build', series(
   exec('yarn', 'tsc', '--build', 'tsconfig.build.json'),
   parallel(...forAllPackages(generatePackageJson))
 ))
+
+task('doc-tests', async () => generateCodeBlocks(__dirname))
 
 task('test',
   exec(
