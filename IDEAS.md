@@ -102,6 +102,11 @@ type TypeHint<Spec extends ValidatorSpecUnion<unknown>> =
 And using these types with the schema outlined just above will look as follows:
 
 ```ts
+const personSchema = {
+  firstName: validateString,
+  lastName: validateString,
+}
+
 type Person = TypeHint<typeof personSchema>
 ```
 
@@ -151,7 +156,7 @@ const stringField = (): Field<string> => ({
     }
     return serialized
   },
-  serialize: (deseriealized: string) => deseriealized,
+  serialize: (deserialized: string) => deserialized,
 })
 
 const numberField = (): Field<number> => ({
@@ -161,7 +166,7 @@ const numberField = (): Field<number> => ({
     }
     return serialized
   },
-  serialize: (deseriealized: number) => deseriealized,
+  serialize: (deserialized: number) => deserialized,
 })
 ```
 
@@ -228,7 +233,7 @@ const stringField = (): Field<string> => ({
     }
     return serialized
   },
-  serialize: (deseriealized: string) => deseriealized,
+  serialize: (deserialized: string) => deserialized,
 })
 
 const numberField = (): Field<number> => ({
@@ -239,7 +244,7 @@ const numberField = (): Field<number> => ({
     }
     return serialized
   },
-  serialize: (deseriealized: number) => deseriealized,
+  serialize: (deserialized: number) => deserialized,
 })
 ```
 
