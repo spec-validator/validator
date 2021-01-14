@@ -11,8 +11,10 @@ import constantField from './constantField'
 import $ from './segmentField'
 import wildcardObjectField from './wildcardObjectField'
 import undefinedField from './undefinedField'
+import dateField from './dateField'
 
 export {
+  dateField,
   arrayField,
   booleanField,
   numberField,
