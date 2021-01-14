@@ -14,7 +14,7 @@ export const sampleField = {
 }
 
 export const testValidateSpecOk = <T> (
-  field: SpecUnion<T>, input: any, expected?: T, expectedSerialized?: T
+  field: SpecUnion<T>, input: any, expected?: T, expectedSerialized?: any
 ): void => {
   // Test deserialization + validation
   expect(validate(field, input)).toEqual(expected || input)
