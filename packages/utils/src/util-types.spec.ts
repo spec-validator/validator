@@ -1,4 +1,4 @@
-import { expectType } from '@spec-validator/test-utils/expecType'
+import { expectType } from '@spec-validator/test-utils/expectType'
 import { AllNonNullKeyTypes, KeysOfType, Optional, RequiredKeys, WithoutOptional } from './util-types'
 
 type Input = {

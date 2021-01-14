@@ -1,6 +1,6 @@
 import { TypeHint } from '@spec-validator/validator'
 import { numberField } from '@spec-validator/validator/fields'
-import { expectType } from 'test-utils/src/expecType'
+import { expectType } from '@spec-validator/test-utils/expectType'
 import { testValidateSpecOk } from '@spec-validator/validator/TestUtils.test'
 
 import withDoc from './withDoc'

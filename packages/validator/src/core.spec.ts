@@ -1,6 +1,6 @@
 import { TypeHint } from './core'
 import { arrayField, booleanField, numberField, objectField, optional, stringField, withDefault } from './fields'
-import { expectType } from '@spec-validator/test-utils/expecType'
+import { expectType } from '@spec-validator/test-utils/expectType'
 
 const schema = {
   innerSchema: objectField({

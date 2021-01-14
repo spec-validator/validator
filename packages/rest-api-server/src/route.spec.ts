@@ -2,7 +2,7 @@ import { choiceField, numberField, objectField, stringField, unionField } from '
 import constantField from '@spec-validator/validator/fields/constantField'
 import $ from '@spec-validator/validator/fields/segmentField'
 
-import { expectType } from '@spec-validator/test-utils/expecType'
+import { expectType } from '@spec-validator/test-utils/expectType'
 import { Route } from './route'
 
 describe('Route', () => {

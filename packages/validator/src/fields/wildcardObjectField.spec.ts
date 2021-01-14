@@ -1,7 +1,7 @@
 import { TypeHint } from '..'
 import { Json } from '../../../utils/src/Json'
 import { testValidateSpecError, testValidateSpecOk } from '../TestUtils.test'
-import { expectType } from '../../../test-utils/src/expecType'
+import { expectType } from '../../../test-utils/src/expectType'
 import wildcardObjectField from './wildcardObjectField'
 
 const field = wildcardObjectField()

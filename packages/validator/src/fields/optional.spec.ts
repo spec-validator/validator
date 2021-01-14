@@ -1,6 +1,6 @@
 import optional from './optional'
 import { TypeHint } from '../core'
-import { expectType } from '@spec-validator/test-utils/expecType'
+import { expectType } from '@spec-validator/test-utils/expectType'
 import { sampleField, testValidateSpecOk } from '../TestUtils.test'
 
 const field = optional(sampleField)
