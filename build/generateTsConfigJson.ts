@@ -42,8 +42,9 @@ const generateProjectConfigs = (): void => {
   const graph = getGraph()
   Object.entries(graph).forEach(([parent, children]) => {
     write(`${getRelativePath(parent)}/tsconfig.build.json`, {
-      'extends': '../../tsconfig.base.json',
+      'extends': '../../tsconfig.json',
       'compilerOptions': {
+        'baseUrl': './',
         'composite': true,
         'noEmit': false,
         'rootDir': './src',
