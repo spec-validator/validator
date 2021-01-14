@@ -1,6 +1,6 @@
 import unionField from './unionField'
 import { TypeHint } from '../core'
-import { expectType } from '../../../test-utils/src/expecType'
+import { expectType } from '@spec-validator/test-utils/expecType'
 import { objectField, booleanField , choiceField, stringField } from '.'
 import { testValidateSpecOk, testValidateSpecError } from '../TestUtils.test'
 import { serialize } from '../interface'

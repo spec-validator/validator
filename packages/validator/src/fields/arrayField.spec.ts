@@ -1,4 +1,4 @@
-import { expectType } from '../../../test-utils/src/expecType'
+import { expectType } from '@spec-validator/test-utils/expecType'
 
 import arrayField from './arrayField'
 import { TypeHint } from '../core'

@@ -1,4 +1,4 @@
-import { expectType } from '../../../test-utils/src/expecType'
+import { expectType } from '@spec-validator/test-utils/expecType'
 import { TypeHint } from '../core'
 import $ from './segmentField'
 import booleanField from './booleanField'

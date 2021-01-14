@@ -1,6 +1,6 @@
 import { numberField, objectField, stringField } from '.'
 import { TypeHint } from '../core'
-import { expectType } from '../../../test-utils/src/expecType'
+import { expectType } from '@spec-validator/test-utils/expecType'
 import { testValidateSpecError, testValidateSpecOk } from '../TestUtils.test'
 
 const field = objectField({
