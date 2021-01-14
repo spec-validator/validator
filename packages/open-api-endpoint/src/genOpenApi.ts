@@ -7,7 +7,7 @@ import { GetRepresentation } from '@spec-validator/validator/registry'
 import getFieldSchema from './schemaRegistry'
 import { Any, ConstructorArgs } from 'utils/src/util-types'
 import { isResponsesSpec, ResponseSpec } from '@spec-validator/rest-api-server/route'
-import { withoutOptional } from '@spec-validator/validator/utils'
+import { withoutOptional } from '@spec-validator/utils/utils'
 import { isFieldSpec, SpecUnion } from '@spec-validator/validator/core'
 import { Json } from 'utils/src/Json'
 

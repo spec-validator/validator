@@ -1,7 +1,7 @@
 import http from 'http'
 import { validate, serialize, TypeHint } from '@spec-validator/validator'
 import { RequestSpec, ResponseSpec, Route } from './route'
-import { cached, pick } from '@spec-validator/validator/utils'
+import { cached, pick } from '@spec-validator/utils/utils'
 import { SerializationFormat } from './serialization'
 import { getFieldForSpec } from '@spec-validator/validator/interface'
 
