@@ -1,4 +1,10 @@
 {
   "name": "@spec-validator/validator",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "dependencies": {
+    "@spec-validator/utils": "0.0.1"
+  },
+  "devDependencies": {
+    "@spec-validator/test-utils": "^4.17.9"
+  }
 }
