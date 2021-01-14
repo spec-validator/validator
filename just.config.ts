@@ -18,7 +18,11 @@ task('build', series(
   parallel(...forAllPackages(generatePackageJson))
 ))
 
-task('doc-tests', async () => generateCodeBlocks(__dirname))
+task('doc-tests', async () => {
+  generateCodeBlocks(
+    `${__dirname}`
+  )
+})
 
 task('test',
   exec(

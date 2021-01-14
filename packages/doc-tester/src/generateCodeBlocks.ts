@@ -18,15 +18,18 @@ const ensureDirExists = (filePath: string): string => {
 }
 
 export default (root: string): void => {
-  discover(root, /^.*\.md$/).forEach(readme => {
-    fs.writeFileSync(
-      ensureDirExists(
-        `${root}/doc-tests/${trimPrefix(readme, root + '/')}.ts`
-      ),
-      extractCodeBlocks(
-        fs.readFileSync(readme).toString(),
-        ['ts', 'typescript']
-      )
+  discover(root, /^.*\.md$/, /node_modules/).forEach(readme => {
+    const blocks = extractCodeBlocks(
+      fs.readFileSync(readme).toString(),
+      ['ts', 'typescript']
     )
+    if (blocks) {
+      fs.writeFileSync(
+        ensureDirExists(
+          `${root}/doc-tests/${trimPrefix(readme, root)}.ts`
+        ),
+        blocks
+      )
+    }
   })
 }

@@ -1,18 +1,20 @@
 import path from 'path'
 import fs from 'fs'
 
-export default (root: string, pattern: RegExp): string[] => {
+export default (root: string, pattern: RegExp, ignore: RegExp): string[] => {
   const result: string[] = []
 
-  const _fromDir = (parent: string) =>
-    fs.readdirSync(parent).forEach(file => {
-      const filename = path.join(parent, file)
-      if (fs.lstatSync(filename).isDirectory()) {
-        _fromDir(filename)
-      } else if (pattern.test(filename)) {
-        result.push(filename)
-      }
-    })
+  const _fromDir = (parent: string) => {
+    if (ignore.test(parent)) {
+      // IGNORE
+    } else if (fs.lstatSync(parent).isDirectory()) {
+      fs.readdirSync(parent).forEach(file => {
+        _fromDir(path.join(parent, file))
+      })
+    } else if (pattern.test(parent)) {
+      result.push(parent)
+    }
+  }
 
   if (fs.existsSync(root)){
     _fromDir(root)
