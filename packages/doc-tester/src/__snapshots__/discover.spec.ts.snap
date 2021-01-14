@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`with existing path 1`] = `
+Array [
+  "/home/gurunars/repo/validator/packages/doc-tester/src/fixtures/README.md",
+  "/home/gurunars/repo/validator/packages/doc-tester/src/fixtures/inner/ONE.md",
+]
+`;
+
+exports[`with missing path 1`] = `Array []`;
