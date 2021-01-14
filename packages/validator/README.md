@@ -11,15 +11,20 @@ second parameter is a function that aims to construct a field object.
 as the second parameter.
 
 ```ts
+import assert from 'assert'
+
 import { Field, declareField } from '@spec-validator/validator/core'
 
-const shortStringField = declareField('ShortStringField', (): Field<string> => ({
-  validate: (value: any): string => {
-    if (typeof value !== 'string') {
-      throw 'Not a string'
-    }
-    if (value.length > 5) {
-      throw 'Too long string'
+const DAYS = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'] as const
+
+const choices = new Set(DAYS)
+
+type Day = typeof DAYS[number]
+
+const dayField = declareField('DateField', (): Field<Day> => ({
+  validate: (value: any): Day => {
+    if (!choices.has(value)) {
+      throw 'Invalid day'
     }
     return value
   },
@@ -31,7 +36,7 @@ Define a schema:
 
 ```ts
 const schema = {
-  title: shortStringField()
+  day: dayField(),
 }
 ```
 
@@ -40,19 +45,31 @@ Validate and serialize payload:
 ```ts
 import { validate, serialize } from '@spec-validator/validator'
 
-const deserialized = validate(schema, { title: 'valid' })
+const deserialized = validate(schema, { day: 'MO' })
+
+assert.deepStrictEqual(
+  deserialized,
+  'MO'
+)
+
 const serialized = serialize(schema, deserialized)
+
+assert.deepStrictEqual(
+  serialized,
+  'MO'
+)
 ```
 
 Infer TypeScript type from schema:
 
 ```ts
 import { TypeHint } from '@spec-validator/validator'
-import { expectType } from '@spec-validator/validator/TypeTestUtils.test'
+import { expectType } from 'test-utils/src/expectType'
 
 type Schema = TypeHint<typeof schema>
+
 expectType<Schema, {
-  title: string
+  day: Day
 }>(true)
 ```
 
