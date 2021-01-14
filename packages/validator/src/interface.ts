@@ -1,4 +1,4 @@
-import { Json } from '../../utils/src/Json'
+import { Json } from '@spec-validator/utils/Json'
 import { Field, TypeHint, SpecUnion, isArraySpec, isFieldSpec, isObjectSpec } from './core'
 import { undefinedField, arrayField, objectField } from './fields'
 

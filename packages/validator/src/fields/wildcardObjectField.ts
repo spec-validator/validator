@@ -1,5 +1,5 @@
 import { declareField, Field } from '../core'
-import { Json } from '../../../utils/src/Json'
+import { Json } from '@spec-validator/utils/Json'
 
 export type WildcardObjectField = Field<Record<string, Json>>
 

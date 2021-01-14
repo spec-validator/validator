@@ -1,6 +1,6 @@
 import { Field, TypeHint, withErrorDecoration, declareField } from '../core'
-import { Json } from '../../../utils/src/Json'
-import { Any } from '../../../utils/src/util-types'
+import { Json } from '@spec-validator/utils/Json'
+import { Any } from '@spec-validator/utils/util-types'
 
 export type ObjectFields<DeserializedType extends Record<string, Any> = Record<string, Any>> = {
   [P in keyof DeserializedType]: Field<DeserializedType[P]>

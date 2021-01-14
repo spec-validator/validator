@@ -1,5 +1,5 @@
 import { declareField, Field } from '@spec-validator/validator/core'
-import { Any } from 'utils/src/util-types'
+import { Any } from '@spec-validator/utils/util-types'
 
 type Example<T extends Any> = {
   value: T,

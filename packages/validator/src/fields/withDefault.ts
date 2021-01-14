@@ -1,6 +1,6 @@
 import { declareField, Field, SpecUnion } from '../core'
 import { getFieldForSpec } from '../interface'
-import { Any } from '../../../utils/src/util-types'
+import { Any } from '@spec-validator/utils/util-types'
 
 export interface WithDefault<T extends Any> extends Field<T> {
   readonly innerSpec: SpecUnion<T>,

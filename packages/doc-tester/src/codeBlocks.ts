@@ -1,4 +1,3 @@
-
 type CodeBlock = {
   type: string,
   snippet: string[]

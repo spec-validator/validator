@@ -1,5 +1,5 @@
 import { Field, withErrorDecoration, declareField } from '../core'
-import { Json } from '../../../utils/src/Json'
+import { Json } from '@spec-validator/utils/Json'
 
 export interface ArrayField<T> extends Field<T[]> {
   readonly itemField: Field<T>,

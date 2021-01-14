@@ -1,4 +1,4 @@
-import { Primitive } from '../../../utils/src/Json'
+import { Primitive } from '@spec-validator/utils/Json'
 import { declareField, Field } from '../core'
 
 export interface ConstantField<Constant extends Primitive> extends Field<Constant> {

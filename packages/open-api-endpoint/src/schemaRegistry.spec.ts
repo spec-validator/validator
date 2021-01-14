@@ -2,7 +2,7 @@ import {
   arrayField, booleanField, choiceField, constantField,
   numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault,
 } from '@spec-validator/validator/fields'
-import { Primitive } from 'utils/src/Json'
+import { Primitive } from '@spec-validator/utils/Json'
 import getSchema from './schemaRegistry'
 import withDoc from './withDoc'
 

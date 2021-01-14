@@ -5,11 +5,11 @@ import { $, optional } from '@spec-validator/validator/fields'
 import { GetRepresentation } from '@spec-validator/validator/registry'
 
 import getFieldSchema from './schemaRegistry'
-import { Any, ConstructorArgs } from 'utils/src/util-types'
+import { Any, ConstructorArgs } from '@spec-validator/utils/util-types'
 import { isResponsesSpec, ResponseSpec } from '@spec-validator/rest-api-server/route'
 import { withoutOptional } from '@spec-validator/utils/utils'
 import { isFieldSpec, SpecUnion } from '@spec-validator/validator/core'
-import { Json } from 'utils/src/Json'
+import { Json } from '@spec-validator/utils/Json'
 
 const mergeValues = (pairs: [a: string, b: OpenAPI.PathItemObject][]): Record<string, OpenAPI.PathItemObject> => {
   const record: Record<string, OpenAPI.PathItemObject>  = {}

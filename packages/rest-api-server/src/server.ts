@@ -8,7 +8,7 @@ import { Route, RequestSpec, ResponseSpec } from './route'
 
 import { TypeHint } from '@spec-validator/validator'
 import { constantField, $ } from '@spec-validator/validator/fields'
-import { WithoutOptional } from 'utils/src/util-types'
+import { WithoutOptional } from '@spec-validator/utils/util-types'
 import { ConstantField } from '@spec-validator/validator/fields/constantField'
 import { Field } from '@spec-validator/validator/core'
 

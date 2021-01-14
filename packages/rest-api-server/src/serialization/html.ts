@@ -1,4 +1,4 @@
-import { Json } from 'utils/src/Json'
+import { Json } from '@spec-validator/utils/Json'
 import SerializationFormat from './base'
 
 export default class HtmlSerialization implements SerializationFormat {

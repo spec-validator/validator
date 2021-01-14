@@ -1,5 +1,5 @@
-import { Json } from '../../utils/src/Json'
-import { Any, Optional } from '../../utils/src/util-types'
+import { Json } from '@spec-validator/utils/Json'
+import { Any, Optional } from '@spec-validator/utils/util-types'
 
 export type OfType<Type extends string> = {
   readonly type: Type

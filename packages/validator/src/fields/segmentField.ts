@@ -1,7 +1,7 @@
 import objectField from './objectField'
 import { Field } from '../core'
-import { Json } from '../../../utils/src/Json'
-import { Any } from '../../../utils/src/util-types'
+import { Json } from '@spec-validator/utils/Json'
+import { Any } from '@spec-validator/utils/util-types'
 
 export interface FieldWithRegExp<Type> extends Field<Type> {
   regex: RegExp
