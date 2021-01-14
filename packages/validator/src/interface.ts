@@ -1,4 +1,4 @@
-import { Json } from './Json'
+import { Json } from '../../utils/src/Json'
 import { Field, TypeHint, SpecUnion, isArraySpec, isFieldSpec, isObjectSpec } from './core'
 import { undefinedField, arrayField, objectField } from './fields'
 

@@ -1,5 +1,5 @@
-import { escapeRegex } from '../utils'
-import { Primitive, Json } from '../Json'
+import { escapeRegex } from '../../../utils/src/utils'
+import { Primitive, Json } from '../../../utils/src/Json'
 import { declareField, OfType } from '../core'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 

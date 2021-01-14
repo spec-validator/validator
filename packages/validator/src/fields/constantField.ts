@@ -1,4 +1,4 @@
-import { Primitive } from '../Json'
+import { Primitive } from '../../../utils/src/Json'
 import { declareField, Field } from '../core'
 
 export interface ConstantField<Constant extends Primitive> extends Field<Constant> {

@@ -1,4 +1,4 @@
-import { expectType } from '../TypeTestUtils.test'
+import { expectType } from '../../../test-utils/src/expecType'
 
 import arrayField from './arrayField'
 import { TypeHint } from '../core'

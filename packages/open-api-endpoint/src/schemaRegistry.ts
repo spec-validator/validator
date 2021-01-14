@@ -6,7 +6,7 @@ import {
 } from '@spec-validator/validator/fields'
 import createRegistry, { registryDeclaration as $ } from '@spec-validator/validator/registry'
 
-import { Primitive } from '@spec-validator/validator/Json'
+import { Primitive } from 'utils/src/Json'
 
 import withDoc from './withDoc'
 

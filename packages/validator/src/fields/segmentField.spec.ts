@@ -3,7 +3,7 @@ import stringField from './stringField'
 import numberField from './numberField'
 
 import $ from './segmentField'
-import { expectType } from '../TypeTestUtils.test'
+import { expectType } from '../../../test-utils/src/expecType'
 import { TypeHint } from '../core'
 import { testValidateSpecOk } from '../TestUtils.test'
 

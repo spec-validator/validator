@@ -3,7 +3,7 @@ import { Field, isFieldSpec, ObjectSpec, SpecUnion, OfType } from '@spec-validat
 import { $, unionField } from '@spec-validator/validator/fields'
 import { ConstantField } from '@spec-validator/validator/fields/constantField'
 import { UnionField } from '@spec-validator/validator/fields/unionField'
-import { Any, WithoutOptional } from '@spec-validator/validator/util-types'
+import { Any, WithoutOptional } from 'utils/src/util-types'
 
 export type StringMapping = Record<string, Any>
 

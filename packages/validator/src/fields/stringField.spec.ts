@@ -1,4 +1,4 @@
-import { expectType } from '../TypeTestUtils.test'
+import { expectType } from '../../../test-utils/src/expecType'
 import { TypeHint } from '../core'
 import $ from './segmentField'
 import stringField from './stringField'

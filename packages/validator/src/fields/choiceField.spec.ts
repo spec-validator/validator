@@ -6,7 +6,7 @@ import {
   testValidateSegmentChainOK,
   testValidateSegmentChainError,
 } from './TestUtils.test'
-import { expectType } from '../TypeTestUtils.test'
+import { expectType } from '../../../test-utils/src/expecType'
 import { testValidateSpecOk, testValidateSpecError } from '../TestUtils.test'
 
 const field = choiceField(1, 2, 3)

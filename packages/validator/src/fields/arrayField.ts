@@ -1,5 +1,5 @@
 import { Field, withErrorDecoration, declareField } from '../core'
-import { Json } from '../Json'
+import { Json } from '../../../utils/src/Json'
 
 export interface ArrayField<T> extends Field<T[]> {
   readonly itemField: Field<T>,

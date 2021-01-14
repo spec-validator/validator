@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { SpecUnion } from './core'
-import { Any } from './util-types'
+import { Any } from '@spec-validator/utils/uitl-types'
 import { serialize, validate } from './interface'
 
 export const sampleField = {

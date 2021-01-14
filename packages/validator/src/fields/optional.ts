@@ -1,6 +1,6 @@
 import { declareField, Field, SpecUnion } from '../core'
 import { getFieldForSpec } from '../interface'
-import { Any, Optional } from '../util-types'
+import { Any, Optional } from '../../../utils/src/util-types'
 
 export interface OptionalField<T extends Any> extends Field<Optional<T>> {
   readonly innerSpec: SpecUnion<T>

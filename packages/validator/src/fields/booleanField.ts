@@ -1,5 +1,5 @@
 import { declareField, OfType } from '../core'
-import { Json } from '../Json'
+import { Json } from '../../../utils/src/Json'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
 export type BooleanField = FieldWithStringInputSupport<boolean>

@@ -1,4 +1,4 @@
-import { expectType } from './TypeTestUtils.test'
+import { expectType } from '../../test-utils/src/expecType'
 import { AllNonNullKeyTypes, KeysOfType, Optional, RequiredKeys, WithoutOptional } from './util-types'
 
 type Input = {

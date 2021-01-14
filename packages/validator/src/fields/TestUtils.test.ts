@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import $, { FieldWithStringInputSupport } from './segmentField'
-import { Any } from '../util-types'
+import { Any } from '../../../utils/src/util-types'
 import { serialize, validate } from '../interface'
 
 export const testValidateSegmentChainOK = <T extends Any> (

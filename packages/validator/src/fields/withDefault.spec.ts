@@ -1,6 +1,6 @@
 import withDefault from './withDefault'
 import { TypeHint } from '../core'
-import { expectType } from '../TypeTestUtils.test'
+import { expectType } from '../../../test-utils/src/expecType'
 import { validate } from '..'
 import { sampleField, testValidateSpecOk } from '../TestUtils.test'
 
