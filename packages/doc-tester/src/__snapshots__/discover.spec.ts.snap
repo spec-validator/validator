@@ -2,8 +2,8 @@
 
 exports[`with existing path 1`] = `
 Array [
-  "/home/gurunars/repo/validator/packages/doc-tester/src/fixtures/README.md",
-  "/home/gurunars/repo/validator/packages/doc-tester/src/fixtures/inner/ONE.md",
+  "./fixtures/README.md",
+  "./fixtures/inner/ONE.md",
 ]
 `;
 
