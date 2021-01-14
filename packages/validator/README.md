@@ -11,7 +11,7 @@ second parameter is a function that aims to construct a field object.
 as the second parameter.
 
 ```ts
-import { Field } from '@spec-validator/validator'
+import { Field, declareField } from '@spec-validator/validator/core'
 
 const shortStringField = declareField('ShortStringField', (): Field<string> => ({
   validate: (value: any): string => {
@@ -31,7 +31,7 @@ Define a schema:
 
 ```ts
 const schema = {
-    title: shortStringField()
+  title: shortStringField()
 }
 ```
 
@@ -48,8 +48,12 @@ Infer TypeScript type from schema:
 
 ```ts
 import { TypeHint } from '@spec-validator/validator'
+import { expectType } from '@spec-validator/validator/TypeTestUtils.test'
 
 type Schema = TypeHint<typeof schema>
+expectType<Schema, {
+  title: string
+}>(true)
 ```
 
 ## Fields
