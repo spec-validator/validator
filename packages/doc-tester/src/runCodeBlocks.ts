@@ -1,4 +1,7 @@
 import fs from 'fs'
+import { execSync } from 'child_process'
+
+import { Task } from 'just-task'
 
 import discover from './discover'
 import extractCodeBlocks from './codeBlocks'
@@ -9,10 +12,12 @@ type CodeFile = {
 }
 
 const runCodeFile = (codeFile: CodeFile): void => {
-  codeFile.code
+  execSync('yarn ts-node', {
+    input: codeFile.code,
+  })
 }
 
-export default (root: string): void =>
+export default (root: string): Task => async () =>
   discover(root, /^.*\.md$/, /node_modules/).map(file => ({
     code: extractCodeBlocks(
       fs.readFileSync(file).toString(),
