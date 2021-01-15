@@ -3,5 +3,6 @@
 exports[`extractCodeBlocks 1`] = `
 "Block 1
 
-Block 2"
+Block 2
+"
 `;
