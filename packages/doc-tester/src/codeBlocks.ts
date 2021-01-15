@@ -47,4 +47,4 @@ const joinCodeBlocks = (snippets: CodeBlock[]): string => snippets
   .join('\n\n')
 
 export default (text: string, types: string[]): string =>
-  joinCodeBlocks(extractCodeBlocks(text, types))
+  joinCodeBlocks(extractCodeBlocks(text, types)) + '\n'

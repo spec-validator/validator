@@ -190,8 +190,8 @@ payloads using them two functions are needed with the respective
 names and the following interfaces:
 
 ```ts
-const serialize = <T>(spec: ValidatorSpecUnion<T>, deserialized: T): any
-const validate = <T>(spec: ValidatorSpecUnion<T>, serialized: any): T
+const serialize = <T>(spec: ValidatorSpecUnion<T>, deserialized: T): any => deserialized as any
+const validate = <T>(spec: ValidatorSpecUnion<T>, serialized: any): T => serialized as T
 ```
 
 Their implementation is a mental exerceise for the reader ;)
