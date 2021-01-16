@@ -14,7 +14,7 @@ type CodeFile = {
 const runCodeFile = (codeFile: CodeFile): void => {
   try {
     Object.values(codeFile.code).forEach((blocks) => {
-      execSync('yarn ts-node', {
+      execSync('yarn ts-node -r tsconfig-paths/register', {
         input: toCode(blocks),
       })
     })
