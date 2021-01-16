@@ -1,6 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`typed and labeled blocks 1`] = `Object {}`;
+exports[`typed and labeled blocks 1`] = `
+Object {
+  "one": Array [
+    Object {
+      "label": "one",
+      "lines": Array [
+        "CODE",
+      ],
+      "offset": 3,
+      "type": "ts",
+    },
+    Object {
+      "label": "one",
+      "lines": Array [
+        "CODE 2",
+      ],
+      "offset": 7,
+      "type": "ts",
+    },
+  ],
+}
+`;
 
 exports[`untyped and unlabeled blocks 1`] = `
 Object {

@@ -1,21 +1,33 @@
 
-import splitIntoBuckets from './splitIntoBuckets'
+import splitIntoBuckets, { extractType } from './splitIntoBuckets'
 
 describe('extractType', () => {
   it('untyped and unlabeled', () => {
-    // TODO
+    expect(extractType('```')).toEqual({
+      type: '',
+      label: '',
+    })
   })
 
   it('typed and labeled', () => {
-    // TODO
+    expect(extractType('```ts one')).toEqual({
+      type: 'ts',
+      label: 'one',
+    })
   })
 
   it('typed and unlabeled', () => {
-    // TODO
+    expect(extractType('```ts')).toEqual({
+      type: 'ts',
+      label: '',
+    })
   })
 
   it('typed and unlabeled', () => {
-    // TODO
+    expect(extractType('``` one')).toEqual({
+      type: '',
+      label: 'one',
+    })
   })
 })
 
