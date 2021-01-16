@@ -13,7 +13,10 @@ type CodeFile = {
 
 const runCodeFile = (codeFile: CodeFile): void => {
   try {
+    console.log(JSON.stringify(codeFile, null, 2))
     Object.values(codeFile.code).forEach((blocks) => {
+      console.log('*****')
+      console.log(toCode(blocks))
       execSync('yarn ts-node -r tsconfig-paths/register', {
         input: toCode(blocks),
       })
