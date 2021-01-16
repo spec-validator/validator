@@ -5,7 +5,7 @@ import exec from './build/exec'
 import generatePackageJson from './build/generatePackageJson'
 import generateTsConfigJson from './build/generateTsConfigJson'
 
-import runCodeBlocks from './packages/doc-tester/src/runCodeBlocks'
+import generateCodeBlocks from './packages/doc-tester/src/generateCodeBlocks'
 
 option('u', { default: false } as any)
 
@@ -18,8 +18,8 @@ task('build', series(
   parallel(...forAllPackages(generatePackageJson))
 ))
 
-task('docs', async () => {
-  runCodeBlocks(
+task('doc-tests', async () => {
+  generateCodeBlocks(
     `${__dirname}`
   )
 })
