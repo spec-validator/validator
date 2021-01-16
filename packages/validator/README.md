@@ -116,4 +116,26 @@ assert.deepStrictEqual(valid, {
   count: 12,
   weight: 16.33
 })
+
+let error: any = undefined
+
+try {
+  validate(primitiveSpec, {
+    flag: true,
+    title: 'Title',
+    email: 'Abracadabra',
+    count: 12,
+    weight: 16.33
+  })
+} catch (err) {
+  error = err
+}
+
+assert.deepStrictEqual(error, {
+  inner: "Doesn't match a regex",
+  path: [
+    'email'
+  ]
+})
+
 ```
