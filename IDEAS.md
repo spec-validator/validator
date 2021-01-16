@@ -270,30 +270,31 @@ must be annotated with a reference to its type.
 
 ```ts ext
 export interface Field<DeserializedType> {
+  type: string
   validate(serialized: any): DeserializedType
   serialize(deserialized: DeserializedType): any
 }
 
 const stringField = (): Field<string> => ({
   type: 'stringField',
-  validate: (serialized: any): string => {
+  validate: (serialized: any) => {
     if (typeof serialized !== 'string') {
       throw 'Not a string'
     }
-    return serialized as string
+    return serialized
   },
-  serialize: (deserialized: string): any => deserialized,
+  serialize: (deserialized: string) => deserialized,
 })
 
 const numberField = (): Field<number> => ({
   type: 'numberField',
-  validate: (serialized: any): number => {
+  validate: (serialized: any) => {
     if (typeof serialized !== 'number') {
       throw 'Not a number'
     }
-    return serialized as number
+    return serialized
   },
-  serialize: (deserialized: number): any => deserialized,
+  serialize: (deserialized: number) => deserialized,
 })
 ```
 
@@ -301,18 +302,13 @@ The function representing a registry pattern can be implemented
 via a mapping between the type and the aspect:
 
 ```ts ext
-const MAPPING = {
+const MAPPING: Record<string, string> = {
   numberField: 'Number field',
   stringField: 'String field'
 }
 
-const getHumanReadableName = (field: Field<unknown>) => {
-  const type = (field as any).type
-  if (!type) {
-    throw 'Field type is not defined'
-  }
-  return MAPPING[type]
-}
+const getHumanReadableName = (field: Field<unknown>): string =>
+  MAPPING[field.type]
 
 import assert from 'assert'
 
