@@ -12,9 +12,14 @@ type CodeFile = {
 }
 
 const runCodeFile = (codeFile: CodeFile): void => {
-  execSync('yarn ts-node', {
-    input: codeFile.code,
-  })
+  try {
+    execSync('yarn ts-node', {
+      input: codeFile.code,
+    })
+  } catch (err) {
+    console.error(`With errors ${codeFile.file}`)
+    console.error(err.stderr.toString())
+  }
 }
 
 export default (root: string): Task => async () =>

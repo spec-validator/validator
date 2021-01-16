@@ -94,7 +94,7 @@ const primitiveSpec = {
 
 type PrimitiveType = TypeHint<typeof primitiveSpec>
 
-const valid = validate(primitiveSpec, {
+const valid: PrimitiveType = validate(primitiveSpec, {
   flag: true,
   title: 'Title',
   count: 12,
