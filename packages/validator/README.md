@@ -64,7 +64,7 @@ Infer TypeScript type from schema:
 
 ```ts
 import { TypeHint } from '@spec-validator/validator'
-import { expectType } from 'test-utils/src/expectType'
+import { expectType } from '@spec-validator/test-utils/expectType'
 
 type Schema = TypeHint<typeof schema>
 
