@@ -103,8 +103,6 @@ expectType<Schema, {
 
 ## Fields
 
-Here are the examples of the fields
-
 ### Primitive fields
 
 ```ts
@@ -116,7 +114,7 @@ import {
 const primitiveSpec = {
   flag: booleanField(),
   title: stringField(),
-  // regex
+  // regex for email
   email: stringField(/\S+@\S+\.\S+/),
   count: numberField(),
   // canBeFloat=true
@@ -140,4 +138,36 @@ assert.deepStrictEqual(valid, {
   count: 12,
   weight: 16.33
 })
+```
+
+### Collection fields
+
+Nested objects and arrays can be outlined as follows:
+
+```ts
+const complexSpec = {
+  firstLevel: stringField(),
+  innerObj: {
+    secondLevel: stringField(),
+    array: [{
+      itemsThirdLevel: stringField()
+    }]
+  }
+}
+
+const validNestedObj = validate(complexSpec, {
+  firstLevel: 'First level',
+  innerObj: {
+    secondLevel: 'Second level',
+    array: [
+      {
+        itemsThirdLevel: 'Third level #1'
+      }, {
+        itemsThirdLevel: 'Third level #2'
+      }
+    ]
+  }
+})
+
+assert.deepStrictEqual(!!validNestedObj, true)
 ```
