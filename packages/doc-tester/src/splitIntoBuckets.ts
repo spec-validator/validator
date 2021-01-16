@@ -44,7 +44,7 @@ const extractCodeBlocks = (lines: string[]): CodeBlock[] => {
       if (hasDelimiter(line)) {
         block = {
           ...extractType(line),
-          lineno: i + 1 + 1, // 1 based index + skip the delimiter
+          lineno: i + 1, // skip the delimiter - block - next line
           lines: [],
         }
       } else {
