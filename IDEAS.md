@@ -33,7 +33,7 @@ not impose any of the requirements outlined above.
 In TypeScript it is possible to obtain a type of the return value of a function
 via `ReturnType` built-in auxilary type:
 
-```ts
+```ts functions-as-schema
 const validateString = (serialized: any): string => {
   if (typeof serialized !== 'string') {
     throw 'Not a string'
@@ -49,7 +49,7 @@ validation domain.
 
 Compare:
 
-```ts
+```ts functions-as-schema
 
 type Person = {
   firstName: string,
@@ -64,7 +64,7 @@ const validatePerson = (input: any): Person => ({
 
 with a dramatically less verbose version:
 
-```ts
+```ts functions-as-schema
 const personSchema = {
   firstName: validateString,
   lastName: validateString,
@@ -79,7 +79,7 @@ JS collections such as **arrays** and **objects** is to use
 
 For the exemplary schemas outlined above the recursive types would look as follows:
 
-```ts
+```ts recursive-types
 type ValidatorFunction<T> = (...args: any[]) => T
 
 type ValidatorObject<DeserializedType extends Record<string, unknown> = Record<string, unknown>> = {
@@ -99,7 +99,7 @@ type TypeHint<Spec extends ValidatorSpecUnion<unknown>> =
 
 And using these types with the schema outlined just above will look as follows:
 
-```ts
+```ts recursive-types
 const personSchema = {
   firstName: validateString,
   lastName: validateString,
@@ -123,7 +123,7 @@ validation and a serialization function.
 
 Let's call this aggregate a `Field`:
 
-```ts
+```ts fields
 export interface Field<DeserializedType> {
   validate(serialized: any): DeserializedType
   serialize(deserialized: DeserializedType): any
@@ -146,7 +146,7 @@ type TypeHint<Spec extends ValidatorSpecUnion<unknown>> =
 
 The fields may look like:
 
-```ts
+```ts fields
 const stringField = (): Field<string> => ({
   validate: (serialized: any) => {
     if (typeof serialized !== 'string') {
@@ -170,7 +170,7 @@ const numberField = (): Field<number> => ({
 
 With the schema defined as:
 
-```ts
+```ts fields
 const personSchema = {
   firstName: stringField(),
   lastName: stringField(),
@@ -181,7 +181,7 @@ const personSchema = {
 
 And type inference working as follows:
 
-```ts
+```ts fields
 type Person = TypeHint<typeof personSchema>
 ```
 
@@ -189,7 +189,7 @@ To actually leverage the schemas and validate or serialize
 payloads using them two functions are needed with the respective
 names and the following interfaces:
 
-```ts
+```ts fields
 const serialize = <T>(spec: ValidatorSpecUnion<T>, deserialized: T): any => deserialized as any
 const validate = <T>(spec: ValidatorSpecUnion<T>, serialized: any): T => serialized as T
 ```
@@ -220,7 +220,7 @@ to return an aspect for an instance of arbitrary type.
 Since JavaScript does not have reflection, each instance of a type
 must be annotated with a reference to its type.
 
-```ts
+```ts ext
 const stringField = (): Field<string> => ({
   type: 'stringField',
   validate: (serialized: any) => {
@@ -247,7 +247,7 @@ const numberField = (): Field<number> => ({
 The function representing a registry pattern can be implemented
 via a mapping between the type and the aspect:
 
-```ts
+```ts ext
 const MAPPING = {
   numberField: 'Number field',
   stringField: 'String field'
