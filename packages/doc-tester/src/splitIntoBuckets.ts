@@ -26,8 +26,9 @@ export const extractType = (line: string): Meta => {
  * Really primitive FSM based README parser aiming to extract code snippets
  * from the documentation.
  */
-const extractCodeBlocks = (lines: string[]): CodeBlock[] => {
+const extractCodeBlocks = (lines: string[], types: string[]): CodeBlock[] => {
   let block: CodeBlock | undefined = undefined
+  const typeSet = new Set(types)
   const result: CodeBlock[] = []
 
   // eslint-disable-next-line max-statements
@@ -35,7 +36,9 @@ const extractCodeBlocks = (lines: string[]): CodeBlock[] => {
     if (block) {
       //block.label = block.label || getLabelCheckpoint(line)
       if (hasDelimiter(line)) {
-        result.push(block)
+        if (!typeSet.size || typeSet.has(block.type)) {
+          result.push(block)
+        }
         block = undefined
       } else {
         block.lines.push(line)
@@ -55,7 +58,7 @@ const extractCodeBlocks = (lines: string[]): CodeBlock[] => {
   return result
 }
 
-type Buckets = Record<string, CodeBlock[]>
+export type Buckets = Record<string, CodeBlock[]>
 
 const splitIntoBuckets = (blocks: CodeBlock[]): Buckets => {
   const buckets: Buckets = {}
@@ -67,8 +70,21 @@ const splitIntoBuckets = (blocks: CodeBlock[]): Buckets => {
   return buckets
 }
 
-export default (lines: string[]): Buckets =>
-  splitIntoBuckets(extractCodeBlocks(lines))
+export const toCode = (blocks: CodeBlock[]): string => {
+  const lines: string[] = []
+  blocks.forEach(block => {
+    while (lines.length < block.lineno) {
+      lines.push('\n')
+    }
+    block.lines.forEach(it => {
+      lines.push(it + '\n')
+    })
+  })
+  return lines.join('')
+}
+
+export default (lines: string[], types: string[]=[]): Buckets =>
+  splitIntoBuckets(extractCodeBlocks(lines, types))
 
 /**
 const joinCodeBlocks = (snippets: CodeBlock[]): string => snippets

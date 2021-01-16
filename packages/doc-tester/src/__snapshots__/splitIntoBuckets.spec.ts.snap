@@ -45,6 +45,18 @@ Object {
 }
 `;
 
+exports[`toCode 1`] = `
+"
+
+one
+two
+
+
+three
+four
+"
+`;
+
 exports[`typed and labeled blocks 1`] = `
 Object {
   "one.ts": Array [

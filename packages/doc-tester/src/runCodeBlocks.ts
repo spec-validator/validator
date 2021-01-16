@@ -4,12 +4,14 @@ import { execSync } from 'child_process'
 import { Task } from 'just-task'
 
 import discover from './discover'
-import extractCodeBlocks from './splitIntoBuckets'
+import extractCodeBlocks, { Buckets } from './splitIntoBuckets'
 
 type CodeFile = {
   file: string,
-  code: string
+  code: Buckets
 }
+
+
 
 const runCodeFile = (codeFile: CodeFile): void => {
   try {
@@ -25,7 +27,7 @@ const runCodeFile = (codeFile: CodeFile): void => {
 export default (root: string): Task => async () =>
   discover(root, /^.*\.md$/, /node_modules/).map(file => ({
     code: extractCodeBlocks(
-      fs.readFileSync(file).toString(),
+      fs.readFileSync(file).toString().split('\n'),
       ['ts', 'typescript']
     ),
     file,

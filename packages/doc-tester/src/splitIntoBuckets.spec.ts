@@ -1,5 +1,5 @@
 
-import splitIntoBuckets, { extractType } from './splitIntoBuckets'
+import splitIntoBuckets, { extractType, toCode } from './splitIntoBuckets'
 
 describe('extractType', () => {
   it('untyped and unlabeled', () => {
@@ -113,4 +113,22 @@ test('mixed blocks', () => {
       '```',
     ],
   )).toMatchSnapshot()
+})
+
+test('toCode', () => {
+  expect(toCode([
+    {
+      lineno: 2, // zero based
+      lines: ['one', 'two'],
+      type: 'ts',
+      label: 'label-one',
+    },
+    {
+      lineno: 6, // zero based
+      lines: ['three', 'four'],
+      type: 'ts',
+      label: 'label-one',
+    },
+  ])).toMatchSnapshot()
+
 })
