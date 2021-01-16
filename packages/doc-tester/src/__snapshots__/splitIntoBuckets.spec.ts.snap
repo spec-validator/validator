@@ -1,5 +1,46 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`mixed blocks 1`] = `
+Object {
+  "": Array [
+    Object {
+      "label": "",
+      "lines": Array [
+        "Unlabeled ts code",
+      ],
+      "offset": 7,
+      "type": "ts",
+    },
+    Object {
+      "label": "",
+      "lines": Array [
+        "Unlabeled wildcard code",
+      ],
+      "offset": 15,
+      "type": "",
+    },
+  ],
+  "one": Array [
+    Object {
+      "label": "one",
+      "lines": Array [
+        "Labeled ts code",
+      ],
+      "offset": 3,
+      "type": "ts",
+    },
+    Object {
+      "label": "one",
+      "lines": Array [
+        "Labeled wildcard code",
+      ],
+      "offset": 11,
+      "type": "",
+    },
+  ],
+}
+`;
+
 exports[`typed and labeled blocks 1`] = `
 Object {
   "one": Array [
@@ -18,6 +59,52 @@ Object {
       ],
       "offset": 7,
       "type": "ts",
+    },
+  ],
+}
+`;
+
+exports[`typed and unlabeled blocks 1`] = `
+Object {
+  "": Array [
+    Object {
+      "label": "",
+      "lines": Array [
+        "CODE",
+      ],
+      "offset": 3,
+      "type": "ts",
+    },
+    Object {
+      "label": "",
+      "lines": Array [
+        "CODE 2",
+      ],
+      "offset": 7,
+      "type": "ts",
+    },
+  ],
+}
+`;
+
+exports[`untyped and labeled blocks 1`] = `
+Object {
+  "one": Array [
+    Object {
+      "label": "one",
+      "lines": Array [
+        "CODE",
+      ],
+      "offset": 3,
+      "type": "",
+    },
+    Object {
+      "label": "one",
+      "lines": Array [
+        "CODE 2",
+      ],
+      "offset": 7,
+      "type": "",
     },
   ],
 }
