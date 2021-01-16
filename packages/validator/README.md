@@ -171,3 +171,63 @@ const validNestedObj = validate(complexSpec, {
 
 assert.deepStrictEqual(!!validNestedObj, true)
 ```
+
+### Auxilary fields
+
+In addition to primitive and collection fields there are also ones that aim to
+match more extensive type checking.
+
+#### Optional
+
+Once annotated, a payload becomes `T | undefined`:
+
+```ts
+import { optional } from '@spec-validator/validator/fields'
+
+const optionalField = optional(numberField())
+
+expectType<TypeHint<typeof optionalField>, number | undefined>(true)
+
+assert.deepStrictEqual(validate(optionalField, 42), 42)
+assert.deepStrictEqual(validate(optionalField, undefined), undefined)
+```
+
+#### Choice field
+
+A union type that may have only primitive types' based constants:
+
+```ts
+import { choiceField } from '@spec-validator/validator/fields'
+
+const withChoices = choiceField(1, 2, 3)
+
+expectType<TypeHint<typeof withChoices>, 1 | 2 | 3>(true)
+
+assert.deepStrictEqual(validate(withChoices, 1), 1)
+```
+
+#### Date field
+
+A mapping between JavaScript-friendly string date value and
+a [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date)
+object.
+
+```ts
+import { dateField } from '@spec-validator/validator/fields'
+
+const date = dateField()
+
+expectType<TypeHint<typeof date>, Date>(true)
+
+assert.deepStrictEqual(validate(date, '1995-12-17T03:24:00'), new Date('1995-12-17T03:24:00'))
+```
+
+#### Constant field
+
+#### With default
+
+#### Union field
+
+#### Wildcard object field
+
+### Segment based strings
