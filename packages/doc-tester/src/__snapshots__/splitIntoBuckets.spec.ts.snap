@@ -5,40 +5,40 @@ Object {
   ".": Array [
     Object {
       "label": "",
+      "lineno": 15,
       "lines": Array [
         "Unlabeled wildcard code",
       ],
-      "offset": 15,
       "type": "",
     },
   ],
   ".ts": Array [
     Object {
       "label": "",
+      "lineno": 7,
       "lines": Array [
         "Unlabeled ts code",
       ],
-      "offset": 7,
       "type": "ts",
     },
   ],
   "one.": Array [
     Object {
       "label": "one",
+      "lineno": 11,
       "lines": Array [
         "Labeled wildcard code",
       ],
-      "offset": 11,
       "type": "",
     },
   ],
   "one.ts": Array [
     Object {
       "label": "one",
+      "lineno": 3,
       "lines": Array [
         "Labeled ts code",
       ],
-      "offset": 3,
       "type": "ts",
     },
   ],
@@ -50,18 +50,18 @@ Object {
   "one.ts": Array [
     Object {
       "label": "one",
+      "lineno": 3,
       "lines": Array [
         "CODE",
       ],
-      "offset": 3,
       "type": "ts",
     },
     Object {
       "label": "one",
+      "lineno": 7,
       "lines": Array [
         "CODE 2",
       ],
-      "offset": 7,
       "type": "ts",
     },
   ],
@@ -73,18 +73,18 @@ Object {
   ".ts": Array [
     Object {
       "label": "",
+      "lineno": 3,
       "lines": Array [
         "CODE",
       ],
-      "offset": 3,
       "type": "ts",
     },
     Object {
       "label": "",
+      "lineno": 7,
       "lines": Array [
         "CODE 2",
       ],
-      "offset": 7,
       "type": "ts",
     },
   ],
@@ -96,18 +96,18 @@ Object {
   "one.": Array [
     Object {
       "label": "one",
+      "lineno": 3,
       "lines": Array [
         "CODE",
       ],
-      "offset": 3,
       "type": "",
     },
     Object {
       "label": "one",
+      "lineno": 7,
       "lines": Array [
         "CODE 2",
       ],
-      "offset": 7,
       "type": "",
     },
   ],
@@ -119,18 +119,18 @@ Object {
   ".": Array [
     Object {
       "label": "",
+      "lineno": 3,
       "lines": Array [
         "CODE",
       ],
-      "offset": 3,
       "type": "",
     },
     Object {
       "label": "",
+      "lineno": 7,
       "lines": Array [
         "CODE 2",
       ],
-      "offset": 7,
       "type": "",
     },
   ],

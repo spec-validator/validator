@@ -4,7 +4,7 @@ type Meta = {
 }
 
 type CodeBlock = {
-  offset: number,
+  lineno: number,
   lines: string[]
 } & Meta
 
@@ -44,7 +44,7 @@ const extractCodeBlocks = (lines: string[]): CodeBlock[] => {
       if (hasDelimiter(line)) {
         block = {
           ...extractType(line),
-          offset: i + 1 + 1, // 1 based index + skip the delimiter
+          lineno: i + 1 + 1, // 1 based index + skip the delimiter
           lines: [],
         }
       } else {
