@@ -43,7 +43,6 @@ test('untyped and unlabeled blocks', () => {
       'CODE 2',
       '```',
     ],
-    ['']
   )).toMatchSnapshot()
 })
 
@@ -59,7 +58,6 @@ test('typed and labeled blocks', () => {
       'CODE 2',
       '```',
     ],
-    ['ts']
   )).toMatchSnapshot()
 })
 
@@ -76,7 +74,6 @@ test('typed and unlabeled blocks', () => {
       'CODE 2',
       '```',
     ],
-    ['ts']
   )).toMatchSnapshot()
 })
 
@@ -92,7 +89,6 @@ test('untyped and labeled blocks', () => {
       'CODE 2',
       '```',
     ],
-    ['']
   )).toMatchSnapshot()
 })
 
@@ -116,6 +112,5 @@ test('mixed blocks', () => {
       'Unlabeled wildcard code',
       '```',
     ],
-    ['ts', '']
   )).toMatchSnapshot()
 })

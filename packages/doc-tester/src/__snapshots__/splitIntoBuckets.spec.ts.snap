@@ -2,15 +2,7 @@
 
 exports[`mixed blocks 1`] = `
 Object {
-  "": Array [
-    Object {
-      "label": "",
-      "lines": Array [
-        "Unlabeled ts code",
-      ],
-      "offset": 7,
-      "type": "ts",
-    },
+  ".": Array [
     Object {
       "label": "",
       "lines": Array [
@@ -20,15 +12,17 @@ Object {
       "type": "",
     },
   ],
-  "one": Array [
+  ".ts": Array [
     Object {
-      "label": "one",
+      "label": "",
       "lines": Array [
-        "Labeled ts code",
+        "Unlabeled ts code",
       ],
-      "offset": 3,
+      "offset": 7,
       "type": "ts",
     },
+  ],
+  "one.": Array [
     Object {
       "label": "one",
       "lines": Array [
@@ -38,12 +32,22 @@ Object {
       "type": "",
     },
   ],
+  "one.ts": Array [
+    Object {
+      "label": "one",
+      "lines": Array [
+        "Labeled ts code",
+      ],
+      "offset": 3,
+      "type": "ts",
+    },
+  ],
 }
 `;
 
 exports[`typed and labeled blocks 1`] = `
 Object {
-  "one": Array [
+  "one.ts": Array [
     Object {
       "label": "one",
       "lines": Array [
@@ -66,7 +70,7 @@ Object {
 
 exports[`typed and unlabeled blocks 1`] = `
 Object {
-  "": Array [
+  ".ts": Array [
     Object {
       "label": "",
       "lines": Array [
@@ -89,7 +93,7 @@ Object {
 
 exports[`untyped and labeled blocks 1`] = `
 Object {
-  "one": Array [
+  "one.": Array [
     Object {
       "label": "one",
       "lines": Array [
@@ -112,7 +116,7 @@ Object {
 
 exports[`untyped and unlabeled blocks 1`] = `
 Object {
-  "": Array [
+  ".": Array [
     Object {
       "label": "",
       "lines": Array [
