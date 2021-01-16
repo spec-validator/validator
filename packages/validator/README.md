@@ -49,14 +49,18 @@ const deserialized = validate(schema, { day: 'MO' })
 
 assert.deepStrictEqual(
   deserialized,
-  'MO'
+  {
+    day: 'MO'
+  }
 )
 
 const serialized = serialize(schema, deserialized)
 
 assert.deepStrictEqual(
   serialized,
-  'MO'
+  {
+    day: 'MO'
+  }
 )
 ```
 
