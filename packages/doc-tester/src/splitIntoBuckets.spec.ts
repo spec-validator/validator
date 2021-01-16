@@ -1,7 +1,25 @@
 
 import splitIntoBuckets from './splitIntoBuckets'
 
-test('untyped and unlabled blocks', () => {
+describe('extractType', () => {
+  it('untyped and unlabeled', () => {
+    // TODO
+  })
+
+  it('typed and labeled', () => {
+    // TODO
+  })
+
+  it('typed and unlabeled', () => {
+    // TODO
+  })
+
+  it('typed and unlabeled', () => {
+    // TODO
+  })
+})
+
+test('untyped and unlabeled blocks', () => {
   expect(splitIntoBuckets(
     [
       '# Title',
@@ -17,7 +35,7 @@ test('untyped and unlabled blocks', () => {
   )).toMatchSnapshot()
 })
 
-test('typed and labled blocks', () => {
+test('typed and labeled blocks', () => {
   expect(splitIntoBuckets(
     [
       '# Title',

@@ -10,7 +10,7 @@ type CodeBlock = {
 
 const hasDelimiter = (line: string): boolean => line.trim().startsWith('```')
 
-const extractType = (line: string): Meta => {
+export const extractType = (line: string): Meta => {
   const groups = line.match(/```(?<type>.+)(\w+(?<label>.+))?/)?.groups
 
   const extract = (key: string): string =>
