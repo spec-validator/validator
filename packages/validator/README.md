@@ -92,7 +92,10 @@ import {
 const primitiveSpec = {
   flag: booleanField(),
   title: stringField(),
+  // regex
+  email: stringField(/\S+@\S+\.\S+/),
   count: numberField(),
+  // canBeFloat=true
   weight: numberField(true),
 }
 
@@ -101,6 +104,7 @@ type PrimitiveType = TypeHint<typeof primitiveSpec>
 const valid: PrimitiveType = validate(primitiveSpec, {
   flag: true,
   title: 'Title',
+  email: 'test@example.com',
   count: 12,
   weight: 16.33
 })
@@ -108,6 +112,7 @@ const valid: PrimitiveType = validate(primitiveSpec, {
 assert.deepStrictEqual(valid, {
   flag: true,
   title: 'Title',
+  email: 'test@example.com',
   count: 12,
   weight: 16.33
 })
