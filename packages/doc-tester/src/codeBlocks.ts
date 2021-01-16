@@ -1,9 +1,8 @@
 type CodeBlock = {
   type: string,
+  offset: number,
   snippet: string[]
 }
-
-type Block = CodeBlock | undefined
 
 const hasDelimiter = (line: string): boolean => line.trim().startsWith('```')
 
@@ -15,14 +14,15 @@ const extractType = (line: string): string =>
  * from the documentation.
  */
 const extractCodeBlocks = (text: string, types: string[]): CodeBlock[] => {
-  let block: Block = undefined
+  let block: CodeBlock | undefined = undefined
   const typeSet = new Set(types)
   const result: CodeBlock[] = []
-  text.split('\n').forEach(line => {
+  text.split('\n').forEach((line, i) => {
     if (!block) {
       if (hasDelimiter(line)) {
         block = {
           type: extractType(line),
+          offset: i + 1 + 1, // 1 based index + skip the delimiter
           snippet: [],
         }
       } else {
