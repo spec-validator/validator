@@ -86,11 +86,3 @@ export const toCode = (blocks: CodeBlock[]): string => {
 export default (lines: string[], types: string[]=[]): Buckets =>
   splitIntoBuckets(extractCodeBlocks(lines, types))
 
-/**
-const joinCodeBlocks = (snippets: CodeBlock[]): string => snippets
-  .map(it => it.lines.join('\n'))
-  .join('\n\n')
-
-export default (text: string, types: string[]): string =>
-  joinCodeBlocks(extractCodeBlocks(text.split('\n'), types))
- */

@@ -4,19 +4,19 @@ import { execSync } from 'child_process'
 import { Task } from 'just-task'
 
 import discover from './discover'
-import extractCodeBlocks, { Buckets } from './splitIntoBuckets'
+import extractCodeBlocks, { Buckets, toCode } from './splitIntoBuckets'
 
 type CodeFile = {
   file: string,
   code: Buckets
 }
 
-
-
 const runCodeFile = (codeFile: CodeFile): void => {
   try {
-    execSync('yarn ts-node', {
-      input: codeFile.code,
+    Object.values(codeFile.code).forEach((blocks) => {
+      execSync('yarn ts-node', {
+        input: toCode(blocks),
+      })
     })
   } catch (err) {
     console.error(`With errors ${codeFile.file}`)
