@@ -211,35 +211,23 @@ const validate = <T>(spec: ValidatorSpecUnion<T>, serialized: any): T => seriali
 
 import assert from 'assert'
 
+const payload = {
+  firstName: 'name',
+  lastName: 'last name',
+  height: 11,
+  weight: 13.2
+}
+
 assert.deepStrictEqual(
-  validate(personSchema, {
-    firstName: 'name',
-    lastName: 'last name',
-    height: 11,
-    weight: 13.2
-  }),
-  {
-    firstName: 'name',
-    lastName: 'last name',
-    height: 11,
-    weight: 13.2
-  }
+  validate(personSchema, payload),
+  payload
 )
 
 assert.deepStrictEqual(
-  serialize(personSchema, {
-    firstName: 'name',
-    lastName: 'last name',
-    height: 11,
-    weight: 13.2
-  }),
-  {
-    firstName: 'name',
-    lastName: 'last name',
-    height: 11,
-    weight: 13.2
-  }
+  serialize(personSchema, payload),
+  payload
 )
+
 ```
 
 Their implementation is a mental exerceise for the reader ;)
