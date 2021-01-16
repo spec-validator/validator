@@ -4,7 +4,7 @@ import { execSync } from 'child_process'
 import { Task } from 'just-task'
 
 import discover from './discover'
-import extractCodeBlocks from './codeBlocks'
+import extractCodeBlocks from './splitIntoBuckets'
 
 type CodeFile = {
   file: string,

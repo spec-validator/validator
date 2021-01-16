@@ -4,14 +4,9 @@ type Meta = {
 }
 
 type CodeBlock = {
-  meta: Meta,
   offset: number,
   lines: string[]
-}
-
-type CodeBucket = {
-  blocks: CodeBlock[]
-}
+} & Meta
 
 const hasDelimiter = (line: string): boolean => line.trim().startsWith('```')
 
@@ -41,7 +36,7 @@ const extractCodeBlocks = (lines: string[], types: string[]): CodeBlock[] => {
     if (block) {
       //block.label = block.label || getLabelCheckpoint(line)
       if (hasDelimiter(line)) {
-        if (typeSet.has(block.meta.type)) {
+        if (typeSet.has(block.type)) {
           result.push(block)
         }
         block = undefined
@@ -51,7 +46,7 @@ const extractCodeBlocks = (lines: string[], types: string[]): CodeBlock[] => {
     } else {
       if (hasDelimiter(line)) {
         block = {
-          meta: extractType(line),
+          ...extractType(line),
           offset: i + 1 + 1, // 1 based index + skip the delimiter
           lines: [],
         }
@@ -63,15 +58,25 @@ const extractCodeBlocks = (lines: string[], types: string[]): CodeBlock[] => {
   return result
 }
 
-const splitIntoBucets = (blocks: CodeBlock[]): CodeBucket[] => {
-  const buckets: CodeBucket[] = []
+type Buckets = Record<string, CodeBlock[]>
 
+const splitIntoBuckets = (blocks: CodeBlock[]): Buckets => {
+  const buckets: Buckets = {}
+  blocks.forEach(it => {
+    buckets[it.label] = buckets[it.label] || []
+    buckets[it.label].push(it)
+  })
   return buckets
 }
 
+export default (lines: string[], types: string[]): Buckets =>
+  splitIntoBuckets(extractCodeBlocks(lines, types))
+
+/**
 const joinCodeBlocks = (snippets: CodeBlock[]): string => snippets
   .map(it => it.lines.join('\n'))
   .join('\n\n')
 
 export default (text: string, types: string[]): string =>
   joinCodeBlocks(extractCodeBlocks(text.split('\n'), types))
+ */
