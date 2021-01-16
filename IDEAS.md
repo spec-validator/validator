@@ -276,24 +276,24 @@ export interface Field<DeserializedType> {
 
 const stringField = (): Field<string> => ({
   type: 'stringField',
-  validate: (serialized: any) => {
+  validate: (serialized: any): string => {
     if (typeof serialized !== 'string') {
       throw 'Not a string'
     }
-    return serialized
+    return serialized as string
   },
-  serialize: (deserialized: string) => deserialized,
+  serialize: (deserialized: string): any => deserialized,
 })
 
 const numberField = (): Field<number> => ({
   type: 'numberField',
-  validate: (serialized: any) => {
+  validate: (serialized: any): number => {
     if (typeof serialized !== 'number') {
       throw 'Not a number'
     }
-    return serialized
+    return serialized as number
   },
-  serialize: (deserialized: number) => deserialized,
+  serialize: (deserialized: number): any => deserialized,
 })
 ```
 
