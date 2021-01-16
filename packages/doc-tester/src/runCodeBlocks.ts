@@ -20,7 +20,6 @@ const runCodeFile = (codeFile: CodeFile): void => {
     })
   } catch (err) {
     console.error(`With errors ${codeFile.file}`)
-    console.error(err.stderr.toString())
     process.exit(1)
   }
 }

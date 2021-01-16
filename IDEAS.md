@@ -65,7 +65,7 @@ const validatePerson = (input: any): Person => ({
 with a dramatically less verbose version:
 
 ```ts functions-as-schema
-const personSchema = {
+const schema = {
   firstName: validateString,
   lastName: validateString,
 }
@@ -100,12 +100,19 @@ type TypeHint<Spec extends ValidatorSpecUnion<unknown>> =
 And using these types with the schema outlined just above will look as follows:
 
 ```ts recursive-types
-const personSchema = {
+const validateString = (serialized: any): string => {
+  if (typeof serialized !== 'string') {
+    throw 'Not a string'
+  }
+  return serialized
+}
+
+const schema = {
   firstName: validateString,
   lastName: validateString,
 }
 
-type Person = TypeHint<typeof personSchema>
+type Person = TypeHint<typeof schema>
 ```
 
 ### Limitation of functions as the low level blocks
@@ -183,6 +190,15 @@ And type inference working as follows:
 
 ```ts fields
 type Person = TypeHint<typeof personSchema>
+
+import { expectType } from '@spec-validator/test-utils/expectType'
+
+expectType<Person, {
+  firstName: string,
+  lastName: string,
+  height: number,
+  weight: number,
+}>(true)
 ```
 
 To actually leverage the schemas and validate or serialize
@@ -192,6 +208,38 @@ names and the following interfaces:
 ```ts fields
 const serialize = <T>(spec: ValidatorSpecUnion<T>, deserialized: T): any => deserialized as any
 const validate = <T>(spec: ValidatorSpecUnion<T>, serialized: any): T => serialized as T
+
+import assert from 'assert'
+
+assert.deepStrictEqual(
+  validate(personSchema, {
+    firstName: 'name',
+    lastName: 'last name',
+    height: 11,
+    weight: 13.2
+  }),
+  {
+    firstName: 'name',
+    lastName: 'last name',
+    height: 11,
+    weight: 13.2
+  }
+)
+
+assert.deepStrictEqual(
+  serialize(personSchema, {
+    firstName: 'name',
+    lastName: 'last name',
+    height: 11,
+    weight: 13.2
+  }),
+  {
+    firstName: 'name',
+    lastName: 'last name',
+    height: 11,
+    weight: 13.2
+  }
+)
 ```
 
 Their implementation is a mental exerceise for the reader ;)
@@ -221,6 +269,11 @@ Since JavaScript does not have reflection, each instance of a type
 must be annotated with a reference to its type.
 
 ```ts ext
+export interface Field<DeserializedType> {
+  validate(serialized: any): DeserializedType
+  serialize(deserialized: DeserializedType): any
+}
+
 const stringField = (): Field<string> => ({
   type: 'stringField',
   validate: (serialized: any) => {
@@ -260,6 +313,12 @@ const getHumanReadableName = (field: Field<unknown>) => {
   }
   return MAPPING[type]
 }
+
+import assert from 'assert'
+
+assert.deepStrictEqual(getHumanReadableName(numberField()), 'Number field')
+assert.deepStrictEqual(getHumanReadableName(stringField()), 'String field')
+
 ```
 
 ## Notes
