@@ -100,4 +100,11 @@ const valid: PrimitiveType = validate(primitiveSpec, {
   count: 12,
   weight: 16.33
 })
+
+assert.deepStrictEqual(valid, {
+  flag: true,
+  title: 'Title',
+  count: 12,
+  weight: 16.33
+})
 ```
