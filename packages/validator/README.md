@@ -64,6 +64,30 @@ assert.deepStrictEqual(
 )
 ```
 
+Errors are reported in a structured form with a `path` outlining
+location of the error.
+
+```ts
+
+let error: any = undefined
+
+try {
+  validate(schema, {
+    day: 'Abracadabra',
+  })
+} catch (err) {
+  error = err
+}
+
+assert.deepStrictEqual(error, {
+  inner: "Invalid day",
+  path: [
+    'day'
+  ]
+})
+
+```
+
 Infer TypeScript type from schema:
 
 ```ts
@@ -116,26 +140,4 @@ assert.deepStrictEqual(valid, {
   count: 12,
   weight: 16.33
 })
-
-let error: any = undefined
-
-try {
-  validate(primitiveSpec, {
-    flag: true,
-    title: 'Title',
-    email: 'Abracadabra',
-    count: 12,
-    weight: 16.33
-  })
-} catch (err) {
-  error = err
-}
-
-assert.deepStrictEqual(error, {
-  inner: "Doesn't match a regex",
-  path: [
-    'email'
-  ]
-})
-
 ```
