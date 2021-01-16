@@ -1,5 +1,10 @@
-type CodeBlock = {
+type Meta = {
   type: string,
+  label: string
+}
+
+type CodeBlock = {
+  meta: Meta,
   offset: number,
   lines: string[]
 }
@@ -10,14 +15,17 @@ type CodeBucket = {
 
 const hasDelimiter = (line: string): boolean => line.trim().startsWith('```')
 
-const extractValue = (regex: RegExp, line: string): string =>
-  line.match(/```(?<value>.+)/)?.groups?.value?.trim()?.toLowerCase() || ''
+const extractType = (line: string): Meta => {
+  const groups = line.match(/```(?<type>.+)(\w+(?<label>.+))?/)?.groups
 
-const extractType = extractValue.bind(null, /```(?<value>.+)/)
+  const extract = (key: string): string =>
+    (groups && groups[key]?.trim()?.toLowerCase()) || ''
 
-const getLabelCheckpoint = extractValue.bind(null, /\w*mark\((?<value>.+)\)\w*/)
-
-const getLabelReset = extractValue.bind(null, /\w*reset\((?<value>.+)\)\w*/)
+  return {
+    type: extract('type'),
+    label: extract('label'),
+  }
+}
 
 /**
  * Really primitive FSM based README parser aiming to extract code snippets
@@ -33,7 +41,7 @@ const extractCodeBlocks = (lines: string[], types: string[]): CodeBlock[] => {
     if (block) {
       //block.label = block.label || getLabelCheckpoint(line)
       if (hasDelimiter(line)) {
-        if (typeSet.has(block.type)) {
+        if (typeSet.has(block.meta.type)) {
           result.push(block)
         }
         block = undefined
@@ -43,7 +51,7 @@ const extractCodeBlocks = (lines: string[], types: string[]): CodeBlock[] => {
     } else {
       if (hasDelimiter(line)) {
         block = {
-          type: extractType(line),
+          meta: extractType(line),
           offset: i + 1 + 1, // 1 based index + skip the delimiter
           lines: [],
         }
