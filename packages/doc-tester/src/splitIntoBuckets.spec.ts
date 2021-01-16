@@ -16,3 +16,19 @@ test('untyped and unlabled blocks', () => {
     ['']
   )).toMatchSnapshot()
 })
+
+test('typed and labled blocks', () => {
+  expect(splitIntoBuckets(
+    [
+      '# Title',
+      '```ts one',
+      'CODE',
+      '```',
+      'Text',
+      '```ts one',
+      'CODE 2',
+      '```',
+    ],
+    ['ts']
+  )).toMatchSnapshot()
+})

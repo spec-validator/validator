@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`typed and labled blocks 1`] = `Object {}`;
+
 exports[`untyped and unlabled blocks 1`] = `
 Object {
   "": Array [
