@@ -77,6 +77,27 @@ expectType<Schema, {
 
 Here are the examples of the fields
 
+### Primitive fields
+
 ```ts
 
+import {
+  booleanField, numberField, stringField
+} from '@spec-validator/validator/fields'
+
+const primitiveSpec = {
+  flag: booleanField(),
+  title: stringField(),
+  count: numberField(),
+  weight: numberField(true),
+}
+
+type PrimitiveType = TypeHint<typeof primitiveSpec>
+
+const valid = validate(primitiveSpec, {
+  flag: true,
+  title: 'Title',
+  count: 12,
+  weight: 16.33
+})
 ```
