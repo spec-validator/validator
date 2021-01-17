@@ -29,6 +29,9 @@ jobs:
       - name: Test
         run: yarn just test
 
+      - name: Test docs
+        run: yarn just test-docs
+
       - name: Build
         run: yarn just build
 
