@@ -4,9 +4,17 @@ import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
 export interface DateField extends FieldWithStringInputSupport<Date>, FieldWithRegExp<Date> {}
 
-export default declareField('@spec-validator/fields.DateField', (): DateField => {
+const DateRegexps = {
+  'date': /.*/,
+  'date-time': /.*/,
+  'time': /.*/,
+}
+
+export default declareField('@spec-validator/fields.DateField', ({ type }: {
+  type: keyof typeof DateRegexps
+}): DateField => {
   const result = {
-    regex: /.*/,
+    regex: DateRegexps[type],
     validate: (value: any): Date => {
       if (typeof value !== 'string') {
         throw 'Not a string'
