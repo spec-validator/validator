@@ -5,7 +5,7 @@ import exec from './build/exec'
 import generatePackageJson from './build/generatePackageJson'
 import generateTsConfigJson from './build/generateTsConfigJson'
 
-import runCodeBlocks from './packages/doc-tester/src/runCodeBlocks'
+import main from './packages/doc-tester/src/runCodeBlocks'
 
 option('u', { default: false } as any)
 
@@ -18,11 +18,7 @@ task('build', series(
   parallel(...forAllPackages(generatePackageJson))
 ))
 
-task('doc-tests',
-  runCodeBlocks(
-    `${__dirname}`
-  )
-)
+task('test-docs', () => main())
 
 task('test',
   exec(
