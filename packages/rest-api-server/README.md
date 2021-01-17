@@ -115,7 +115,7 @@ For any arbitrary set of routes it is possible to join those with
 extra parameters to craft server configs:
 
 ```ts
-import { createServer } from './server'
+import { createServer } from '@spec-validator/rest-api-server'
 
 import http from 'http'
 
@@ -124,7 +124,7 @@ const server = createServer({
   routes: [postRoute, getRoute]
 })
 
-expectType<http.Server, typeof server>(true)
+expectType<http.Server & { serve: () => http.Server }, typeof server>(true)
 ```
 
 To actually run the server and handle trafic using it,
