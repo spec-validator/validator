@@ -1,5 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ignore blocks labeled with # 1`] = `
+Object {
+  "taken.ts": Array [
+    Object {
+      "label": "taken",
+      "lineno": 1,
+      "lines": Array [
+        "Taken ts code",
+      ],
+      "type": "ts",
+    },
+  ],
+}
+`;
+
 exports[`mixed blocks 1`] = `
 Object {
   ".": Array [

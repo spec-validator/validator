@@ -36,7 +36,7 @@ const extractCodeBlocks = (lines: string[], types: string[]): CodeBlock[] => {
     if (block) {
       //block.label = block.label || getLabelCheckpoint(line)
       if (hasDelimiter(line)) {
-        if (!typeSet.size || typeSet.has(block.type)) {
+        if ((!typeSet.size || typeSet.has(block.type)) && !block.label.startsWith('#')) {
           result.push(block)
         }
         block = undefined

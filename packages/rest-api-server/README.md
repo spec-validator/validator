@@ -130,7 +130,7 @@ expectType<http.Server, typeof server>(true)
 To actually run the server and handle trafic using it,
 run `serve` method:
 
-```ts
+```ts #ignore
 
 server.serve()
 

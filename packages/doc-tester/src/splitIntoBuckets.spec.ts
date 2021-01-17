@@ -92,6 +92,19 @@ test('untyped and labeled blocks', () => {
   )).toMatchSnapshot()
 })
 
+test('ignore blocks labeled with #', () => {
+  expect(splitIntoBuckets(
+    [
+      '```ts taken',
+      'Taken ts code',
+      '```',
+      '```ts #ignored',
+      'Ignored ts code',
+      '```',
+    ],
+  )).toMatchSnapshot()
+})
+
 test('mixed blocks', () => {
   expect(splitIntoBuckets(
     [
