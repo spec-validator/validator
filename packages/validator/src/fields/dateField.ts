@@ -5,7 +5,7 @@ import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 const DateRegexps = {
   'date': /\d{4}-\d{2}-\d{2}/,
   'date-time': /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z/,
-  'time': /\d{2}:\d{2}:\d{2}\.\d{3}Z/,
+  'time': /\d{2}:\d{2}:\d{2}(\.\d{3})?Z/,
 }
 
 export interface DateField extends FieldWithStringInputSupport<Date>, FieldWithRegExp<Date> {
@@ -23,11 +23,25 @@ export default declareField('@spec-validator/fields.DateField', (
         throw 'Not a string'
       }
       if (!regex.test(value) || !Date.parse(value)) {
-        throw 'Invalid date string'
+        throw `Invalid ${format} string`
       }
-      return new Date(value)
+      if (format === 'date-time') {
+        return new Date(value)
+      } else if (format === 'date') {
+        return new Date(value)
+      } else {
+        return new Date('1970-01-01T' + value)
+      }
     },
-    serialize: (deserialized: Date) => deserialized.toISOString(),
+    serialize: (deserialized: Date) => {
+      if (format === 'date-time') {
+        return deserialized.toISOString()
+      } else if (format === 'date') {
+        return deserialized.toISOString().split('T')[0]
+      } else {
+        return deserialized.toISOString().split('T')[1]
+      }
+    },
   } as DateField
 
   result.getFieldWithRegExp = () => result

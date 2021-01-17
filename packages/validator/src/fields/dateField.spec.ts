@@ -8,24 +8,26 @@ import {
 } from './TestUtils.test'
 import { testValidateSpecOk, testValidateSpecError } from '../TestUtils.test'
 
-const field = dateField('date-time')
 
-test('field', () => {
-  testValidateSpecOk(field, '1995-12-17T03:24:00Z', new Date('1995-12-17T03:24:00Z'), '1995-12-17T03:24:00.000Z')
-  testValidateSpecError(field, 42, 'Not a string')
-  testValidateSpecError(field, 'foo', 'Invalid date string')
-})
+describe('date-time', () => {
+  const field = dateField('date-time')
 
-test('segmentChain', () => {
-  testValidateSegmentChainOK(field,
-    '1995-12-17T03:24:00Z',
-    new Date('1995-12-17T03:24:00Z'),
-    '1995-12-17T03:24:00.000Z'
-  )
-  testValidateSegmentChainError(field, 'foo', 'Didn\'t match')
-})
+  test('field', () => {
+    testValidateSpecOk(field, '1995-12-17T03:24:00Z', new Date('1995-12-17T03:24:00Z'), '1995-12-17T03:24:00.000Z')
+    testValidateSpecError(field, 42, 'Not a string')
+    testValidateSpecError(field, 'foo', 'Invalid date-time string')
+  })
 
-test('types', () => {
+  test('segmentChain', () => {
+    testValidateSegmentChainOK(field,
+      '1995-12-17T03:24:00Z',
+      new Date('1995-12-17T03:24:00Z'),
+      '1995-12-17T03:24:00.000Z'
+    )
+    testValidateSegmentChainError(field, 'foo', 'Didn\'t match')
+  })
+
+  test('types', () => {
   type Spec = TypeHint<typeof field>
 
   expectType<Spec, Date>(true)
@@ -38,4 +40,25 @@ test('types', () => {
   type SegmentSpec = TypeHint<typeof segmentSpec>
 
   expectType<SegmentSpec, {field: Date}>(true)
+  })
+
 })
+
+describe('date', () => {
+  const field = dateField('date')
+
+  test('field', () => {
+    testValidateSpecOk(field, '1995-12-17', new Date('1995-12-17T00:00:00Z'), '1995-12-17')
+  })
+
+})
+
+describe('time', () => {
+  const field = dateField('time')
+
+  test('field', () => {
+    testValidateSpecOk(field, '03:24:00Z', new Date('1995-12-17T00:00:00Z'), '03:24:00.000Z')
+  })
+
+})
+
