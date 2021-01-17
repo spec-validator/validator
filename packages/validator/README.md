@@ -84,7 +84,6 @@ assert.deepStrictEqual(error, {
     'day'
   ]
 })
-
 ```
 
 Infer TypeScript type from schema:
@@ -284,7 +283,6 @@ assert.deepStrictEqual(validate(union, {
 }), {
   innerFieldV2: 42
 })
-
 ```
 
 #### Wildcard object field
