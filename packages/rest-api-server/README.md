@@ -20,7 +20,12 @@ The route is a combination of essentially 3 things:
   returns a valid response object
 
 ```ts
-import { route } from '@spec-validator/rest-api-server'
+import { route, Route } from '@spec-validator/rest-api-server'
+import { expectType } from '@spec-validator/test-utils/expectType'
+import {
+  $, choiceField, numberField, stringField,
+  unionField, constantField,
+} from '@spec-validator/validator/fields'
 
 const routeObject = route({
   request: {
@@ -48,6 +53,8 @@ const routeObject = route({
     headerKey: request.pathParams.pathKey,
   },
 }))
+
+expectType<Route, typeof routeObject>(true)
 ```
 
 ### Fluent API for the most common case
@@ -59,8 +66,15 @@ codes for various request methods).
 ```ts
 import { _ } from '@spec-validator/rest-api-server'
 
+const itemSpec = {
+  title: stringField(),
+  description: stringField(),
+}
+
 const getRoute = _.GET($._('/items')).spec({
-  response: ofItems,
+  response: {
+    data: [itemSpec],
+  },
 }).handler(async () => ({
   data: [
     {
@@ -70,8 +84,12 @@ const getRoute = _.GET($._('/items')).spec({
   ],
 }))
 
+expectType<Route, typeof getRoute>(true)
+
 const postRoute = _.POST($._('/items')).spec({
-  request: ofItem,
+  request: {
+    data: itemSpec,
+  },
   response: {
     data: numberField(),
     headers: {
@@ -84,4 +102,6 @@ const postRoute = _.POST($._('/items')).spec({
     title: 'Foo',
   },
 }))
+
+expectType<Route, typeof postRoute>(true)
 ```

@@ -1,6 +1,7 @@
-import { choiceField, numberField, stringField, unionField } from '@spec-validator/validator/fields'
-import constantField from '@spec-validator/validator/fields/constantField'
-import $ from '@spec-validator/validator/fields/segmentField'
+import {
+  $, choiceField, numberField, stringField,
+  unionField, constantField,
+} from '@spec-validator/validator/fields'
 import { expectType } from '@spec-validator/test-utils/expectType'
 
 import { Route, route } from './route'
