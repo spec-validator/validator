@@ -83,7 +83,7 @@ export const DEFAULT_SERVER_CONFIG: ServerConfig = {
   routes: [],
 }
 
-const mergeServerConfigs = (
+export const mergeServerConfigs = (
   serverConfig: Partial<ServerConfig>
 ): ServerConfig => ({
   ...DEFAULT_SERVER_CONFIG,

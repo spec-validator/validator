@@ -1,4 +1,5 @@
 import { _, ServerConfig } from '@spec-validator/rest-api-server'
+import { mergeServerConfigs } from '@spec-validator/rest-api-server/server'
 import { Json } from '@spec-validator/utils/Json'
 import { $, constantField, stringField } from '@spec-validator/validator/fields'
 import wildcardObjectField from '@spec-validator/validator/fields/wildcardObjectField'
@@ -36,10 +37,10 @@ const getUI = (url: string, info: Info) => `
   </html>
 `
 
-export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): ServerConfig => {
-
+export default (config: Partial<ServerConfig> & WithInfo, schemaRoot = '/open-api'): ServerConfig => {
+  const merged = mergeServerConfigs(config)
   const routes = [
-    ...config.routes,
+    ...merged.routes,
     _.GET($._(schemaRoot)).spec(
       {
         response: {
@@ -48,7 +49,7 @@ export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): Serv
       },
     ).handler(
       async () => ({
-        data: genOpenApi(config) as unknown as Record<string, Json>,
+        data: genOpenApi(merged) as unknown as Record<string, Json>,
       })
     ),
     _.GET($._(schemaRoot)._('-ui')).spec(
@@ -71,7 +72,7 @@ export default (config: ServerConfig & WithInfo, schemaRoot = '/open-api'): Serv
   ]
 
   return {
-    ...config,
+    ...merged,
     routes,
   }
 }
