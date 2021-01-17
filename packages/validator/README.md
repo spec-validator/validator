@@ -68,7 +68,6 @@ Errors are reported in a structured form with a `path` outlining
 location of the error.
 
 ```ts
-
 let error: any = undefined
 
 try {
@@ -106,7 +105,6 @@ expectType<Schema, {
 ### Primitive fields
 
 ```ts
-
 import {
   booleanField, numberField, stringField
 } from '@spec-validator/validator/fields'
@@ -237,13 +235,12 @@ expectType<TypeHint<typeof constant>, 11>(true)
 assert.deepStrictEqual(validate(constant, 11), 11)
 ```
 
+#### withDefault
+
 Similar to `optional` but instead of returning `undefined` in
 case of a missing field.
 
-#### withDefault
-
 ```ts
-
 import { withDefault } from '@spec-validator/validator/fields'
 
 const defaultValue = withDefault(numberField(), 42)
@@ -255,6 +252,40 @@ assert.deepStrictEqual(validate(defaultValue, undefined), 42)
 ```
 
 #### Union field
+
+A field for the cases when an object can have multiple structures
+(i.e. union of objects).
+
+```ts
+import { unionField } from '@spec-validator/validator/fields'
+
+const union = unionField(
+  {
+    innerFieldV1: stringField(),
+  },
+  {
+    innerFieldV2: numberField(),
+  }
+)
+
+expectType<TypeHint<typeof union>, {
+  innerFieldV1: string
+} | {
+  innerFieldV2: number
+}>(true)
+
+assert.deepStrictEqual(validate(union, {
+  innerFieldV1: 'value'
+}), {
+  innerFieldV1: 'value'
+})
+assert.deepStrictEqual(validate(union, {
+  innerFieldV2: 42
+}), {
+  innerFieldV2: 42
+})
+
+```
 
 #### Wildcard object field
 
