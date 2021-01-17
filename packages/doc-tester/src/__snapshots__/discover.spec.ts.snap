@@ -1,5 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`with existing path 1`] = `Array []`;
+exports[`with existing path 1`] = `
+Array [
+  "./fixtures/README.md",
+  "./fixtures/inner/ONE.md",
+]
+`;
 
 exports[`with missing path 1`] = `Array []`;
