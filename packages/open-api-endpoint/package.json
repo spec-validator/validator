@@ -9,6 +9,6 @@
     "openapi-types": "^7.0.1"
   },
   "devDependencies": {
-    "@spec-validator/test-utils": "^0.0.1"
+    "@spec-validator/test-utils": "0.0.1"
   }
 }
