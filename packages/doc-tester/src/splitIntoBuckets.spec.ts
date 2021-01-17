@@ -128,6 +128,24 @@ test('mixed blocks', () => {
   )).toMatchSnapshot()
 })
 
+test('ignore one-liners', () => {
+  expect(splitIntoBuckets(
+    [
+      '```ts Ignore ```',
+    ],
+  )).toMatchSnapshot()
+})
+
+test('take blocks that follow one-liners', () => {
+  expect(splitIntoBuckets(
+    [
+      '```ts Ignore ``` ```ts',
+      'Take',
+      '```',
+    ],
+  )).toMatchSnapshot()
+})
+
 test('toCode', () => {
   expect(toCode([
     {

@@ -15,6 +15,8 @@ Object {
 }
 `;
 
+exports[`ignore one-liners 1`] = `Object {}`;
+
 exports[`mixed blocks 1`] = `
 Object {
   ".": Array [
@@ -53,6 +55,21 @@ Object {
       "lineno": 2,
       "lines": Array [
         "Labeled ts code",
+      ],
+      "type": "ts",
+    },
+  ],
+}
+`;
+
+exports[`take blocks that follow one-liners 1`] = `
+Object {
+  "ignore.ts": Array [
+    Object {
+      "label": "ignore",
+      "lineno": 1,
+      "lines": Array [
+        "Take",
       ],
       "type": "ts",
     },

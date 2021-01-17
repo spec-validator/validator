@@ -8,7 +8,13 @@ type CodeBlock = {
   lines: string[]
 } & Meta
 
-const hasDelimiter = (line: string): boolean => line.trim().startsWith('```')
+const countDelimiters = (line: string): number =>
+  (line.match(/```/g) || []).length
+
+const hasOddDelimiterCount = (line: string): boolean =>
+  countDelimiters(line) % 2 !== 0
+
+const hasDelimiter = (line: string): boolean => hasOddDelimiterCount(line)
 
 export const extractType = (line: string): Meta => {
   const groups = line.match(/```(?<type>[^\s]+)?(\s+(?<label>[^\s]+))?/)?.groups
@@ -45,14 +51,10 @@ const extractCodeBlocks = (lines: string[], types: string[]): CodeBlock[] => {
       }
     } else {
       if (hasDelimiter(line)) {
-        if (isOneLineBlock(line)) {
-
-        } else {
-          block = {
-            ...extractType(line),
-            lineno: i + 1, // skip the delimiter - block - next line
-            lines: [],
-          }
+        block = {
+          ...extractType(line),
+          lineno: i + 1, // skip the delimiter - block - next line
+          lines: [],
         }
       } else {
         // IGNORE
