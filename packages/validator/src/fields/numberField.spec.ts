@@ -12,7 +12,7 @@ import { testValidateSpecOk, testValidateSpecError } from '../TestUtils.test'
 describe('spec', () => {
 
   it('intField signed', () => {
-    const field = numberField()
+    const field = numberField({ signed: true })
     testValidateSpecOk(field, 12, 12)
     testValidateSpecOk(field, 0, 0)
     testValidateSpecOk(field, -1, -1)
@@ -22,8 +22,13 @@ describe('spec', () => {
     testValidateSpecError(field, '1', 'Not a number')
   })
 
+  it('intField unsigned', () => {
+    const field = numberField({ signed: false })
+    testValidateSpecError(field, -1, 'Must be unsigned')
+  })
+
   it('floatField signed', () => {
-    const field = numberField(true)
+    const field = numberField({ canBeFloat: true, signed: true })
     testValidateSpecOk(field, 12, 12)
     testValidateSpecOk(field, 0, 0)
     testValidateSpecOk(field, -1, -1)
@@ -32,12 +37,17 @@ describe('spec', () => {
     testValidateSpecError(field, '1', 'Not a number')
   })
 
+  it('floatField unsigned', () => {
+    const field = numberField({ canBeFloat: true, signed: false })
+    testValidateSpecError(field, -1.2, 'Must be unsigned')
+  })
+
 })
 
 describe('segmentChain', () => {
 
   it('intField', () => {
-    const field = numberField()
+    const field = numberField({ signed: true })
     testValidateSegmentChainOK(field, '12', 12)
     testValidateSegmentChainOK(field, '0', 0)
     testValidateSegmentChainOK(field, '-1', -1)
@@ -48,7 +58,7 @@ describe('segmentChain', () => {
   })
 
   it('floatField', () => {
-    const field = numberField(true)
+    const field = numberField({ canBeFloat: true, signed: true })
     testValidateSegmentChainOK(field, '12', 12)
     testValidateSegmentChainOK(field, '0', 0)
     testValidateSegmentChainOK(field, '-1', -1)

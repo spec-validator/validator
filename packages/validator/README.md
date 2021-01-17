@@ -114,8 +114,8 @@ const primitiveSpec = {
   // regex for email
   email: stringField(/\S+@\S+\.\S+/),
   count: numberField(),
-  // canBeFloat=true
-  weight: numberField(true),
+  weight: numberField({ canBeFloat: true }),
+  rating: numberField({ signed: true }),
 }
 
 type PrimitiveType = TypeHint<typeof primitiveSpec>
@@ -125,7 +125,8 @@ const valid: PrimitiveType = validate(primitiveSpec, {
   title: 'Title',
   email: 'test@example.com',
   count: 12,
-  weight: 16.33
+  weight: 16.33,
+  rating: -10,
 })
 
 assert.deepStrictEqual(valid, {
@@ -133,7 +134,8 @@ assert.deepStrictEqual(valid, {
   title: 'Title',
   email: 'test@example.com',
   count: 12,
-  weight: 16.33
+  weight: 16.33,
+  rating: -10,
 })
 ```
 
@@ -311,7 +313,7 @@ const url = $
   ._('/items/')
   ._('id', numberField())
 
-assert.deepStrictEqual(url.toString(), '^/(?<username>.*)/items/(?<id>-?\\d+)$')
+assert.deepStrictEqual(url.toString(), '^/(?<username>.*)/items/(?<id>\\d+)$')
 
 expectType<TypeHint<typeof url>, {
   username: string,

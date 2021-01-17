@@ -4,17 +4,22 @@ import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
 export interface NumberField extends FieldWithStringInputSupport<number> {
   canBeFloat: boolean
+  signed: boolean
 }
 
-export default declareField('@spec-validator/fields.NumberField', (
-  canBeFloat = false
-): NumberField => {
+export default declareField('@spec-validator/fields.NumberField', ({ canBeFloat, signed }: {
+  readonly canBeFloat?: boolean,
+  readonly signed?: boolean
+} = {}): NumberField => {
   const validate = (value: any): number => {
     if (typeof value !== 'number') {
       throw 'Not a number'
     }
     if (!canBeFloat && value !== Math.floor(value)) {
       throw 'Not an int'
+    }
+    if (!signed && value < 0) {
+      throw 'Must be unsigned'
     }
     return value
   }
@@ -29,14 +34,17 @@ export default declareField('@spec-validator/fields.NumberField', (
   result.getFieldWithRegExp = ():
     Omit<NumberField, 'getFieldWithRegExp'> & FieldWithRegExp<number> & OfType<string> => {
     const parts: string[] = []
-    parts.push('-?')
+    if (signed) {
+      parts.push('-?')
+    }
     parts.push('\\d+')
     if (canBeFloat) {
       parts.push('(\\.\\d+)?')
     }
 
     return {
-      canBeFloat,
+      canBeFloat: canBeFloat || false,
+      signed: signed || false,
       type: result.type,
       validate: (value: any) => validate(Number.parseFloat(value)),
       serialize: (value: number) => value.toString(),
