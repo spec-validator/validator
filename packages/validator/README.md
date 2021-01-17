@@ -287,16 +287,14 @@ assert.deepStrictEqual(validate(union, {
 
 #### wildcardObjectField
 
-In case if payload can be virtually anything (i.e. no validation is required)
+In case if payload can be virtually anything JSON friendly (i.e. no validation is required)
 
 ```ts
 import { wildcardObjectField } from '@spec-validator/validator/fields'
 
 const wildCard = wildcardObjectField()
 
-testValidateSpecOk(field, 42)
-
-assert.deepStrictEqual(validate(wildCard, 'Abracadabra'), 'Abracadabra')
+assert.deepStrictEqual(validate(wildCard, '"Abracadabra"'), 'Abracadabra')
 ```
 
 ### Segment based strings
