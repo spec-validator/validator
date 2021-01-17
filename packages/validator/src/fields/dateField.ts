@@ -22,7 +22,9 @@ export default declareField('@spec-validator/fields.DateField', (
       if (typeof value !== 'string') {
         throw 'Not a string'
       }
+
       if (!regex.test(value) || !Date.parse(value)) {
+        console.log(value)
         throw `Invalid ${format} string`
       }
       if (format === 'date-time') {
