@@ -47,7 +47,7 @@ describe('date-time', () => {
 describe('date', () => {
   const field = dateField('date')
 
-  test('field', () => {
+  it('deserializes into the a given date at midnight', () => {
     testValidateSpecOk(field, '1995-12-17', new Date('1995-12-17T00:00:00Z'), '1995-12-17')
   })
 
@@ -56,7 +56,7 @@ describe('date', () => {
 describe('time', () => {
   const field = dateField('time')
 
-  test('field', () => {
+  it('deserializes into the first epoch Date with a given time', () => {
     testValidateSpecOk(field, '03:24:00Z', new Date('1970-01-01T03:24:00.000Z'), '03:24:00.000Z')
   })
 

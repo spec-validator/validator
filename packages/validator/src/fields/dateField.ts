@@ -13,7 +13,7 @@ export interface DateField extends FieldWithStringInputSupport<Date>, FieldWithR
 }
 
 export default declareField('@spec-validator/fields.DateField', (
-  format: keyof typeof DateRegexps
+  format: keyof typeof DateRegexps = 'date-time'
 ): DateField => {
   const regex = DateRegexps[format]
   const result = {
