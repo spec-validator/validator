@@ -10,6 +10,7 @@ type CodeFile = {
 }
 
 const runCodeFile = (codeFile: CodeFile): void => {
+  console.info(`Checking ${codeFile.file}`)
   try {
     Object.values(codeFile.code).forEach((blocks) => {
       execSync('yarn ts-node -r tsconfig-paths/register', {
