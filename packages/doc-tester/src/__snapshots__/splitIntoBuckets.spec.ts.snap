@@ -64,9 +64,9 @@ Object {
 
 exports[`take blocks that follow one-liners 1`] = `
 Object {
-  "ignore.ts": Array [
+  ".ts": Array [
     Object {
-      "label": "ignore",
+      "label": "",
       "lineno": 1,
       "lines": Array [
         "Take",

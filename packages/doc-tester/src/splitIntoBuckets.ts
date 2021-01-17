@@ -17,7 +17,10 @@ const hasOddDelimiterCount = (line: string): boolean =>
 const hasDelimiter = (line: string): boolean => hasOddDelimiterCount(line)
 
 export const extractType = (line: string): Meta => {
-  const groups = line.match(/```(?<type>[^\s]+)?(\s+(?<label>[^\s]+))?/)?.groups
+  const parts = line.split('```')
+  const suffix = parts.length ? parts[parts.length - 1] : ''
+
+  const groups = suffix.match(/(?<type>[^\s]+)?(\s+(?<label>[^\s]+))?/)?.groups
 
   const extract = (key: string): string =>
     (groups && groups[key]?.trim()?.toLowerCase()) || ''
