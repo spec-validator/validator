@@ -38,7 +38,7 @@ const server = createServer({routes: [
       }
     }
   ),
-  route.spec({
+  route({
     request: {
       method: constantField('GET'),
       pathParams: $._('/multi-response'),

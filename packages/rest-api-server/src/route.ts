@@ -55,21 +55,19 @@ export type Route<
 export const isResponsesSpec = (spec: ResponsesSpec | ResponseSpec): spec is ResponsesSpec =>
   isFieldSpec(spec) && (spec as unknown as OfType<string>).type !== unionField.type
 
-export const route = ({
-  spec: <
-    ReqSpec extends RequestSpec = RequestSpec,
-    RespSpec extends ResponsesSpec | ResponseSpec = ResponsesSpec | ResponseSpec,
-    >(spec: {
-      request: ReqSpec,
-      response: RespSpec
-    }): {
-      handler: (handler:
-        (request: WithoutOptional<TypeHint<ReqSpec>>) => Promise<WithoutOptional<TypeHint<RespSpec>>>
-      ) => Route
-    } => ({
+export const route = <
+  ReqSpec extends RequestSpec = RequestSpec,
+  RespSpec extends ResponsesSpec | ResponseSpec = ResponsesSpec | ResponseSpec,
+  >(spec: {
+    request: ReqSpec,
+    response: RespSpec
+  }): {
+    handler: (handler:
+      (request: WithoutOptional<TypeHint<ReqSpec>>) => Promise<WithoutOptional<TypeHint<RespSpec>>>
+    ) => Route
+  } => ({
     handler: (handler): Route => ({
       ...spec,
       handler: async (request) => await handler(request as any),
     }),
-  }),
-})
+  })

@@ -45,7 +45,7 @@ export const withMethod = <
     })
   } => ({
       spec: (spec) => ({ handler: ( handler ) =>
-        route.spec({
+        route({
           request: {
             ...(spec.request || {}),
             method: constantField(method),

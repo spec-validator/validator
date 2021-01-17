@@ -1,3 +1,3 @@
 export { ServerConfig } from './handler'
-export { Route } from './route'
+export { Route, route } from './route'
 export { serve, withMethod, _ } from './server'

@@ -1,9 +1,9 @@
 import { choiceField, numberField, objectField, stringField, unionField } from '@spec-validator/validator/fields'
 import constantField from '@spec-validator/validator/fields/constantField'
 import $ from '@spec-validator/validator/fields/segmentField'
-
 import { expectType } from '@spec-validator/test-utils/expectType'
-import { Route } from './route'
+
+import { Route, route } from './route'
 
 describe('Route', () => {
 
@@ -94,5 +94,37 @@ describe('Route', () => {
           headerKey: string
         }
       }>}>(true)
+  })
+})
+
+describe('route function', () => {
+  it('returns a proper route object', () => {
+    const routeObject = route({
+      request: {
+        method: constantField('GET'),
+        headers: {
+          headerKey: stringField(),
+        },
+        pathParams: $._('pathKey', stringField()),
+      },
+      response: unionField({
+        statusCode: constantField(201),
+        data: numberField(),
+      }, {
+        statusCode: constantField(202),
+        data: choiceField('one', 'two'),
+        headers: objectField({
+          headerKey: stringField(),
+        }),
+      }),
+    }).handler(async (request) => ({
+      statusCode: 202,
+      data: 'one',
+      headers: {
+        headerKey: request.pathParams.pathKey,
+      },
+    }))
+    expect(routeObject.request).toMatchSnapshot()
+    expect(routeObject.response).toMatchSnapshot()
   })
 })
