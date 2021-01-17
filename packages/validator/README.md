@@ -171,6 +171,9 @@ const validNestedObj = validate(complexSpec, {
 assert.deepStrictEqual(!!validNestedObj, true)
 ```
 
+Note, when it comes to array specification only the first element in the array
+is taken into consideration as a spec fo array items.
+
 ### Auxilary fields
 
 In addition to primitive and collection fields there are also ones that aim to
