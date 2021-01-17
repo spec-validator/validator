@@ -297,4 +297,29 @@ const wildCard = wildcardObjectField()
 assert.deepStrictEqual(validate(wildCard, '"Abracadabra"'), 'Abracadabra')
 ```
 
-### Segment based strings
+### Segment field ($)
+
+This special kind of a field with a fluent API, is for outlining a
+structure of a string (e.g. a url pattern).
+
+```ts
+import { $ } from '@spec-validator/validator/fields'
+
+const url = $
+  ._('/')
+  ._('username', stringField())
+  ._('/items/')
+  ._('id', numberField())
+
+assert.deepStrictEqual(url.toString(), '^/(?<username>.*)/items/(?<id>-?\\d+)$')
+
+expectType<TypeHint<typeof url>, {
+  username: string,
+  id: number
+}>(true)
+
+assert.deepStrictEqual(validate(url, '/john-smith/items/42'), {
+  id: 42,
+  username: 'john-smith'
+})
+```
