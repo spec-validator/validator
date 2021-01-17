@@ -71,19 +71,13 @@ Object {
         "validate": [Function],
       },
       "headers": Object {
-        "canHaveExtraKeys": false,
-        "objectSpec": Object {
-          "headerKey": Object {
-            "getFieldWithRegExp": [Function],
-            "regex": /\\.\\*/,
-            "serialize": [Function],
-            "type": "@spec-validator/fields.StringField",
-            "validate": [Function],
-          },
+        "headerKey": Object {
+          "getFieldWithRegExp": [Function],
+          "regex": /\\.\\*/,
+          "serialize": [Function],
+          "type": "@spec-validator/fields.StringField",
+          "validate": [Function],
         },
-        "serialize": [Function],
-        "type": "@spec-validator/fields.ObjectField",
-        "validate": [Function],
       },
       "statusCode": Object {
         "constant": 202,

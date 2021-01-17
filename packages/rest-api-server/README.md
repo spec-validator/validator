@@ -19,13 +19,45 @@ The route is a combination of essentially 3 things:
 - handler that gets a valid request object as its only parameter and
   returns a valid response object
 
-### Fluent API
+```ts
+import { route } from '@spec-validator/rest-api-server'
+
+const routeObject = route({
+  request: {
+    method: constantField('GET'),
+    headers: {
+      headerKey: stringField(),
+    },
+    pathParams: $._('pathKey', stringField()),
+  },
+  response: unionField(
+    {
+      statusCode: constantField(201),
+      data: numberField(),
+    }, {
+      statusCode: constantField(202),
+      data: choiceField('one', 'two'),
+      headers: {
+        headerKey: stringField(),
+    },
+  }),
+}).handler(async (request) => ({
+  statusCode: 202,
+  data: 'one',
+  headers: {
+    headerKey: request.pathParams.pathKey,
+  },
+}))
+```
+
+### Fluent API for the most common case
 
 There is a fluent API aiming to simplify route configuration in the
 most common case (one 200ish response per handler, known status
 codes for various request methods).
 
 ```ts
+import { _ } from '@spec-validator/rest-api-server'
 
 
 ```

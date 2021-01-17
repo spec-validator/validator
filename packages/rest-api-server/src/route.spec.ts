@@ -1,4 +1,4 @@
-import { choiceField, numberField, objectField, stringField, unionField } from '@spec-validator/validator/fields'
+import { choiceField, numberField, stringField, unionField } from '@spec-validator/validator/fields'
 import constantField from '@spec-validator/validator/fields/constantField'
 import $ from '@spec-validator/validator/fields/segmentField'
 import { expectType } from '@spec-validator/test-utils/expectType'
@@ -72,9 +72,9 @@ describe('Route', () => {
     }, {
       statusCode: constantField(202),
       data: choiceField('one', 'two'),
-      headers: objectField({
+      headers: {
         headerKey: stringField(),
-      }),
+      },
     })
 
     type Decor = Route<typeof reqSpec, typeof respSpec>
@@ -113,9 +113,9 @@ describe('route function', () => {
       }, {
         statusCode: constantField(202),
         data: choiceField('one', 'two'),
-        headers: objectField({
+        headers: {
           headerKey: stringField(),
-        }),
+        },
       }),
     }).handler(async (request) => ({
       statusCode: 202,
