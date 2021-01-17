@@ -3,9 +3,9 @@ import { declareField } from '../core'
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
 const DateRegexps = {
-  'date': /^\d{4}-\d{2}-\d{2}$/,
-  'date-time': /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$/,
-  'time': /^\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
+  'date': /\d{4}-\d{2}-\d{2}/,
+  'date-time': /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z/,
+  'time': /\d{2}:\d{2}:\d{2}\.\d{3}Z/,
 }
 
 export interface DateField extends FieldWithStringInputSupport<Date>, FieldWithRegExp<Date> {

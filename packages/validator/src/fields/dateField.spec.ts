@@ -22,7 +22,7 @@ test('segmentChain', () => {
     new Date('1995-12-17T03:24:00Z'),
     '1995-12-17T03:24:00.000Z'
   )
-  testValidateSegmentChainError(field, 'foo', 'Invalid date string')
+  testValidateSegmentChainError(field, 'foo', 'Didn\'t match')
 })
 
 test('types', () => {
