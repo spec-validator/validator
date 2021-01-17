@@ -127,6 +127,8 @@ const server = createServer({
 expectType<http.Server & { serve: () => http.Server }, typeof server>(true)
 ```
 
+## Running the app
+
 To actually run the server and handle trafic using it,
 run `serve` method:
 
@@ -134,4 +136,25 @@ run `serve` method:
 
 server.serve()
 
+```
+
+Once the app is started you may run the following curl command to obtain the
+payload from the endpoint:
+
+```
+curl -X GET "http://localhost:8080/items"
+```
+
+Or post a new entry:
+
+```
+curl -X POST "http://localhost:8080/items" -H  "Content-Type: application/json" \
+  -d "{\"title\":\"string\",\"description\":\"string\"}"
+```
+
+The following call will produce a 400 (validation) error:
+
+```
+curl -X POST "http://localhost:8080/items" -H  "Content-Type: application/json" \
+  -d "{\"title\":true,\"description\":\"string\"}"
 ```
