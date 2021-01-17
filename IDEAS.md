@@ -4,7 +4,7 @@
 
 The main sentiment of the toolkit is that if it is impossible to deduce
 validation logic from TypeScript type definitions (since theose are
-stripped upon transpiling) the reverse has process has to be conducted.
+stripped upon transpiling) the reverse process has to be conducted.
 I.e. deduce TypeScript types from the validation logic.
 
 Another sentiment is that any sort of code generation results of which are
@@ -44,7 +44,7 @@ type ActuallyAString = ReturnType<typeof validateString>
 ```
 
 Dogmatically sticking, though, to raw functional programming inevitably
-leads to substantial redundancy and declaration duplication in schema
+leads to a substantial redundancy and declaration duplication in schema
 validation domain.
 
 Compare:
@@ -65,15 +65,18 @@ const validatePerson = (input: any): Person => ({
 with a dramatically less verbose version:
 
 ```ts functions-as-schema
-const schema = {
+const PersonSchema = {
   firstName: validateString,
   lastName: validateString,
 }
 ```
 
+All unecessary duplication and verbosity was removed while keeping
+structural definitions and thus semantics.
+
 ### Recursive types
 
-A sensible alternative to outline hierarchical schemas composed of native
+A sensible way to outline types for hierarchical schemas composed of native
 JS collections such as **arrays** and **objects** is to use
 [recursive types](https://github.com/microsoft/TypeScript/pull/33050).
 
@@ -107,12 +110,12 @@ const validateString = (serialized: any): string => {
   return serialized
 }
 
-const schema = {
+const PersonSchema = {
   firstName: validateString,
   lastName: validateString,
 }
 
-type Person = TypeHint<typeof schema>
+type Person = TypeHint<typeof PersonSchema>
 ```
 
 ### Limitation of functions as the low level blocks
@@ -178,7 +181,7 @@ const numberField = (): Field<number> => ({
 With the schema defined as:
 
 ```ts fields
-const personSchema = {
+const PersonSchema = {
   firstName: stringField(),
   lastName: stringField(),
   height: numberField(),
@@ -189,7 +192,7 @@ const personSchema = {
 And type inference working as follows:
 
 ```ts fields
-type Person = TypeHint<typeof personSchema>
+type Person = TypeHint<typeof PersonSchema>
 
 import { expectType } from '@spec-validator/test-utils/expectType'
 
@@ -219,23 +222,26 @@ const payload = {
 }
 
 assert.deepStrictEqual(
-  validate(personSchema, payload),
+  validate(PersonSchema, payload),
   payload
 )
 
 assert.deepStrictEqual(
-  serialize(personSchema, payload),
+  serialize(PersonSchema, payload),
   payload
 )
 
 ```
 
-Their implementation is a mental exerceise for the reader ;)
+Their implementation is a mental exerceise for the reader ;).
+HINT: use recursion and
+[type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards)
+for assistance.
 
 ## Schema extension using [aspect oriented programming](https://en.wikipedia.org/wiki/Aspect-oriented_programming)
 
 Since the schema is formalized in a form of JS primitives
-rather than types that stripped away in the final artifact the schema
+rather than types, that are stripped away in the final artifact, the schema
 can be used to generate a variety of other hierarcical structures:
 OpenAPI specs, JSON schemas, Postman configs, to name but a few.
 
@@ -245,16 +251,16 @@ redundant and more dynamic apporach is needed.
 
 Within this library aspect oriented programming is leveraged to
 dynamically extend the fields as base types thus enabling a variety
-of hierarchical schema representations in a loosely-coupled way.
+of hierarchical schema representations in a loosely-coupled manner.
 
 To enable aspects in general a common practice is to use an
 **aspect [registry](https://martinfowler.com/eaaCatalog/registry.html)**.
 
-On a surface a registry can be a simple function that is able
+At the interface level a registry can be a simple function that is able
 to return an aspect for an instance of arbitrary type.
 
 Since JavaScript does not have reflection, each instance of a type
-must be annotated with a reference to its type.
+must be annotated with a reference to it.
 
 ```ts ext
 export interface Field<DeserializedType> {
