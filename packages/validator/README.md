@@ -224,6 +224,16 @@ assert.deepStrictEqual(validate(date, '1995-12-17T03:24:00'), new Date('1995-12-
 
 #### Constant field
 
+```ts
+import { constantField } from '@spec-validator/validator/fields'
+
+const constant = constantField(11)
+
+expectType<TypeHint<typeof constant>, 11>(true)
+
+assert.deepStrictEqual(validate(constant, 11), 11)
+```
+
 #### With default
 
 #### Union field
