@@ -2,7 +2,7 @@
 
 exports[`with existing path 1`] = `
 Array [
-  "./fixtures/README1.md",
+  "./fixtures/README.md",
   "./fixtures/inner/ONE.md",
 ]
 `;
