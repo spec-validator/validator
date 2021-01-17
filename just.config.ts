@@ -7,7 +7,7 @@ import generateTsConfigJson from './build/generateTsConfigJson'
 
 import testDocs from './packages/doc-tester/src/runCodeBlocks'
 
-option('u', { default: false } as any)
+option('-u', { default: false } as any)
 
 const lint = (...extras: string[]) =>
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
