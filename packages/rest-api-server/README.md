@@ -57,6 +57,9 @@ const routeObject = route({
 expectType<Route, typeof routeObject>(true)
 ```
 
+Note, the routes do not handle trafic in any meaningful way,
+they are just a specification for the handlers.
+
 ### Fluent API for the most common case
 
 There is a fluent API aiming to simplify route configuration in the
@@ -105,3 +108,7 @@ const postRoute = _.POST($._('/items')).spec({
 
 expectType<Route, typeof postRoute>(true)
 ```
+
+## Server object
+
+
