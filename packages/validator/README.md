@@ -287,6 +287,7 @@ assert.deepStrictEqual(validate(union, {
 }), {
   innerFieldV1: 'value'
 })
+
 assert.deepStrictEqual(validate(union, {
   innerFieldV2: 42
 }), {
