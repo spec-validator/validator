@@ -111,4 +111,27 @@ expectType<Route, typeof postRoute>(true)
 
 ## Server object
 
+For any arbitrary set of routes it is possible to join those with
+extra parameters to craft server configs:
 
+```ts
+import { createServer } from './server'
+
+import http from 'http'
+
+const server = createServer({
+  baseUrl: 'http://localhost:8080',
+  routes: [postRoute, getRoute]
+})
+
+expectType<http.Server, typeof server>(true)
+```
+
+To actually run the server and handle trafic using it,
+run `serve` method:
+
+```ts
+
+server.serve()
+
+```

@@ -1,4 +1,4 @@
-import { serve } from '@spec-validator/rest-api-server'
+import { createServer } from '@spec-validator/rest-api-server'
 import { DEFAULT_SERVER_CONFIG, _ } from '@spec-validator/rest-api-server/server'
 import {
   $, constantField, numberField, optional, stringField,
@@ -18,7 +18,7 @@ const ofItem = {
   data: itemSpec,
 }
 
-serve(withOpenApi({
+createServer(withOpenApi({
   ...DEFAULT_SERVER_CONFIG,
   routes: [
     _.GET($._('/expected-error')).spec(
@@ -114,4 +114,4 @@ serve(withOpenApi({
     ),
   ],
 
-}))
+})).serve()

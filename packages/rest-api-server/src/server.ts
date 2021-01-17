@@ -110,13 +110,13 @@ const getPort = (baseUrl: string): number => {
   return url.port ? Number.parseInt(url.port) : SUPPORTED_PROTOCOLS[protocol]
 }
 
+type ConfiguredServer = http.Server & { serve: () => http.Server }
+
 export const createServer = (
   config: Partial<ServerConfig>,
-): http.Server => http.createServer(handle.bind(null, mergeServerConfigs(config)))
-
-export const serve = (
-  config: Partial<ServerConfig>,
-): void => {
+): ConfiguredServer => {
   const merged = mergeServerConfigs(config)
-  http.createServer(handle.bind(null, merged)).listen(getPort(merged.baseUrl))
+  const server = http.createServer(handle.bind(null, merged)) as ConfiguredServer
+  server.serve = () => server.listen(getPort(merged.baseUrl))
+  return server
 }
