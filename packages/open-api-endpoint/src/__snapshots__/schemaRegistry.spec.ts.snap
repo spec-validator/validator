@@ -12,9 +12,11 @@ Array [
     "type": "boolean",
   },
   Object {
+    "minimum": 0,
     "type": "integer",
   },
   Object {
+    "minimum": 0,
     "type": "number",
   },
   Object {
@@ -92,6 +94,7 @@ Array [
   Object {
     "oneOf": Array [
       Object {
+        "minimum": 0,
         "type": "integer",
       },
       Object {

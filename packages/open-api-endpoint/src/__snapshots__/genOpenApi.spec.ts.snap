@@ -38,6 +38,7 @@ Object {
                   "properties": Object {
                     "items": Object {
                       "items": Object {
+                        "minimum": 0,
                         "type": "integer",
                       },
                       "type": "array",
@@ -55,6 +56,7 @@ Object {
                   "properties": Object {
                     "items": Object {
                       "items": Object {
+                        "minimum": 0,
                         "type": "integer",
                       },
                       "type": "array",
@@ -81,6 +83,7 @@ Object {
                       },
                     },
                   },
+                  "minimum": 0,
                   "type": "integer",
                 },
               },
@@ -99,6 +102,7 @@ Object {
                 "additionalProperties": false,
                 "properties": Object {
                   "count": Object {
+                    "minimum": 0,
                     "type": "integer",
                   },
                   "title": Object {
@@ -118,6 +122,7 @@ Object {
                 "additionalProperties": false,
                 "properties": Object {
                   "count": Object {
+                    "minimum": 0,
                     "type": "integer",
                   },
                   "title": Object {

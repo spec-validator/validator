@@ -40,10 +40,10 @@ const splitOfOneOrMany = (choices: readonly Primitive[]): OpenAPI.NonArraySchema
 }
 
 export const BASE_PAIRS = [
-  // TODO
   $(dateField, (field) => ({
     type: 'string',
-
+    format: field.format,
+    pattern: field.regex.source,
   })),
   $(arrayField, (field, requestSchema): OpenAPI.ArraySchemaObject => ({
     items: requestSchema(field.itemField),

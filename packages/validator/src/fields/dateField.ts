@@ -2,25 +2,28 @@ import { declareField } from '../core'
 
 import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
 
-export interface DateField extends FieldWithStringInputSupport<Date>, FieldWithRegExp<Date> {}
-
 const DateRegexps = {
-  'date': /.*/,
-  'date-time': /.*/,
-  'time': /.*/,
+  'date': /^\d{4}-\d{2}-\d{2}$/,
+  'date-time': /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$/,
+  'time': /^\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
 }
 
-export default declareField('@spec-validator/fields.DateField', ({ type }: {
-  type: keyof typeof DateRegexps
-}): DateField => {
+export interface DateField extends FieldWithStringInputSupport<Date>, FieldWithRegExp<Date> {
+  format: keyof typeof DateRegexps
+}
+
+export default declareField('@spec-validator/fields.DateField', (
+  format: keyof typeof DateRegexps
+): DateField => {
+  const regex = DateRegexps[format]
   const result = {
-    regex: DateRegexps[type],
+    regex,
     validate: (value: any): Date => {
       if (typeof value !== 'string') {
         throw 'Not a string'
       }
-      if (!Date.parse(value)) {
-        throw 'Invalid string'
+      if (!regex.test(value) || !Date.parse(value)) {
+        throw 'Invalid date string'
       }
       return new Date(value)
     },
@@ -28,6 +31,7 @@ export default declareField('@spec-validator/fields.DateField', ({ type }: {
   } as DateField
 
   result.getFieldWithRegExp = () => result
+  result.format = format
 
   return result
 })

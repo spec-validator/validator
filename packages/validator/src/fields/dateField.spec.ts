@@ -8,17 +8,21 @@ import {
 } from './TestUtils.test'
 import { testValidateSpecOk, testValidateSpecError } from '../TestUtils.test'
 
-const field = dateField()
+const field = dateField('date-time')
 
 test('field', () => {
-  testValidateSpecOk(field, '1995-12-17T03:24:00', new Date('1995-12-17T03:24:00'), '1995-12-17T02:24:00.000Z')
+  testValidateSpecOk(field, '1995-12-17T03:24:00Z', new Date('1995-12-17T03:24:00Z'), '1995-12-17T03:24:00.000Z')
   testValidateSpecError(field, 42, 'Not a string')
-  testValidateSpecError(field, 'foo', 'Invalid string')
+  testValidateSpecError(field, 'foo', 'Invalid date string')
 })
 
 test('segmentChain', () => {
-  testValidateSegmentChainOK(field, '1995-12-17T03:24:00', new Date('1995-12-17T03:24:00'), '1995-12-17T02:24:00.000Z')
-  testValidateSegmentChainError(field, 'foo', 'Invalid string')
+  testValidateSegmentChainOK(field,
+    '1995-12-17T03:24:00Z',
+    new Date('1995-12-17T03:24:00Z'),
+    '1995-12-17T03:24:00.000Z'
+  )
+  testValidateSegmentChainError(field, 'foo', 'Invalid date string')
 })
 
 test('types', () => {
