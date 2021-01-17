@@ -4,4 +4,3 @@ dist
 node_modules
 *.tsbuildinfo
 tsconfig.build.json
-doc-tests
