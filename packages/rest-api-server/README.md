@@ -59,5 +59,29 @@ codes for various request methods).
 ```ts
 import { _ } from '@spec-validator/rest-api-server'
 
+const getRoute = _.GET($._('/items')).spec({
+  response: ofItems,
+}).handler(async () => ({
+  data: [
+    {
+      title: 'Item N',
+      description: 'Description',
+    },
+  ],
+}))
 
+const postRoute = _.POST($._('/items')).spec({
+  request: ofItem,
+  response: {
+    data: numberField(),
+    headers: {
+      title: stringField(),
+    },
+  },
+}).handler(async () => ({
+  data: 42,
+  headers: {
+    title: 'Foo',
+  },
+}))
 ```
