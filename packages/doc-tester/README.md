@@ -56,3 +56,9 @@ server.serve()
 \```
 
 </code>
+
+## Known limitiations
+
+1. By design ignores any non typescript blocks.
+1. By design ignores any non-multiline blocks (i.e. triple quotes must live on their own lines).
+1. Works only with triple quote blocks. `<code>` blocks are ignored.
