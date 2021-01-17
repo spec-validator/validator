@@ -174,7 +174,7 @@ assert.deepStrictEqual(!!validNestedObj, true)
 In addition to primitive and collection fields there are also ones that aim to
 match more extensive type checking.
 
-#### optional
+#### **optional**
 
 Once annotated, a payload becomes `T | undefined`:
 
@@ -189,7 +189,7 @@ assert.deepStrictEqual(validate(optionalField, 42), 42)
 assert.deepStrictEqual(validate(optionalField, undefined), undefined)
 ```
 
-#### choiceField
+#### **choiceField**
 
 A union type that may have only primitive types' based constants:
 
@@ -203,7 +203,7 @@ expectType<TypeHint<typeof withChoices>, 1 | 2 | 3>(true)
 assert.deepStrictEqual(validate(withChoices, 1), 1)
 ```
 
-#### dateField
+#### **dateField**
 
 A mapping between JavaScript-friendly string date value and
 a [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date)
@@ -219,7 +219,7 @@ expectType<TypeHint<typeof date>, Date>(true)
 assert.deepStrictEqual(validate(date, '1995-12-17T03:24:00'), new Date('1995-12-17T03:24:00'))
 ```
 
-#### constantField
+#### **constantField**
 
 Similar to `choiceField` but only with a single valid choice
 
@@ -234,7 +234,7 @@ expectType<TypeHint<typeof constant>, 11>(true)
 assert.deepStrictEqual(validate(constant, 11), 11)
 ```
 
-#### withDefault
+#### **withDefault**
 
 Similar to `optional` but instead of returning `undefined` in
 case of a missing field.
@@ -250,7 +250,7 @@ assert.deepStrictEqual(validate(defaultValue, 11), 11)
 assert.deepStrictEqual(validate(defaultValue, undefined), 42)
 ```
 
-#### unionField
+#### **unionField**
 
 A field for the cases when an object can have multiple structures
 (i.e. union of objects).
@@ -285,7 +285,7 @@ assert.deepStrictEqual(validate(union, {
 })
 ```
 
-#### wildcardObjectField
+#### **wildcardObjectField**
 
 In case if payload can be virtually anything JSON friendly (i.e. no validation is required)
 
