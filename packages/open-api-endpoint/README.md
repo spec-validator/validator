@@ -6,12 +6,11 @@ routes that generate open-api spec and a ui for it.
 ```ts
 import http from 'http'
 
-import { createServer } from '@spec-validator/rest-api-server'
-import { _ } from '@spec-validator/rest-api-server/server'
+import { createServer, _ } from '@spec-validator/rest-api-server'
 import {
   $, numberField, stringField,
 } from '@spec-validator/validator/fields'
-import withOpenApi from '@spec-validator/open-api-endpoint/withOpenApi'
+import { withOpenApi } from '@spec-validator/open-api-endpoint'
 import { expectType } from '@spec-validator/test-utils/expectType'
 
 const itemSpec = {

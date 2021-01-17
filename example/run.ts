@@ -1,9 +1,8 @@
-import { createServer } from '@spec-validator/rest-api-server'
-import { _ } from '@spec-validator/rest-api-server/server'
+import { createServer, _ } from '@spec-validator/rest-api-server'
 import {
   $, constantField, numberField, optional, stringField,
 } from '@spec-validator/validator/fields'
-import withOpenApi from '@spec-validator/open-api-endpoint/withOpenApi'
+import { withOpenApi } from '@spec-validator/open-api-endpoint'
 
 const itemSpec = {
   title: stringField(),
