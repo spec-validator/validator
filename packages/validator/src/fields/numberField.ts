@@ -26,7 +26,8 @@ export default declareField('@spec-validator/fields.NumberField', ({ canBeFloat,
   const serialize = (deserialized: number): Json => deserialized
 
   const result = {
-    canBeFloat,
+    canBeFloat: canBeFloat || false,
+    signed: signed || false,
     validate,
     serialize,
   } as NumberField & OfType<string>
