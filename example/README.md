@@ -2,7 +2,7 @@
 
 ## Start
 
-    yarn start-demo
+    yarn just start-demo
 
 ## CURL
 
