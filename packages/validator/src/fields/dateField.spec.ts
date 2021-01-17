@@ -57,7 +57,7 @@ describe('time', () => {
   const field = dateField('time')
 
   test('field', () => {
-    testValidateSpecOk(field, '03:24:00Z', new Date('1995-12-17T00:00:00Z'), '03:24:00.000Z')
+    testValidateSpecOk(field, '03:24:00Z', new Date('1970-01-01T03:24:00.000Z'), '03:24:00.000Z')
   })
 
 })
