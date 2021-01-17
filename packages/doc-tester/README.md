@@ -5,7 +5,13 @@ blocks and feeds those to `ts-node`. Line mapping is done accordingly
 to indicate the locations of the errors within the source
 Markdown files.
 
-To denote a code block just write
+## Run
+
+`ỳarn test-docs`
+
+## Expected Markdown format
+
+To denote a code block just write:
 
 <code>
 
@@ -62,3 +68,4 @@ server.serve()
 1. By design ignores any non typescript blocks.
 1. By design ignores any non-multiline blocks (i.e. triple quotes must live on their own lines).
 1. Works only with triple quote blocks. `<code>` blocks are ignored.
+1. Does not affest Jest's code coverage in any way
