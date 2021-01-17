@@ -1,7 +1,7 @@
 import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import {
-  arrayField, booleanField, choiceField, constantField,
+  arrayField, booleanField, choiceField, constantField, dateField,
   numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault,
 } from '@spec-validator/validator/fields'
 import createRegistry, { registryDeclaration as $ } from '@spec-validator/validator/registry'
@@ -40,6 +40,11 @@ const splitOfOneOrMany = (choices: readonly Primitive[]): OpenAPI.NonArraySchema
 }
 
 export const BASE_PAIRS = [
+  // TODO
+  $(dateField, (field) => ({
+    type: 'string',
+
+  })),
   $(arrayField, (field, requestSchema): OpenAPI.ArraySchemaObject => ({
     items: requestSchema(field.itemField),
     type: 'array',
@@ -55,6 +60,7 @@ export const BASE_PAIRS = [
   $(constantField, (field): OpenAPI.NonArraySchemaObject => splitOfOneOrMany([field.constant])),
   $(numberField, (field): OpenAPI.NonArraySchemaObject => ({
     type: field.canBeFloat ? 'number' : 'integer',
+    minimum: field.signed ? undefined : 0,
   })),
   $(objectField, (field, requestSchema): OpenAPI.NonArraySchemaObject  => {
     const required = Object.entries(field.objectSpec).filter(
