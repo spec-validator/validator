@@ -36,7 +36,7 @@ Please got through the [ideas' document](IDEAS.md) before diving into the API.
 
 - [@spec-validator/open-api-endpoint](packages/open-api-endpoint/README.md)
 
-  Two endpoints to generate Open API based documentation for
+  Endpoint decorators to generate Open API based documentation for
   the routes defined using the `rest-api-server`.
 
   `yarn add @spec-validator/open-api-endpoint`
