@@ -11,7 +11,7 @@ export default declareField('@spec-validator/fields.ConstantField', <Constant ex
     constant,
     validate: (value: any): Constant => {
       if (value !== constant) {
-        throw 'Constant does not match the requirement'
+        throw `${value} !== ${constant}`
       }
       return constant
     },

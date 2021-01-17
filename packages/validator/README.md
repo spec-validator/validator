@@ -177,7 +177,7 @@ assert.deepStrictEqual(!!validNestedObj, true)
 In addition to primitive and collection fields there are also ones that aim to
 match more extensive type checking.
 
-#### Optional
+#### optional
 
 Once annotated, a payload becomes `T | undefined`:
 
@@ -192,7 +192,7 @@ assert.deepStrictEqual(validate(optionalField, 42), 42)
 assert.deepStrictEqual(validate(optionalField, undefined), undefined)
 ```
 
-#### Choice field
+#### choiceField
 
 A union type that may have only primitive types' based constants:
 
@@ -206,7 +206,7 @@ expectType<TypeHint<typeof withChoices>, 1 | 2 | 3>(true)
 assert.deepStrictEqual(validate(withChoices, 1), 1)
 ```
 
-#### Date field
+#### dateField
 
 A mapping between JavaScript-friendly string date value and
 a [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date)
@@ -222,7 +222,10 @@ expectType<TypeHint<typeof date>, Date>(true)
 assert.deepStrictEqual(validate(date, '1995-12-17T03:24:00'), new Date('1995-12-17T03:24:00'))
 ```
 
-#### Constant field
+#### constantField
+
+Similar to `choiceField` but only with a single valid choice
+
 
 ```ts
 import { constantField } from '@spec-validator/validator/fields'
@@ -234,7 +237,22 @@ expectType<TypeHint<typeof constant>, 11>(true)
 assert.deepStrictEqual(validate(constant, 11), 11)
 ```
 
-#### With default
+Similar to `optional` but instead of returning `undefined` in
+case of a missing field.
+
+#### withDefault
+
+```ts
+
+import { withDefault } from '@spec-validator/validator/fields'
+
+const defaultValue = withDefault(numberField(), 42)
+
+expectType<TypeHint<typeof defaultValue>, number>(true)
+
+assert.deepStrictEqual(validate(defaultValue, 11), 11)
+assert.deepStrictEqual(validate(defaultValue, undefined), 42)
+```
 
 #### Union field
 
