@@ -250,7 +250,7 @@ assert.deepStrictEqual(validate(defaultValue, 11), 11)
 assert.deepStrictEqual(validate(defaultValue, undefined), 42)
 ```
 
-#### Union field
+#### unionField
 
 A field for the cases when an object can have multiple structures
 (i.e. union of objects).
@@ -285,6 +285,18 @@ assert.deepStrictEqual(validate(union, {
 })
 ```
 
-#### Wildcard object field
+#### wildcardObjectField
+
+In case if payload can be virtually anything (i.e. no validation is required)
+
+```ts
+import { wildcardObjectField } from '@spec-validator/validator/fields'
+
+const wildCard = wildcardObjectField()
+
+testValidateSpecOk(field, 42)
+
+assert.deepStrictEqual(validate(wildCard, 'Abracadabra'), 'Abracadabra')
+```
 
 ### Segment based strings
