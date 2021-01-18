@@ -4,7 +4,9 @@ import {
   arrayField, booleanField, choiceField, constantField, dateField,
   numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault,
 } from '@spec-validator/validator/fields'
-import createRegistry, { registryDeclaration as $ } from '@spec-validator/validator/registry'
+import createRegistry, {
+  FieldPair, GetRepresentation, registryDeclaration as $,
+} from '@spec-validator/validator/registry'
 
 import { Primitive } from '@spec-validator/utils/Json'
 
@@ -39,7 +41,7 @@ const splitOfOneOrMany = (choices: readonly Primitive[]): OpenAPI.NonArraySchema
   }
 }
 
-export const BASE_PAIRS = [
+export const BASE_PAIRS: FieldPair[] = [
   $(dateField, (field) => ({
     type: 'string',
     format: field.format,
@@ -98,6 +100,6 @@ export const BASE_PAIRS = [
   })),
 ]
 
-const getSchema = createRegistry(BASE_PAIRS)
+const getSchema: GetRepresentation = createRegistry(BASE_PAIRS)
 
 export default getSchema
