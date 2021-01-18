@@ -14,24 +14,24 @@ export type DataMapping = StringMapping | Any
 export type RequestSpec<
   Method extends string = string,
   PathParams extends StringMapping | unknown = StringMapping | unknown,
-  Data extends Any = Any,
+  Body extends Any = Any,
   QueryParams extends StringMapping = StringMapping,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
   readonly method: ConstantField<Method>,
   readonly pathParams: typeof $ & Field<PathParams>,
-  readonly data?: SpecUnion<Data>,
+  readonly body?: SpecUnion<Body>,
   readonly headers?: ObjectSpec<Headers>,
   readonly queryParams?: ObjectSpec<QueryParams>
 }
 
 export type ResponseSpec<
   StatusCode extends number = number,
-  Data extends Any = Any,
+  Body extends Any = Any,
   Headers extends HeaderMapping = HeaderMapping,
 > = {
   readonly statusCode: ConstantField<StatusCode>,
-  readonly data?: SpecUnion<Data>,
+  readonly body?: SpecUnion<Body>,
   readonly headers?: ObjectSpec<Headers>,
 }
 

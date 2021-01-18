@@ -11,7 +11,7 @@ test('fullRoute', () => {
     _.POST($._('/items')).spec(
       {
         request: {
-          data: {
+          body: {
             title: stringField(/.*/),
             count: numberField(),
           },
@@ -50,7 +50,7 @@ test('fullRoute', () => {
               },
             }),
           },
-          data: {
+          body: {
             items: arrayField(numberField()),
           },
         },
@@ -61,7 +61,7 @@ test('fullRoute', () => {
         headers: {
           key: 13,
         },
-        data: {
+        body: {
           items: [1, 2, 3],
         },
       })

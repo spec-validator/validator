@@ -44,18 +44,18 @@ export default (config: Partial<ServerConfig> & WithInfo, schemaRoot = '/open-ap
     _.GET($._(schemaRoot)).spec(
       {
         response: {
-          data: wildcardObjectField(),
+          body: wildcardObjectField(),
         },
       },
     ).handler(
       async () => ({
-        data: genOpenApi(merged) as unknown as Record<string, Json>,
+        body: genOpenApi(merged) as unknown as Record<string, Json>,
       })
     ),
     _.GET($._(schemaRoot)._('-ui')).spec(
       {
         response: {
-          data: stringField(),
+          body: stringField(),
           headers: {
             'content-type': constantField('text/html'),
           },
@@ -63,7 +63,7 @@ export default (config: Partial<ServerConfig> & WithInfo, schemaRoot = '/open-ap
       },
     ).handler(
       async () => ({
-        data: getUI(config.baseUrl + schemaRoot, config.info || DEFAULT_INFO),
+        body: getUI(config.baseUrl + schemaRoot, config.info || DEFAULT_INFO),
         headers: {
           'content-type': 'text/html' as const,
         },

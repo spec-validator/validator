@@ -81,10 +81,10 @@ const getWildcardRoute = async (
   serialization: SerializationFormat,
   request: http.IncomingMessage,
 ) => {
-  const data = await getData(request)
+  const body = await getData(request)
   return ({
     ...getWildcardRequestBase(request),
-    data: data && await withAppErrorStatusCode(400, () => serialization.deserialize(data)),
+    body: body && await withAppErrorStatusCode(400, () => serialization.deserialize(body)),
     headers: request.headers,
   })
 }
@@ -176,9 +176,9 @@ const handleRoute = async (
     response.setHeader('content-type', accept.mediaType)
   }
 
-  if (resp.data !== undefined) {
+  if (resp.body !== undefined) {
     response.write(
-      accept.serialize(resp.data),
+      accept.serialize(resp.body),
       config.encoding
     )
   }

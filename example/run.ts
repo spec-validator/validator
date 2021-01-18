@@ -10,11 +10,11 @@ const itemSpec = {
 }
 
 const ofItems = {
-  data: [itemSpec],
+  body: [itemSpec],
 }
 
 const ofItem = {
-  data: itemSpec,
+  body: itemSpec,
 }
 
 createServer(withOpenApi({
@@ -22,7 +22,7 @@ createServer(withOpenApi({
     _.GET($._('/expected-error')).spec(
       {
         response: {
-          data: constantField(42),
+          body: constantField(42),
         },
       }
     ).handler(
@@ -37,7 +37,7 @@ createServer(withOpenApi({
     _.GET($._('/unexpected-error')).spec(
       {
         response: {
-          data: constantField(42),
+          body: constantField(42),
         },
       },
     ).handler(
@@ -53,7 +53,7 @@ createServer(withOpenApi({
       },
     ).handler(
       async () => ({
-        data: [
+        body: [
           {
             title: 'Item N',
             description: 'Description',
@@ -65,12 +65,12 @@ createServer(withOpenApi({
       {
         request: ofItem,
         response: {
-          data: numberField(),
+          body: numberField(),
         },
       },
     ).handler(
       async () => ({
-        data: 42,
+        body: 42,
       })
     ),
     _.GET($._('/items/')._('id', numberField())).spec(
@@ -79,7 +79,7 @@ createServer(withOpenApi({
       },
     ).handler(
       async (request) => ({
-        data:
+        body:
           {
             title: `Item ${request.pathParams.id}`,
             description: 'Description',
@@ -101,7 +101,7 @@ createServer(withOpenApi({
     _.PATCH($._('/items/')._('id', numberField())).spec(
       {
         request: {
-          data: {
+          body: {
             title: optional(stringField()),
             description: optional(stringField()),
           },

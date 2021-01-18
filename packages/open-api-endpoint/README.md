@@ -21,26 +21,26 @@ const server = createServer(withOpenApi({
   routes: [
     _.POST($._('/items')).spec({
       request: {
-        data: itemSpec,
+        body: itemSpec,
       },
       response: {
-        data: numberField(),
+        body: numberField(),
         headers: {
           title: stringField(),
         },
       },
     }).handler(async () => ({
-      data: 42,
+      body: 42,
       headers: {
         title: 'Foo',
       },
     })),
     _.GET($._('/items')).spec({
       response: {
-        data: [itemSpec],
+        body: [itemSpec],
       },
     }).handler(async () => ({
-      data: [
+      body: [
         {
           title: 'Item N',
           description: 'Description',

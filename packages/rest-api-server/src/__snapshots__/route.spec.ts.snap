@@ -44,7 +44,7 @@ Object {
   "validate": [Function],
   "variants": Array [
     Object {
-      "data": Object {
+      "body": Object {
         "canBeFloat": false,
         "getFieldWithRegExp": [Function],
         "serialize": [Function],
@@ -60,7 +60,7 @@ Object {
       },
     },
     Object {
-      "data": Object {
+      "body": Object {
         "choices": Array [
           "one",
           "two",

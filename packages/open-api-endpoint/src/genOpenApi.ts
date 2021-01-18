@@ -113,7 +113,7 @@ class OpenApiGenerator {
       this.createParameterBaseObject(value),
     ])),
     description: getDescription(response) || '',
-    content: response.data && this.createContentObject(response.data),
+    content: response.body && this.createContentObject(response.body),
   })
 
   createRequestBodyObject = (data: SpecUnion<Any>): OpenAPI.RequestBodyObject => withoutOptional({
@@ -138,7 +138,7 @@ class OpenApiGenerator {
       ...this.specToParams('query', route.request.queryParams),
       ...this.specToParams('path', route.request.pathParams.getObjectSpec()),
     ],
-    requestBody: route.request.data && this.createRequestBodyObject(route.request.data),
+    requestBody: route.request.body && this.createRequestBodyObject(route.request.body),
     responses: this.createResponses(route.response),
   })
 

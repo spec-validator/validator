@@ -38,17 +38,17 @@ const routeObject = route({
   response: unionField(
     {
       statusCode: constantField(201),
-      data: numberField(),
+      body: numberField(),
     }, {
       statusCode: constantField(202),
-      data: choiceField('one', 'two'),
+      body: choiceField('one', 'two'),
       headers: {
         headerKey: stringField(),
     },
   }),
 }).handler(async (request) => ({
   statusCode: 202,
-  data: 'one',
+  body: 'one',
   headers: {
     headerKey: request.pathParams.pathKey,
   },
@@ -76,10 +76,10 @@ const itemSpec = {
 
 const getRoute = _.GET($._('/items')).spec({
   response: {
-    data: [itemSpec],
+    body: [itemSpec],
   },
 }).handler(async () => ({
-  data: [
+  body: [
     {
       title: 'Item N',
       description: 'Description',
@@ -91,16 +91,16 @@ expectType<Route, typeof getRoute>(true)
 
 const postRoute = _.POST($._('/items')).spec({
   request: {
-    data: itemSpec,
+    body: itemSpec,
   },
   response: {
-    data: numberField(),
+    body: numberField(),
     headers: {
       title: stringField(),
     },
   },
 }).handler(async () => ({
-  data: 42,
+  body: 42,
   headers: {
     title: 'Foo',
   },

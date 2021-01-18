@@ -19,7 +19,7 @@ describe('Route', () => {
 
     const respSpec = {
       statusCode: constantField(201),
-      data: stringField(),
+      body: stringField(),
     }
 
     type Decor = Route<typeof reqSpec, typeof respSpec>
@@ -33,7 +33,7 @@ describe('Route', () => {
         pathParams: { pathKey: string },
       }) => Promise<{
         statusCode: 201,
-        data: string
+        body: string
       }>
         }>(true)
   })
@@ -69,10 +69,10 @@ describe('Route', () => {
 
     const respSpec = unionField({
       statusCode: constantField(201),
-      data: numberField(),
+      body: numberField(),
     }, {
       statusCode: constantField(202),
-      data: choiceField('one', 'two'),
+      body: choiceField('one', 'two'),
       headers: {
         headerKey: stringField(),
       },
@@ -87,10 +87,10 @@ describe('Route', () => {
         method: 'GET',
       }) => Promise<{
         statusCode: 201,
-        data: number
+        body: number
       } | {
         statusCode: 202,
-        data: 'one' | 'two',
+        body: 'one' | 'two',
         headers: {
           headerKey: string
         }
@@ -110,17 +110,17 @@ describe('route function', () => {
       },
       response: unionField({
         statusCode: constantField(201),
-        data: numberField(),
+        body: numberField(),
       }, {
         statusCode: constantField(202),
-        data: choiceField('one', 'two'),
+        body: choiceField('one', 'two'),
         headers: {
           headerKey: stringField(),
         },
       }),
     }).handler(async (request) => ({
       statusCode: 202,
-      data: 'one',
+      body: 'one',
       headers: {
         headerKey: request.pathParams.pathKey,
       },

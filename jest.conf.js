@@ -32,6 +32,8 @@ module.exports = {
     },
   },
 
+  modulePathIgnorePatterns: ['dist'],
+
   testEnvironment: 'node',
   testMatch: ['<rootDir>/packages/**/src/**/*.spec.ts'],
   testURL: 'http://localhost/',

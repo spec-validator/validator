@@ -14,11 +14,11 @@ const itemSpec = {
 }
 
 const ofItems = {
-  data: [itemSpec],
+  body: [itemSpec],
 }
 
 const ofItem = {
-  data: itemSpec,
+  body: itemSpec,
 }
 
 // TODO: disablable error on extra keys for object field
@@ -26,7 +26,7 @@ const server = createServer({routes: [
   _.GET($._('/expected-error')).spec(
     {
       response: {
-        data: constantField(42),
+        body: constantField(42),
       },
     }
   ).handler(
@@ -55,7 +55,7 @@ const server = createServer({routes: [
   _.GET($._('/unexpected-error')).spec(
     {
       response: {
-        data: constantField(42),
+        body: constantField(42),
       },
     }
   ).handler(
@@ -71,7 +71,7 @@ const server = createServer({routes: [
     },
   ).handler(
     async () => ({
-      data: [
+      body: [
         {
           title: 'Item N',
           description: 'Description',
@@ -83,7 +83,7 @@ const server = createServer({routes: [
     {
       request: ofItem,
       response: {
-        data: numberField(),
+        body: numberField(),
         headers: {
           title: stringField(),
         },
@@ -91,7 +91,7 @@ const server = createServer({routes: [
     },
   ).handler(
     async () => ({
-      data: 42,
+      body: 42,
       headers: {
         title: 'Foo',
       },
@@ -103,7 +103,7 @@ const server = createServer({routes: [
     },
   ).handler(
     async (req) => ({
-      data:
+      body:
         {
           title: `Item ${req.pathParams.id}`,
           description: 'Description',
@@ -120,7 +120,7 @@ const server = createServer({routes: [
   _.PATCH($._('/items/')._('id', numberField())).spec(
     {
       request: {
-        data: objectField({
+        body: objectField({
           title: optional(stringField()),
           description: optional(stringField()),
         }),
