@@ -8,9 +8,12 @@ import { Route, RequestSpec, ResponseSpec } from './route'
 
 import { TypeHint } from '@spec-validator/validator'
 import { constantField, $ } from '@spec-validator/validator/fields'
-import { WithoutOptional } from '@spec-validator/utils/util-types'
+import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
 import { ConstantField } from '@spec-validator/validator/fields/constantField'
 import { Field } from '@spec-validator/validator/core'
+
+// workaround for: https://github.com/microsoft/TypeScript/issues/42349
+export type Placeholder = Any
 
 type RequestSpecMethod = Omit<RequestSpec, 'method' | 'pathParams'>
 
