@@ -1,4 +1,4 @@
-import { declareField, Field } from '@spec-validator/validator/core'
+import { declareField, Field, OfType } from '@spec-validator/validator/core'
 import { Any } from '@spec-validator/utils/util-types'
 
 type Example<T extends Any> = {
@@ -16,6 +16,9 @@ export interface WithDoc<T extends Any, F extends Field<T>> extends Field<T> {
   readonly innerField: F,
   readonly doc: Doc<T>
 }
+
+// workaround for: https://github.com/microsoft/TypeScript/issues/42349
+export type Placeholder = OfType<'Placeholder'>
 
 export default declareField('@spec-validator/fields.WithDoc', <T extends Any, F extends Field<T>> (
   innerField: F,

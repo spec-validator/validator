@@ -74,7 +74,7 @@ export const declareField = <
   Type extends string,
   Params extends any[],
   FieldType extends Field<unknown>,
-  Constructor extends (...params: Params) => Omit<FieldType, 'type'>
+  Constructor extends (...params: Params) => FieldType
 > (
     type: Type,
     constructor: Constructor
