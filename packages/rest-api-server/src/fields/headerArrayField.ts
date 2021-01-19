@@ -7,9 +7,10 @@ export interface HeaderArrayField<T> extends FieldWithStringInputSupport<T[]> {
   readonly regex: RegExp
 }
 
-export default declareField('@spec-validator/rest-api/headerArrayField', <T>(
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language
+export default declareField('@spec-validator/rest-api/fields/headerArrayField', <T>(
   itemField: FieldWithStringInputSupport<T>,
-  separator=','
+  separator=', '
 ): HeaderArrayField<T> => {
 
   const fieldWithStringSupport = itemField.getFieldWithRegExp()
