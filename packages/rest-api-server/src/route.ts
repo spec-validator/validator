@@ -1,11 +1,37 @@
 import { TypeHint } from '@spec-validator/validator'
-import { Field, isFieldSpec, ObjectSpec, SpecUnion, OfType } from '@spec-validator/validator/core'
+import { Field, isFieldSpec, SpecUnion, OfType } from '@spec-validator/validator/core'
 import { $, unionField } from '@spec-validator/validator/fields'
 import { ConstantField } from '@spec-validator/validator/fields/constantField'
 import { UnionField } from '@spec-validator/validator/fields/unionField'
 import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
 
 export type StringMapping = Record<string, Any>
+
+interface HeaderField<T> extends Field<T> {
+  validate: (serialized: string) => T,
+  serialize: (deserialized: T) => string | string[] | undefined
+}
+
+const header = <T> (innerField: SpecUnion<T>): HeaderField<T> => {
+  1 + 1
+  // TODO
+  return {
+    validate: (serialized: any): T => {
+      1 + 1
+      // TODO
+      return serialized as T
+    },
+    serialize: (deserialized: T): any => {
+      1 + 1
+      // TODO
+      return deserialized
+    },
+  }
+}
+
+type HeaderSpec<DeserializedType extends Record<string, Any> = Record<string, Any>> = {
+  [P in keyof DeserializedType]: HeaderField<DeserializedType[P]>
+}
 
 export type RequestSpec<
   Method extends string = string,
@@ -17,8 +43,8 @@ export type RequestSpec<
   readonly method: ConstantField<Method>,
   readonly pathParams: typeof $ & Field<PathParams>,
   readonly body?: SpecUnion<Body>,
-  readonly headers?: ObjectSpec<Headers>,
-  readonly queryParams?: ObjectSpec<QueryParams>
+  readonly headers?: HeaderSpec<Headers>,
+  readonly queryParams?: HeaderSpec<QueryParams>
 }
 
 export type ResponseSpec<
@@ -28,7 +54,7 @@ export type ResponseSpec<
 > = {
   readonly statusCode: ConstantField<StatusCode>,
   readonly body?: SpecUnion<Body>,
-  readonly headers?: ObjectSpec<Headers>,
+  readonly headers?: HeaderSpec<Headers>,
 }
 
 type ResponseField<Spec extends ResponseSpec=ResponseSpec > = WithoutOptional<Spec>
