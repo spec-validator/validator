@@ -7,16 +7,12 @@ import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
 
 export type StringMapping = Record<string, Any>
 
-export type HeaderMapping = Record<string, string | string[] | number>
-
-export type DataMapping = StringMapping | Any
-
 export type RequestSpec<
   Method extends string = string,
   PathParams extends StringMapping | unknown = StringMapping | unknown,
   Body extends Any = Any,
   QueryParams extends StringMapping = StringMapping,
-  Headers extends HeaderMapping = HeaderMapping,
+  Headers extends StringMapping = StringMapping,
 > = {
   readonly method: ConstantField<Method>,
   readonly pathParams: typeof $ & Field<PathParams>,
@@ -28,7 +24,7 @@ export type RequestSpec<
 export type ResponseSpec<
   StatusCode extends number = number,
   Body extends Any = Any,
-  Headers extends HeaderMapping = HeaderMapping,
+  Headers extends StringMapping = StringMapping,
 > = {
   readonly statusCode: ConstantField<StatusCode>,
   readonly body?: SpecUnion<Body>,
@@ -37,7 +33,6 @@ export type ResponseSpec<
 
 type ResponseField<Spec extends ResponseSpec=ResponseSpec > = WithoutOptional<Spec>
 
-// TODO: how to extract schema from
 type ResponsesSpec<ResponseVariants extends ResponseField[] = ResponseField[]> =
   UnionField<ResponseVariants>
 

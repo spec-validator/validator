@@ -5,9 +5,9 @@ export type OfType<Type extends string> = {
   readonly type: Type
 }
 
-export interface Field<DeserializedType> {
+export interface Field<DeserializedType, SerializedType=Json> {
   validate(serialized: any): DeserializedType
-  serialize(deserialized: DeserializedType): Json
+  serialize(deserialized: DeserializedType): SerializedType
 }
 
 export type ObjectSpec<DeserializedType extends Record<string, Any> = Record<string, Any>> = {
