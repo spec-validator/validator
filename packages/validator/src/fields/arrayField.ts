@@ -5,7 +5,7 @@ export interface ArrayField<T> extends Field<T[]> {
   readonly itemField: Field<T>,
 }
 
-export default declareField('@spec-validator/fields.ArrayField', <T>(itemField: Field<T>): ArrayField<T> => ({
+export default declareField('@spec-validator/validator/fields/arrayField', <T>(itemField: Field<T>): ArrayField<T> => ({
   itemField,
   validate: (value: any): T[] => {
     if (!Array.isArray(value)) {

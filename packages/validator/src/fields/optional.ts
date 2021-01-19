@@ -6,7 +6,7 @@ export interface OptionalField<T extends Any> extends Field<Optional<T>> {
   readonly innerSpec: SpecUnion<T>
 }
 
-export default declareField('@spec-validator/fields.Optional', <T extends Any> (
+export default declareField('@spec-validator/validator/fields/optional', <T extends Any> (
   innerSpec: SpecUnion<T>
 ): OptionalField<T> => {
   const innerField = getFieldForSpec(innerSpec)

@@ -7,7 +7,7 @@ export interface ChoiceField<Choice extends Primitive> extends FieldWithStringIn
   choices: readonly Choice[]
 }
 
-export default declareField('@spec-validator/fields.ChoiceField', <Choice extends Primitive>(
+export default declareField('@spec-validator/validator/fields/choiceField', <Choice extends Primitive>(
   ...choices: readonly Choice[]
 ): ChoiceField<Choice> => {
   const choicesSet = new Set(choices)

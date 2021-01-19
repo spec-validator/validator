@@ -7,7 +7,7 @@ export interface NumberField extends FieldWithStringInputSupport<number> {
   signed: boolean
 }
 
-export default declareField('@spec-validator/fields.NumberField', ({ canBeFloat, signed }: {
+export default declareField('@spec-validator/validator/fields/numberField', ({ canBeFloat, signed }: {
   readonly canBeFloat?: boolean,
   readonly signed?: boolean
 } = {}): NumberField => {

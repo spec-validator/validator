@@ -5,7 +5,7 @@ export interface ConstantField<Constant extends Primitive> extends Field<Constan
   readonly constant: Constant
 }
 
-export default declareField('@spec-validator/fields.ConstantField', <Constant extends Primitive> (
+export default declareField('@spec-validator/validator/fields/constantField', <Constant extends Primitive> (
   constant: Constant
 ): ConstantField<Constant> => ({
     constant,
