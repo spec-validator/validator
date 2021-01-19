@@ -5,6 +5,10 @@ import { ConstantField } from '@spec-validator/validator/fields/constantField'
 import { UnionField } from '@spec-validator/validator/fields/unionField'
 import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
 
+import { HeaderSpec } from './fields/headerObjectField'
+
+type StringMapping = Record<string, Any>
+
 export type RequestSpec<
   Method extends string = string,
   PathParams extends StringMapping | unknown = StringMapping | unknown,

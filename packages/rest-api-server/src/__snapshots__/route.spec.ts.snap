@@ -7,14 +7,14 @@ Object {
       "getFieldWithRegExp": [Function],
       "regex": /\\.\\*/,
       "serialize": [Function],
-      "type": "@spec-validator/fields.StringField",
+      "type": "@spec-validator/validator/fields/stringField",
       "validate": [Function],
     },
   },
   "method": Object {
     "constant": "GET",
     "serialize": [Function],
-    "type": "@spec-validator/fields.ConstantField",
+    "type": "@spec-validator/validator/fields/constantField",
     "validate": [Function],
   },
   "pathParams": SegmentField {
@@ -22,7 +22,7 @@ Object {
       "getFieldWithRegExp": [Function],
       "regex": /\\.\\*/,
       "serialize": [Function],
-      "type": "@spec-validator/fields.StringField",
+      "type": "@spec-validator/validator/fields/stringField",
       "validate": [Function],
     },
     "key": "pathKey",
@@ -30,9 +30,9 @@ Object {
       "field": undefined,
       "key": "",
       "parent": undefined,
-      "type": "@spec-validator/fields.SegmentField",
+      "type": "@spec-validator/validator/fields/segmentField",
     },
-    "type": "@spec-validator/fields.SegmentField",
+    "type": "@spec-validator/validator/fields/segmentField",
   },
 }
 `;
@@ -40,7 +40,7 @@ Object {
 exports[`route function returns a proper route object 2`] = `
 Object {
   "serialize": [Function],
-  "type": "@spec-validator/fields.UnionField",
+  "type": "@spec-validator/validator/fields/unionField",
   "validate": [Function],
   "variants": Array [
     Object {
@@ -49,13 +49,13 @@ Object {
         "getFieldWithRegExp": [Function],
         "serialize": [Function],
         "signed": false,
-        "type": "@spec-validator/fields.NumberField",
+        "type": "@spec-validator/validator/fields/numberField",
         "validate": [Function],
       },
       "statusCode": Object {
         "constant": 201,
         "serialize": [Function],
-        "type": "@spec-validator/fields.ConstantField",
+        "type": "@spec-validator/validator/fields/constantField",
         "validate": [Function],
       },
     },
@@ -67,7 +67,7 @@ Object {
         ],
         "getFieldWithRegExp": [Function],
         "serialize": [Function],
-        "type": "@spec-validator/fields.ChoiceField",
+        "type": "@spec-validator/validator/fields/choiceField",
         "validate": [Function],
       },
       "headers": Object {
@@ -75,14 +75,14 @@ Object {
           "getFieldWithRegExp": [Function],
           "regex": /\\.\\*/,
           "serialize": [Function],
-          "type": "@spec-validator/fields.StringField",
+          "type": "@spec-validator/validator/fields/stringField",
           "validate": [Function],
         },
       },
       "statusCode": Object {
         "constant": 202,
         "serialize": [Function],
-        "type": "@spec-validator/fields.ConstantField",
+        "type": "@spec-validator/validator/fields/constantField",
         "validate": [Function],
       },
     },
