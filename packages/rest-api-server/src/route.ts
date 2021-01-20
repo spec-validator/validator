@@ -7,7 +7,7 @@ import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
 
 import { HeaderSpec } from './fields/headerObjectField'
 
-type StringMapping = Record<string, Any>
+export type StringMapping = Record<string, Any>
 
 export type RequestSpec<
   Method extends string = string,
