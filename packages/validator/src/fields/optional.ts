@@ -4,17 +4,17 @@ import { Any, Optional } from '@spec-validator/utils/util-types'
 import { FieldWithRegExp, FieldWithStringInputSupport, isFieldWithStringInputSupport } from './segmentField'
 import { Json } from '@spec-validator/utils/Json'
 
-export interface OptionalField<T extends Any, Spec extends SpecUnion<T>> extends Field<Optional<T>> {
-  readonly innerSpec: Spec
+export interface OptionalField<T extends Any> extends Field<Optional<T>> {
+  readonly innerSpec: SpecUnion<T>
 }
 
 export default declareField('@spec-validator/validator/fields/optional', <T extends Any, Spec extends SpecUnion<T>> (
-  innerSpec: Spec
-): Spec extends FieldWithStringInputSupport<unknown>
-  ? OptionalField<T, Spec> & { getFieldWithRegExp(): FieldWithRegExp<Optional<T>> }
-  : OptionalField<T, Spec> => {
+  innerSpec: Spec & SpecUnion<T>
+): Spec extends FieldWithStringInputSupport<T> ? OptionalField<T> & {
+  getFieldWithRegExp(): FieldWithRegExp<T>
+} : OptionalField<T> => {
   const innerField = getFieldForSpec(innerSpec) as Field<T>
-  const getRawField = (inner: Field<T>): OptionalField<T, Spec> => ({
+  const getRawField = (inner: Field<T>): OptionalField<T> => ({
     innerSpec,
     validate: (value: any): Optional<T> => {
       if (value === undefined) {
@@ -40,7 +40,7 @@ export default declareField('@spec-validator/validator/fields/optional', <T exte
     } as any
 
   } else {
-    return raw as any
+    return getRawField(innerField) as any
   }
 
 })

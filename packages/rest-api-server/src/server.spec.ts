@@ -142,6 +142,7 @@ const server = createServer({routes: [
           cookies: headerObjectField({
             auth: stringField(),
             username: stringField(),
+            //phone: optional(stringField()),
           }),
         },
       },
