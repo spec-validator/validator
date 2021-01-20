@@ -2,21 +2,11 @@
 
 exports[`with-complex-headers 1`] = `
 Object {
-  "header": Object {
-    "connection": "close",
-    "content-length": "0",
-    "content-type": "application/json",
-    "cookies": "auth=Payload; username=User",
-    "many": "42",
-    "one": "foo",
-  },
-  "req": Object {
-    "data": undefined,
-    "headers": Object {},
-    "method": "GET",
-    "url": "http://127.0.0.1:41537/with-complex-headers",
-  },
-  "status": 200,
-  "text": "",
+  "connection": "close",
+  "content-length": "0",
+  "content-type": "application/json",
+  "cookies": "auth=Payload; username=User",
+  "many": "42",
+  "one": "foo",
 }
 `;

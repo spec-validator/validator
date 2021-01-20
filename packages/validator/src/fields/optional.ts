@@ -2,14 +2,14 @@ import { declareField, Field, SpecUnion } from '../core'
 import { getFieldForSpec } from '../interface'
 import { Any, Optional } from '@spec-validator/utils/util-types'
 
-export interface OptionalField<T extends Any> extends Field<Optional<T>> {
-  readonly innerSpec: SpecUnion<T>
+export interface OptionalField<T extends Any, Spec extends SpecUnion<T>> extends Field<Optional<T>> {
+  readonly innerSpec: Spec
 }
 
-export default declareField('@spec-validator/validator/fields/optional', <T extends Any> (
-  innerSpec: SpecUnion<T>
-): OptionalField<T> => {
-  const innerField = getFieldForSpec(innerSpec)
+export default declareField('@spec-validator/validator/fields/optional', <T extends Any, Spec extends SpecUnion<T>> (
+  innerSpec: Spec
+): OptionalField<T, Spec> => {
+  const innerField = getFieldForSpec(innerSpec) as Field<T>
   return {
     innerSpec,
     validate: (value: any): Optional<T> => {
