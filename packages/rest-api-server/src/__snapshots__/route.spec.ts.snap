@@ -13,6 +13,8 @@ Object {
   },
   "method": Object {
     "constant": "GET",
+    "getFieldWithRegExp": [Function],
+    "regexp": "GET",
     "serialize": [Function],
     "type": "@spec-validator/validator/fields/constantField",
     "validate": [Function],
@@ -54,6 +56,8 @@ Object {
       },
       "statusCode": Object {
         "constant": 201,
+        "getFieldWithRegExp": [Function],
+        "regexp": "201",
         "serialize": [Function],
         "type": "@spec-validator/validator/fields/constantField",
         "validate": [Function],
@@ -81,6 +85,8 @@ Object {
       },
       "statusCode": Object {
         "constant": 202,
+        "getFieldWithRegExp": [Function],
+        "regexp": "202",
         "serialize": [Function],
         "type": "@spec-validator/validator/fields/constantField",
         "validate": [Function],
