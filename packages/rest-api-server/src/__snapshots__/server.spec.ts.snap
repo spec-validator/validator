@@ -14,7 +14,7 @@ Object {
     "data": undefined,
     "headers": Object {},
     "method": "GET",
-    "url": "http://127.0.0.1:35189/with-complex-headers",
+    "url": "http://127.0.0.1:41537/with-complex-headers",
   },
   "status": 200,
   "text": "",
