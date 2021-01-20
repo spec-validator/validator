@@ -1,5 +1,9 @@
-import { declareField, Field, OfType } from '@spec-validator/validator/core'
+import { declareField, Field, OfType, SpecUnion } from '@spec-validator/validator/core'
 import { Any } from '@spec-validator/utils/util-types'
+import { getFieldForSpec } from '@spec-validator/validator/interface'
+import {
+  FieldWithStringInputSupport, FieldWithRegExp, isFieldWithStringInputSupport,
+} from '@spec-validator/validator/fields/segmentField'
 
 type Example<T extends Any> = {
   value: T,
@@ -12,20 +16,43 @@ type Doc<T extends Any> = {
   examples?: Record<string, Example<T>>
 }
 
-export interface WithDoc<T extends Any, F extends Field<T>> extends Field<T> {
-  readonly innerField: F,
+export interface WithDoc<T extends Any> extends Field<T> {
+  readonly innerSpec: SpecUnion<T>,
   readonly doc: Doc<T>
 }
 
 // workaround for: https://github.com/microsoft/TypeScript/issues/42349
 export type Placeholder = OfType<'Placeholder'>
 
-export default declareField('@spec-validator/fields.WithDoc', <T extends Any, F extends Field<T>> (
-  innerField: F,
+export default declareField('@spec-validator/fields.WithDoc', <T extends Any, Spec extends SpecUnion<T>> (
+  innerSpec: Spec & SpecUnion<T>,
   doc: Doc<T>
-): WithDoc<T, F> => ({
-    innerField,
+): Spec extends FieldWithStringInputSupport<T> ? WithDoc<T> & {
+  getFieldWithRegExp(): FieldWithRegExp<T>
+} : WithDoc<T> => {
+  const innerField = getFieldForSpec(innerSpec) as Field<T>
+
+  const getRawField = (inner: Field<T>): WithDoc<T> => ({
+    innerSpec,
     doc,
-    validate: (it) => innerField.validate(it),
-    serialize: (it) => innerField.serialize(it),
-  }))
+    validate: (it: any) => inner.validate(it),
+    serialize: (it: T) => inner.serialize(it),
+  }) // as unknown as WithDoc<T> & FieldWithRegExp<T> & FieldWithStringInputSupport<T>
+
+  const raw = getRawField(innerField)
+
+  if (isFieldWithStringInputSupport(innerField)) {
+    const withRegex = innerField.getFieldWithRegExp() as FieldWithRegExp<T>
+
+    return {
+      ...raw,
+      getFieldWithRegExp: () => ({
+        ...getRawField(withRegex),
+        regex: withRegex.regex,
+      }),
+    } as any
+
+  } else {
+    return getRawField(innerField) as any
+  }
+})

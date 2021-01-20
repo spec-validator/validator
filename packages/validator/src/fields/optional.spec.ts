@@ -4,7 +4,6 @@ import { expectType } from '@spec-validator/test-utils/expectType'
 import { testValidateSpecError, testValidateSpecOk } from '../TestUtils.test'
 import booleanField from './booleanField'
 
-
 const raw = optional(booleanField())
 
 test('allows undefined value go through', () => {

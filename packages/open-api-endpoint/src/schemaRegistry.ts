@@ -1,7 +1,7 @@
 import { OpenAPIV3 as OpenAPI } from 'openapi-types'
 
 import {
-  arrayField, booleanField, choiceField, constantField, dateField,
+  arrayField, booleanField, choiceField, constantField, dateField, undefinedField,
   numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault,
 } from '@spec-validator/validator/fields'
 import createRegistry, {
@@ -53,9 +53,10 @@ export const BASE_PAIRS: FieldPair[] = [
     items: requestSchema(field.itemField),
     type: 'array',
   }))),
-  $(booleanField, (): OpenAPI.NonArraySchemaObject  => ({
+  $(booleanField, (): OpenAPI.NonArraySchemaObject => ({
     type: 'boolean',
   })),
+  $(undefinedField, (): OpenAPI.NonArraySchemaObject => ({})),
   $(wildcardObjectField, (): OpenAPI.NonArraySchemaObject => ({
     type: 'object',
     additionalProperties: true,
@@ -98,7 +99,7 @@ export const BASE_PAIRS: FieldPair[] = [
     default: field.defaultValue,
   })),
   $(withDoc, (field, requestSchema): OpenAPI.SchemaObject => ({
-    ...requestSchema(field.innerField),
+    ...requestSchema(field.innerSpec),
     description: field.doc,
   })),
 ]

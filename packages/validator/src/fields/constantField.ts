@@ -11,7 +11,7 @@ export default declareField('@spec-validator/validator/fields/constantField', <C
   constant: Constant
 ): ConstantField<Constant> => {
 
-  const result = ({
+  const result = {
     regexp: escapeRegex(constant.toString()),
     constant,
     validate: (value: any): Constant => {
@@ -21,7 +21,7 @@ export default declareField('@spec-validator/validator/fields/constantField', <C
       return constant
     },
     serialize: () => constant,
-  }) as unknown as ConstantField<Constant> & FieldWithRegExp<Constant>
+  } as unknown as ConstantField<Constant> & FieldWithRegExp<Constant>
   result.getFieldWithRegExp = () => result
 
   return result
