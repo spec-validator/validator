@@ -141,6 +141,7 @@ const server = createServer({routes: [
           many: headerArrayField(numberField()),
           cookies: headerObjectField({
             auth: stringField(),
+            username: stringField(),
           }),
         },
       },
@@ -213,6 +214,7 @@ test('if request is invalid - 400 status code is returned', async () => {
 test('with-complex-headers', async () => {
   const resp = await request(server).get('/with-complex-headers')
   delete resp.headers.date
+  delete resp.headers.url
   expect(resp).toMatchSnapshot()
 })
 
