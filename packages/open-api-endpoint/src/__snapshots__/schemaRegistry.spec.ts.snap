@@ -12,6 +12,26 @@ Array [
     "type": "boolean",
   },
   Object {
+    "additionalProperties": false,
+    "properties": Object {
+      "a": Object {
+        "minimum": 0,
+        "type": "integer",
+      },
+    },
+    "required": Array [
+      "a",
+    ],
+    "type": "object",
+  },
+  Object {
+    "items": Object {
+      "minimum": 0,
+      "type": "integer",
+    },
+    "type": "array",
+  },
+  Object {
     "minimum": 0,
     "type": "integer",
   },

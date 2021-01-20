@@ -5,11 +5,16 @@ import {
 import { Primitive } from '@spec-validator/utils/Json'
 import getSchema from './schemaRegistry'
 import withDoc from './withDoc'
+import { headerArrayField, headerObjectField } from '@spec-validator/rest-api-server/fields'
 
 test('BASE_PAIRS', () => {
   expect([
     arrayField(booleanField()),
     booleanField(),
+    headerObjectField({
+      a: numberField(),
+    }),
+    headerArrayField(numberField()),
     numberField(),
     numberField({canBeFloat: true}),
     wildcardObjectField(),

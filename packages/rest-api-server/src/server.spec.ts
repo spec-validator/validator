@@ -7,6 +7,7 @@ import {
 
 import { createServer, _ } from './server'
 import { route } from './route'
+import { headerArrayField, headerObjectField } from './fields'
 
 const itemSpec = {
   title: stringField(),
@@ -132,6 +133,30 @@ const server = createServer({routes: [
   _.DELETE($._('/items/')._('id', numberField())).spec({}).handler(
     async () => undefined
   ),
+  _.GET($._('/with-complex-headers')).spec(
+    {
+      response: {
+        headers: {
+          one: stringField(),
+          many: headerArrayField(numberField()),
+          cookies: headerObjectField({
+            auth: stringField(),
+          }),
+        },
+      },
+    },
+  ).handler(
+    async () => ({
+      headers: {
+        one: 'foo',
+        many: [42],
+        cookies: {
+          auth: 'Payload',
+          username: 'User',
+        },
+      },
+    })
+  ),
 ]})
 
 let oldLog: any = null
@@ -183,6 +208,12 @@ test('if handler fails without status code - 500 status code is returned', async
 test('if request is invalid - 400 status code is returned', async () => {
   const resp = await request(server).post('/items').set('Content-Type', 'application/json').send('blob')
   expect(resp.status).toEqual(400)
+})
+
+test('with-complex-headers', async () => {
+  const resp = await request(server).get('/with-complex-headers')
+  delete resp.headers.date
+  expect(resp).toMatchSnapshot()
 })
 
 test('POST', async () => {

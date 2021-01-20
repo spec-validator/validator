@@ -8,6 +8,8 @@ import createRegistry, {
   FieldPair, GetRepresentation, registryDeclaration as $,
 } from '@spec-validator/validator/registry'
 
+import { headerArrayField, headerObjectField } from '@spec-validator/rest-api-server/fields'
+
 import { Primitive } from '@spec-validator/utils/Json'
 
 import withDoc from './withDoc'
@@ -47,10 +49,10 @@ export const BASE_PAIRS: FieldPair[] = [
     format: field.format,
     pattern: field.regex.source,
   })),
-  $(arrayField, (field, requestSchema): OpenAPI.ArraySchemaObject => ({
+  ...[arrayField, headerArrayField].map(it => $(it, (field, requestSchema): OpenAPI.ArraySchemaObject => ({
     items: requestSchema(field.itemField),
     type: 'array',
-  })),
+  }))),
   $(booleanField, (): OpenAPI.NonArraySchemaObject  => ({
     type: 'boolean',
   })),
@@ -64,22 +66,23 @@ export const BASE_PAIRS: FieldPair[] = [
     type: field.canBeFloat ? 'number' : 'integer',
     minimum: field.signed ? undefined : 0,
   })),
-  $(objectField, (field, requestSchema): OpenAPI.NonArraySchemaObject  => {
-    const required = Object.entries(field.objectSpec).filter(
-      ([_, value]) => (value as any).type !== optional.type && (value as any).type !== withDefault.type
-    ).map(([key, _]) => key)
-    const result: OpenAPI.NonArraySchemaObject = {
-      type: 'object',
-      additionalProperties: false,
-      properties: Object.fromEntries(
-        Object.entries(field.objectSpec).map(([key, value]) => [key, requestSchema(value)] )
-      ),
-    }
-    if (required.length) {
-      result.required = required
-    }
-    return result
-  }),
+  ...[objectField, headerObjectField].map(it =>
+    $(it, (field, requestSchema): OpenAPI.NonArraySchemaObject  => {
+      const required = Object.entries(field.objectSpec).filter(
+        ([_, value]) => (value as any).type !== optional.type && (value as any).type !== withDefault.type
+      ).map(([key, _]) => key)
+      const result: OpenAPI.NonArraySchemaObject = {
+        type: 'object',
+        additionalProperties: false,
+        properties: Object.fromEntries(
+          Object.entries(field.objectSpec).map(([key, value]) => [key, requestSchema(value)] )
+        ),
+      }
+      if (required.length) {
+        result.required = required
+      }
+      return result
+    })),
   $(optional, (field, requestSchema): OpenAPI.SchemaObject  => ({
     ...requestSchema(field.innerSpec),
   })),
