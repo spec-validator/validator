@@ -1,34 +1,73 @@
 import optional from './optional'
 import { TypeHint } from '../core'
 import { expectType } from '@spec-validator/test-utils/expectType'
-import { sampleField, testValidateSpecOk } from '../TestUtils.test'
+import { testValidateSpecError, testValidateSpecOk } from '../TestUtils.test'
+import booleanField from './booleanField'
 
-const field = optional(sampleField)
 
-describe('field', () => {
-  it('should allow undefined value go through', () => {
-    testValidateSpecOk(field, undefined)
+const raw = optional(booleanField())
+
+test('allows undefined value go through', () => {
+  testValidateSpecOk(raw, undefined)
+})
+
+it('allows valid value go through', () => {
+  testValidateSpecOk(raw, true)
+})
+
+test('allows undefined nested value go through', () => {
+  testValidateSpecOk({
+    inner: raw,
+  }, {
+    inner: undefined,
   })
+})
 
-  it('should allow undefined nested value go through', () => {
-    testValidateSpecOk({
-      inner: field,
-    }, {
-      inner: undefined,
-    })
+test('allows defined nested value go through', () => {
+  testValidateSpecOk({
+    inner: raw,
+  }, {
+    inner: true,
   })
+})
 
-  it('should allow defined nested value go through', () => {
-    testValidateSpecOk({
-      inner: field,
-    }, {
-      inner: true,
-    })
-  })
+
+test ('does not let string value og through with raw field', () => {
+  testValidateSpecError(raw, 'true', 'Not a boolean')
 })
 
 test('types', () => {
-  type Spec = TypeHint<typeof field>
+    type Spec = TypeHint<typeof raw>
 
-  expectType<Spec, true | undefined>(true)
+    expectType<Spec, boolean | undefined>(true)
 })
+
+
+describe('field with FieldWithStringInputSupport as inner spec', () => {
+
+  const field = raw.getFieldWithRegExp()
+
+  it('allows undefined value go through', () => {
+    testValidateSpecOk(field, undefined)
+  })
+
+  it('allows valid value go through', () => {
+    testValidateSpecOk(field, true, true, 'true')
+  })
+
+  it('allows string value go through', () => {
+    testValidateSpecOk(field, 'true', true, 'true')
+  })
+
+  it('does not let invalid string value go through', () => {
+    testValidateSpecError(field, 'boom', 'Not a boolean')
+  })
+
+  test('types', () => {
+    type Spec = TypeHint<typeof field>
+
+    expectType<Spec, boolean | undefined>(true)
+  })
+
+})
+

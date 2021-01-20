@@ -1,5 +1,7 @@
 import { declareField, TypeHint, withErrorDecoration } from '@spec-validator/validator/core'
-import { FieldWithStringInputSupport } from '@spec-validator/validator/fields/segmentField'
+import {
+  FieldWithStringInputSupport,
+} from '@spec-validator/validator/fields/segmentField'
 import { Any } from 'utils/dist/util-types'
 
 export type HeaderSpec<DeserializedType extends Record<string, Any> = Record<string, Any>> = {

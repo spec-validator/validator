@@ -1,5 +1,5 @@
 import objectField from './objectField'
-import { Field } from '../core'
+import { Field, isFieldSpec } from '../core'
 import { Json } from '@spec-validator/utils/Json'
 import { Any } from '@spec-validator/utils/util-types'
 
@@ -10,6 +10,11 @@ export interface FieldWithRegExp<Type> extends Field<Type> {
 export interface FieldWithStringInputSupport<Type> extends Field<Type> {
   getFieldWithRegExp(): FieldWithRegExp<Type>
 }
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const isFieldWithStringInputSupport = <DeserializedType>(obj: any):
+  obj is FieldWithStringInputSupport<DeserializedType> =>
+    isFieldSpec(obj) && typeof (obj as any).getFieldWithRegExp === 'function'
 
 class SegmentField<
   DeserializedType = undefined
