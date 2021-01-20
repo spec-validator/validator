@@ -33,13 +33,13 @@ export default declareField('@spec-validator/rest-api/fields/headerObjectField',
         .map(it =>it.split(/=(.*)/, 2)))
 
       return Object.fromEntries(Object.entries(objectSpec).map(([key, valueSpec]) => [
-        key, withErrorDecoration(key, () => valueSpec.validate(payload[key])),
+        key, withErrorDecoration(key, () => valueSpec.getFieldWithRegExp().validate(payload[key])),
       ])) as TypeHint<Spec>
     },
     serialize: (deserialized: TypeHint<Spec>): string =>
       Object.entries(objectSpec)
         .map(([key, valueSpec]) => [
-          key, withErrorDecoration(key, () => valueSpec.serialize(deserialized[key])),
+          key, withErrorDecoration(key, () => valueSpec.getFieldWithRegExp().serialize(deserialized[key])),
         ])
         .map(([key, value]) => `${key}=${value}`)
         .join(separator),
