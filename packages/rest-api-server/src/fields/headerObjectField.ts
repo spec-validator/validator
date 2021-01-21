@@ -12,22 +12,22 @@ export interface HeaderObjectField<Spec extends StringSpec = StringSpec>
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie
+const SEPARATOR = '; '
+
 export default declareField('@spec-validator/rest-api/fields/headerObjectField', <Spec extends StringSpec>(
-  objectSpec: Spec,
-  separator='; '
+  objectSpec: Spec
 ): HeaderObjectField<Spec> => {
 
   const regex = '.+=.+'
 
   const result = {
     objectSpec,
-    separator,
-    regex: new RegExp(`${regex}(${separator}${regex})*`),
+    regex: new RegExp(`${regex}(${SEPARATOR}${regex})*`),
     validate: (value: any): TypeHint<Spec> => {
       if (typeof value !== 'string') {
         throw 'Not a string'
       }
-      const payload = Object.fromEntries(value.split(separator)
+      const payload = Object.fromEntries(value.split(SEPARATOR)
         .map(it =>it.split(/=(.*)/, 2)))
 
       return Object.fromEntries(Object.entries(objectSpec).map(([key, valueSpec]) => [
@@ -40,7 +40,7 @@ export default declareField('@spec-validator/rest-api/fields/headerObjectField',
           key, withErrorDecoration(key, () => valueSpec.getFieldWithRegExp().serialize(deserialized[key])),
         ])
         .map(([key, value]) => `${key}=${value}`)
-        .join(separator),
+        .join(SEPARATOR),
   } as HeaderObjectField<Spec>
 
   result.getFieldWithRegExp = () => result

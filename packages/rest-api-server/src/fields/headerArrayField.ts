@@ -3,14 +3,14 @@ import { FieldWithStringInputSupport } from '@spec-validator/validator/fields/se
 
 export interface HeaderArrayField<T> extends FieldWithStringInputSupport<T[]> {
   readonly itemField: FieldWithStringInputSupport<T>,
-  readonly separator: string
   readonly regex: RegExp
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language
+const SEPARATOR = ', '
+
 export default declareField('@spec-validator/rest-api/fields/headerArrayField', <T>(
-  itemField: FieldWithStringInputSupport<T>,
-  separator=', '
+  itemField: FieldWithStringInputSupport<T>
 ): HeaderArrayField<T> => {
 
   const fieldWithStringSupport = itemField.getFieldWithRegExp()
@@ -18,20 +18,19 @@ export default declareField('@spec-validator/rest-api/fields/headerArrayField', 
 
   const result = {
     itemField,
-    separator,
-    regex: new RegExp(`${regex}(${separator}${regex})+`),
+    regex: new RegExp(`${regex}(${SEPARATOR}${regex})+`),
     validate: (value: any): T[] => {
       if (typeof value !== 'string') {
         throw 'Not a string'
       }
-      return value.split(separator).map(
+      return value.split(SEPARATOR).map(
         (it, index) => withErrorDecoration(index, () => fieldWithStringSupport.validate(it))
       )
     },
     serialize: (deserialized: T[]): string =>
       deserialized.map(
         (it, index) => withErrorDecoration(index, () => fieldWithStringSupport.serialize(it))
-      ).join(separator),
+      ).join(SEPARATOR),
   } as HeaderArrayField<T>
 
   result.getFieldWithRegExp = () => result
