@@ -1,14 +1,10 @@
-import { Any } from '@spec-validator/utils/util-types'
 import { declareField, TypeHint, withErrorDecoration } from '@spec-validator/validator/core'
 import {
   FieldWithStringInputSupport,
 } from '@spec-validator/validator/fields/segmentField'
+import { StringSpec } from './stringSpec'
 
-export type HeaderSpec<DeserializedType extends Record<string, Any> = Record<string, Any>> = {
-  [P in keyof DeserializedType]: FieldWithStringInputSupport<DeserializedType[P]>
-}
-
-export interface HeaderObjectField<Spec extends HeaderSpec = HeaderSpec>
+export interface HeaderObjectField<Spec extends StringSpec = StringSpec>
   extends FieldWithStringInputSupport<TypeHint<Spec>> {
   readonly objectSpec: Spec,
   readonly separator: string
@@ -16,7 +12,7 @@ export interface HeaderObjectField<Spec extends HeaderSpec = HeaderSpec>
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie
-export default declareField('@spec-validator/rest-api/fields/headerObjectField', <Spec extends HeaderSpec>(
+export default declareField('@spec-validator/rest-api/fields/headerObjectField', <Spec extends StringSpec>(
   objectSpec: Spec,
   separator='; '
 ): HeaderObjectField<Spec> => {
