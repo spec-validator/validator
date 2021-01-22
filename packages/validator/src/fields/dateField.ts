@@ -10,6 +10,7 @@ const DateRegexps = {
 
 export interface DateField extends FieldWithStringInputSupport<Date>, FieldWithRegExp<Date> {
   format: keyof typeof DateRegexps
+  serialize(input: Date): string
 }
 
 export default declareField('@spec-validator/validator/fields/dateField', (

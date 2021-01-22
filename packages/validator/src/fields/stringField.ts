@@ -1,7 +1,9 @@
 import { declareField } from '../core'
 import { FieldWithStringInputSupport, FieldWithRegExp } from './segmentField'
 
-export interface StringField extends FieldWithStringInputSupport<string>, FieldWithRegExp<string> {}
+export interface StringField extends FieldWithStringInputSupport<string>, FieldWithRegExp<string> {
+  serialize(input: string): string
+}
 
 export default declareField('@spec-validator/validator/fields/stringField', (
   regex?: RegExp

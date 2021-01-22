@@ -5,7 +5,7 @@ import { ConstantField } from '@spec-validator/validator/fields/constantField'
 import { UnionField } from '@spec-validator/validator/fields/unionField'
 import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
 
-import { StringSpec } from './fields/stringSpec'
+import { StringObjectSpec } from './fields/stringSpec'
 
 export type StringMapping = Record<string, Any>
 
@@ -19,8 +19,8 @@ export type RequestSpec<
   readonly method: ConstantField<Method>,
   readonly pathParams: typeof $ & Field<PathParams>,
   readonly body?: SpecUnion<Body>,
-  readonly headers?: StringSpec<Headers>,
-  readonly queryParams?: StringSpec<QueryParams>
+  readonly headers?: StringObjectSpec<Headers>,
+  readonly queryParams?: StringObjectSpec<QueryParams>
 }
 
 export type ResponseSpec<
@@ -30,7 +30,7 @@ export type ResponseSpec<
 > = {
   readonly statusCode: ConstantField<StatusCode>,
   readonly body?: SpecUnion<Body>,
-  readonly headers?: StringSpec<Headers>,
+  readonly headers?: StringObjectSpec<Headers>,
 }
 
 type ResponseField<Spec extends ResponseSpec=ResponseSpec > = WithoutOptional<Spec>

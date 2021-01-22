@@ -1,3 +1,4 @@
+/*
 import { Field, SpecUnion, isArraySpec, isFieldSpec, isObjectSpec } from './core'
 import { undefinedField, arrayField, objectField } from './fields'
 
@@ -17,3 +18,4 @@ export const getFieldForSpec = <DeserializedType> (
     return undefinedField()
   }
 }
+*/

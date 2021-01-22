@@ -3,9 +3,9 @@ import {
   FieldWithRegExp,
   FieldWithStringInputSupport,
 } from '@spec-validator/validator/fields/segmentField'
-import { StringSpec } from './stringSpec'
+import { StringObjectSpec } from './stringSpec'
 
-export interface HeaderObjectField<Spec extends StringSpec = StringSpec>
+export interface HeaderObjectField<Spec extends StringObjectSpec = StringObjectSpec>
   extends FieldWithStringInputSupport<TypeHint<Spec>>, FieldWithRegExp<TypeHint<Spec>> {
   readonly objectSpec: Spec,
   readonly separator: string
@@ -16,7 +16,7 @@ export interface HeaderObjectField<Spec extends StringSpec = StringSpec>
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie
 const SEPARATOR = '; '
 
-export default declareField('@spec-validator/rest-api/fields/headerObjectField', <Spec extends StringSpec>(
+export default declareField('@spec-validator/rest-api/fields/headerObjectField', <Spec extends StringObjectSpec>(
   objectSpec: Spec
 ): HeaderObjectField<Spec> => {
 
