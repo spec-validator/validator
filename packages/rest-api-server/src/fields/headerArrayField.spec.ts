@@ -1,28 +1,19 @@
 import { expectType } from '@spec-validator/test-utils/expectType'
 import { TypeHint } from '@spec-validator/validator'
-import { FieldWithRegExp, FieldWithStringInputSupport } from '@spec-validator/validator/fields/segmentField'
+import { booleanField, stringField } from '@spec-validator/validator/fields'
 import { testValidateSpecError, testValidateSpecOk } from '@spec-validator/validator/TestUtils.test'
 
 import arrayField from './headerArrayField'
 
-const sampleField = (): FieldWithStringInputSupport<true> => {
-  const result = {
-    regex: /true/,
-    validate: (it: any): true => {
-      if (it === 'true') {
-        return true
-      }
-      throw 'Boom!'
-    },
-    serialize: (it: true) => it.toString(),
-  } as unknown as FieldWithStringInputSupport<true> & FieldWithRegExp<true>
-  result.getFieldWithRegExp = () => result
-  return result
-}
 
-const field = arrayField(sampleField())
+const field = arrayField(booleanField())
 
 describe('field', () => {
+
+  it('works with urlendcoding', () => {
+    const withStr = arrayField(stringField())
+    testValidateSpecOk(withStr, '%D0%B0%D0%B1%D1%81, %D0%B1%D0%B1', ['абс', 'бб'])
+  })
 
   it('valid', () => {
     testValidateSpecOk(field, 'true', [true])
@@ -33,12 +24,12 @@ describe('field', () => {
   })
 
   it('invalid item', () => {
-    testValidateSpecError(field, 'true, true, false', {'inner': 'Boom!', 'path': [2]})
+    testValidateSpecError(field, 'true, true, 11', {'inner': 'Not a boolean', 'path': [2]})
   })
 })
 
 test('types', () => {
   type Spec = TypeHint<typeof field>
 
-  expectType<Spec, true[]>(true)
+  expectType<Spec, boolean[]>(true)
 })

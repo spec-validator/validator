@@ -5,6 +5,7 @@ import { Any } from '@spec-validator/utils/util-types'
 
 export interface FieldWithRegExp<Type> extends Field<Type> {
   regex: RegExp
+  serialize(input: Type): string
 }
 
 export interface FieldWithStringInputSupport<Type> extends Field<Type> {

@@ -1,4 +1,4 @@
-import HtmlSerialization from './html'
+import { HtmlSerialization } from '.'
 
 const html = new HtmlSerialization()
 

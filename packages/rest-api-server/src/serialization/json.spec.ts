@@ -1,4 +1,4 @@
-import JsonSerialization from './json'
+import { JsonSerialization } from '.'
 
 const json = new JsonSerialization()
 

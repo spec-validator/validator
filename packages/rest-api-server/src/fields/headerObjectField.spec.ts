@@ -1,6 +1,6 @@
 import { headerObjectField } from '.'
 import { expectType } from '@spec-validator/test-utils/expectType'
-import { numberField } from '@spec-validator/validator/fields'
+import { numberField, stringField } from '@spec-validator/validator/fields'
 import { testValidateSpecError, testValidateSpecOk } from '@spec-validator/validator/TestUtils.test'
 import { TypeHint } from '@spec-validator/validator'
 
@@ -10,6 +10,14 @@ const field = headerObjectField({
 })
 
 describe('field', () => {
+
+  it('works with urlendcoding', () => {
+    const withStr = headerObjectField({
+      str: stringField(),
+      str2: stringField(),
+    })
+    testValidateSpecOk(withStr, 'str=%D0%B0%D0%B1%D1%81; str2=%D0%B1%D0%B1', {'str': 'абс', 'str2': 'бб'})
+  })
 
   it('allows valid choices to get throw', () => {
     testValidateSpecOk(field, 'num=42; num2=43', {'num': 42, 'num2': 43})

@@ -1,9 +1,10 @@
 import { declareField, withErrorDecoration } from '@spec-validator/validator/core'
-import { FieldWithStringInputSupport } from '@spec-validator/validator/fields/segmentField'
+import { FieldWithRegExp, FieldWithStringInputSupport } from '@spec-validator/validator/fields/segmentField'
 
-export interface HeaderArrayField<T> extends FieldWithStringInputSupport<T[]> {
+export interface HeaderArrayField<T> extends FieldWithStringInputSupport<T[]>, FieldWithRegExp<T[]>  {
   readonly itemField: FieldWithStringInputSupport<T>,
-  readonly regex: RegExp
+  readonly regex: RegExp,
+  serialize(input: T[]): string
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language
@@ -24,12 +25,12 @@ export default declareField('@spec-validator/rest-api/fields/headerArrayField', 
         throw 'Not a string'
       }
       return value.split(SEPARATOR).map(
-        (it, index) => withErrorDecoration(index, () => fieldWithStringSupport.validate(it))
+        (it, index) => withErrorDecoration(index, () => fieldWithStringSupport.validate(decodeURI(it)))
       )
     },
     serialize: (deserialized: T[]): string =>
       deserialized.map(
-        (it, index) => withErrorDecoration(index, () => fieldWithStringSupport.serialize(it))
+        (it, index) => withErrorDecoration(index, () => encodeURI(fieldWithStringSupport.serialize(it)))
       ).join(SEPARATOR),
   } as HeaderArrayField<T>
 
