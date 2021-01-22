@@ -12,4 +12,5 @@ export type WildcardStringObjectSpec = {
 export type StringArraySpec<DeserializedType extends Any[] = Any[]> = StringSpecUnion<DeserializedType[number]>[]
 
 export type StringSpecUnion<DeserializedType> =
-  StringObjectSpec | StringArraySpec | FieldWithStringInputSupport<DeserializedType> | undefined
+  WildcardStringObjectSpec | StringObjectSpec | StringArraySpec |
+  FieldWithStringInputSupport<DeserializedType> | undefined
