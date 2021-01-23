@@ -1,8 +1,8 @@
 import { declareField, OfType } from '../core'
 import { Json } from '@spec-validator/utils/Json'
-import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
+import { FieldWithRegExp, FieldWithRegExpSupport } from './segmentField'
 
-export interface NumberField extends FieldWithStringInputSupport<number> {
+export interface NumberField extends FieldWithRegExpSupport<number> {
   canBeFloat: boolean
   signed: boolean
 }
@@ -32,8 +32,8 @@ export default declareField('@spec-validator/validator/fields/numberField', ({ c
     serialize,
   } as NumberField & OfType<string>
 
-  result.getFieldWithRegExp = ():
-    Omit<NumberField, 'getFieldWithRegExp'> & FieldWithRegExp<number> & OfType<string> => {
+  result.getStringField = ():
+    Omit<NumberField, 'getStringField'> & FieldWithRegExp<number> & OfType<string> => {
     const parts: string[] = []
     if (signed) {
       parts.push('-?')

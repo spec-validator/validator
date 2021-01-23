@@ -26,7 +26,7 @@ test('types', () => {
 
 describe('field with FieldWithStringInputSupport as inner spec', () => {
 
-  const field = raw.getFieldWithRegExp()
+  const field = raw.getStringField()
 
   it('allows undefined value go through', () => {
     testValidateSpecOk(field, undefined, true, 'true')

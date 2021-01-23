@@ -1,6 +1,6 @@
 import { declareField } from '../core'
 
-import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
+import { FieldWithRegExp, FieldWithRegExpSupport } from './segmentField'
 
 const DateRegexps = {
   'date': /\d{4}-\d{2}-\d{2}/,
@@ -8,7 +8,7 @@ const DateRegexps = {
   'time': /\d{2}:\d{2}:\d{2}(\.\d{3})?Z/,
 }
 
-export interface DateField extends FieldWithStringInputSupport<Date>, FieldWithRegExp<Date> {
+export interface DateField extends FieldWithRegExpSupport<Date>, FieldWithRegExp<Date> {
   format: keyof typeof DateRegexps
   serialize(input: Date): string
 }
@@ -45,7 +45,7 @@ export default declareField('@spec-validator/validator/fields/dateField', (
     },
   } as DateField
 
-  result.getFieldWithRegExp = () => result
+  result.getStringField = () => result
   result.format = format
 
   return result

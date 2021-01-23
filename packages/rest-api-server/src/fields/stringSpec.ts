@@ -1,8 +1,8 @@
 import { Any, Optional } from '@spec-validator/utils/util-types'
-import { FieldWithStringInputSupport } from '@spec-validator/validator/fields/segmentField'
+import { FieldWithRegExpSupport } from '@spec-validator/validator/fields/segmentField'
 
 export type StringObjectSpec<DeserializedType extends Record<string, Any> = Record<string, Any>> = {
-  [P in keyof DeserializedType]: FieldWithStringInputSupport<DeserializedType[P]>
+  [P in keyof DeserializedType]: FieldWithRegExpSupport<DeserializedType[P]>
 }
 
 export type WildcardStringObjectSpec = {
@@ -13,4 +13,4 @@ export type StringArraySpec<DeserializedType extends Any[] = Any[]> = StringSpec
 
 export type StringSpecUnion<DeserializedType> =
   WildcardStringObjectSpec | StringObjectSpec | StringArraySpec |
-  FieldWithStringInputSupport<DeserializedType> | undefined
+  FieldWithRegExpSupport<DeserializedType> | undefined

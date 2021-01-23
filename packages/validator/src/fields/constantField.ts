@@ -1,9 +1,9 @@
 import { Primitive } from '@spec-validator/utils/Json'
 import { escapeRegex } from '@spec-validator/utils/utils'
 import { declareField } from '../core'
-import { FieldWithRegExp, FieldWithStringInputSupport } from './segmentField'
+import { FieldWithRegExp, FieldWithRegExpSupport } from './segmentField'
 
-export interface ConstantField<Constant extends Primitive> extends FieldWithStringInputSupport<Constant> {
+export interface ConstantField<Constant extends Primitive> extends FieldWithRegExpSupport<Constant> {
   readonly constant: Constant
 }
 
@@ -22,7 +22,7 @@ export default declareField('@spec-validator/validator/fields/constantField', <C
     },
     serialize: () => constant,
   } as unknown as ConstantField<Constant> & FieldWithRegExp<Constant>
-  result.getFieldWithRegExp = () => result
+  result.getStringField = () => result
 
   return result
 })

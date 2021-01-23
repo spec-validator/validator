@@ -4,7 +4,7 @@ exports[`route function returns a proper route object 1`] = `
 Object {
   "headers": Object {
     "headerKey": Object {
-      "getFieldWithRegExp": [Function],
+      "getStringField": [Function],
       "regex": /\\.\\*/,
       "serialize": [Function],
       "type": "@spec-validator/validator/fields/stringField",
@@ -13,7 +13,7 @@ Object {
   },
   "method": Object {
     "constant": "GET",
-    "getFieldWithRegExp": [Function],
+    "getStringField": [Function],
     "regexp": "GET",
     "serialize": [Function],
     "type": "@spec-validator/validator/fields/constantField",
@@ -21,7 +21,7 @@ Object {
   },
   "pathParams": SegmentField {
     "field": Object {
-      "getFieldWithRegExp": [Function],
+      "getStringField": [Function],
       "regex": /\\.\\*/,
       "serialize": [Function],
       "type": "@spec-validator/validator/fields/stringField",
@@ -48,7 +48,7 @@ Object {
     Object {
       "body": Object {
         "canBeFloat": false,
-        "getFieldWithRegExp": [Function],
+        "getStringField": [Function],
         "serialize": [Function],
         "signed": false,
         "type": "@spec-validator/validator/fields/numberField",
@@ -56,7 +56,7 @@ Object {
       },
       "statusCode": Object {
         "constant": 201,
-        "getFieldWithRegExp": [Function],
+        "getStringField": [Function],
         "regexp": "201",
         "serialize": [Function],
         "type": "@spec-validator/validator/fields/constantField",
@@ -69,14 +69,14 @@ Object {
           "one",
           "two",
         ],
-        "getFieldWithRegExp": [Function],
+        "getStringField": [Function],
         "serialize": [Function],
         "type": "@spec-validator/validator/fields/choiceField",
         "validate": [Function],
       },
       "headers": Object {
         "headerKey": Object {
-          "getFieldWithRegExp": [Function],
+          "getStringField": [Function],
           "regex": /\\.\\*/,
           "serialize": [Function],
           "type": "@spec-validator/validator/fields/stringField",
@@ -85,7 +85,7 @@ Object {
       },
       "statusCode": Object {
         "constant": 202,
-        "getFieldWithRegExp": [Function],
+        "getStringField": [Function],
         "regexp": "202",
         "serialize": [Function],
         "type": "@spec-validator/validator/fields/constantField",

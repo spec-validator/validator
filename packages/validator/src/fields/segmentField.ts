@@ -2,20 +2,19 @@ import objectField from './objectField'
 import { Field, isFieldSpec } from '../core'
 import { Json } from '@spec-validator/utils/Json'
 import { Any } from '@spec-validator/utils/util-types'
+import { StringBasedField, WithStringSupport } from '../withStringSerialization'
 
-export interface FieldWithRegExp<Type> extends Field<Type> {
+export interface FieldWithRegExp<Type> extends StringBasedField<Type> {
   regex: RegExp
-  serialize(input: Type): string
 }
 
-export interface FieldWithStringInputSupport<Type> extends Field<Type> {
-  getFieldWithRegExp(): FieldWithRegExp<Type>
+export interface FieldWithRegExpSupport<Type> extends Field<Type>, WithStringSupport<Type, FieldWithRegExp<Type>> {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const isFieldWithStringInputSupport = <DeserializedType>(obj: any):
-  obj is FieldWithStringInputSupport<DeserializedType> =>
-    isFieldSpec(obj) && typeof (obj as any).getFieldWithRegExp === 'function'
+  obj is FieldWithRegExpSupport<DeserializedType> =>
+    isFieldSpec(obj) && typeof (obj as any).getStringField === 'function'
 
 class SegmentField<
   DeserializedType = undefined
@@ -31,15 +30,15 @@ class SegmentField<
 
   // Here we actually do want to have a constructor parameter as 'any' since it is not going
   // to be used outside of this file
-  constructor(parent?: SegmentField<unknown>, key?: string, field?: FieldWithStringInputSupport<any>) {
+  constructor(parent?: SegmentField<unknown>, key?: string, field?: FieldWithRegExpSupport<any>) {
     this.parent = parent
     this.key = key || ''
-    this.field = field?.getFieldWithRegExp()
+    this.field = field?.getStringField()
   }
 
   _<Key extends string, ExtraDeserializedType extends Any = undefined>(
     key: Key,
-    field?: FieldWithStringInputSupport<ExtraDeserializedType>
+    field?: FieldWithRegExpSupport<ExtraDeserializedType>
   ): SegmentField<[ExtraDeserializedType] extends [undefined]
     ? DeserializedType : [DeserializedType] extends [undefined] ?
   {

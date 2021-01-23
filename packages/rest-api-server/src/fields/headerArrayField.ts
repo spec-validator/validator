@@ -1,8 +1,8 @@
 import { declareField, withErrorDecoration } from '@spec-validator/validator/core'
-import { FieldWithRegExp, FieldWithStringInputSupport } from '@spec-validator/validator/fields/segmentField'
+import { FieldWithRegExp, FieldWithRegExpSupport } from '@spec-validator/validator/fields/segmentField'
 
-export interface HeaderArrayField<T> extends FieldWithStringInputSupport<T[]>, FieldWithRegExp<T[]>  {
-  readonly itemField: FieldWithStringInputSupport<T>,
+export interface HeaderArrayField<T> extends FieldWithRegExpSupport<T[]>, FieldWithRegExp<T[]>  {
+  readonly itemField: FieldWithRegExpSupport<T>,
   readonly regex: RegExp,
   serialize(input: T[]): string
 }
@@ -11,10 +11,10 @@ export interface HeaderArrayField<T> extends FieldWithStringInputSupport<T[]>, F
 const SEPARATOR = ', '
 
 export default declareField('@spec-validator/rest-api/fields/headerArrayField', <T>(
-  itemField: FieldWithStringInputSupport<T>
+  itemField: FieldWithRegExpSupport<T>
 ): HeaderArrayField<T> => {
 
-  const fieldWithStringSupport = itemField.getFieldWithRegExp()
+  const fieldWithStringSupport = itemField.getStringField()
   const regex = fieldWithStringSupport.regex.source
 
   const result = {
@@ -34,7 +34,7 @@ export default declareField('@spec-validator/rest-api/fields/headerArrayField', 
       ).join(SEPARATOR),
   } as HeaderArrayField<T>
 
-  result.getFieldWithRegExp = () => result
+  result.getStringField = () => result
 
   return result
 })

@@ -1,6 +1,6 @@
 import { Field, SpecUnion } from './core'
 import {
-  FieldWithRegExp, FieldWithStringInputSupport, isFieldWithStringInputSupport,
+  FieldWithRegExp, FieldWithRegExpSupport, isFieldWithStringInputSupport,
 } from './fields/segmentField'
 import { getFieldForSpec } from './interface'
 
@@ -8,8 +8,8 @@ export type Decor<
   FieldIn extends Field<unknown>,
   SpecIn extends SpecUnion<unknown>,
   T = ReturnType<FieldIn['validate']>
-> = SpecIn extends FieldWithStringInputSupport<T> ? FieldIn & {
-  getFieldWithRegExp(): FieldWithRegExp<T>
+> = SpecIn extends FieldWithRegExpSupport<T> ? FieldIn & {
+  getStringField(): FieldWithRegExp<T>
 } : FieldIn
 
 /**
@@ -28,10 +28,10 @@ export default <
   const raw = getRawField(innerField)
 
   if (isFieldWithStringInputSupport(innerField)) {
-    const withRegex = innerField.getFieldWithRegExp() as any
+    const withRegex = innerField.getStringField() as any
     return {
       ...raw,
-      getFieldWithRegExp: () => ({
+      getStringField: () => ({
         ...getRawField(withRegex),
         regex: withRegex.regex,
       }),

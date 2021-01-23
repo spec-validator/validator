@@ -1,6 +1,6 @@
 import { Any } from '@spec-validator/utils/util-types'
-import { FieldWithStringInputSupport } from '@spec-validator/validator/fields/segmentField'
+import { FieldWithRegExpSupport } from '@spec-validator/validator/fields/segmentField'
 
 export type HeadersSpec<DeserializedType extends Record<string, Any> = Record<string, Any>> = {
-  [P in keyof DeserializedType]: FieldWithStringInputSupport<DeserializedType[P]>
+  [P in keyof DeserializedType]: FieldWithRegExpSupport<DeserializedType[P]>
 }
