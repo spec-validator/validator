@@ -1,6 +1,6 @@
-import { declareField, OfType } from '../core'
+import { declareField, OfType, StringBasedField } from '../core'
 import { Json } from '@spec-validator/utils/Json'
-import { FieldWithRegExp, FieldWithRegExpSupport } from './segmentField'
+import { FieldWithRegExpSupport } from './segmentField'
 
 export type BooleanField = FieldWithRegExpSupport<boolean>
 
@@ -18,8 +18,7 @@ export default declareField('@spec-validator/validator/fields/booleanField', ():
     serialize,
   } as BooleanField & OfType<string>
 
-  result.getStringField = ():
-    Omit<BooleanField, 'getStringField'> & FieldWithRegExp<boolean> & OfType<string> => ({
+  result.getStringField = (): StringBasedField<boolean, BooleanField> & OfType<string> => ({
     type: result.type,
     validate: (value: string): boolean => {
       if (value === 'true' || value === '1') {

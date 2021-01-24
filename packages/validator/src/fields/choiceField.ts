@@ -1,7 +1,8 @@
 import { escapeRegex } from '@spec-validator/utils/utils'
 import { Primitive, Json } from '@spec-validator/utils/Json'
 import { declareField, OfType } from '../core'
-import { FieldWithRegExp, FieldWithRegExpSupport } from './segmentField'
+import { FieldWithRegExpSupport } from './segmentField'
+import { StringBasedField } from '../withStringSerialization'
 
 export interface ChoiceField<Choice extends Primitive> extends FieldWithRegExpSupport<Choice> {
   choices: readonly Choice[]
@@ -26,8 +27,7 @@ export default declareField('@spec-validator/validator/fields/choiceField', <Cho
     serialize,
   } as ChoiceField<Choice> & OfType<string>
 
-  result.getStringField = ():
-    Omit<ChoiceField<Choice>, 'getStringField'> & FieldWithRegExp<Choice> & OfType<string> => {
+  result.getStringField = (): StringBasedField<Choice, ChoiceField<Choice>> & OfType<string> => {
 
     const fullChoiceMap: Map<any, Primitive> = new Map<any, Primitive>()
     choices.forEach(it => {

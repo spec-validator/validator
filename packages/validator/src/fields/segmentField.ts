@@ -1,14 +1,10 @@
 import objectField from './objectField'
-import { Field, isFieldSpec } from '../core'
+import { Field, isFieldSpec, FieldWithStringSupport } from '../core'
 import { Json } from '@spec-validator/utils/Json'
 import { Any } from '@spec-validator/utils/util-types'
-import { StringBasedField, WithStringSupport } from '../withStringSerialization'
 
-export interface FieldWithRegExp<Type> extends StringBasedField<Type> {
+export type FieldWithRegExpSupport<Type> = FieldWithStringSupport<Type> & {
   regex: RegExp
-}
-
-export interface FieldWithRegExpSupport<Type> extends Field<Type>, WithStringSupport<Type, FieldWithRegExp<Type>> {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -26,7 +22,7 @@ class SegmentField<
   private regex?: string
 
   readonly key: string
-  readonly field?: FieldWithRegExp<Any>
+  readonly field?: Omit<FieldWithRegExpSupport<Any>, 'getStringField'>
 
   // Here we actually do want to have a constructor parameter as 'any' since it is not going
   // to be used outside of this file

@@ -70,6 +70,24 @@ export const isArraySpec = (obj: any): obj is ArraySpec =>
 export const isValidChild = (obj: any) =>
   isFieldSpec(obj) || isArraySpec(obj) || isObjectSpec(obj)
 
+export type StringBasedField<
+  DeserializedType,
+  Base extends Field<DeserializedType>,
+> = Omit<Base, 'getStringField'> & {
+  serialize(deserialized: DeserializedType): string
+}
+
+export interface FieldWithStringSupport<
+  DeserializedType,
+> extends Field<DeserializedType> {
+  getStringField(): StringBasedField<DeserializedType, this>
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const isFieldWithStringSupport = <DeserializedType>(obj: any):
+  obj is FieldWithStringSupport<DeserializedType> =>
+    isFieldSpec(obj) && typeof (obj as any).getStringField === 'function'
+
 export const declareField = <
   Type extends string,
   Params extends any[],
@@ -78,12 +96,19 @@ export const declareField = <
 > (
     type: Type,
     constructor: Constructor
-  ): (Constructor) & OfType<Type>  => {
+  ): Constructor & OfType<Type>  => {
   const wrapper = (...params: any[]) => {
     const result = (constructor as any)(...params)
     result.type = type
+    if (isFieldWithStringSupport(result)) {
+      result.getStringField = () => {
+        const temp = result.getStringField() as any
+        temp.type = type
+        return temp
+      }
+    }
     return result
   }
   wrapper.type = type
-  return wrapper as (Constructor) & OfType<Type>
+  return wrapper as Constructor & OfType<Type>
 }

@@ -1,7 +1,7 @@
 import { declareField } from '../core'
-import { FieldWithRegExpSupport, FieldWithRegExp } from './segmentField'
+import { FieldWithRegExpSupport } from './segmentField'
 
-export interface StringField extends FieldWithRegExpSupport<string>, FieldWithRegExp<string> {
+export interface StringField extends FieldWithRegExpSupport<string> {
   serialize(input: string): string
 }
 
