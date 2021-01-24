@@ -16,9 +16,10 @@ export type Decor<
  * Apply decoration to the fields respecting their string input acceptance
  */
 export default <
-  FieldIn extends Field<unknown>,
-  SpecIn extends SpecUnion<unknown>,
-  Out extends Field<unknown>
+  T,
+  FieldIn extends Field<T>,
+  SpecIn extends SpecUnion<T>,
+  Out extends Field<T>
 >(
   innerSpec: SpecIn,
   getRawField: (fieldForSpec: FieldIn) => Out
