@@ -5,8 +5,41 @@ import {
 import { expectType } from '@spec-validator/test-utils/expectType'
 
 import { Route, route } from './route'
+import { headerObjectField } from './fields'
 
 describe('Route', () => {
+
+  it('works with cookies', () => {
+    const reqSpec = {
+      method: constantField('GET'),
+      headers: {
+        cookies: headerObjectField({
+          cookie1: stringField(),
+        }),
+      },
+      pathParams: $._('pathKey', stringField()),
+    }
+
+    const respSpec = {
+      statusCode: constantField(201),
+    }
+
+    type Decor = Route<typeof reqSpec, typeof respSpec>
+
+    expectType<Decor, {
+      request: typeof reqSpec,
+      response: typeof respSpec,
+      handler: (request: {
+        method: 'GET',
+        headers: { cookies: {
+          cookie1: string
+        } },
+        pathParams: { pathKey: string },
+      }) => Promise<{
+        statusCode: 201,
+      }>
+        }>(true)
+  })
 
   it('always contains the fields that are defined', () => {
     const reqSpec = {

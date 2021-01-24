@@ -1,12 +1,9 @@
-import { declareField, TypeHint, withErrorDecoration } from '@spec-validator/validator/core'
-import {
-  FieldWithRegExp,
-  FieldWithRegExpSupport,
-} from '@spec-validator/validator/fields/segmentField'
+import { declareField, FieldWithStringSupport, TypeHint, withErrorDecoration } from '@spec-validator/validator/core'
+
 import { StringObjectSpec } from './stringSpec'
 
 export interface HeaderObjectField<Spec extends StringObjectSpec = StringObjectSpec>
-  extends FieldWithRegExpSupport<TypeHint<Spec>>, FieldWithRegExp<TypeHint<Spec>> {
+extends FieldWithStringSupport<TypeHint<Spec>> {
   readonly objectSpec: Spec,
   readonly separator: string
   readonly regex: RegExp
@@ -41,7 +38,9 @@ export default declareField('@spec-validator/rest-api/fields/headerObjectField',
     serialize: (deserialized: TypeHint<Spec>): string =>
       Object.entries(objectSpec)
         .map(([key, valueSpec]) => [
-          key, withErrorDecoration(key, () => encodeURI(valueSpec.getStringField().serialize(deserialized[key]))),
+          key, withErrorDecoration(key, () => encodeURI(
+            valueSpec.getStringField().serialize(deserialized[key])
+          )),
         ])
         .map(([key, value]) => `${key}=${value}`)
         .join(SEPARATOR),

@@ -158,3 +158,46 @@ The following call will produce a 400 (validation) error:
 curl -X POST "http://localhost:8080/items" -H  "Content-Type: application/json" \
   -d "{\"title\":true,\"description\":\"string\"}"
 ```
+
+## Cheat sheet
+
+Response with a cookie:
+
+```ts
+const withCookies = _.GET($._('/with-cookies')).spec({
+  response: {
+    body: [itemSpec],
+    headers: {
+      cookies: headerObjectField({
+        cookieStr: stringField(),
+        cookieNum: numberField()
+      })
+    }
+  },
+}).handler(async () => ({
+  body: [
+    {
+      title: 'Item N',
+      description: 'Description',
+    },
+  ],
+  headers: {
+    cookies: {
+      cookieStr: 'foo',
+      cookieNum: 42
+    }
+  }
+}))
+```
+
+Request with authorization:
+
+```ts
+const withCookies = _.POST($._('/with-cookies')).spec({
+  request: {
+    headers: {
+      authorization: $._('type', stringField())._(' ')._('credentials', stringField())
+    }
+  }
+}).handler(async () => undefined)
+```

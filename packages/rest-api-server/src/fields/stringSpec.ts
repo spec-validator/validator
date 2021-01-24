@@ -1,5 +1,5 @@
 import { Any, Optional } from '@spec-validator/utils/util-types'
-import { FieldWithStringSupport } from '@spec-validator/validator/withStringSerialization'
+import { FieldWithStringSupport } from '@spec-validator/validator/core'
 
 export type StringObjectSpec<DeserializedType extends Record<string, Any> = Record<string, Any>> = {
   [P in keyof DeserializedType]: FieldWithStringSupport<DeserializedType[P]>

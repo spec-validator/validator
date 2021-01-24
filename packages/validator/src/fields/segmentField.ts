@@ -1,6 +1,5 @@
 import objectField from './objectField'
-import { Field, isFieldSpec, FieldWithStringSupport } from '../core'
-import { Json } from '@spec-validator/utils/Json'
+import { Field, isFieldSpec, FieldWithStringSupport, StringBasedField } from '../core'
 import { Any } from '@spec-validator/utils/util-types'
 
 export type FieldWithRegExpSupport<Type> = FieldWithStringSupport<Type> & {
@@ -14,12 +13,12 @@ export const isFieldWithStringInputSupport = <DeserializedType>(obj: any):
 
 class SegmentField<
   DeserializedType = undefined
-> implements Field<DeserializedType> {
+> implements FieldWithRegExpSupport<DeserializedType> {
 
   type = '@spec-validator/validator/fields/segmentField'
 
   private parent?: SegmentField<unknown>
-  private regex?: string
+  private _regex?: string
 
   readonly key: string
   readonly field?: Omit<FieldWithRegExpSupport<Any>, 'getStringField'>
@@ -30,6 +29,10 @@ class SegmentField<
     this.parent = parent
     this.key = key || ''
     this.field = field?.getStringField()
+  }
+
+  getStringField(): StringBasedField<DeserializedType, this> {
+    return this
   }
 
   _<Key extends string, ExtraDeserializedType extends Any = undefined>(
@@ -64,14 +67,18 @@ class SegmentField<
   }
 
   private getRegex(): string {
-    if (!this.regex) {
-      this.regex = `^${this.getSegments()
+    if (!this._regex) {
+      this._regex = `^${this.getSegments()
         .map(segment => segment.field && segment.key
           ? `(?<${segment.key}>${segment.field.regex.source})`
           : (segment.key || '')
         ).join('')}$`
     }
-    return this.regex
+    return this._regex
+  }
+
+  get regex(): RegExp {
+    return new RegExp(this.getRegex())
   }
 
   getObjectSpec(): Record<string, Field<unknown>> | undefined {
@@ -96,7 +103,7 @@ class SegmentField<
     return objectField(spec).validate(matches)
   }
 
-  serialize(deserialized: DeserializedType): Json {
+  serialize(deserialized: DeserializedType): string {
     const result: string[] = []
     this.getSegments().forEach((it: SegmentField<unknown>) => {
       if (it.field && it.key) {

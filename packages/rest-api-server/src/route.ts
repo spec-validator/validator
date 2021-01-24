@@ -6,27 +6,42 @@ import { UnionField } from '@spec-validator/validator/fields/unionField'
 import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
 
 import { StringObjectSpec } from './fields/stringSpec'
+import { HeaderObjectField } from './fields/headerObjectField'
 
 export type StringMapping = Record<string, Any>
+
+// TODO: expand predefined headers based on
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
+type PredefinedHeaders = {
+  cookies: Record<string, Any>
+}
+
+type HeadersObject = PredefinedHeaders & StringMapping
+
+type HeadersSpec<Headers extends HeadersObject=HeadersObject> = Partial<{
+  [P in keyof PredefinedHeaders]: Headers[P] extends undefined
+    ? undefined
+    : HeaderObjectField<StringObjectSpec<Headers[P]>>
+}> & StringObjectSpec<Omit<Headers, keyof PredefinedHeaders>>
 
 export type RequestSpec<
   Method extends string = string,
   PathParams extends StringMapping | unknown = StringMapping | unknown,
   Body extends Any = Any,
   QueryParams extends StringMapping = StringMapping,
-  Headers extends StringMapping = StringMapping,
+  Headers extends HeadersObject = HeadersObject,
 > = {
   readonly method: ConstantField<Method>,
   readonly pathParams: typeof $ & Field<PathParams>,
   readonly body?: SpecUnion<Body>,
-  readonly headers?: StringObjectSpec<Headers>,
+  readonly headers?: HeadersSpec<Headers>,
   readonly queryParams?: StringObjectSpec<QueryParams>
 }
 
 export type ResponseSpec<
   StatusCode extends number = number,
   Body extends Any = Any,
-  Headers extends StringMapping = StringMapping,
+  Headers extends HeadersObject = HeadersObject,
 > = {
   readonly statusCode: ConstantField<StatusCode>,
   readonly body?: SpecUnion<Body>,

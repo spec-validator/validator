@@ -1,7 +1,7 @@
 import { declareField, withErrorDecoration } from '@spec-validator/validator/core'
-import { FieldWithRegExp, FieldWithRegExpSupport } from '@spec-validator/validator/fields/segmentField'
+import { FieldWithRegExpSupport } from '@spec-validator/validator/fields/segmentField'
 
-export interface HeaderArrayField<T> extends FieldWithRegExpSupport<T[]>, FieldWithRegExp<T[]>  {
+export interface HeaderArrayField<T> extends FieldWithRegExpSupport<T[]> {
   readonly itemField: FieldWithRegExpSupport<T>,
   readonly regex: RegExp,
   serialize(input: T[]): string
