@@ -1,6 +1,6 @@
-import { Field, SpecUnion } from './core'
+import { Field, SpecUnion, StringBasedField } from './core'
 import {
-  FieldWithRegExp, FieldWithRegExpSupport, isFieldWithStringInputSupport,
+  FieldWithRegExpSupport, isFieldWithStringInputSupport,
 } from './fields/segmentField'
 import { getFieldForSpec } from './interface'
 
@@ -9,7 +9,7 @@ export type Decor<
   SpecIn extends SpecUnion<unknown>,
   T = ReturnType<FieldIn['validate']>
 > = SpecIn extends FieldWithRegExpSupport<T> ? FieldIn & {
-  getStringField(): FieldWithRegExp<T>
+  getStringField(): StringBasedField<T, SpecIn>
 } : FieldIn
 
 /**

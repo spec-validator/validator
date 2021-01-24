@@ -14,7 +14,7 @@ Object {
   "method": Object {
     "constant": "GET",
     "getStringField": [Function],
-    "regexp": "GET",
+    "regex": /GET/,
     "serialize": [Function],
     "type": "@spec-validator/validator/fields/constantField",
     "validate": [Function],
@@ -57,7 +57,7 @@ Object {
       "statusCode": Object {
         "constant": 201,
         "getStringField": [Function],
-        "regexp": "201",
+        "regex": /201/,
         "serialize": [Function],
         "type": "@spec-validator/validator/fields/constantField",
         "validate": [Function],
@@ -86,7 +86,7 @@ Object {
       "statusCode": Object {
         "constant": 202,
         "getStringField": [Function],
-        "regexp": "202",
+        "regex": /202/,
         "serialize": [Function],
         "type": "@spec-validator/validator/fields/constantField",
         "validate": [Function],

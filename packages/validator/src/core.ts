@@ -101,10 +101,10 @@ export const declareField = <
     const result = (constructor as any)(...params)
     result.type = type
     if (isFieldWithStringSupport(result)) {
+      const oldStringField = result.getStringField() as any
       result.getStringField = () => {
-        const temp = result.getStringField() as any
-        temp.type = type
-        return temp
+        oldStringField.type = type
+        return oldStringField
       }
     }
     return result

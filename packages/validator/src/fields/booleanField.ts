@@ -20,7 +20,7 @@ export default declareField('@spec-validator/validator/fields/booleanField', ():
 
   result.getStringField = (): StringBasedField<boolean, BooleanField> & OfType<string> => ({
     type: result.type,
-    validate: (value: string): boolean => {
+    validate: (value: any): boolean => {
       if (value === 'true' || value === '1') {
         return true
       }
