@@ -251,7 +251,7 @@ case of a missing field.
 ```ts
 import { withDefault } from '@spec-validator/validator/fields'
 
-const defaultValue = withDefault(numberField(), 42)
+const defaultValue = withDefault(numberField(), 42 as number)
 
 expectType<TypeHint<typeof defaultValue>, number>(true)
 

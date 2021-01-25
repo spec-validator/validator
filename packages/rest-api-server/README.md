@@ -161,9 +161,11 @@ curl -X POST "http://localhost:8080/items" -H  "Content-Type: application/json" 
 
 ## Cheat sheet
 
-Response with a cookie:
+Response with cookies:
 
 ```ts
+import { headerObjectField } from '@spec-validator/rest-api-server/fields'
+
 const withCookies = _.GET($._('/with-cookies')).spec({
   response: {
     body: [itemSpec],
@@ -188,16 +190,21 @@ const withCookies = _.GET($._('/with-cookies')).spec({
     }
   }
 }))
+
+expectType<Route, typeof withCookies>(true)
 ```
 
 Request with authorization:
 
 ```ts
-const withCookies = _.POST($._('/with-cookies')).spec({
+const withAuthorization = _.POST($._('/with-cookies')).spec({
   request: {
     headers: {
       authorization: $._('type', stringField())._(' ')._('credentials', stringField())
     }
   }
 }).handler(async () => undefined)
+
+
+expectType<Route, typeof withAuthorization>(true)
 ```

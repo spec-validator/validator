@@ -9,35 +9,24 @@ import { StringObjectSpec } from './fields/stringSpec'
 
 export type StringMapping = Record<string, Any>
 
-// TODO: expand predefined headers based on
-// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
-type PredefinedHeaders = {
-  cookies?: StringObjectSpec<Record<string, Any>>
-}
-
-type HeadersObject = PredefinedHeaders & StringMapping
-
-type HeadersSpec<Headers extends HeadersObject=HeadersObject> = PredefinedHeaders &
-  StringObjectSpec<Omit<Headers, keyof PredefinedHeaders>>
-
 export type RequestSpec<
   Method extends string = string,
   PathParams extends StringMapping | unknown = StringMapping | unknown,
   Body extends Any = Any,
   QueryParams extends StringMapping = StringMapping,
-  Headers extends HeadersObject = HeadersObject,
+  Headers extends StringMapping = StringMapping,
 > = {
   readonly method: ConstantField<Method>,
   readonly pathParams: typeof $ & Field<PathParams>,
   readonly body?: SpecUnion<Body>,
-  readonly headers?: HeadersSpec<Headers>,
+  readonly headers?: StringObjectSpec<Headers>,
   readonly queryParams?: StringObjectSpec<QueryParams>
 }
 
 export type ResponseSpec<
   StatusCode extends number = number,
   Body extends Any = Any,
-  Headers extends HeadersObject = HeadersObject,
+  Headers extends StringMapping = StringMapping,
 > = {
   readonly statusCode: ConstantField<StatusCode>,
   readonly body?: SpecUnion<Body>,
