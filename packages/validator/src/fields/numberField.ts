@@ -1,6 +1,6 @@
-import { declareField, OfType } from '../core'
+import { declareField } from '../core'
 import { Json } from '@spec-validator/utils/Json'
-import { FieldWithRegExp, FieldWithRegExpSupport } from './segmentField'
+import { FieldWithRegExpSupport } from './segmentField'
 
 export interface NumberField extends FieldWithRegExpSupport<number> {
   canBeFloat: boolean
@@ -11,47 +11,41 @@ export default declareField('@spec-validator/validator/fields/numberField', ({ c
   readonly canBeFloat?: boolean,
   readonly signed?: boolean
 } = {}): NumberField => {
-  const validate = (value: any): number => {
-    if (typeof value !== 'number') {
-      throw 'Not a number'
-    }
-    if (!canBeFloat && value !== Math.floor(value)) {
-      throw 'Not an int'
-    }
-    if (!signed && value < 0) {
-      throw 'Must be unsigned'
-    }
-    return value
+  const parts: string[] = []
+  if (signed) {
+    parts.push('-?')
   }
-  const serialize = (deserialized: number): Json => deserialized
+  parts.push('\\d+')
+  if (canBeFloat) {
+    parts.push('(\\.\\d+)?')
+  }
 
-  const result = {
+  const base = {
     canBeFloat: canBeFloat || false,
     signed: signed || false,
-    validate,
-    serialize,
-  } as NumberField & OfType<string>
-
-  result.getStringField = ():
-    Omit<NumberField, 'getStringField'> & FieldWithRegExp<number> & OfType<string> => {
-    const parts: string[] = []
-    if (signed) {
-      parts.push('-?')
-    }
-    parts.push('\\d+')
-    if (canBeFloat) {
-      parts.push('(\\.\\d+)?')
-    }
-
-    return {
-      canBeFloat: canBeFloat || false,
-      signed: signed || false,
-      type: result.type,
-      validate: (value: any) => validate(Number.parseFloat(value)),
-      serialize: (value: number) => value.toString(),
-      regex: RegExp(parts.join('')),
-    }
+    regex: RegExp(parts.join('')),
+    validate: (value: any): number => {
+      if (typeof value !== 'number') {
+        throw 'Not a number'
+      }
+      if (!canBeFloat && value !== Math.floor(value)) {
+        throw 'Not an int'
+      }
+      if (!signed && value < 0) {
+        throw 'Must be unsigned'
+      }
+      return value
+    },
+    serialize: (deserialized: number): Json => deserialized,
   }
 
-  return result
+  return {
+    ...base,
+    getStringField: () => ({
+      ...base,
+      validate: (value: any) => base.validate(Number.parseFloat(value)),
+      serialize: (value: number) => value.toString(),
+    }),
+  }
+
 })

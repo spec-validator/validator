@@ -6,23 +6,19 @@ import { UnionField } from '@spec-validator/validator/fields/unionField'
 import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
 
 import { StringObjectSpec } from './fields/stringSpec'
-import { HeaderObjectField } from './fields/headerObjectField'
 
 export type StringMapping = Record<string, Any>
 
 // TODO: expand predefined headers based on
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
 type PredefinedHeaders = {
-  cookies: Record<string, Any>
+  cookies?: StringObjectSpec<Record<string, Any>>
 }
 
 type HeadersObject = PredefinedHeaders & StringMapping
 
-type HeadersSpec<Headers extends HeadersObject=HeadersObject> = Partial<{
-  [P in keyof PredefinedHeaders]: Headers[P] extends undefined
-    ? undefined
-    : HeaderObjectField<StringObjectSpec<Headers[P]>>
-}> & StringObjectSpec<Omit<Headers, keyof PredefinedHeaders>>
+type HeadersSpec<Headers extends HeadersObject=HeadersObject> = PredefinedHeaders &
+  StringObjectSpec<Omit<Headers, keyof PredefinedHeaders>>
 
 export type RequestSpec<
   Method extends string = string,

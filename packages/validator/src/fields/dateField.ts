@@ -1,6 +1,6 @@
 import { declareField } from '../core'
 
-import { FieldWithRegExp, FieldWithRegExpSupport } from './segmentField'
+import { FieldWithRegExpSupport } from './segmentField'
 
 const DateRegexps = {
   'date': /\d{4}-\d{2}-\d{2}/,
@@ -8,7 +8,7 @@ const DateRegexps = {
   'time': /\d{2}:\d{2}:\d{2}(\.\d{3})?Z/,
 }
 
-export interface DateField extends FieldWithRegExpSupport<Date>, FieldWithRegExp<Date> {
+export interface DateField extends FieldWithRegExpSupport<Date> {
   format: keyof typeof DateRegexps
   serialize(input: Date): string
 }

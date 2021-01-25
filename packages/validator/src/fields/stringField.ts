@@ -8,7 +8,7 @@ export interface StringField extends FieldWithRegExpSupport<string> {
 export default declareField('@spec-validator/validator/fields/stringField', (
   regex?: RegExp
 ): StringField => {
-  const result = {
+  const base = {
     regex: regex || /.*/,
     validate: (value: any): string => {
       if (typeof value !== 'string') {
@@ -23,9 +23,10 @@ export default declareField('@spec-validator/validator/fields/stringField', (
       return value
     },
     serialize: (deserialized: string) => deserialized,
-  } as StringField
+  }
 
-  result.getStringField = () => result
-
-  return result
+  return {
+    ...base,
+    getStringField: () => base,
+  }
 })

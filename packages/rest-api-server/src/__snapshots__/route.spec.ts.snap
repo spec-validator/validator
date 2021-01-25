@@ -21,7 +21,6 @@ Object {
   },
   "pathParams": SegmentField {
     "field": Object {
-      "getStringField": [Function],
       "regex": /\\.\\*/,
       "serialize": [Function],
       "type": "@spec-validator/validator/fields/stringField",
@@ -49,6 +48,7 @@ Object {
       "body": Object {
         "canBeFloat": false,
         "getStringField": [Function],
+        "regex": /\\\\d\\+/,
         "serialize": [Function],
         "signed": false,
         "type": "@spec-validator/validator/fields/numberField",
@@ -70,6 +70,7 @@ Object {
           "two",
         ],
         "getStringField": [Function],
+        "regex": /0\\|1/,
         "serialize": [Function],
         "type": "@spec-validator/validator/fields/choiceField",
         "validate": [Function],
