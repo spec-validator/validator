@@ -6,7 +6,7 @@ import { getFieldForSpec } from './interface'
 
 export type Decor<
   FieldIn extends Field<unknown>,
-  SpecIn extends SpecUnion<unknown>,
+  SpecIn extends SpecUnion,
   T = ReturnType<FieldIn['validate']>
 > = SpecIn extends FieldWithRegExpSupport<T> ? FieldIn & {
   getStringField(): StringBasedField<T, SpecIn>
@@ -18,7 +18,7 @@ export type Decor<
 export default <
   T,
   FieldIn extends Field<T>,
-  SpecIn extends SpecUnion<T>,
+  SpecIn extends SpecUnion,
   Out extends Field<T>
 >(
   innerSpec: SpecIn,

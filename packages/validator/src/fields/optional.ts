@@ -4,16 +4,16 @@ import { Json } from '@spec-validator/utils/Json'
 import withDecor from '../withDecor'
 
 export interface OptionalField<T> extends Field<Optional<T>> {
-  readonly innerSpec: SpecUnion<T>
+  readonly innerSpec: SpecUnion
 }
 
 export default declareField('@spec-validator/validator/fields/optional', <
-  Spec extends SpecUnion<unknown>,
+  Spec extends SpecUnion,
   T = TypeHint<Spec>
 > (
     innerSpec: Spec
   ) => withDecor(innerSpec, (fieldForSpec: Field<T>): OptionalField<T> => ({
-    innerSpec: innerSpec as unknown as SpecUnion<T>,
+    innerSpec: innerSpec as unknown as SpecUnion,
     validate: (value: any): Optional<T> => {
       if (value === undefined) {
         return value

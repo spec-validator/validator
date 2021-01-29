@@ -128,7 +128,7 @@ const server = createServer({routes: [
       },
     },
   ).handler(
-    async () => undefined
+    async (req) => req.method
   ),
   _.DELETE($._('/items/')._('id', numberField())).spec({}).handler(
     async () => undefined

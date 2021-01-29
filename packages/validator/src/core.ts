@@ -11,19 +11,19 @@ export interface Field<DeserializedType> {
 }
 
 export type ObjectSpec<DeserializedType extends Record<string, Any> = Record<string, Any>> = {
-  [P in keyof DeserializedType]: SpecUnion<DeserializedType[P]>
+  [P in keyof DeserializedType]: SpecUnion
 }
 
 export type WildcardObjectSpec = {
-  [key: string]: Optional<SpecUnion<unknown>>
+  [key: string]: Optional<SpecUnion>
 }
 
-export type ArraySpec<DeserializedType extends Any[] = Any[]> = SpecUnion<DeserializedType[number]>[]
+export type ArraySpec = SpecUnion[]
 
-export type SpecUnion<DeserializedType> =
-  WildcardObjectSpec | ObjectSpec | ArraySpec | Field<DeserializedType> | undefined
+export type SpecUnion =
+  WildcardObjectSpec | ObjectSpec | ArraySpec | Field<unknown> | undefined
 
-export type TypeHint<Spec extends SpecUnion<unknown>> =
+export type TypeHint<Spec extends SpecUnion> =
   Spec extends WildcardObjectSpec ?
     { [P in keyof Spec]: TypeHint<Spec[P]> }
   : Spec extends ArraySpec ?

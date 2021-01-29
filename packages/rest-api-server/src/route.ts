@@ -10,27 +10,19 @@ import { StringObjectSpec } from './fields/stringSpec'
 export type StringMapping = Record<string, Any>
 
 export type RequestSpec<
-  Method extends string = string,
   PathParams extends StringMapping | unknown = StringMapping | unknown,
-  Body extends Any = Any,
-  QueryParams extends StringMapping = StringMapping,
-  Headers extends StringMapping = StringMapping,
 > = {
-  readonly method: ConstantField<Method>,
+  readonly method: ConstantField<string>,
   readonly pathParams: typeof $ & Field<PathParams>,
-  readonly body?: SpecUnion<Body>,
-  readonly headers?: StringObjectSpec<Headers>,
-  readonly queryParams?: StringObjectSpec<QueryParams>
+  readonly body?: SpecUnion,
+  readonly headers?: StringObjectSpec<StringMapping>,
+  readonly queryParams?: StringObjectSpec<StringMapping>
 }
 
-export type ResponseSpec<
-  StatusCode extends number = number,
-  Body extends Any = Any,
-  Headers extends StringMapping = StringMapping,
-> = {
-  readonly statusCode: ConstantField<StatusCode>,
-  readonly body?: SpecUnion<Body>,
-  readonly headers?: StringObjectSpec<Headers>,
+export type ResponseSpec = {
+  readonly statusCode: ConstantField<number>,
+  readonly body?: SpecUnion,
+  readonly headers?: StringObjectSpec<StringMapping>,
 }
 
 type ResponseField<Spec extends ResponseSpec=ResponseSpec > = WithoutOptional<Spec>
@@ -38,14 +30,11 @@ type ResponseField<Spec extends ResponseSpec=ResponseSpec > = WithoutOptional<Sp
 type ResponsesSpec<ResponseVariants extends ResponseField[] = ResponseField[]> =
   UnionField<ResponseVariants>
 
-export type Route<
-  ReqSpec extends RequestSpec = RequestSpec,
-  RespSpec extends ResponsesSpec | ResponseSpec = ResponsesSpec | ResponseSpec
-> = {
-  readonly request: ReqSpec,
-  readonly response: RespSpec,
-  readonly handler: (request: WithoutOptional<TypeHint<ReqSpec>>) => Promise<
-    WithoutOptional<TypeHint<RespSpec>>
+export interface Route {
+  readonly request: RequestSpec,
+  readonly response: ResponsesSpec | ResponseSpec,
+  readonly handler: (request: WithoutOptional<TypeHint<this['request']>>) => Promise<
+    WithoutOptional<TypeHint<this['response']>>
   >
 }
 

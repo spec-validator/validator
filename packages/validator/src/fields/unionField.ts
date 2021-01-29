@@ -1,15 +1,15 @@
 import { getFieldForSpec } from '../interface'
 import { Field, SpecUnion, TypeHint, declareField } from '../core'
 
-export type Unioned<T extends SpecUnion<unknown>[]> = {
-  [P in keyof T]: T[P] extends SpecUnion<unknown> ? TypeHint<T[P]> : never
+export type Unioned<T extends SpecUnion[]> = {
+  [P in keyof T]: T[P] extends SpecUnion ? TypeHint<T[P]> : never
 }[number]
 
-export interface UnionField<Variants extends SpecUnion<any>[]> extends Field<Unioned<Variants>> {
+export interface UnionField<Variants extends SpecUnion[]> extends Field<Unioned<Variants>> {
   readonly variants: Variants
 }
 
-export default declareField('@spec-validator/validator/fields/unionField', <Variants extends SpecUnion<unknown>[]> (
+export default declareField('@spec-validator/validator/fields/unionField', <Variants extends SpecUnion[]> (
   ...variants: Variants
 ): UnionField<Variants> => {
   const fieldVariants = variants.map(it => getFieldForSpec(it))
