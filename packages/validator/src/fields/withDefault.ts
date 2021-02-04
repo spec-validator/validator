@@ -8,18 +8,17 @@ export interface WithDefault<T> extends Field<T> {
 
 export default declareField('@spec-validator/validator/fields/withDefault', <
   Spec extends SpecUnion,
-  T=TypeHint<Spec>
 > (
     innerSpec: Spec,
-    defaultValue: T
-  ) => withDecor(innerSpec, (inner: Field<T>): WithDefault<T> => ({
+    defaultValue: TypeHint<Spec>
+  ) => withDecor(innerSpec, (inner: Field<TypeHint<Spec>>): WithDefault<TypeHint<Spec>> => ({
     innerSpec,
     defaultValue,
-    validate: (value: any): T => {
+    validate: (value: any): TypeHint<Spec> => {
       if (value === undefined) {
         value = defaultValue
       }
       return inner.validate(value)
     },
-    serialize: (deserialized: T) => inner.serialize(deserialized),
+    serialize: (deserialized: TypeHint<Spec>) => inner.serialize(deserialized),
   })))
