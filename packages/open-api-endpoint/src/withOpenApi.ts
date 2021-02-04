@@ -1,7 +1,7 @@
 import { _, ServerConfig } from '@spec-validator/rest-api-server'
 import { mergeServerConfigs } from '@spec-validator/rest-api-server/server'
 import { Json } from '@spec-validator/utils/Json'
-import { $, constantField, stringField } from '@spec-validator/validator/fields'
+import { segmentField as $, constantField, stringField } from '@spec-validator/validator/fields'
 import wildcardObjectField from '@spec-validator/validator/fields/wildcardObjectField'
 import genOpenApi, { DEFAULT_INFO, Info, WithInfo } from './genOpenApi'
 

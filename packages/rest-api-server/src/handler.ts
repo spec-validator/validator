@@ -159,10 +159,11 @@ const handleRoute = async (
   // null values.
   const handler = route.handler as unknown as (req: TypeHint<RequestSpec>) => Promise<TypeHint<ResponseSpec>>
 
+  // TODO: no any here
   const resp = serialize(route.response, await withAppErrorStatusCode(
     config.appErrorStatusCode,
-    () => handler(request)
-  )) as any
+    () => handler(request as any)
+  ) as any) as any
 
   Object.entries(resp.headers || {}).forEach(([key, value]) => {
     response.setHeader(key, value as any)

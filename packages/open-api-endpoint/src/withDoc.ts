@@ -1,32 +1,31 @@
-import { declareField, Field, OfType, SpecUnion } from '@spec-validator/validator/core'
-import { Any } from '@spec-validator/utils/util-types'
+import { declareField, Field, OfType, SpecUnion, TypeHint } from '@spec-validator/validator/core'
 
 import withDecor from '@spec-validator/validator/withDecor'
 
-type Example<T extends Any> = {
+type Example<T> = {
   value: T,
   summary: string
 }
 
-type Doc<T extends Any> = {
+type Doc<T> = {
   description?: string,
   format?: string,
   examples?: Record<string, Example<T>>
 }
 
-export interface WithDoc<T extends Any> extends Field<T> {
-  readonly innerSpec: SpecUnion<T>,
+export interface WithDoc<Spec extends SpecUnion, T = TypeHint<Spec>> extends Field<T> {
+  readonly innerSpec: Spec,
   readonly doc: Doc<T>
 }
 
 // workaround for: https://github.com/microsoft/TypeScript/issues/42349
 export type Placeholder = OfType<'Placeholder'>
 
-export default declareField('@spec-validator/fields.WithDoc', <T extends Any, Spec extends SpecUnion<T>> (
-  innerSpec: Spec & SpecUnion<T>,
+export default declareField('@spec-validator/fields.WithDoc', <Spec extends SpecUnion, T = TypeHint<Spec>> (
+  innerSpec: Spec,
   doc: Doc<T>
 ) =>
-    withDecor(innerSpec, (inner: Field<T>): WithDoc<T> => ({
+    withDecor(innerSpec, (inner: Field<T>): WithDoc<Spec, T> => ({
       innerSpec,
       doc,
       validate: (it: any) => inner.validate(it),
