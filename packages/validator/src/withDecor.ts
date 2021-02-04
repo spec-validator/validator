@@ -1,4 +1,4 @@
-import { Field, SpecUnion, StringBasedField } from './core'
+import { Field, SpecUnion, StringBasedField, TypeHint } from './core'
 import {
   FieldWithRegExpSupport, isFieldWithStringInputSupport,
 } from './fields/segmentField'
@@ -17,14 +17,13 @@ export type Decor<
  */
 export default <
   T,
-  R,
   FieldIn extends Field<T>,
   SpecIn extends SpecUnion,
-  Out extends Field<R>
+  Out extends Field<unknown>
 >(
   innerSpec: SpecIn,
   getRawField: (fieldForSpec: FieldIn) => Out
-): Decor<R, Out, SpecIn> => {
+): Decor<TypeHint<Out>, Out, SpecIn> => {
   const innerField = getFieldForSpec(innerSpec) as any
 
   const raw = getRawField(innerField)
