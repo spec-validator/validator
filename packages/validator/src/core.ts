@@ -72,7 +72,7 @@ export const isValidChild = (obj: any) =>
 
 export type StringBasedField<
   DeserializedType,
-  Base extends Field<unknown>,
+  Base extends Field<DeserializedType>,
 > = {
   serialize(deserialized: DeserializedType): string
 } & Omit<Base, 'getStringField'>
