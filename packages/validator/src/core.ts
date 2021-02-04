@@ -10,8 +10,8 @@ export interface Field<DeserializedType> {
   serialize(deserialized: DeserializedType): Json
 }
 
-export type ObjectSpec<DeserializedType extends Record<string, Any> = Record<string, Any>> = {
-  [P in keyof DeserializedType]: SpecUnion
+export type ObjectSpec = {
+  [key: string]: SpecUnion
 }
 
 export type WildcardObjectSpec = {
@@ -72,7 +72,7 @@ export const isValidChild = (obj: any) =>
 
 export type StringBasedField<
   DeserializedType,
-  Base extends Field<DeserializedType>,
+  Base extends Field<unknown>,
 > = {
   serialize(deserialized: DeserializedType): string
 } & Omit<Base, 'getStringField'>

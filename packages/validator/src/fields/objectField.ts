@@ -1,4 +1,4 @@
-import { Field, TypeHint, withErrorDecoration, declareField } from '../core'
+import { Field, withErrorDecoration, declareField } from '../core'
 import { Json } from '@spec-validator/utils/Json'
 import { Any } from '@spec-validator/utils/util-types'
 
@@ -7,9 +7,9 @@ export type ObjectFields<DeserializedType extends Record<string, Any> = Record<s
 }
 
 export interface ObjectField<
-  Spec extends ObjectFields = ObjectFields
-> extends Field<TypeHint<Spec>> {
-  readonly objectSpec: Spec
+  DeserializedType extends Record<string, Any>
+> extends Field<DeserializedType> {
+  readonly objectSpec: ObjectFields<DeserializedType>
   readonly canHaveExtraKeys: boolean
 }
 
@@ -28,26 +28,26 @@ const ensureNoExtraFields = (
 }
 
 export default declareField('@spec-validator/validator/fields/objectField', <
-  Spec extends ObjectFields = ObjectFields
+  DeserializedType extends Record<string, Any>
 > (
-    objectSpec: Spec,
+    objectSpec: ObjectFields<DeserializedType>,
     canHaveExtraKeys = false
-  ): ObjectField<Spec> => ({
+  ): ObjectField<DeserializedType> => ({
     objectSpec,
     canHaveExtraKeys,
-    validate: (value: any): TypeHint<Spec> => {
+    validate: (value: any): DeserializedType => {
       if (typeof value !== 'object' || value === null) {
         throw 'Not an object'
       }
       const result = Object.fromEntries(Object.entries(objectSpec).map(([key, valueSpec]) => [
         key, withErrorDecoration(key, () => valueSpec.validate(value[key])),
-      ])) as TypeHint<Spec>
+      ])) as DeserializedType
       if (!canHaveExtraKeys) {
         ensureNoExtraFields(objectSpec, value)
       }
       return result
     },
-    serialize: (deserialized: TypeHint<Spec>): Json =>
+    serialize: (deserialized: DeserializedType): Json =>
     Object.fromEntries(Object.entries(objectSpec).map(([key, valueSpec]) => [
       key, withErrorDecoration(key, () => valueSpec.serialize(deserialized[key])),
     ])) as Json,
