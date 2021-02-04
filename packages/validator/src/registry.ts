@@ -8,7 +8,7 @@ export type FieldDeclaration<
   Constructor extends (...params: Params) => FieldType = (...params: Params) => FieldType
 > = Constructor & OfType<Type>
 
-export type GetRepresentation = (field: SpecUnion<unknown>) => any
+export type GetRepresentation = (field: SpecUnion) => any
 
 type ProvideRepresentation<
   RepresentationType,
