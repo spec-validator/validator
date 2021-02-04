@@ -115,7 +115,7 @@ export class SegmentField<
     const matches = match.groups || {}
     const segments = this.getFieldSegments()
     const spec = Object.fromEntries(segments.map(segment => [segment.key, segment.field])) as any
-    return objectField(spec).validate(matches)
+    return objectField(spec).validate(matches) as unknown as DeserializedType
   }
 
   serialize(deserialized: DeserializedType): string {
