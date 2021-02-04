@@ -7,7 +7,7 @@ import { HtmlSerialization, JsonSerialization } from './serialization'
 import { Route, RequestSpec, ResponseSpec } from './route'
 
 import { TypeHint } from '@spec-validator/validator'
-import { constantField, $ } from '@spec-validator/validator/fields'
+import { constantField, segmentField as $ } from '@spec-validator/validator/fields'
 import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
 import { ConstantField } from '@spec-validator/validator/fields/constantField'
 import { Field } from '@spec-validator/validator/core'

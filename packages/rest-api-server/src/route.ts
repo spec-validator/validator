@@ -1,6 +1,6 @@
 import { TypeHint } from '@spec-validator/validator'
-import { Field, isFieldSpec, SpecUnion, OfType } from '@spec-validator/validator/core'
-import { $, unionField } from '@spec-validator/validator/fields'
+import { isFieldSpec, SpecUnion, OfType } from '@spec-validator/validator/core'
+import { SegmentField, unionField } from '@spec-validator/validator/fields'
 import { ConstantField } from '@spec-validator/validator/fields/constantField'
 import { UnionField } from '@spec-validator/validator/fields/unionField'
 import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
@@ -9,11 +9,9 @@ import { StringObjectSpec } from './fields/stringSpec'
 
 export type StringMapping = Record<string, Any>
 
-export type RequestSpec<
-  PathParams extends StringMapping | unknown = StringMapping | unknown,
-> = {
+export type RequestSpec = {
   readonly method: ConstantField<string>,
-  readonly pathParams: typeof $ & Field<PathParams>,
+  readonly pathParams: SegmentField<StringMapping | undefined>,
   readonly body?: SpecUnion,
   readonly headers?: StringObjectSpec<StringMapping>,
   readonly queryParams?: StringObjectSpec<StringMapping>

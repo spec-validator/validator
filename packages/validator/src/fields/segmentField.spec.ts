@@ -19,7 +19,7 @@ describe('field', () => {
       ._('/')
       ._('username', stringField())
       .toString()
-    ).toEqual('^/(?<username>.*)$')
+    ).toEqual('^\\/(?<username>.*)$')
   })
 
   it('validates the input correctly', () => {

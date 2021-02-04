@@ -1,5 +1,5 @@
 import {
-  $, choiceField, numberField, stringField,
+  segmentField as $, choiceField, numberField, stringField,
   unionField, constantField,
 } from '@spec-validator/validator/fields'
 import { expectType } from '@spec-validator/test-utils/expectType'

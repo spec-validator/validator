@@ -1,7 +1,7 @@
 import request from 'supertest'
 
 import {
-  $, constantField, numberField, objectField, optional, stringField, unionField,
+  segmentField as $, constantField, numberField, objectField, optional, stringField, unionField,
 } from '@spec-validator/validator/fields'
 
 
@@ -128,7 +128,7 @@ const server = createServer({routes: [
       },
     },
   ).handler(
-    async (req) => req.method
+    async () => undefined
   ),
   _.DELETE($._('/items/')._('id', numberField())).spec({}).handler(
     async () => undefined
