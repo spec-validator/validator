@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { SpecUnion } from './core'
-import { Any } from '@spec-validator/utils/util-types'
 import { serialize, validate } from './interface'
 
 export const sampleField = {
@@ -14,7 +13,7 @@ export const sampleField = {
 }
 
 export const testValidateSpecOk = <T> (
-  field: SpecUnion<T>, input: any, expected?: T, expectedSerialized?: any
+  field: SpecUnion, input: any, expected?: T, expectedSerialized?: any
 ): void => {
   // Test deserialization + validation
   expect(validate(field, input)).toEqual(expected || input)
@@ -22,7 +21,7 @@ export const testValidateSpecOk = <T> (
   expect(serialize(field, (expected || input) as any)).toEqual(expectedSerialized || input)
 }
 
-export const testValidateSpecError = <T extends Any> (field: SpecUnion<T>, input: any, expectedError: any) => {
+export const testValidateSpecError = (field: SpecUnion, input: any, expectedError: any) => {
   let error: any = null
   try {
     validate(field, input)

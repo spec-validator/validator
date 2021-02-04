@@ -1,6 +1,6 @@
 import { createServer, _ } from '@spec-validator/rest-api-server'
 import {
-  $, constantField, numberField, optional, stringField,
+  segmentField as $, constantField, numberField, optional, stringField,
 } from '@spec-validator/validator/fields'
 import { withOpenApi } from '@spec-validator/open-api-endpoint'
 
