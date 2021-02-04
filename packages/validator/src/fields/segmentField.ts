@@ -18,8 +18,8 @@ export class SegmentField<
   type = '@spec-validator/validator/fields/segmentField'
 
   private parent?: SegmentField<unknown>
-  private readonly key: string
-  private readonly field?: Omit<FieldWithRegExpSupport<Any>, 'getStringField'>
+  readonly key: string
+  readonly field?: Omit<FieldWithRegExpSupport<Any>, 'getStringField'>
 
   // Here we actually do want to have a constructor parameter as 'any' since it is not going
   // to be used outside of this file

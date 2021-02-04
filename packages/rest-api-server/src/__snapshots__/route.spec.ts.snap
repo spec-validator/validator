@@ -27,12 +27,16 @@ Object {
       "validate": [Function],
     },
     "key": "pathKey",
+    "objectSpecCacheReady": false,
     "parent": SegmentField {
       "field": undefined,
       "key": "",
+      "objectSpecCacheReady": false,
       "parent": undefined,
+      "segmentsCache": undefined,
       "type": "@spec-validator/validator/fields/segmentField",
     },
+    "segmentsCache": undefined,
     "type": "@spec-validator/validator/fields/segmentField",
   },
 }

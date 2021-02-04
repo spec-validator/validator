@@ -1,6 +1,6 @@
 import { _, Route } from '@spec-validator/rest-api-server'
 import {
-  $, stringField, booleanField, numberField, arrayField,
+  segmentField as $, stringField, booleanField, numberField, arrayField,
 } from '@spec-validator/validator/fields'
 import genOpenApi from './genOpenApi'
 import { DEFAULT_SERVER_CONFIG } from '@spec-validator/rest-api-server/server'
