@@ -12,7 +12,7 @@ export const isFieldWithStringInputSupport = <DeserializedType>(obj: any):
     isFieldSpec(obj) && typeof (obj as any).getStringField === 'function'
 
 export class SegmentField<
-  DeserializedType = undefined
+  DeserializedType
 > implements FieldWithRegExpSupport<DeserializedType> {
 
   type = '@spec-validator/validator/fields/segmentField'
