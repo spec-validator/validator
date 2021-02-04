@@ -7,26 +7,23 @@ import { HtmlSerialization, JsonSerialization } from './serialization'
 import { Route, RequestSpec, ResponseSpec } from './route'
 
 import { TypeHint } from '@spec-validator/validator'
-import { constantField, segmentField as $ } from '@spec-validator/validator/fields'
+import { constantField, SegmentField } from '@spec-validator/validator/fields'
 import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
 import { ConstantField } from '@spec-validator/validator/fields/constantField'
-import { Field } from '@spec-validator/validator/core'
 
-// workaround for: https://github.com/microsoft/TypeScript/issues/42349
+
 export type Placeholder = Any
 
 type RequestSpecMethod = Omit<RequestSpec, 'method' | 'pathParams'>
 
 type ResponseSpecMethod = Omit<ResponseSpec, 'statusCode'>
 
-type PathSpec<PathParams extends StringMapping> = typeof $ & Field<PathParams>
-
 // Make it fluid API - to make things work with autocomplete
 export const withMethod = <
   Method extends string,
   OkStatusCode extends number
 > (method: Method, okStatusCode: OkStatusCode) =>
-  <PathParams extends StringMapping = StringMapping> (pathParams: PathSpec<PathParams>): {
+  <PathParams extends StringMapping | undefined = StringMapping | undefined> (pathParams: SegmentField<PathParams>): {
     spec:  <
       ReqSpec extends RequestSpecMethod = RequestSpecMethod,
       RespSpec extends ResponseSpecMethod = ResponseSpecMethod,
@@ -39,7 +36,7 @@ export const withMethod = <
           ReqSpec
           & {
               readonly method: ConstantField<Method>,
-              readonly pathParams: PathSpec<PathParams>
+              readonly pathParams: SegmentField<PathParams>
             }
         >>
       ) => Promise<

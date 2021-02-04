@@ -57,7 +57,7 @@ describe('type', () => {
   })
 
   it('with unparametrized segment', () => {
-    const path = $._('foo')
+    const path = $._('foo')._('bar')
     type Props = TypeHint<typeof path>
     expectType<Props, undefined>(true)
   })
