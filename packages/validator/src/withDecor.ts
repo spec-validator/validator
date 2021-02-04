@@ -5,9 +5,9 @@ import {
 import { getFieldForSpec } from './interface'
 
 export type Decor<
+  T,
   FieldIn extends Field<unknown>,
   SpecIn extends SpecUnion,
-  T = ReturnType<FieldIn['validate']>
 > = SpecIn extends FieldWithRegExpSupport<T> ? FieldIn & {
   getStringField(): StringBasedField<T, SpecIn>
 } : FieldIn
@@ -17,13 +17,14 @@ export type Decor<
  */
 export default <
   T,
+  R,
   FieldIn extends Field<T>,
   SpecIn extends SpecUnion,
-  Out extends Field<T>
+  Out extends Field<R>
 >(
   innerSpec: SpecIn,
   getRawField: (fieldForSpec: FieldIn) => Out
-): Decor<Out, SpecIn> => {
+): Decor<R, Out, SpecIn> => {
   const innerField = getFieldForSpec(innerSpec) as any
 
   const raw = getRawField(innerField)

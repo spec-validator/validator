@@ -38,7 +38,8 @@ test ('does not let string value og through with raw field', () => {
 test('types', () => {
     type Spec = TypeHint<typeof raw>
 
-    expectType<Spec, boolean | undefined>(true)
+    expectType<Spec, boolean>(true)
+    expectType<Spec, undefined>(true)
 })
 
 
@@ -65,7 +66,8 @@ describe('field with FieldWithStringInputSupport as inner spec', () => {
   test('types', () => {
     type Spec = TypeHint<typeof field>
 
-    expectType<Spec, boolean | undefined>(true)
+    expectType<Spec, boolean>(true)
+    expectType<Spec, undefined>(true)
   })
 
 })
