@@ -7,7 +7,7 @@ export type FieldWithRegExpSupport<Type> = FieldWithStringSupport<Type> & {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const isFieldWithStringInputSupport = <DeserializedType>(obj: any):
+export const isFieldWithRegRxpSupport = <DeserializedType>(obj: any):
   obj is FieldWithRegExpSupport<DeserializedType> =>
     isFieldSpec(obj) && (obj as any).regex && typeof (obj as any).getStringField === 'function'
 

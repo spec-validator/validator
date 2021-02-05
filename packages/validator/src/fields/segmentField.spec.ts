@@ -22,6 +22,15 @@ describe('field', () => {
     ).toEqual('^\\/(?<username>.*)$')
   })
 
+  it('getStringField.toString', () => {
+    expect($
+      ._('/')
+      ._('username', stringField())
+      .getStringField()
+      .toString()
+    ).toEqual('^\\/(?<username>.*)$')
+  })
+
   it('validates the input correctly', () => {
     const segmentSpec = $
       ._('/')

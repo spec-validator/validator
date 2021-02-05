@@ -1,6 +1,6 @@
 import { Field, SpecUnion, StringBasedField } from './core'
 import {
-  FieldWithRegExpSupport, isFieldWithStringInputSupport,
+  FieldWithRegExpSupport, isFieldWithRegRxpSupport,
 } from './fields/segmentField'
 import { getFieldForSpec } from './interface'
 
@@ -29,7 +29,7 @@ export default <
 
   const raw = getRawField(innerField)
 
-  if (isFieldWithStringInputSupport(innerField)) {
+  if (isFieldWithRegRxpSupport(innerField)) {
     const withRegex = innerField.getStringField() as any
     return {
       ...raw,
