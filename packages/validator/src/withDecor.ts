@@ -17,9 +17,10 @@ export type Decor<
  */
 export default <
   T,
+  R,
   FieldIn extends Field<T>,
   SpecIn extends SpecUnion,
-  Out extends Field<T>
+  Out extends Field<R>
 >(
   innerSpec: SpecIn,
   getRawField: (fieldForSpec: FieldIn) => Out

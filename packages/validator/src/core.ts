@@ -74,8 +74,9 @@ export type StringBasedField<
   DeserializedType,
   Base extends Field<unknown>,
 > = {
-  serialize(deserialized: DeserializedType): string
-} & Omit<Base, 'getStringField'>
+  serialize(deserialized: DeserializedType): string,
+  validate(serialized: any): DeserializedType
+} & Omit<Base, 'getStringField' | 'validate' | 'serialize'>
 
 export interface FieldWithStringSupport<
   DeserializedType,
