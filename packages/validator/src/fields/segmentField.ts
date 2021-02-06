@@ -1,15 +1,10 @@
 import objectField from './objectField'
-import { Field, isFieldSpec, FieldWithStringSupport, StringBasedField } from '../core'
+import { Field, FieldWithStringSupport, StringBasedField } from '../core'
 import { Any } from '@spec-validator/utils/util-types'
 
 export type FieldWithRegExpSupport<Type> = FieldWithStringSupport<Type> & {
   regex: RegExp
 }
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const isFieldWithRegRxpSupport = <DeserializedType>(obj: any):
-  obj is FieldWithRegExpSupport<DeserializedType> =>
-    isFieldSpec(obj) && (obj as any).regex && typeof (obj as any).getStringField === 'function'
 
 export class SegmentField<
   DeserializedType

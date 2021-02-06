@@ -1,16 +1,17 @@
-import { Field, SpecUnion, StringBasedField } from './core'
-import {
-  FieldWithRegExpSupport, isFieldWithRegRxpSupport,
-} from './fields/segmentField'
+import { Field, FieldWithStringSupport, isFieldSpec, SpecUnion, StringBasedField } from './core'
 import { getFieldForSpec } from './interface'
 
 export type Decor<
   FieldIn extends Field<unknown>,
   SpecIn extends SpecUnion,
   T = ReturnType<FieldIn['validate']>
-> = SpecIn extends FieldWithRegExpSupport<T> ? FieldIn & {
+> = SpecIn extends FieldWithStringSupport<T> ? FieldIn & {
   getStringField(): StringBasedField<T, SpecIn>
 } : FieldIn
+
+const isFieldWithStringSupport = <DeserializedType>(obj: any):
+  obj is FieldWithStringSupport<DeserializedType> =>
+    isFieldSpec(obj) && typeof (obj as any).getStringField === 'function'
 
 /**
  * Apply decoration to the fields respecting their string input acceptance
@@ -27,18 +28,17 @@ export default <
 ): Decor<Out, SpecIn> => {
   const innerField = getFieldForSpec(innerSpec) as any
 
-  const raw = getRawField(innerField)
+  const raw = getRawField(innerField) as any
 
-  if (isFieldWithRegRxpSupport(innerField)) {
+  if (isFieldWithStringSupport(innerField)) {
     const withRegex = innerField.getStringField() as any
     return {
       ...raw,
       getStringField: () => ({
         ...getRawField(withRegex),
-        regex: withRegex.regex,
       }),
     } as any
   } else {
-    return getRawField(innerField) as any
+    return raw
   }
 }
