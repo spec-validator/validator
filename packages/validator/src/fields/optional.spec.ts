@@ -72,3 +72,22 @@ describe('field with FieldWithStringInputSupport as inner spec', () => {
 
 })
 
+describe('field without string support as inner spec', () => {
+
+  const field = optional({
+    key: booleanField(),
+  })
+
+  it('works with a valid payload', () => {
+    testValidateSpecOk(field, { key: true})
+  })
+
+  it('breaks with invalid payload', () => {
+    testValidateSpecError(field, 11, 'Not an object')
+  })
+
+  it('works with undefined payload', () => {
+    testValidateSpecOk(field, undefined)
+  })
+
+})
