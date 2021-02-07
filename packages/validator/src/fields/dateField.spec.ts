@@ -44,6 +44,15 @@ describe('date-time', () => {
 
 })
 
+describe('default', () => {
+  const field = dateField()
+
+  it('deserializes into the a given date at midnight', () => {
+    testValidateSpecOk(field, '1995-12-17T03:24:00Z', new Date('1995-12-17T03:24:00Z'), '1995-12-17T03:24:00.000Z')
+  })
+
+})
+
 describe('date', () => {
   const field = dateField('date')
 
