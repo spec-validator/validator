@@ -1,6 +1,7 @@
 import {
   arrayField, booleanField, choiceField, constantField,
-  numberField, objectField, optional, stringField, unionField, wildcardObjectField, withDefault,
+  dateField,
+  numberField, objectField, optional, stringField, undefinedField, unionField, wildcardObjectField, withDefault,
 } from '@spec-validator/validator/fields'
 import { Primitive } from '@spec-validator/utils/Json'
 import getSchema from './schemaRegistry'
@@ -27,6 +28,8 @@ test('BASE_PAIRS', () => {
       a: booleanField(),
       b: booleanField(),
     }),
+    undefinedField(),
+    dateField(),
     objectField({
       opt: optional(stringField()),
     }),

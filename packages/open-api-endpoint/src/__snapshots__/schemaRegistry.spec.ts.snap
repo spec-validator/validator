@@ -94,6 +94,12 @@ Array [
     ],
     "type": "object",
   },
+  Object {},
+  Object {
+    "format": "date-time",
+    "pattern": "\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}(\\\\.\\\\d{3})?Z",
+    "type": "string",
+  },
   Object {
     "additionalProperties": false,
     "properties": Object {
