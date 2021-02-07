@@ -40,6 +40,10 @@ Array [
     "type": "number",
   },
   Object {
+    "minimum": undefined,
+    "type": "integer",
+  },
+  Object {
     "additionalProperties": true,
     "type": "object",
   },

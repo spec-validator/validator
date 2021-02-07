@@ -17,6 +17,7 @@ test('BASE_PAIRS', () => {
     headerArrayField(numberField()),
     numberField(),
     numberField({canBeFloat: true}),
+    numberField({signed: true}),
     wildcardObjectField(),
     choiceField(1, 2, 3),
     choiceField<Primitive>(1, true),
