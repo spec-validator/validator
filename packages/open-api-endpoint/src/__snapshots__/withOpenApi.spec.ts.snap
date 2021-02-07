@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`routing 1`] = `
+Object {
+  "appErrorStatusCode": 500,
+  "baseUrl": "http://localhost:8000",
+  "encoding": "utf-8",
+  "frameworkErrorStatusCode": 503,
+  "reportError": [Function],
+  "routes": Array [
+    Object {
+      "handler": [Function],
+      "request": Object {
+        "method": Object {
+          "constant": "GET",
+          "getStringField": [Function],
+          "regex": /GET/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+        "pathParams": SegmentField {
+          "field": undefined,
+          "key": "/open-api",
+          "parent": SegmentField {
+            "field": undefined,
+            "key": "",
+            "parent": undefined,
+            "type": "@spec-validator/validator/fields/segmentField",
+          },
+          "type": "@spec-validator/validator/fields/segmentField",
+        },
+      },
+      "response": Object {
+        "body": Object {
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/wildcardObjectField",
+          "validate": [Function],
+        },
+        "statusCode": Object {
+          "constant": 200,
+          "getStringField": [Function],
+          "regex": /200/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+      },
+    },
+    Object {
+      "handler": [Function],
+      "request": Object {
+        "method": Object {
+          "constant": "GET",
+          "getStringField": [Function],
+          "regex": /GET/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+        "pathParams": SegmentField {
+          "field": undefined,
+          "key": "-ui",
+          "parent": SegmentField {
+            "field": undefined,
+            "key": "/open-api",
+            "parent": SegmentField {
+              "field": undefined,
+              "key": "",
+              "parent": undefined,
+              "type": "@spec-validator/validator/fields/segmentField",
+            },
+            "type": "@spec-validator/validator/fields/segmentField",
+          },
+          "type": "@spec-validator/validator/fields/segmentField",
+        },
+      },
+      "response": Object {
+        "body": Object {
+          "getStringField": [Function],
+          "regex": /\\.\\*/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/stringField",
+          "validate": [Function],
+        },
+        "headers": Object {
+          "content-type": Object {
+            "constant": "text/html",
+            "getStringField": [Function],
+            "regex": /text\\\\/html/,
+            "serialize": [Function],
+            "type": "@spec-validator/validator/fields/constantField",
+            "validate": [Function],
+          },
+        },
+        "statusCode": Object {
+          "constant": 200,
+          "getStringField": [Function],
+          "regex": /200/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+      },
+    },
+  ],
+  "serializationFormats": Array [
+    JsonSerialization {
+      "deserialize": [Function],
+      "mediaType": "application/json",
+      "serialize": [Function],
+    },
+    HtmlSerialization {
+      "deserialize": [Function],
+      "mediaType": "text/html",
+      "serialize": [Function],
+    },
+  ],
+}
+`;
+
+exports[`schema root handler 1`] = `
+Object {
+  "handler": [Function],
+  "request": Object {
+    "method": Object {
+      "constant": "GET",
+      "getStringField": [Function],
+      "regex": /GET/,
+      "serialize": [Function],
+      "type": "@spec-validator/validator/fields/constantField",
+      "validate": [Function],
+    },
+    "pathParams": SegmentField {
+      "field": undefined,
+      "key": "/open-api",
+      "parent": SegmentField {
+        "field": undefined,
+        "key": "",
+        "parent": undefined,
+        "type": "@spec-validator/validator/fields/segmentField",
+      },
+      "type": "@spec-validator/validator/fields/segmentField",
+    },
+  },
+  "response": Object {
+    "body": Object {
+      "serialize": [Function],
+      "type": "@spec-validator/validator/fields/wildcardObjectField",
+      "validate": [Function],
+    },
+    "statusCode": Object {
+      "constant": 200,
+      "getStringField": [Function],
+      "regex": /200/,
+      "serialize": [Function],
+      "type": "@spec-validator/validator/fields/constantField",
+      "validate": [Function],
+    },
+  },
+}
+`;
