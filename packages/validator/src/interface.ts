@@ -22,14 +22,14 @@ export const getFieldForSpec = (
 
 // The whole point of the library is to validate wildcard objects
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const validate = (
-  spec: SpecUnion,
+export const validate = <Spec extends SpecUnion>(
+  spec: Spec,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   value: any,
   allowExtraFields = false
-): TypeHint<typeof spec> => getFieldForSpec(spec, allowExtraFields).validate(value) as unknown as TypeHint<typeof spec>
+): TypeHint<Spec> => getFieldForSpec(spec, allowExtraFields).validate(value) as unknown as TypeHint<Spec>
 
-export const serialize = (
-  spec: SpecUnion,
-  value: TypeHint<typeof spec>
+export const serialize = <Spec extends SpecUnion>(
+  spec: Spec,
+  value: TypeHint<Spec>
 ): Json => getFieldForSpec(spec).serialize(value)
