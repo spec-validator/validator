@@ -1,6 +1,6 @@
 import withOpenApi from './withOpenApi'
 
-const fullRoute = withOpenApi({})
+const fullRoute = withOpenApi({}, '/schema')
 
 test('routing', () => {
   expect(fullRoute).toMatchSnapshot()

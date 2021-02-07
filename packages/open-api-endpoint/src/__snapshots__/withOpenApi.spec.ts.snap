@@ -21,7 +21,7 @@ Object {
         },
         "pathParams": SegmentField {
           "field": undefined,
-          "key": "/open-api",
+          "key": "/schema",
           "parent": SegmentField {
             "field": undefined,
             "key": "",
@@ -63,7 +63,7 @@ Object {
           "key": "-ui",
           "parent": SegmentField {
             "field": undefined,
-            "key": "/open-api",
+            "key": "/schema",
             "parent": SegmentField {
               "field": undefined,
               "key": "",
@@ -156,7 +156,7 @@ Object {
     <script>
     window.onload = function() {
       const ui = SwaggerUIBundle({
-        url: \\"undefined/open-api\\",
+        url: \\"undefined/schema\\",
         dom_id: '#swagger-ui',
         presets: [
           SwaggerUIBundle.presets.apis,
