@@ -321,7 +321,7 @@ const url = $
   ._('/items/')
   ._('id', numberField())
 
-assert.deepStrictEqual(url.toString(), '^/(?<username>.*)/items/(?<id>\\d+)$')
+assert.deepStrictEqual(url.toString(), '^\\/(?<username>.*)\\/items\\/(?<id>\\d+)$')
 
 expectType<TypeHint<typeof url>, {
   username: string,
