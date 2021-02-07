@@ -9,3 +9,7 @@ test('routing', () => {
 test('schema root handler', async () => {
   expect(await fullRoute.routes[0]).toMatchSnapshot()
 })
+
+test('schema root handler ui', async () => {
+  expect(await fullRoute.routes[1]).toMatchSnapshot()
+})

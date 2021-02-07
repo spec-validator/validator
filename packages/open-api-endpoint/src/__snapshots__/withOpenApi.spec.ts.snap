@@ -160,3 +160,62 @@ Object {
   },
 }
 `;
+
+exports[`schema root handler ui 1`] = `
+Object {
+  "handler": [Function],
+  "request": Object {
+    "method": Object {
+      "constant": "GET",
+      "getStringField": [Function],
+      "regex": /GET/,
+      "serialize": [Function],
+      "type": "@spec-validator/validator/fields/constantField",
+      "validate": [Function],
+    },
+    "pathParams": SegmentField {
+      "field": undefined,
+      "key": "-ui",
+      "parent": SegmentField {
+        "field": undefined,
+        "key": "/open-api",
+        "parent": SegmentField {
+          "field": undefined,
+          "key": "",
+          "parent": undefined,
+          "type": "@spec-validator/validator/fields/segmentField",
+        },
+        "type": "@spec-validator/validator/fields/segmentField",
+      },
+      "type": "@spec-validator/validator/fields/segmentField",
+    },
+  },
+  "response": Object {
+    "body": Object {
+      "getStringField": [Function],
+      "regex": /\\.\\*/,
+      "serialize": [Function],
+      "type": "@spec-validator/validator/fields/stringField",
+      "validate": [Function],
+    },
+    "headers": Object {
+      "content-type": Object {
+        "constant": "text/html",
+        "getStringField": [Function],
+        "regex": /text\\\\/html/,
+        "serialize": [Function],
+        "type": "@spec-validator/validator/fields/constantField",
+        "validate": [Function],
+      },
+    },
+    "statusCode": Object {
+      "constant": 200,
+      "getStringField": [Function],
+      "regex": /200/,
+      "serialize": [Function],
+      "type": "@spec-validator/validator/fields/constantField",
+      "validate": [Function],
+    },
+  },
+}
+`;
