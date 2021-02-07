@@ -37,7 +37,7 @@ export interface Route {
 }
 
 export const isResponsesSpec = (spec: ResponsesSpec | ResponseSpec): spec is ResponsesSpec =>
-  isFieldSpec(spec) && (spec as unknown as OfType<string>).type !== unionField.type
+  isFieldSpec(spec) && (spec as unknown as OfType<string>).type === unionField.type
 
 export const route = <
   ReqSpec extends RequestSpec = RequestSpec,

@@ -1,6 +1,6 @@
-import { _, Route } from '@spec-validator/rest-api-server'
+import { _, Route, route } from '@spec-validator/rest-api-server'
 import {
-  segmentField as $, stringField, booleanField, numberField, arrayField,
+  segmentField as $, stringField, booleanField, numberField, arrayField, unionField, constantField,
 } from '@spec-validator/validator/fields'
 import genOpenApi from './genOpenApi'
 import { DEFAULT_SERVER_CONFIG } from '@spec-validator/rest-api-server/server'
@@ -8,6 +8,23 @@ import withDoc from './withDoc'
 
 test('fullRoute', () => {
   const routes: Route[] = [
+    route(
+      {
+        request: {
+          pathParams: $._('/multi-response'),
+          method: constantField('GET'),
+        },
+        response: unionField({
+          statusCode: constantField(201),
+        }, {
+          statusCode: constantField(202),
+        }),
+      }
+    ).handler(
+      async () => Promise.resolve({
+        statusCode: 201,
+      })
+    ),
     _.POST($._('/items')).spec(
       {
         request: {

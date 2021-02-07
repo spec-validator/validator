@@ -147,6 +147,19 @@ Object {
         },
       },
     },
+    "/multi-response": Object {
+      "get": Object {
+        "parameters": Array [],
+        "responses": Object {
+          "201": Object {
+            "description": "",
+          },
+          "202": Object {
+            "description": "",
+          },
+        },
+      },
+    },
   },
   "servers": Array [
     Object {
