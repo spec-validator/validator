@@ -7,7 +7,7 @@ routes that generate open-api spec and a ui for it.
 import http from 'http'
 
 import { createServer, _ } from '@spec-validator/rest-api-server'
-import { $, numberField, stringField } from '@spec-validator/validator/fields'
+import { segmentField as $, numberField, stringField } from '@spec-validator/validator/fields'
 import { withOpenApi } from '@spec-validator/open-api-endpoint'
 import { expectType } from '@spec-validator/test-utils/expectType'
 

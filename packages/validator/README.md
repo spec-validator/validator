@@ -313,7 +313,7 @@ This special kind of a field with a fluent API, is for outlining a
 structure of a string (e.g. a url pattern).
 
 ```ts
-import { $ } from '@spec-validator/validator/fields'
+import { segmentField as $ } from '@spec-validator/validator/fields'
 
 const url = $
   ._('/')

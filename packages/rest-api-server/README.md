@@ -23,7 +23,7 @@ The route is a combination of essentially 3 things:
 import { route, Route } from '@spec-validator/rest-api-server'
 import { expectType } from '@spec-validator/test-utils/expectType'
 import {
-  $, choiceField, numberField, stringField,
+  segmentField as $, choiceField, numberField, stringField,
   unionField, constantField,
 } from '@spec-validator/validator/fields'
 
