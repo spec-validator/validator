@@ -15,8 +15,8 @@ export type ServerConfig = {
   readonly routes: Route[],
 }
 
-const splitPath = (url?: string) => {
-  const [pathParams, queryParams] = (url || '').split('?', 2)
+const splitPath = (url: string) => {
+  const [pathParams, queryParams] = url.split('?', 2)
   return {
     pathParams, queryParams,
   }
@@ -25,7 +25,8 @@ const splitPath = (url?: string) => {
 const getWildcardRequestBase = (
   request: http.IncomingMessage,
 ) => ({
-  ...splitPath(request.url),
+  // we know that it is a string because the value comes from http.Server
+  ...splitPath(request.url as string),
   method: request.method,
 })
 
