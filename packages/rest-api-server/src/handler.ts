@@ -49,14 +49,10 @@ const matchRoute = (
 
 
 const getData = async (msg: http.IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
-  try {
-    const chunks: string[] = []
-    msg.on('readable', () => chunks.push(msg.read()))
-    msg.on('error', reject)
-    msg.on('end', () => resolve(chunks.join('')))
-  } catch (err) {
-    reject(err)
-  }
+  const chunks: string[] = []
+  msg.on('readable', () => chunks.push(msg.read()))
+  msg.on('error', reject)
+  msg.on('end', () => resolve(chunks.join('')))
 })
 
 const withAppErrorStatusCode = async <T>(
@@ -99,7 +95,7 @@ const getSerializationMapping = (
     [it.mediaType,  it]
   )))
 
-const firstHeader = (value: string | string[] | undefined): string | undefined => {
+export const firstHeader = (value: string | string[] | undefined): string | undefined => {
   if (!value) {
     return undefined
   } if (typeof value === 'string') {
@@ -174,9 +170,7 @@ const handleRoute = async (
 
   const accept = _getMediaType('accept')
 
-  if (!response.getHeader('content-type')) {
-    response.setHeader('content-type', accept.mediaType)
-  }
+  response.setHeader('content-type', accept.mediaType)
 
   if (resp.body !== undefined) {
     response.write(
@@ -193,7 +187,7 @@ export const handle = async (
   response: http.ServerResponse
 ): Promise<void> => {
 
-  // An optimization tecnique to prevent a deep spec transformation
+  // An optimization technique to prevent a deep spec transformation
   // on each request
   const routes = cached('routes', () => config.routes.map(it => ({
     path: getFieldForSpec(pick(it.request, ROUTE_KEYS)),
