@@ -1,5 +1,7 @@
 import objectField from './objectField'
 import { Field, FieldWithStringSupport, StringBasedField } from '../core'
+
+import lazyProp from '@spec-validator/utils/lazy-prop'
 import { Any } from '@spec-validator/utils/util-types'
 
 export type FieldWithRegExpSupport<Type> = FieldWithStringSupport<Type> & {
@@ -41,65 +43,43 @@ export class SegmentField<
     return new SegmentField(this, key as any, field)
   }
 
-  get _segments(): SegmentField<unknown>[] {
-    const segments: SegmentField<unknown>[] = []
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let cursor: SegmentField<unknown> | undefined = this
-    while (cursor) {
-      segments.push(cursor)
-      cursor = cursor.parent
-    }
-    segments.reverse()
-    return segments
-  }
-
-  private segmentsCache: SegmentField<unknown>[] | undefined = undefined
   get segments(): SegmentField<unknown>[] {
-    if (!this.segmentsCache) {
-      this.segmentsCache = this._segments
-    }
-    return this.segmentsCache
+    return lazyProp(this, 'segments', () => {
+      const segments: SegmentField<unknown>[] = []
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      let cursor: SegmentField<unknown> | undefined = this
+      while (cursor) {
+        segments.push(cursor)
+        cursor = cursor.parent
+      }
+      segments.reverse()
+      return segments
+    })
   }
 
   private getFieldSegments(): SegmentField<unknown>[] {
     return this.segments.filter(segment => segment.field)
   }
 
-  private get _regex(): RegExp {
-    return new RegExp(`^${this.segments
+  get regex(): RegExp {
+    return lazyProp(this, 'regex', () => new RegExp(`^${this.segments
       .map(segment => segment.field && segment.key
         ? `(?<${segment.key}>${segment.field.regex.source})`
         : (segment.key || '')
-      ).join('')}$`)
+      ).join('')}$`))
   }
 
-  private regexCache: RegExp | undefined
-  get regex(): RegExp {
-    if (!this.regexCache) {
-      this.regexCache = this._regex
-    }
-    return this.regexCache
-  }
-
-  private get _objectSpec(): Record<string, Field<unknown>> | undefined {
-    const fieldSegments = this.getFieldSegments()
-    if (fieldSegments.length === 0) {
-      return undefined
-    } else {
-      return Object.fromEntries(fieldSegments.map(it =>
-        [it.key as string, it.field as Field<unknown>]
-      )) as Record<string, Field<unknown>>
-    }
-  }
-
-  private objectSpecCacheReady = false
-  private objectSpecCache: Record<string, Field<unknown>> | undefined
   get objectSpec(): Record<string, Field<unknown>> | undefined {
-    if (!this.objectSpecCacheReady) {
-      this.objectSpecCache = this._objectSpec
-      this.objectSpecCacheReady = true
-    }
-    return this.objectSpecCache
+    return lazyProp(this, 'objectSpec', () => {
+      const fieldSegments = this.getFieldSegments()
+      if (fieldSegments.length === 0) {
+        return undefined
+      } else {
+        return Object.fromEntries(fieldSegments.map(it =>
+          [it.key as string, it.field as Field<unknown>]
+        )) as Record<string, Field<unknown>>
+      }
+    })
   }
 
   validate(value: string): DeserializedType {
