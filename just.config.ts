@@ -7,8 +7,6 @@ import generateTsConfigJson from './build/generateTsConfigJson'
 
 import testDocs from './packages/doc-tester/src/runCodeBlocks'
 
-option('-u', { default: false } as any)
-
 const lint = (...extras: string[]) =>
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
 
@@ -20,10 +18,14 @@ task('build', series(
 
 task('test-docs', () => testDocs())
 
+option('-u', { default: false } as any)
+option('-p', { default: undefined } as any)
+
 task('test',
   exec(
     'jest', '--config', './jest.conf.js', '--passWithNoTests', '--detectOpenHandles',
-    ...(argv().u ? ['-u'] : [])
+    ...(argv().u ? ['-u'] : []),
+    ...(argv().p ? [argv().p] : []),
   )
 )
 

@@ -1,9 +1,9 @@
-import http from 'http'
 import { validate, serialize, TypeHint } from '@spec-validator/validator'
-import { RequestSpec, ResponseSpec, Route } from './route'
-import { cached, pick } from '@spec-validator/utils/utils'
-import { SerializationFormat } from './serialization'
-import { getFieldForSpec } from '@spec-validator/validator/interface'
+import { RequestSpec, ResponseSpec, route as declareRoute, Route, StringMapping } from './route'
+import { cached } from '@spec-validator/utils/utils'
+import { HtmlSerialization, JsonSerialization, SerializationFormat } from './serialization'
+import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
+import { SegmentField, ConstantField, constantField } from '@spec-validator/validator/fields'
 
 export type ServerConfig = {
   readonly baseUrl: string,
@@ -22,38 +22,46 @@ const splitPath = (url: string) => {
   }
 }
 
-const getWildcardRequestBase = (
-  request: http.IncomingMessage,
-) => ({
-  // we know that it is a string because the value comes from http.Server
-  ...splitPath(request.url as string),
-  method: request.method,
-})
+const DEFAULT_SERVER_CONFIG: ServerConfig = {
+  baseUrl: 'http://localhost:8000',
+  serializationFormats: [new JsonSerialization(), new HtmlSerialization()],
+  encoding: 'utf-8',
+  frameworkErrorStatusCode: 503,
+  appErrorStatusCode: 500,
+  reportError: (error: unknown) => {
+    console.error(error)
+    return Promise.resolve(undefined)
+  },
+  routes: [],
+}
 
-const ROUTE_KEYS = ['method' as const, 'pathParams' as const]
+export const getServerConfigs = <C extends Partial<ServerConfig>> (
+  serverConfig: C
+): ServerConfig => ({
+    ...DEFAULT_SERVER_CONFIG,
+    ...serverConfig,
+  })
 
 const matchRoute = (
-  request: http.IncomingMessage,
-  route: any,
+  request: WildCardRequest,
+  requestSpec: RequestSpec,
 ): boolean => {
   try {
     validate(
-      route.path,
-      pick(getWildcardRequestBase(request), ROUTE_KEYS)
+      {
+        method: requestSpec.method,
+        pathParams: requestSpec.pathParams,
+      },
+      {
+        method: request.method,
+        pathParams: splitPath(request.url).pathParams,
+      }
     )
     return true
   } catch (_) {
     return false
   }
 }
-
-
-const getData = async (msg: http.IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
-  const chunks: string[] = []
-  msg.on('readable', () => chunks.push(msg.read()))
-  msg.on('error', reject)
-  msg.on('end', () => resolve(chunks.join('')))
-})
 
 const withAppErrorStatusCode = async <T>(
   statusCode: number,
@@ -74,18 +82,18 @@ const withAppErrorStatusCode = async <T>(
   }
 }
 
-const getWildcardRoute = async (
-  serialization: SerializationFormat,
-  request: http.IncomingMessage,
-) => {
-  const body = await getData(request)
-  return ({
-    ...getWildcardRequestBase(request),
-    body: body && await withAppErrorStatusCode(400, () => serialization.deserialize(body)),
-    headers: request.headers,
-  })
+export type WildCardRequest = {
+  body: string,
+  headers: Record<string, any>,
+  method: string,
+  url: string
 }
 
+export type WildCardResponse = {
+  body?: string,
+  headers?: Record<string, any>,
+  statusCode: number
+}
 
 const getSerializationMapping = (
   serializationFormats: SerializationFormat[],
@@ -109,7 +117,7 @@ const ANY_MEDIA_TYPE = '*/*'
 
 const getMediaType = (
   config: ServerConfig,
-  requestIn: http.IncomingMessage,
+  requestIn: WildCardRequest,
   headerKey: string,
   fallback?: string
 ) => {
@@ -135,21 +143,24 @@ const getMediaType = (
 const handleRoute = async (
   config: ServerConfig,
   route: Route,
-  requestIn: http.IncomingMessage,
-  response: http.ServerResponse
-): Promise<void> => {
+  wildcardRequest: WildCardRequest
+): Promise<WildCardResponse> => {
 
-  requestIn.headers['accept'] = requestIn.headers['accept'] || requestIn.headers['content-type']
+  wildcardRequest.headers['accept'] = wildcardRequest.headers['accept'] || wildcardRequest.headers['content-type']
 
-  const _getMediaType = getMediaType.bind(null, config, requestIn)
+  const _getMediaType = getMediaType.bind(null, config, wildcardRequest)
 
   const contentType = _getMediaType('content-type')
 
-  const wildcardRequest = await getWildcardRoute(contentType, requestIn)
-
   const request = await withAppErrorStatusCode(
     400,
-    async () => validate(route.request, wildcardRequest, true),
+    async () => validate(route.request, {
+      ...wildcardRequest,
+      ...splitPath(wildcardRequest.url),
+      body: route.request.body ?
+        await withAppErrorStatusCode(400, () => contentType.deserialize(wildcardRequest.body)) :
+        undefined,
+    }, true),
   )
 
   // This cast is totally reasoanble because in the interface we exclude
@@ -159,77 +170,114 @@ const handleRoute = async (
   // TODO: no any here
   const resp = serialize(route.response, await withAppErrorStatusCode(
     config.appErrorStatusCode,
-    () => handler(request as any)
+    async () => await handler(request as any)
   ) as any) as any
-
-  Object.entries(resp.headers || {}).forEach(([key, value]) => {
-    response.setHeader(key, value as any)
-  })
-
-  response.statusCode = resp.statusCode
 
   const accept = _getMediaType('accept')
 
-  response.setHeader('content-type', accept.mediaType)
-
-  if (resp.body !== undefined) {
-    response.write(
-      accept.serialize(resp.body),
-      config.encoding
-    )
+  return {
+    body: accept.serialize(resp.body),
+    headers: {
+      ...resp.headers,
+      'content-type': accept.mediaType,
+    },
+    statusCode: resp.statusCode,
   }
 }
 
+export type Placeholder = Any
+
+type RequestSpecMethod = Omit<RequestSpec, 'method' | 'pathParams'>
+
+type ResponseSpecMethod = Omit<ResponseSpec, 'statusCode'>
+
+// Make it fluid API - to make things work with autocomplete
+export const withMethod = <
+  Method extends string,
+  OkStatusCode extends number
+> (method: Method, okStatusCode: OkStatusCode) =>
+  <PathParams extends StringMapping | undefined = StringMapping | undefined> (pathParams: SegmentField<PathParams>): {
+    spec:  <
+      ReqSpec extends RequestSpecMethod = RequestSpecMethod,
+      RespSpec extends ResponseSpecMethod = ResponseSpecMethod,
+      > (spec: {
+      request?: ReqSpec,
+      response?: RespSpec
+    }) => ({
+      handler: (
+        handler: (request: WithoutOptional<TypeHint<
+          ReqSpec
+          & {
+              readonly method: ConstantField<Method>,
+              readonly pathParams: SegmentField<PathParams>
+            }
+        >>
+      ) => Promise<
+        WithoutOptional<TypeHint<RespSpec>>
+      >) => Route
+    })
+  } => ({
+      spec: (spec) => ({ handler: ( handler ) =>
+        declareRoute({
+          request: {
+            ...(spec.request || {}),
+            method: constantField(method),
+            pathParams: pathParams as SegmentField<StringMapping | undefined>,
+          },
+          response: {
+            ...(spec.response || {}),
+            statusCode: constantField(okStatusCode),
+          },
+        }).handler(
+          async (req) => ({ ...((await handler(req as any)) as any), statusCode: okStatusCode })
+        ),
+      }),
+    })
+
+export const _ = {
+  GET: withMethod('GET', 200),
+  HEAD: withMethod('HEAD', 200),
+  POST: withMethod('POST', 201),
+  PUT: withMethod('PUT', 204),
+  DELETE: withMethod('DELETE', 204),
+  PATCH: withMethod('PATCH', 204),
+}
+
+const jsonSerialization = new JsonSerialization()
+
 // eslint-disable-next-line max-statements
-export const handle = async (
+export default async (
   config: ServerConfig,
-  request: http.IncomingMessage,
-  response: http.ServerResponse
-): Promise<void> => {
+  request: WildCardRequest
+): Promise<WildCardResponse> => {
 
-  // An optimization technique to prevent a deep spec transformation
-  // on each request
-  const routes = cached('routes', () => config.routes.map(it => ({
-    path: getFieldForSpec(pick(it.request, ROUTE_KEYS)),
-    request: getFieldForSpec(it.request, true),
-    response: getFieldForSpec(it.response),
-    handler: it.handler,
-  }))) as any
+  try {
+    const route = config.routes.find(it => matchRoute(request, it.request))
 
-  const route = routes.find(matchRoute.bind(null, request))
-
-  const reportError = async (error: unknown) => {
-    try {
-      await config.reportError(error)
-    } catch (reportingError) {
-      console.error(reportingError)
-    }
-  }
-
-  if (route) {
-    try {
-      await handleRoute(config, route, request, response)
-    } catch (error) {
-      response.statusCode = error.statusCode || config.frameworkErrorStatusCode
-      if (error.isPublic) {
-        try {
-          const accept = getMediaType(
-            config, request, 'accept',
-            config.serializationFormats[0].mediaType
-          )
-          response.write(
-            accept.serialize(error),
-            config.encoding
-          )
-        } catch (error2) {
-          reportError(error2)
-        }
-      } else {
-        reportError(error)
+    if (!route) {
+      return {
+        statusCode: 404,
       }
     }
-  } else {
-    response.statusCode = 404
+
+    return await handleRoute(config, route, request)
+  } catch (error) {
+    if (error.isPublic) {
+      const accept = getMediaType(config, request, 'accept', jsonSerialization.mediaType)
+      return {
+        statusCode: error.statusCode || config.frameworkErrorStatusCode,
+        body: accept.serialize(error),
+      }
+    } else {
+      try {
+        await config.reportError(error)
+      } catch (reportingError) {
+        console.error(reportingError)
+      }
+      return {
+        statusCode:  error.statusCode || config.frameworkErrorStatusCode,
+      }
+    }
   }
-  response.end()
+
 }

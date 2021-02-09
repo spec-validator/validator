@@ -2,11 +2,11 @@ import { Json } from '@spec-validator/utils/Json'
 import { Field, TypeHint, SpecUnion, isArraySpec, isFieldSpec, isObjectSpec } from './core'
 import { undefinedField, arrayField, objectField } from './fields'
 
-export const getFieldForSpec = (
-  spec: SpecUnion,
+export const getFieldForSpec = <Spec extends SpecUnion> (
+  spec: Spec,
   allowExtraFields = false
-): Field<TypeHint<typeof spec>> => {
-  type F = Field<TypeHint<typeof spec>>
+): Field<TypeHint<Spec>> => {
+  type F = Field<TypeHint<Spec>>
   if (isFieldSpec(spec)) {
     return spec as F
   } else if (isArraySpec(spec)) {
@@ -16,7 +16,7 @@ export const getFieldForSpec = (
       Object.entries(spec).map(([key, value]) => [key, getFieldForSpec(value)])
     ), allowExtraFields) as unknown as F
   } else {
-    return undefinedField()
+    return undefinedField() as F
   }
 }
 

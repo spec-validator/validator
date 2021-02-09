@@ -1,94 +1,7 @@
 import http from 'http'
 import { URL } from 'url'
-import { route, StringMapping } from './route'
 
-import { ServerConfig, handle } from './handler'
-import { HtmlSerialization, JsonSerialization } from './serialization'
-import { Route, RequestSpec, ResponseSpec } from './route'
-
-import { TypeHint } from '@spec-validator/validator'
-import { constantField, SegmentField } from '@spec-validator/validator/fields'
-import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
-import { ConstantField } from '@spec-validator/validator/fields/constantField'
-
-
-export type Placeholder = Any
-
-type RequestSpecMethod = Omit<RequestSpec, 'method' | 'pathParams'>
-
-type ResponseSpecMethod = Omit<ResponseSpec, 'statusCode'>
-
-// Make it fluid API - to make things work with autocomplete
-export const withMethod = <
-  Method extends string,
-  OkStatusCode extends number
-> (method: Method, okStatusCode: OkStatusCode) =>
-  <PathParams extends StringMapping | undefined = StringMapping | undefined> (pathParams: SegmentField<PathParams>): {
-    spec:  <
-      ReqSpec extends RequestSpecMethod = RequestSpecMethod,
-      RespSpec extends ResponseSpecMethod = ResponseSpecMethod,
-      > (spec: {
-      request?: ReqSpec,
-      response?: RespSpec
-    }) => ({
-      handler: (
-        handler: (request: WithoutOptional<TypeHint<
-          ReqSpec
-          & {
-              readonly method: ConstantField<Method>,
-              readonly pathParams: SegmentField<PathParams>
-            }
-        >>
-      ) => Promise<
-        WithoutOptional<TypeHint<RespSpec>>
-      >) => Route
-    })
-  } => ({
-      spec: (spec) => ({ handler: ( handler ) =>
-        route({
-          request: {
-            ...(spec.request || {}),
-            method: constantField(method),
-            pathParams,
-          },
-          response: {
-            ...(spec.response || {}),
-            statusCode: constantField(okStatusCode),
-          },
-        }).handler(
-          async (req) => ({ ...((await handler(req as any)) as any), statusCode: okStatusCode })
-        ),
-      }),
-    })
-
-export const _ = {
-  GET: withMethod('GET', 200),
-  HEAD: withMethod('HEAD', 200),
-  POST: withMethod('POST', 201),
-  PUT: withMethod('PUT', 204),
-  DELETE: withMethod('DELETE', 204),
-  PATCH: withMethod('PATCH', 204),
-}
-
-export const DEFAULT_SERVER_CONFIG: ServerConfig = {
-  baseUrl: 'http://localhost:8000',
-  serializationFormats: [new JsonSerialization(), new HtmlSerialization()],
-  encoding: 'utf-8',
-  frameworkErrorStatusCode: 503,
-  appErrorStatusCode: 500,
-  reportError: (error: unknown) => {
-    console.error(error)
-    return Promise.resolve(undefined)
-  },
-  routes: [],
-}
-
-export const mergeServerConfigs = (
-  serverConfig: Partial<ServerConfig>
-): ServerConfig => ({
-  ...DEFAULT_SERVER_CONFIG,
-  ...serverConfig,
-})
+import handle, { getServerConfigs, ServerConfig, WildCardRequest, WildCardResponse } from './handler'
 
 const SUPPORTED_PROTOCOLS= {
   'http': 80,
@@ -112,11 +25,59 @@ const getPort = (baseUrl: string): number => {
 
 type ConfiguredServer = http.Server & { serve: () => http.Server }
 
+const getData = async (msg: http.IncomingMessage): Promise<string> => new Promise<string> ((resolve, reject) => {
+  const chunks: string[] = []
+  msg.on('readable', () => chunks.push(msg.read()))
+  msg.on('error', reject)
+  msg.on('end', () => resolve(chunks.join('')))
+})
+
+const getWildcardRequest = async (
+  request: http.IncomingMessage,
+): Promise<WildCardRequest> => ({
+  method: request.method as string,
+  url: request.url as string,
+  body: await getData(request),
+  headers: request.headers,
+})
+
+const toHttpResponse = async (
+  config: ServerConfig,
+  resp: WildCardResponse,
+  response: http.ServerResponse
+): Promise<void> => {
+  Object.entries(resp.headers || {}).forEach(([key, value]) => {
+    response.setHeader(key, value as any)
+  })
+
+  response.statusCode = resp.statusCode
+
+  if (resp.body !== undefined) {
+    response.write(
+      resp.body,
+      config.encoding
+    )
+  }
+
+  response.end()
+}
+
+// eslint-disable-next-line max-statements
+const proc = async (
+  config: ServerConfig,
+  request: http.IncomingMessage,
+  response: http.ServerResponse
+): Promise<void> => {
+  const wildCardRequest = await getWildcardRequest(request)
+  const wildCardResponse = await handle(config, wildCardRequest)
+  await toHttpResponse(config, wildCardResponse, response)
+}
+
 export const createServer = (
   config: Partial<ServerConfig>,
 ): ConfiguredServer => {
-  const merged = mergeServerConfigs(config)
-  const server = http.createServer(handle.bind(null, merged)) as ConfiguredServer
+  const merged = getServerConfigs(config)
+  const server = http.createServer(proc.bind(null, merged)) as ConfiguredServer
   server.serve = () => server.listen(getPort(merged.baseUrl))
   return server
 }

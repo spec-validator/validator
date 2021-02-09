@@ -1,9 +1,8 @@
-import { _, Route, route } from '@spec-validator/rest-api-server'
+import { _, Route, route, getServerConfigs } from '@spec-validator/rest-api-server'
 import {
   segmentField as $, stringField, booleanField, numberField, arrayField, unionField, constantField,
 } from '@spec-validator/validator/fields'
 import genOpenApi from './genOpenApi'
-import { DEFAULT_SERVER_CONFIG } from '@spec-validator/rest-api-server/server'
 import withDoc from './withDoc'
 
 test('fullRoute', () => {
@@ -86,13 +85,12 @@ test('fullRoute', () => {
   ]
 
   expect(genOpenApi(
-    {
-      ...DEFAULT_SERVER_CONFIG,
+    getServerConfigs({
       routes,
       info: {
         title: 'Test',
         version: '1.0.0',
       },
-    })).toMatchSnapshot()
+    }))).toMatchSnapshot()
 
 })

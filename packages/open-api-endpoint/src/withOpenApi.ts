@@ -1,8 +1,6 @@
-import { _, ServerConfig } from '@spec-validator/rest-api-server'
-import { mergeServerConfigs } from '@spec-validator/rest-api-server/server'
+import { _, ServerConfig, getServerConfigs } from '@spec-validator/rest-api-server'
 import { Json } from '@spec-validator/utils/Json'
-import { segmentField as $, constantField, stringField } from '@spec-validator/validator/fields'
-import wildcardObjectField from '@spec-validator/validator/fields/wildcardObjectField'
+import { segmentField as $, constantField, stringField, wildcardObjectField } from '@spec-validator/validator/fields'
 import genOpenApi, { DEFAULT_INFO, Info, WithInfo } from './genOpenApi'
 
 const getUI = (url: string, info: Info) => `
@@ -37,8 +35,8 @@ const getUI = (url: string, info: Info) => `
   </html>
 `
 
-export default (config: Partial<ServerConfig> & WithInfo, schemaRoot = '/open-api'): ServerConfig => {
-  const merged = mergeServerConfigs(config)
+export default <C extends Partial<ServerConfig> & WithInfo>(config: C, schemaRoot = '/open-api'): ServerConfig => {
+  const merged = getServerConfigs(config)
   const routes = [
     ...merged.routes,
     _.GET($._(schemaRoot)).spec(
