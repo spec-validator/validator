@@ -10,6 +10,21 @@ import testDocs from './packages/doc-tester/src/runCodeBlocks'
 const lint = (...extras: string[]) =>
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
 
+task('new',
+  async (): Promise<void> => {
+    option('name', { default: undefined })
+    const name = argv().name
+    if (!name) {
+      throw 'Define package --name'
+    }
+    const call = exec(
+      'plop', '--plopfile', 'build/package-template/plopfile.js',
+      'package', '--', '--name', name
+    ) as unknown as (() => Promise<void>)
+    return await call()
+  }
+)
+
 task('build', series(
   generateTsConfigJson(),
   exec('yarn', 'tsc', '--build', 'tsconfig.build.json'),
@@ -18,15 +33,17 @@ task('build', series(
 
 task('test-docs', () => testDocs())
 
-option('-u', { default: false } as any)
-option('-p', { default: undefined } as any)
-
 task('test',
-  exec(
-    'jest', '--config', './jest.conf.js', '--passWithNoTests', '--detectOpenHandles',
-    ...(argv().u ? ['-u'] : []),
-    ...(argv().p ? [argv().p] : []),
-  )
+  async (): Promise<void> => {
+    option('-u', { default: false } as any)
+    option('-p', { default: undefined } as any)
+    const call = exec(
+      'jest', '--config', './jest.conf.js', '--passWithNoTests', '--detectOpenHandles',
+      ...(argv().u ? ['-u'] : []),
+      ...(argv().p ? ['--coverage', 'false', argv().p] : []),
+    ) as unknown as (() => Promise<void>)
+    return await call()
+  }
 )
 
 task('lint', lint())
