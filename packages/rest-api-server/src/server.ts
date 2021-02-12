@@ -1,7 +1,7 @@
 import http from 'http'
 import { URL } from 'url'
 
-import handle, { getServerConfigs, ServerConfig, WildCardRequest, WildCardResponse } from './handler'
+import createHandler, { getServerConfigs, ServerConfig, WildCardRequest, WildCardResponse } from './handler'
 
 const SUPPORTED_PROTOCOLS= {
   'http': 80,
@@ -63,21 +63,22 @@ const toHttpResponse = async (
 }
 
 // eslint-disable-next-line max-statements
-const proc = async (
-  config: ServerConfig,
-  request: http.IncomingMessage,
-  response: http.ServerResponse
-): Promise<void> => {
-  const wildCardRequest = await getWildcardRequest(request)
-  const wildCardResponse = await handle(config, wildCardRequest)
-  await toHttpResponse(config, wildCardResponse, response)
+const proc =  (
+  config: ServerConfig
+): ((request: http.IncomingMessage, response: http.ServerResponse) => Promise<void>) => {
+  const handleWildCardRounte = createHandler(config)
+  return async (request: http.IncomingMessage, response: http.ServerResponse): Promise<void> => {
+    const wildCardRequest = await getWildcardRequest(request)
+    const wildCardResponse = await handleWildCardRounte(wildCardRequest)
+    await toHttpResponse(config, wildCardResponse, response)
+  }
 }
 
 export const createServer = (
   config: Partial<ServerConfig>,
 ): ConfiguredServer => {
   const merged = getServerConfigs(config)
-  const server = http.createServer(proc.bind(null, merged)) as ConfiguredServer
+  const server = http.createServer(proc(merged)) as ConfiguredServer
   server.serve = () => server.listen(getPort(merged.baseUrl))
   return server
 }

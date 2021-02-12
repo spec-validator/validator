@@ -1,9 +1,13 @@
+import querystring from 'querystring'
+
 import { validate, serialize, TypeHint } from '@spec-validator/validator'
 import { RequestSpec, ResponseSpec, route as declareRoute, Route, StringMapping } from './route'
 import { cached } from '@spec-validator/utils/utils'
 import { HtmlSerialization, JsonSerialization, SerializationFormat } from './serialization'
 import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
 import { SegmentField, ConstantField, constantField } from '@spec-validator/validator/fields'
+import { getFieldForSpec } from '@spec-validator/validator/interface'
+import { Field } from '@spec-validator/validator/core'
 
 export type ServerConfig = {
   readonly baseUrl: string,
@@ -18,7 +22,8 @@ export type ServerConfig = {
 const splitPath = (url: string) => {
   const [pathParams, queryParams] = url.split('?', 2)
   return {
-    pathParams, queryParams,
+    pathParams,
+    queryParams: querystring.decode(queryParams),
   }
 }
 
@@ -44,7 +49,7 @@ export const getServerConfigs = <C extends Partial<ServerConfig>> (
 
 const matchRoute = (
   request: WildCardRequest,
-  requestSpec: RequestSpec,
+  requestSpec: Pick<RequestSpec, 'method' | 'pathParams'>,
 ): boolean => {
   try {
     validate(
@@ -142,7 +147,17 @@ const getMediaType = (
 // eslint-disable-next-line max-statements
 const handleRoute = async (
   config: ServerConfig,
-  route: Route,
+  route: {
+    request: {
+      headers?: Field<TypeHint<Route['request']['headers']>>,
+      queryParams?: Field<TypeHint<Route['request']['queryParams']>>,
+      method: Route['request']['method'],
+      pathParams: Route['request']['pathParams'],
+      body?: Route['request']['body']
+    },
+    response: Route['response'],
+    handler: Route['handler']
+  },
   wildcardRequest: WildCardRequest
 ): Promise<WildCardResponse> => {
 
@@ -246,38 +261,54 @@ export const _ = {
 const jsonSerialization = new JsonSerialization()
 
 // eslint-disable-next-line max-statements
-export default async (
-  config: ServerConfig,
-  request: WildCardRequest
-): Promise<WildCardResponse> => {
+export default (
+  config: ServerConfig
+): ((request: WildCardRequest) => Promise<WildCardResponse>) => {
 
-  try {
-    const route = config.routes.find(it => matchRoute(request, it.request))
+  const routes = config.routes.map(it => ({
+    ...it,
+    path: {
+      method: it.request.method,
+      pathParams: it.request.pathParams,
+    },
+    request: {
+      ...it.request,
+      headers: getFieldForSpec(it.request.headers, true),
+      queryParams: getFieldForSpec(it.request.queryParams, true),
+    },
+  }))
 
-    if (!route) {
-      return {
-        statusCode: 404,
+  // eslint-disable-next-line max-statements
+  return async (request: WildCardRequest): Promise<WildCardResponse> => {
+
+    try {
+      const route = routes.find(it => matchRoute(request, it.path))
+
+      if (!route) {
+        return {
+          statusCode: 404,
+        }
+      }
+
+      return await handleRoute(config, route, request)
+    } catch (error) {
+      if (error.isPublic) {
+        const accept = getMediaType(config, request, 'accept', jsonSerialization.mediaType)
+        return {
+          statusCode: error.statusCode || config.frameworkErrorStatusCode,
+          body: accept.serialize(error),
+        }
+      } else {
+        try {
+          await config.reportError(error)
+        } catch (reportingError) {
+          console.error(reportingError)
+        }
+        return {
+          statusCode:  error.statusCode || config.frameworkErrorStatusCode,
+        }
       }
     }
 
-    return await handleRoute(config, route, request)
-  } catch (error) {
-    if (error.isPublic) {
-      const accept = getMediaType(config, request, 'accept', jsonSerialization.mediaType)
-      return {
-        statusCode: error.statusCode || config.frameworkErrorStatusCode,
-        body: accept.serialize(error),
-      }
-    } else {
-      try {
-        await config.reportError(error)
-      } catch (reportingError) {
-        console.error(reportingError)
-      }
-      return {
-        statusCode:  error.statusCode || config.frameworkErrorStatusCode,
-      }
-    }
   }
-
 }

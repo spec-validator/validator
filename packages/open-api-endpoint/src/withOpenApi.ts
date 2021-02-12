@@ -3,7 +3,7 @@ import { Json } from '@spec-validator/utils/Json'
 import { segmentField as $, constantField, stringField, wildcardObjectField } from '@spec-validator/validator/fields'
 import genOpenApi, { DEFAULT_INFO, Info, WithInfo } from './genOpenApi'
 
-const getUI = (url: string, info: Info) => `
+const getUI = (info: Info) => `
   <html>
   <head>
     <title>${info.title} : ${info.version}</title>
@@ -19,7 +19,7 @@ const getUI = (url: string, info: Info) => `
     <script>
     window.onload = function() {
       const ui = SwaggerUIBundle({
-        url: "${url}",
+        url: window.location.href.split('?')[0].replace(/-ui$/, ''),
         dom_id: '#swagger-ui',
         presets: [
           SwaggerUIBundle.presets.apis,
@@ -61,7 +61,7 @@ export default <C extends Partial<ServerConfig> & WithInfo>(config: C, schemaRoo
       },
     ).handler(
       async () => ({
-        body: getUI(config.baseUrl + schemaRoot, config.info || DEFAULT_INFO),
+        body: getUI(config.info || DEFAULT_INFO),
         headers: {
           'content-type': 'text/html' as const,
         },

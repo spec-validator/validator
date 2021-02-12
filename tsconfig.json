@@ -34,7 +34,9 @@
       "@spec-validator/rest-api-server/*": ["rest-api-server/src/*"],
       "@spec-validator/rest-api-server": ["rest-api-server/src/index.ts"],
       "@spec-validator/open-api-endpoint/*": ["open-api-endpoint/src/*"],
-      "@spec-validator/open-api-endpoint": ["open-api-endpoint/src/index.ts"]
+      "@spec-validator/open-api-endpoint": ["open-api-endpoint/src/index.ts"],
+      "@spec-validator/aws-api-gw-adapter/*": ["aws-api-gw-adapter/src/*"],
+      "@spec-validator/aws-api-gw-adapter": ["aws-api-gw-adapter/src/index.ts"]
     }
   }
 }

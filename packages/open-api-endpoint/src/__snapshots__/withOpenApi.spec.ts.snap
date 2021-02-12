@@ -275,7 +275,7 @@ Object {
     <script>
     window.onload = function() {
       const ui = SwaggerUIBundle({
-        url: \\"undefined/open-api\\",
+        url: window.location.href.split('?')[0].replace(/-ui$/, ''),
         dom_id: '#swagger-ui',
         presets: [
           SwaggerUIBundle.presets.apis,
