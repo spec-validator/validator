@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import { task, series, parallel, option, argv } from 'just-task'
 import { forAll as forAllPackages } from './build/buildOrder'
 
@@ -10,15 +12,29 @@ import testDocs from './packages/doc-tester/src/runCodeBlocks'
 const lint = (...extras: string[]) =>
   exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
 
+const INTERNAL_TPL_DIR = 'build/internal-templates'
+
 task('new',
+  // eslint-disable-next-line max-statements
   async (): Promise<void> => {
-    option('name', { default: undefined })
+    option('name')
+    option('type')
+    const types = fs.readdirSync(INTERNAL_TPL_DIR, {withFileTypes: true})
+      .filter(item => item.isDirectory())
+      .map(item => item.name)
+
+    const type = argv().type || 'package'
+    if (types.indexOf(type) < 0) {
+      throw `Invalid --type. Must be on of: ${types.join('|')}`
+    }
+
     const name = argv().name
     if (!name) {
       throw 'Define package --name'
     }
+
     const call = exec(
-      'plop', '--plopfile', 'build/package-template/plopfile.js',
+      'plop', '--plopfile', `${INTERNAL_TPL_DIR}/${type}/plopfile.js`,
       'package', '--', '--name', name
     ) as unknown as (() => Promise<void>)
     return await call()

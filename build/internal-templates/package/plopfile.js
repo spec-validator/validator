@@ -1,6 +1,6 @@
 const item = (path) => ({
   type: 'add',
-  path: `../../packages/{{name}}/${path}`,
+  path: `../../../packages/{{name}}/${path}`,
   templateFile: path,
 })
 
