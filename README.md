@@ -41,6 +41,14 @@ Please got through the [ideas' document](IDEAS.md) before diving into the API.
 
   `yarn add @spec-validator/open-api-endpoint`
 
+- [@spec-validator/aws-api-gw-adapter](packages/aws-api-gw-adapter/README.md)
+
+  AWS API gateway adapter. ATM works only with a proxy route. But
+  in the future will be able to bootstrap the whole set of explicit
+  routes in API gateway.
+
+  `yarn add @spec-validator/aws-api-gw-adapter`
+
 - [@spec-validator/doc-tester](packages/doc-tester/README.md)
 
   A tool to validate TypeScript snippets within Markdown files.
