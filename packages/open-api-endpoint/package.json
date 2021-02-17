@@ -1,0 +1,14 @@
+{
+  "name": "@spec-validator/open-api-endpoint",
+  "license": "Apache-2.0",
+  "version": "0.0.1",
+  "dependencies": {
+    "@spec-validator/utils": "0.0.1",
+    "@spec-validator/rest-api-server": "0.0.1",
+    "@spec-validator/validator": "0.0.1",
+    "openapi-types": "^7.0.1"
+  },
+  "devDependencies": {
+    "@spec-validator/test-utils": "0.0.1"
+  }
+}

@@ -1,0 +1,51 @@
+import request from 'supertest'
+import express from 'express'
+
+import { $, objectField, stringField } from '@spec-validator/validator/fields'
+import { createServer, _ } from './server'
+
+/**
+Just to compare how slow the toolkit is with all its validation
+*/
+
+const server = createServer({routes: [
+  _.GET($._('/item')).spec(
+    {
+      response: {
+        data: objectField({
+          name: stringField()
+        })
+      }
+    }
+  ).handler(
+    async () => ({
+      data: {
+        name: 'john'
+      }
+    })
+  )
+]})
+
+const app = express()
+
+app.get('/test', function(req, res) {
+  res.status(200).json({ name: 'john' })
+})
+
+test('performance-express', async () => {
+  const before = Date.now()
+  for (let i=0; i < 600; i++) {
+    await request(app).get('/item')
+  }
+  const after = Date.now()
+  console.log(after - before)
+})
+
+test('performance-this', async () => {
+  const before = Date.now()
+  for (let i=0; i < 600; i++) {
+    await request(server).get('/item')
+  }
+  const after = Date.now()
+  console.log(after - before)
+})

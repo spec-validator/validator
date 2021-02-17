@@ -1,0 +1,170 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fullRoute 1`] = `
+Object {
+  "info": Object {
+    "title": "Test",
+    "version": "1.0.0",
+  },
+  "openapi": "3.0.3",
+  "paths": Object {
+    "/item/{id}": Object {
+      "get": Object {
+        "parameters": Array [
+          Object {
+            "in": "query",
+            "name": "flag",
+            "required": true,
+            "schema": Object {
+              "type": "boolean",
+            },
+          },
+          Object {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": Object {
+              "pattern": ".*",
+              "type": "string",
+            },
+          },
+        ],
+        "responses": Object {
+          "200": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "additionalProperties": false,
+                  "properties": Object {
+                    "items": Object {
+                      "items": Object {
+                        "minimum": 0,
+                        "type": "integer",
+                      },
+                      "type": "array",
+                    },
+                  },
+                  "required": Array [
+                    "items",
+                  ],
+                  "type": "object",
+                },
+              },
+              "text/html": Object {
+                "schema": Object {
+                  "additionalProperties": false,
+                  "properties": Object {
+                    "items": Object {
+                      "items": Object {
+                        "minimum": 0,
+                        "type": "integer",
+                      },
+                      "type": "array",
+                    },
+                  },
+                  "required": Array [
+                    "items",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "",
+            "headers": Object {
+              "key": Object {
+                "required": true,
+                "schema": Object {
+                  "description": Object {
+                    "description": "key header",
+                    "examples": Object {
+                      "sampleKey": Object {
+                        "summary": "Sample value",
+                        "value": 13,
+                      },
+                    },
+                  },
+                  "minimum": 0,
+                  "type": "integer",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/items": Object {
+      "post": Object {
+        "parameters": Array [],
+        "requestBody": Object {
+          "content": Object {
+            "application/json": Object {
+              "schema": Object {
+                "additionalProperties": false,
+                "properties": Object {
+                  "count": Object {
+                    "minimum": 0,
+                    "type": "integer",
+                  },
+                  "title": Object {
+                    "pattern": ".*",
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "title",
+                  "count",
+                ],
+                "type": "object",
+              },
+            },
+            "text/html": Object {
+              "schema": Object {
+                "additionalProperties": false,
+                "properties": Object {
+                  "count": Object {
+                    "minimum": 0,
+                    "type": "integer",
+                  },
+                  "title": Object {
+                    "pattern": ".*",
+                    "type": "string",
+                  },
+                },
+                "required": Array [
+                  "title",
+                  "count",
+                ],
+                "type": "object",
+              },
+            },
+          },
+          "required": true,
+        },
+        "responses": Object {
+          "201": Object {
+            "description": "",
+          },
+        },
+      },
+    },
+    "/multi-response": Object {
+      "get": Object {
+        "parameters": Array [],
+        "responses": Object {
+          "201": Object {
+            "description": "",
+          },
+          "202": Object {
+            "description": "",
+          },
+        },
+      },
+    },
+  },
+  "servers": Array [
+    Object {
+      "url": "http://localhost:8000",
+    },
+  ],
+}
+`;

@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`route function returns a proper route object 1`] = `
+Object {
+  "headers": Object {
+    "headerKey": Object {
+      "getStringField": [Function],
+      "regex": /\\.\\*/,
+      "serialize": [Function],
+      "type": "@spec-validator/validator/fields/stringField",
+      "validate": [Function],
+    },
+  },
+  "method": Object {
+    "constant": "GET",
+    "getStringField": [Function],
+    "regex": /GET/,
+    "serialize": [Function],
+    "type": "@spec-validator/validator/fields/constantField",
+    "validate": [Function],
+  },
+  "pathParams": SegmentField {
+    "field": Object {
+      "regex": /\\.\\*/,
+      "serialize": [Function],
+      "type": "@spec-validator/validator/fields/stringField",
+      "validate": [Function],
+    },
+    "key": "pathKey",
+    "parent": SegmentField {
+      "field": undefined,
+      "key": "",
+      "parent": undefined,
+      "type": "@spec-validator/validator/fields/segmentField",
+    },
+    "type": "@spec-validator/validator/fields/segmentField",
+  },
+}
+`;
+
+exports[`route function returns a proper route object 2`] = `
+Object {
+  "serialize": [Function],
+  "type": "@spec-validator/validator/fields/unionField",
+  "validate": [Function],
+  "variants": Array [
+    Object {
+      "body": Object {
+        "canBeFloat": false,
+        "getStringField": [Function],
+        "regex": /\\\\d\\+/,
+        "serialize": [Function],
+        "signed": false,
+        "type": "@spec-validator/validator/fields/numberField",
+        "validate": [Function],
+      },
+      "statusCode": Object {
+        "constant": 201,
+        "getStringField": [Function],
+        "regex": /201/,
+        "serialize": [Function],
+        "type": "@spec-validator/validator/fields/constantField",
+        "validate": [Function],
+      },
+    },
+    Object {
+      "body": Object {
+        "choices": Array [
+          "one",
+          "two",
+        ],
+        "getStringField": [Function],
+        "regex": /0\\|1/,
+        "serialize": [Function],
+        "type": "@spec-validator/validator/fields/choiceField",
+        "validate": [Function],
+      },
+      "headers": Object {
+        "headerKey": Object {
+          "getStringField": [Function],
+          "regex": /\\.\\*/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/stringField",
+          "validate": [Function],
+        },
+      },
+      "statusCode": Object {
+        "constant": 202,
+        "getStringField": [Function],
+        "regex": /202/,
+        "serialize": [Function],
+        "type": "@spec-validator/validator/fields/constantField",
+        "validate": [Function],
+      },
+    },
+  ],
+}
+`;

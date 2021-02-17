@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createRegistry correctly returns a representation of a schema with known field 1`] = `
+Object {
+  "page": Object {
+    "pageCount": Object {
+      "canBeFloat": false,
+      "type": "number",
+    },
+    "subtitle": Object {
+      "regexp": ".*",
+      "type": "string",
+    },
+  },
+  "title": Object {
+    "regexp": ".*",
+    "type": "string",
+  },
+}
+`;

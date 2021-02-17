@@ -1,0 +1,43 @@
+name: release
+
+on:
+  push:
+    branches:
+      - "!*"
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Configure node
+        uses: actions/setup-node@master
+        with:
+          node-version: "12.x"
+
+      - name: Install
+        run: yarn install
+
+      - name: Lint
+        run: yarn just lint
+
+      - name: Test
+        run: yarn just test
+
+      - name: Test docs
+        run: yarn just test-docs
+
+      - name: Build
+        run: yarn just build
+
+      - name: Prepare NPM_TOKEN
+        run: echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_TOKEN}}" > ~/.npmrc
+
+      - name: Publish
+        run: yarn just publish
+

@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`entrypoint 1`] = `
+Object {
+  "body": "{\\"id\\":42,\\"title\\":\\"Title\\",\\"key\\":\\"qvalue\\"}",
+  "headers": Object {
+    "content-type": "application/json",
+  },
+  "statusCode": 201,
+}
+`;

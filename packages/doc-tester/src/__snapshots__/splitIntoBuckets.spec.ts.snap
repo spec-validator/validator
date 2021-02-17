@@ -1,0 +1,182 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ignore blocks labeled with # 1`] = `
+Object {
+  "taken.ts": Array [
+    Object {
+      "label": "taken",
+      "lineno": 1,
+      "lines": Array [
+        "Taken ts code",
+      ],
+      "type": "ts",
+    },
+  ],
+}
+`;
+
+exports[`ignore one-liners 1`] = `Object {}`;
+
+exports[`mixed blocks 1`] = `
+Object {
+  ".": Array [
+    Object {
+      "label": "",
+      "lineno": 14,
+      "lines": Array [
+        "Unlabeled wildcard code",
+      ],
+      "type": "",
+    },
+  ],
+  ".ts": Array [
+    Object {
+      "label": "",
+      "lineno": 6,
+      "lines": Array [
+        "Unlabeled ts code",
+      ],
+      "type": "ts",
+    },
+  ],
+  "one.": Array [
+    Object {
+      "label": "one",
+      "lineno": 10,
+      "lines": Array [
+        "Labeled wildcard code",
+      ],
+      "type": "",
+    },
+  ],
+  "one.ts": Array [
+    Object {
+      "label": "one",
+      "lineno": 2,
+      "lines": Array [
+        "Labeled ts code",
+      ],
+      "type": "ts",
+    },
+  ],
+}
+`;
+
+exports[`take blocks that follow one-liners 1`] = `
+Object {
+  ".ts": Array [
+    Object {
+      "label": "",
+      "lineno": 1,
+      "lines": Array [
+        "Take",
+      ],
+      "type": "ts",
+    },
+  ],
+}
+`;
+
+exports[`toCode 1`] = `
+"
+
+one
+two
+
+
+three
+four
+"
+`;
+
+exports[`typed and labeled blocks 1`] = `
+Object {
+  "one.ts": Array [
+    Object {
+      "label": "one",
+      "lineno": 2,
+      "lines": Array [
+        "CODE",
+      ],
+      "type": "ts",
+    },
+    Object {
+      "label": "one",
+      "lineno": 6,
+      "lines": Array [
+        "CODE 2",
+      ],
+      "type": "ts",
+    },
+  ],
+}
+`;
+
+exports[`typed and unlabeled blocks 1`] = `
+Object {
+  ".ts": Array [
+    Object {
+      "label": "",
+      "lineno": 2,
+      "lines": Array [
+        "CODE",
+      ],
+      "type": "ts",
+    },
+    Object {
+      "label": "",
+      "lineno": 6,
+      "lines": Array [
+        "CODE 2",
+      ],
+      "type": "ts",
+    },
+  ],
+}
+`;
+
+exports[`untyped and labeled blocks 1`] = `
+Object {
+  "one.": Array [
+    Object {
+      "label": "one",
+      "lineno": 2,
+      "lines": Array [
+        "CODE",
+      ],
+      "type": "",
+    },
+    Object {
+      "label": "one",
+      "lineno": 6,
+      "lines": Array [
+        "CODE 2",
+      ],
+      "type": "",
+    },
+  ],
+}
+`;
+
+exports[`untyped and unlabeled blocks 1`] = `
+Object {
+  ".": Array [
+    Object {
+      "label": "",
+      "lineno": 2,
+      "lines": Array [
+        "CODE",
+      ],
+      "type": "",
+    },
+    Object {
+      "label": "",
+      "lineno": 6,
+      "lines": Array [
+        "CODE 2",
+      ],
+      "type": "",
+    },
+  ],
+}
+`;

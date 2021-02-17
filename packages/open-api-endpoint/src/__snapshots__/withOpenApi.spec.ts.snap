@@ -1,0 +1,298 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`routing 1`] = `
+Object {
+  "appErrorStatusCode": 500,
+  "baseUrl": "http://localhost:8000",
+  "encoding": "utf-8",
+  "frameworkErrorStatusCode": 503,
+  "reportError": [Function],
+  "routes": Array [
+    Object {
+      "handler": [Function],
+      "request": Object {
+        "method": Object {
+          "constant": "GET",
+          "getStringField": [Function],
+          "regex": /GET/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+        "pathParams": SegmentField {
+          "field": undefined,
+          "key": "/open-api",
+          "parent": SegmentField {
+            "field": undefined,
+            "key": "",
+            "parent": undefined,
+            "type": "@spec-validator/validator/fields/segmentField",
+          },
+          "type": "@spec-validator/validator/fields/segmentField",
+        },
+      },
+      "response": Object {
+        "body": Object {
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/wildcardObjectField",
+          "validate": [Function],
+        },
+        "statusCode": Object {
+          "constant": 200,
+          "getStringField": [Function],
+          "regex": /200/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+      },
+    },
+    Object {
+      "handler": [Function],
+      "request": Object {
+        "method": Object {
+          "constant": "GET",
+          "getStringField": [Function],
+          "regex": /GET/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+        "pathParams": SegmentField {
+          "field": undefined,
+          "key": "-ui",
+          "parent": SegmentField {
+            "field": undefined,
+            "key": "/open-api",
+            "parent": SegmentField {
+              "field": undefined,
+              "key": "",
+              "parent": undefined,
+              "type": "@spec-validator/validator/fields/segmentField",
+            },
+            "type": "@spec-validator/validator/fields/segmentField",
+          },
+          "type": "@spec-validator/validator/fields/segmentField",
+        },
+      },
+      "response": Object {
+        "body": Object {
+          "getStringField": [Function],
+          "regex": /\\.\\*/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/stringField",
+          "validate": [Function],
+        },
+        "headers": Object {
+          "content-type": Object {
+            "constant": "text/html",
+            "getStringField": [Function],
+            "regex": /text\\\\/html/,
+            "serialize": [Function],
+            "type": "@spec-validator/validator/fields/constantField",
+            "validate": [Function],
+          },
+        },
+        "statusCode": Object {
+          "constant": 200,
+          "getStringField": [Function],
+          "regex": /200/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+      },
+    },
+  ],
+  "serializationFormats": Array [
+    JsonSerialization {
+      "deserialize": [Function],
+      "mediaType": "application/json",
+      "serialize": [Function],
+    },
+    HtmlSerialization {
+      "deserialize": [Function],
+      "mediaType": "text/html",
+      "serialize": [Function],
+    },
+  ],
+}
+`;
+
+exports[`routing with custom schema url 1`] = `
+Object {
+  "appErrorStatusCode": 500,
+  "baseUrl": "http://localhost:8000",
+  "encoding": "utf-8",
+  "frameworkErrorStatusCode": 503,
+  "reportError": [Function],
+  "routes": Array [
+    Object {
+      "handler": [Function],
+      "request": Object {
+        "method": Object {
+          "constant": "GET",
+          "getStringField": [Function],
+          "regex": /GET/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+        "pathParams": SegmentField {
+          "field": undefined,
+          "key": "/schema",
+          "parent": SegmentField {
+            "field": undefined,
+            "key": "",
+            "parent": undefined,
+            "type": "@spec-validator/validator/fields/segmentField",
+          },
+          "type": "@spec-validator/validator/fields/segmentField",
+        },
+      },
+      "response": Object {
+        "body": Object {
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/wildcardObjectField",
+          "validate": [Function],
+        },
+        "statusCode": Object {
+          "constant": 200,
+          "getStringField": [Function],
+          "regex": /200/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+      },
+    },
+    Object {
+      "handler": [Function],
+      "request": Object {
+        "method": Object {
+          "constant": "GET",
+          "getStringField": [Function],
+          "regex": /GET/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+        "pathParams": SegmentField {
+          "field": undefined,
+          "key": "-ui",
+          "parent": SegmentField {
+            "field": undefined,
+            "key": "/schema",
+            "parent": SegmentField {
+              "field": undefined,
+              "key": "",
+              "parent": undefined,
+              "type": "@spec-validator/validator/fields/segmentField",
+            },
+            "type": "@spec-validator/validator/fields/segmentField",
+          },
+          "type": "@spec-validator/validator/fields/segmentField",
+        },
+      },
+      "response": Object {
+        "body": Object {
+          "getStringField": [Function],
+          "regex": /\\.\\*/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/stringField",
+          "validate": [Function],
+        },
+        "headers": Object {
+          "content-type": Object {
+            "constant": "text/html",
+            "getStringField": [Function],
+            "regex": /text\\\\/html/,
+            "serialize": [Function],
+            "type": "@spec-validator/validator/fields/constantField",
+            "validate": [Function],
+          },
+        },
+        "statusCode": Object {
+          "constant": 200,
+          "getStringField": [Function],
+          "regex": /200/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+      },
+    },
+  ],
+  "serializationFormats": Array [
+    JsonSerialization {
+      "deserialize": [Function],
+      "mediaType": "application/json",
+      "serialize": [Function],
+    },
+    HtmlSerialization {
+      "deserialize": [Function],
+      "mediaType": "text/html",
+      "serialize": [Function],
+    },
+  ],
+}
+`;
+
+exports[`schema root handler 1`] = `
+Object {
+  "body": Object {
+    "info": Object {
+      "title": "Test",
+      "version": "0.0.1",
+    },
+    "openapi": "3.0.3",
+    "paths": Object {},
+    "servers": Array [
+      Object {
+        "url": "http://localhost:8000",
+      },
+    ],
+  },
+  "statusCode": 200,
+}
+`;
+
+exports[`schema root handler ui 1`] = `
+Object {
+  "body": "
+  <html>
+  <head>
+    <title>Test : 0.0.1</title>
+
+    <link rel=\\"stylesheet\\" type=\\"text/css\\" href=\\"https://unpkg.com/swagger-ui-dist@3.38.0/swagger-ui.css\\">
+  <body>
+
+    <div id=\\"swagger-ui\\"></div>
+
+    <script src=\\"https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js\\" charset=\\"UTF-8\\"></script>
+    <script src=\\"https://unpkg.com/swagger-ui-dist@3/swagger-ui-standalone-preset.js\\" charset=\\"UTF-8\\"></script>
+
+    <script>
+    window.onload = function() {
+      const ui = SwaggerUIBundle({
+        url: window.location.href.split('?')[0].replace(/-ui$/, ''),
+        dom_id: '#swagger-ui',
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ]
+      })
+
+      window.ui = ui
+    }
+    </script>
+
+  </body>
+  </html>
+",
+  "headers": Object {
+    "content-type": "text/html",
+  },
+  "statusCode": 200,
+}
+`;
