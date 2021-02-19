@@ -17,7 +17,6 @@ const itemSpec = {
 }
 
 const server = createServer(withOpenApi({
-  baseUrl: 'http://localhost:8080',
   routes: [
     _.POST($._('/items')).spec({
       request: {
