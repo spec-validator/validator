@@ -117,7 +117,9 @@ const server = createServer({routes: [
       request: ofItem,
     },
   ).handler(
-    async () => undefined
+    async () => {
+      // Nothing
+    }
   ),
   _.PATCH($._('/items/')._('id', numberField())).spec(
     {
@@ -129,10 +131,14 @@ const server = createServer({routes: [
       },
     },
   ).handler(
-    async () => undefined
+    async () => {
+      // Nothing
+    }
   ),
   _.DELETE($._('/items/')._('id', numberField())).spec({}).handler(
-    async () => undefined
+    async () => {
+      // Nothing
+    }
   ),
   _.GET($._('/with-complex-headers')).spec(
     {

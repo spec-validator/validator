@@ -1,7 +1,7 @@
 import querystring from 'querystring'
 
 import { validate, serialize, TypeHint } from '@spec-validator/validator'
-import { RequestSpec, ResponseSpec, route as declareRoute, Route, StringMapping } from './route'
+import { RequestSpec, ResponseSpec, route as declareRoute, Route, StringMapping, VoidOrUndefined } from './route'
 import { cached } from '@spec-validator/utils/utils'
 import { HtmlSerialization, JsonSerialization, SerializationFormat } from './serialization'
 import { Any, WithoutOptional } from '@spec-validator/utils/util-types'
@@ -232,7 +232,7 @@ export const withMethod = <
             }
         >>
       ) => Promise<
-        WithoutOptional<TypeHint<RespSpec>>
+        VoidOrUndefined<WithoutOptional<TypeHint<RespSpec>>>
       >) => Route
     })
   } => ({

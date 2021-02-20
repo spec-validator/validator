@@ -28,11 +28,13 @@ type ResponseField<Spec extends ResponseSpec=ResponseSpec > = WithoutOptional<Sp
 type ResponsesSpec<ResponseVariants extends ResponseField[] = ResponseField[]> =
   UnionField<ResponseVariants>
 
+export type VoidOrUndefined<T> = T extends undefined ? void | undefined : T
+
 export interface Route {
   readonly request: RequestSpec,
   readonly response: ResponsesSpec | ResponseSpec,
   readonly handler: (request: WithoutOptional<TypeHint<this['request']>>) => Promise<
-    WithoutOptional<TypeHint<this['response']>>
+    VoidOrUndefined<WithoutOptional<TypeHint<this['response']>>>
   >
 }
 
