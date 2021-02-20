@@ -41,6 +41,9 @@ expectType<typeof handle, (event: {
   queryStringParameters: Record<string, string>,
   httpMethod: string,
   body?: string,
+  requestContext: {
+    stage: string
+  }
 }) => Promise<{
   body?: string,
   headers?: Record<string, any>,
