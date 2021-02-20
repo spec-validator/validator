@@ -1,4 +1,4 @@
-import withOpenApi from './withOpenApi'
+import withOpenApi, { getBaseUrl } from './withOpenApi'
 
 const fullRoute = withOpenApi({})
 
@@ -16,4 +16,26 @@ test('schema root handler ui', async () => {
 
 test('routing with custom schema url', () => {
   expect(withOpenApi({}, '/schema')).toMatchSnapshot()
+})
+
+
+describe('getBaseUrl', () => {
+
+  beforeEach(() => {
+    delete process.env.REST_API_BASE_URL
+  })
+
+  afterEach(() => {
+    delete process.env.REST_API_BASE_URL
+  })
+
+  it('loads from REST_API_BASE_URL env if it is set', () => {
+    process.env.REST_API_BASE_URL = 'base-from-env'
+    expect(getBaseUrl('configure')).toEqual('base-from-env')
+  })
+
+  it('loads configured one if REST_API_BASE_URL is not set', () => {
+    expect(getBaseUrl('configured')).toEqual('configured')
+  })
+
 })

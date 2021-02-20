@@ -40,15 +40,11 @@ const DEFAULT_SERVER_CONFIG: ServerConfig = {
   routes: [],
 }
 
-export const getBaseUrl = (configUrl?: string): string =>
-  process.env.REST_API_BASE_URL || configUrl || DEFAULT_SERVER_CONFIG.baseUrl
-
 export const getServerConfigs = <C extends Partial<ServerConfig>> (
   serverConfig: C
 ): ServerConfig => ({
     ...DEFAULT_SERVER_CONFIG,
     ...serverConfig,
-    baseUrl: getBaseUrl(serverConfig.baseUrl),
   })
 
 const matchRoute = (

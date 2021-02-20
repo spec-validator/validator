@@ -35,6 +35,9 @@ const getUI = (info: Info) => `
   </html>
 `
 
+export const getBaseUrl = (configUrl: string): string =>
+  process.env.REST_API_BASE_URL || configUrl
+
 export default <C extends Partial<ServerConfig> & WithInfo>(config: C, schemaRoot = '/open-api'): ServerConfig => {
   const merged = getServerConfigs(config)
   const routes = [
@@ -47,7 +50,10 @@ export default <C extends Partial<ServerConfig> & WithInfo>(config: C, schemaRoo
       },
     ).handler(
       async () => ({
-        body: genOpenApi(merged) as unknown as Record<string, Json>,
+        body: genOpenApi({
+          ...merged,
+          baseUrl: getBaseUrl(merged.baseUrl),
+        }) as unknown as Record<string, Json>,
       })
     ),
     _.GET($._(schemaRoot)._('-ui')).spec(
