@@ -16,8 +16,15 @@ const getModuleNameMapper = () => {
   return result
 }
 
+const pkgs = '<rootDir>/packages'
+
+const srcs = `${pkgs}/**/src/**`
+
+const testsPattern = `${srcs}/*.spec.ts`
+
 module.exports = {
-  roots: ['<rootDir>/packages'],
+  rootDir: process.cwd(),
+  roots: [pkgs],
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
@@ -35,7 +42,7 @@ module.exports = {
   modulePathIgnorePatterns: ['dist'],
 
   testEnvironment: 'node',
-  testMatch: ['<rootDir>/packages/**/src/**/*.spec.ts'],
+  testMatch: [testsPattern],
   testURL: 'http://localhost/',
 
   moduleNameMapper: getModuleNameMapper(),
@@ -44,9 +51,8 @@ module.exports = {
   coverageReporters: ['json', 'json-summary', 'lcov'],
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
-    '<rootDir>/packages/**/src/**/*.ts',
-    '!<rootDir>/packages/**/src/**/*.spec.ts',
-    '!<rootDir>/packages/**/src/**/*.test.ts',
+    `${srcs}/*.ts`,
+    `!${testsPattern}`,
   ],
   coverageThreshold: {
     global: {

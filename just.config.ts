@@ -9,9 +9,6 @@ import generateTsConfigJson from './build/generateTsConfigJson'
 
 import testDocs from './packages/doc-tester/src/runCodeBlocks'
 
-const lint = (...extras: string[]) =>
-  exec('eslint', '--config', '.eslintrc.json', '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras)
-
 const INTERNAL_TPL_DIR = 'build/internal-templates'
 
 task('new',
@@ -49,24 +46,26 @@ task('build', series(
 
 task('test-docs', () => testDocs())
 
+const tsNode = (script: string, isSrv=false) =>
+  ['yarn', isSrv ? 'ts-node-dev' : 'ts-node', '-r', 'tsconfig-paths/register', script]
+
 task('test',
   async (): Promise<void> => {
     option('-u', { default: false } as any)
     option('-p', { default: undefined } as any)
-    const call = exec(
-      'jest', '--config', './jest.conf.js', '--passWithNoTests', '--detectOpenHandles',
+    const call = exec(...tsNode('packages/qa/src/test.ts'),
       ...(argv().u ? ['-u'] : []),
-      ...(argv().p ? ['--coverage', 'false', argv().p] : []),
+      ...(argv().p ? ['-p', argv().p] : []),
     ) as unknown as (() => Promise<void>)
     return await call()
   }
 )
 
-task('lint', lint())
+task('lint', exec(...tsNode('packages/qa/src/lint.ts')))
 
-task('fmt', lint('--fix'))
+task('fmt', exec(...tsNode('packages/qa/src/fmt.ts')))
 
-task('start-demo', exec('yarn', 'ts-node-dev', '-r', 'tsconfig-paths/register', 'example/run.ts'))
+task('start-demo', exec(...tsNode('example/run.ts', true)))
 
 task('clean', series(
   generateTsConfigJson(),

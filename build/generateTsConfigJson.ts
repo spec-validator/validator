@@ -1,8 +1,8 @@
+import { flatMap } from '../packages/utils/src/utils'
 import { Task } from 'just-task'
 import path from 'path'
 
 import { getGraph, getProjectsPathsInBuildOrder, getWorkspaceInfo } from './buildOrder'
-import flatMap from './flatMap'
 import { write } from './readAndWrite'
 
 const generateRootConfig = (): void => {

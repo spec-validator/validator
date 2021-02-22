@@ -4,7 +4,7 @@
     },
     "typescript.tsdk": "node_modules/typescript/lib",
     "eslint.options": {
-        "configFile": ".eslintrc.json",
+        "configFile": "packages/qa/configs/eslintrc.json",
     },
     "eslint.validate": [ "javascript", "typescript", "vue", "html" ],
     "deno.enable": false,

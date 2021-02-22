@@ -2,9 +2,14 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": ["esnext"],
+    "lib": [
+      "esnext"
+    ],
     "declaration": true,
-    "types": ["jest", "node"],
+    "types": [
+      "jest",
+      "node"
+    ],
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -19,24 +24,66 @@
     "strictPropertyInitialization": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "typeRoots": ["./node_modules/@types"],
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
     "baseUrl": "./packages",
     "noEmit": true,
     "paths": {
-      "@spec-validator/doc-tester/*": ["doc-tester/src/*"],
-      "@spec-validator/doc-tester": ["doc-tester/src/index.ts"],
-      "@spec-validator/test-utils/*": ["test-utils/src/*"],
-      "@spec-validator/test-utils": ["test-utils/src/index.ts"],
-      "@spec-validator/utils/*": ["utils/src/*"],
-      "@spec-validator/utils": ["utils/src/index.ts"],
-      "@spec-validator/validator/*": ["validator/src/*"],
-      "@spec-validator/validator": ["validator/src/index.ts"],
-      "@spec-validator/rest-api-server/*": ["rest-api-server/src/*"],
-      "@spec-validator/rest-api-server": ["rest-api-server/src/index.ts"],
-      "@spec-validator/open-api-endpoint/*": ["open-api-endpoint/src/*"],
-      "@spec-validator/open-api-endpoint": ["open-api-endpoint/src/index.ts"],
-      "@spec-validator/aws-api-gw-adapter/*": ["aws-api-gw-adapter/src/*"],
-      "@spec-validator/aws-api-gw-adapter": ["aws-api-gw-adapter/src/index.ts"]
+      "@spec-validator/doc-tester/*": [
+        "doc-tester/src/*"
+      ],
+      "@spec-validator/doc-tester": [
+        "doc-tester/src/index.ts"
+      ],
+      "@spec-validator/test-utils/*": [
+        "test-utils/src/*"
+      ],
+      "@spec-validator/test-utils": [
+        "test-utils/src/index.ts"
+      ],
+      "@spec-validator/utils/*": [
+        "utils/src/*"
+      ],
+      "@spec-validator/utils": [
+        "utils/src/index.ts"
+      ],
+      "@spec-validator/validator/*": [
+        "validator/src/*"
+      ],
+      "@spec-validator/validator": [
+        "validator/src/index.ts"
+      ],
+      "@spec-validator/rest-api-server/*": [
+        "rest-api-server/src/*"
+      ],
+      "@spec-validator/rest-api-server": [
+        "rest-api-server/src/index.ts"
+      ],
+      "@spec-validator/open-api-endpoint/*": [
+        "open-api-endpoint/src/*"
+      ],
+      "@spec-validator/open-api-endpoint": [
+        "open-api-endpoint/src/index.ts"
+      ],
+      "@spec-validator/aws-api-gw-adapter/*": [
+        "aws-api-gw-adapter/src/*"
+      ],
+      "@spec-validator/aws-api-gw-adapter": [
+        "aws-api-gw-adapter/src/index.ts"
+      ],
+      "@spec-validator/qa/*": [
+        "qa/src/*"
+      ],
+      "@spec-validator/qa": [
+        "qa/src/index.ts"
+      ],
+      "@spec-validator/cli/*": [
+        "cli/src/*"
+      ],
+      "@spec-validator/cli": [
+        "cli/src/index.ts"
+      ]
     }
   }
 }

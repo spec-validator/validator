@@ -1,8 +1,7 @@
 import { Task } from 'just-task'
 
-import cached from './cached'
 import dfs from './dfs'
-import flatMap from './flatMap'
+import { cached, flatMap } from '../packages/utils/src/utils'
 import getOutput from './getOutput'
 
 type PackageName = string

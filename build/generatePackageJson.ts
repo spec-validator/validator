@@ -6,6 +6,7 @@ import { Task } from 'just-task'
 import { getPackageNamesInBuildOrder } from './buildOrder'
 import getOutput from './getOutput'
 import { read, write } from './readAndWrite'
+import syncPackageFiles from './syncPackageFiles'
 
 const EXCLUDE = new Set(['devDependencies'])
 const COPY_FROM_PARENT = [
@@ -65,4 +66,6 @@ export default (projectPath: string): Task => async () => {
   write(`${projectPath}/dist/package.json`, newPackageJson)
 
   copyFile(`${projectPath}/README.md`, `${projectPath}/dist/README.md`)
+
+  syncPackageFiles(projectPath)
 }

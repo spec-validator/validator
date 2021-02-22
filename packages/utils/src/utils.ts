@@ -28,3 +28,14 @@ export const cached = <T>(key: string, call:() => T): T => {
   }
   return cache[key] as T
 }
+
+export const flatMap = <T>(items: T[][]): T[] => {
+  const result: T[] = []
+  items.forEach(it => {
+    it.forEach(it2 => result.push(it2))
+  })
+  return result
+}
+
+export const removePrefix = (str: string, prefix: string): string =>
+  str.startsWith(prefix) ? str.slice(prefix.length) : str
