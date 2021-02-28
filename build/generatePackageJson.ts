@@ -8,7 +8,7 @@ import getOutput from './getOutput'
 import { read, write } from './readAndWrite'
 import syncPackageFiles from './syncPackageFiles'
 
-const EXCLUDE = new Set(['devDependencies'])
+const EXCLUDE = new Set(['devDependencies', 'files'])
 const COPY_FROM_PARENT = [
   'license',
   'author',
