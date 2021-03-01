@@ -8,9 +8,9 @@ const mapValue = (value) => value.replace('*', '$1')
 
 const getModuleNameMapper = () => {
   const config = JSON.parse(readTsConfig())
-  const baseUrl = config.compilerOptions.baseUrl.replace('./', '<rootDir>/')
+  const baseUrl = (config.compilerOptions.baseUrl || './').replace('./', '<rootDir>/')
   const result = {}
-  Object.entries(config.compilerOptions.paths).forEach(([key, value]) => {
+  Object.entries(config.compilerOptions.paths || {}).forEach(([key, value]) => {
     result[mapKey(key)] = baseUrl + '/' + mapValue(value[0])
   })
   return result
