@@ -19,7 +19,7 @@ test('field', () => {
 test('segmentChain', () => {
   ['1', 'true'].forEach(it => testValidateSegmentChainOK(field, it, true, 'true'));
   ['0', 'false'].forEach(it => testValidateSegmentChainOK(field, it, false, 'false'))
-  testValidateSegmentChainError(field, 'foo', 'Didn\'t match')
+  testValidateSegmentChainError(field, 'foo')
 })
 
 test('types', () => {

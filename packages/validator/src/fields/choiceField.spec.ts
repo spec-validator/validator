@@ -18,7 +18,7 @@ test('field', () => {
 
 test('segmentChain', () => {
   testValidateSegmentChainOK(field, '1', 1)
-  testValidateSegmentChainError(field, '12', 'Didn\'t match')
+  testValidateSegmentChainError(field, '12')
 })
 
 test('types', () => {

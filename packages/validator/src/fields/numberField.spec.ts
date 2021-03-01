@@ -52,9 +52,9 @@ describe('segmentChain', () => {
     testValidateSegmentChainOK(field, '0', 0)
     testValidateSegmentChainOK(field, '-1', -1)
 
-    testValidateSegmentChainError(field, '-1.2', 'Didn\'t match')
-    testValidateSegmentChainError(field, '1.2', 'Didn\'t match')
-    testValidateSegmentChainError(field, 'A', 'Didn\'t match')
+    testValidateSegmentChainError(field, '-1.2')
+    testValidateSegmentChainError(field, '1.2')
+    testValidateSegmentChainError(field, 'A')
   })
 
   it('floatField', () => {
@@ -64,7 +64,7 @@ describe('segmentChain', () => {
     testValidateSegmentChainOK(field, '-1', -1)
     testValidateSegmentChainOK(field, '-1.2', -1.2)
     testValidateSegmentChainOK(field, '1.2', 1.2)
-    testValidateSegmentChainError(field, 'A', 'Didn\'t match')
+    testValidateSegmentChainError(field, 'A')
   })
 
 })

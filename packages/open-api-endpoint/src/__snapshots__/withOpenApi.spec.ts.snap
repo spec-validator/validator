@@ -5,7 +5,6 @@ Object {
   "appErrorStatusCode": 500,
   "baseUrl": "http://localhost:8000",
   "encoding": "utf-8",
-  "frameworkErrorStatusCode": 503,
   "reportError": [Function],
   "routes": Array [
     Object {
@@ -124,7 +123,6 @@ Object {
   "appErrorStatusCode": 500,
   "baseUrl": "http://localhost:8000",
   "encoding": "utf-8",
-  "frameworkErrorStatusCode": 503,
   "reportError": [Function],
   "routes": Array [
     Object {

@@ -24,7 +24,7 @@ export const testValidateSegmentChainOK = <T extends Any> (
 }
 
 export const testValidateSegmentChainError = <T extends Any> (
-  field: FieldWithRegExpSupport<T>, input: any, expectedError: any
+  field: FieldWithRegExpSupport<T>, input: any
 ) => {
   const spec = $
     ._('/')
@@ -37,9 +37,5 @@ export const testValidateSegmentChainError = <T extends Any> (
   } catch (err) {
     error = err
   }
-  if (expectedError === 'Didn\'t match') {
-    expect(error).toEqual(expectedError)
-  } else {
-    expect(error).toEqual({'inner': expectedError, 'path': ['field']})
-  }
+  expect(error).toEqual('Didn\'t match')
 }

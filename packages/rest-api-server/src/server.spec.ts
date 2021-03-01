@@ -254,6 +254,11 @@ test('PATCH', async () => {
   expect(resp.status).toEqual(204)
 })
 
+test('addressing non-existent URL returns 404 status code', async () => {
+  const resp = await request(server).get('/does-not-exist')
+  expect(resp.status).toEqual(404)
+})
+
 test('retains content-type if it is passed as a header from the handler', async () => {
   // TODO
 })

@@ -13,7 +13,6 @@ export type ServerConfig = {
   readonly baseUrl: string,
   readonly serializationFormats: [SerializationFormat, ...SerializationFormat[]],
   readonly encoding: BufferEncoding,
-  readonly frameworkErrorStatusCode: number,
   readonly appErrorStatusCode: number,
   readonly reportError: (error: unknown) => Promise<void>
   readonly routes: Route[],
@@ -31,7 +30,6 @@ const DEFAULT_SERVER_CONFIG: ServerConfig = {
   baseUrl: 'http://localhost:8000',
   serializationFormats: [new JsonSerialization(), new HtmlSerialization()],
   encoding: 'utf-8',
-  frameworkErrorStatusCode: 503,
   appErrorStatusCode: 500,
   reportError: (error: unknown) => {
     console.error(error)
@@ -292,20 +290,17 @@ export default (
 
       return await handleRoute(config, route, request)
     } catch (error) {
+      const statusCode = error.statusCode || config.appErrorStatusCode
       if (error.isPublic) {
         const accept = getMediaType(config, request, 'accept', jsonSerialization.mediaType)
         return {
-          statusCode: error.statusCode || config.frameworkErrorStatusCode,
+          statusCode,
           body: accept.serialize(error),
         }
       } else {
-        try {
-          await config.reportError(error)
-        } catch (reportingError) {
-          console.error(reportingError)
-        }
+        await config.reportError(error)
         return {
-          statusCode:  error.statusCode || config.frameworkErrorStatusCode,
+          statusCode,
         }
       }
     }

@@ -1,7 +1,9 @@
 {
   "name": "@spec-validator/doc-tester",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "ts-node": "^9.1.1"
+  },
   "devDependencies": {},
   "bin": {
     "test-docs": "./runCodeBlocks.js"

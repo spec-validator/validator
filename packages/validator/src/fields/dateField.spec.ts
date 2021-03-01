@@ -24,7 +24,7 @@ describe('date-time', () => {
       new Date('1995-12-17T03:24:00Z'),
       '1995-12-17T03:24:00.000Z'
     )
-    testValidateSegmentChainError(field, 'foo', 'Didn\'t match')
+    testValidateSegmentChainError(field, 'foo')
   })
 
   test('types', () => {
