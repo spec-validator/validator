@@ -16,9 +16,15 @@ const getModuleNameMapper = () => {
   return result
 }
 
-const pkgs = '<rootDir>/packages'
+let pkgs, srcs
 
-const srcs = `${pkgs}/**/src/**`
+if (fs.existsSync(`${process.cwd()}/packages`)) {
+  pkgs = '<rootDir>/packages'
+  srcs = `${pkgs}/**/src/**`
+} else {
+  pkgs = '<rootDir>'
+  srcs = `${pkgs}/src/**`
+}
 
 const testsPattern = `${srcs}/*.spec.ts`
 
