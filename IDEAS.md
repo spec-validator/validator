@@ -10,9 +10,9 @@ I.e. deduce TypeScript types from the validation logic.
 Another sentiment is that any sort of code generation results of which are
 required to be:
 
-  - stored within a GIT repostiory alongside with with the sources
-  - executed explicitly in order to make things work on dev's machine
-  - tied to any standard outside of ECMAScript universe
+- stored within a GIT repostiory alongside with with the sources
+- executed explicitly in order to make things work on dev's machine
+- tied to any standard outside of ECMAScript universe
 
 is redundant by definition in comparison with any aproach that does
 not impose any of the requirements outlined above.
