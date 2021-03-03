@@ -58,5 +58,5 @@ Once served via a regular call:
 server.serve()
 ```
 
-OpenApi ui will be available at http://localhost:8080/open-api-ui
+OpenApi ui will be available at <http://localhost:8080/open-api-ui>
 without any additional effort.

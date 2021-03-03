@@ -67,12 +67,28 @@ most common case (one 200ish response per handler, known status
 codes for various request methods).
 
 ```ts
-import { _ } from '@spec-validator/rest-api-server'
+import { createRouteCollection  } from '@spec-validator/rest-api-server'
 
 const itemSpec = {
   title: stringField(),
   description: stringField(),
 }
+
+// 'routes' is a list that effectively will aggregate the routes
+// defined via a '_' helper object
+const [_, routes] = createRouteCollection()
+
+// As an alternative you may import '_' singleton object that is
+// not linked to any routes collection. In that case you would need
+// to add routes to the collections explicitly via 'routes.push'
+
+/**
+import { _ } from '@spec-validator/rest-api-server'
+
+const routes: Route[] = []
+
+routes.push(_.GET(...).spec(...).handler(...))
+*/
 
 const getRoute = _.GET($._('/items')).spec({
   response: {
@@ -121,7 +137,7 @@ import http from 'http'
 
 const server = createServer({
   baseUrl: 'http://localhost:8080',
-  routes: [postRoute, getRoute]
+  routes
 })
 
 expectType<http.Server & { serve: () => http.Server }, typeof server>(true)

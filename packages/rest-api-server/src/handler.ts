@@ -208,7 +208,7 @@ type ResponseSpecMethod = Omit<ResponseSpec, 'statusCode'>
 export const withMethod = <
   Method extends string,
   OkStatusCode extends number
-> (method: Method, okStatusCode: OkStatusCode) =>
+> (method: Method, okStatusCode: OkStatusCode, routes?: Route[]) =>
   <PathParams extends StringMapping | undefined = StringMapping | undefined> (pathParams: SegmentField<PathParams>): {
     spec:  <
       ReqSpec extends RequestSpecMethod = RequestSpecMethod,
@@ -230,8 +230,8 @@ export const withMethod = <
       >) => Route
     })
   } => ({
-      spec: (spec) => ({ handler: ( handler ) =>
-        declareRoute({
+      spec: (spec) => ({ handler: ( handler ) => {
+        const entry = declareRoute({
           request: {
             ...(spec.request || {}),
             method: constantField(method),
@@ -243,18 +243,26 @@ export const withMethod = <
           },
         }).handler(
           async (req) => ({ ...((await handler(req as any)) as any), statusCode: okStatusCode })
-        ),
+        )
+        routes?.push(entry)
+        return entry
+      },
       }),
     })
 
-export const _ = {
-  GET: withMethod('GET', 200),
-  HEAD: withMethod('HEAD', 200),
-  POST: withMethod('POST', 201),
-  PUT: withMethod('PUT', 204),
-  DELETE: withMethod('DELETE', 204),
-  PATCH: withMethod('PATCH', 204),
-}
+// We don't want to define the types explicitly because those definitions are quite large
+// - better to infer them
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const createRouteCollection = (routes: Route[] | undefined = []) => [({
+  GET: withMethod('GET', 200, routes),
+  HEAD: withMethod('HEAD', 200, routes),
+  POST: withMethod('POST', 201, routes),
+  PUT: withMethod('PUT', 204, routes),
+  DELETE: withMethod('DELETE', 204, routes),
+  PATCH: withMethod('PATCH', 204, routes),
+}), routes] as const
+
+export const _ = createRouteCollection(undefined)[0]
 
 const jsonSerialization = new JsonSerialization()
 

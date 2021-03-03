@@ -1,4 +1,4 @@
-import { _, Route, route, getServerConfigs } from '@spec-validator/rest-api-server'
+import { createRouteCollection, route, getServerConfigs } from '@spec-validator/rest-api-server'
 import {
   segmentField as $, stringField, booleanField, numberField, arrayField, unionField, constantField,
 } from '@spec-validator/validator/fields'
@@ -6,7 +6,10 @@ import genOpenApi from './genOpenApi'
 import withDoc from './withDoc'
 
 test('fullRoute', () => {
-  const routes: Route[] = [
+
+  const [_, routes] = createRouteCollection()
+
+  routes.push(
     route(
       {
         request: {
@@ -23,66 +26,68 @@ test('fullRoute', () => {
       async () => Promise.resolve({
         statusCode: 201,
       })
-    ),
-    _.POST($._('/items')).spec(
-      {
-        request: {
-          body: {
-            title: stringField(/.*/),
-            count: numberField(),
-          },
+    )
+  )
+
+  _.POST($._('/items')).spec(
+    {
+      request: {
+        body: {
+          title: stringField(/.*/),
+          count: numberField(),
         },
-      }
-    ).handler(
-      async () => Promise.resolve(undefined)
-    ),
-    _.GET($._('/item/')._('id', stringField())).spec(
-      {
-        request: {
-          headers: {
-            key: withDoc(numberField(), {
-              description: 'key header',
-              examples: {
-                sampleKey: {
-                  value: 13 as number,
-                  summary: 'Sample value',
-                },
-              },
-            }),
-          },
-          queryParams: {
-            flag: booleanField(),
-          },
-        },
-        response: {
-          headers: {
-            key: withDoc(numberField(), {
-              description: 'key header',
-              examples: {
-                sampleKey: {
-                  value: 13 as number,
-                  summary: 'Sample value',
-                },
-              },
-            }),
-          },
-          body: {
-            items: arrayField(numberField()),
-          },
-        },
-      }
-    ).handler(
-      async () => ({
-        statusCode: 200,
+      },
+    }
+  ).handler(
+    async () => Promise.resolve(undefined)
+  )
+
+  _.GET($._('/item/')._('id', stringField())).spec(
+    {
+      request: {
         headers: {
-          key: 13,
+          key: withDoc(numberField(), {
+            description: 'key header',
+            examples: {
+              sampleKey: {
+                value: 13 as number,
+                summary: 'Sample value',
+              },
+            },
+          }),
+        },
+        queryParams: {
+          flag: booleanField(),
+        },
+      },
+      response: {
+        headers: {
+          key: withDoc(numberField(), {
+            description: 'key header',
+            examples: {
+              sampleKey: {
+                value: 13 as number,
+                summary: 'Sample value',
+              },
+            },
+          }),
         },
         body: {
-          items: [1, 2, 3],
+          items: arrayField(numberField()),
         },
-      })
-    ),
-  ]
+      },
+    }
+  ).handler(
+    async () => ({
+      statusCode: 200,
+      headers: {
+        key: 13,
+      },
+      body: {
+        items: [1, 2, 3],
+      },
+    })
+  )
 
   expect(genOpenApi(
     getServerConfigs({

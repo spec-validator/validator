@@ -1,4 +1,4 @@
-import { _ } from '@spec-validator/rest-api-server/handler'
+import { _ } from '@spec-validator/rest-api-server'
 import { segmentField as $, numberField, stringField } from '@spec-validator/validator/fields'
 import { createAwsLambdaHandler, configureBaseUrl } from './awsLambdaHandler'
 

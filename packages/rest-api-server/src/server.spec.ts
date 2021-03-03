@@ -4,8 +4,7 @@ import {
   segmentField as $, constantField, numberField, objectField, optional, stringField, unionField,
 } from '@spec-validator/validator/fields'
 
-
-import { _ } from './handler'
+import { createRouteCollection } from './handler'
 import { createServer } from './server'
 import { route } from './route'
 import { headerArrayField, headerObjectField } from './fields'
@@ -23,150 +22,159 @@ const ofItem = {
   body: itemSpec,
 }
 
-// TODO: disablable error on extra keys for object field
-const server = createServer({routes: [
-  _.GET($._('/expected-error')).spec(
-    {
-      response: {
-        body: constantField(42),
-      },
-    }
-  ).handler(
-    async () => {
-      throw {
-        statusCode: 442,
-        isPublic: true,
-        reason: 'Boom!',
-      }
-    }
-  ),
-  route({
-    request: {
-      method: constantField('GET'),
-      pathParams: $._('/multi-response'),
+const [_, routes] = createRouteCollection()
+
+_.GET($._('/expected-error')).spec(
+  {
+    response: {
+      body: constantField(42),
     },
-    response: unionField({
-      statusCode: constantField(400),
-    }, {
-      statusCode: constantField(200),
-    }),
-  }).handler( async () => ({
-    statusCode: 200,
+  }
+).handler(
+  async () => {
+    throw {
+      statusCode: 442,
+      isPublic: true,
+      reason: 'Boom!',
+    }
+  }
+)
+
+routes.push(route({
+  request: {
+    method: constantField('GET'),
+    pathParams: $._('/multi-response'),
+  },
+  response: unionField({
+    statusCode: constantField(400),
+  }, {
+    statusCode: constantField(200),
   }),
-  ),
-  _.GET($._('/unexpected-error')).spec(
-    {
-      response: {
-        body: constantField(42),
-      },
-    }
-  ).handler(
-    async () => {
-      throw {
-        reason: 'Boom!',
-      }
-    }
-  ),
-  _.GET($._('/items')).spec(
-    {
-      response: ofItems,
+}).handler( async () => ({ statusCode: 200 }),
+))
+
+_.GET($._('/unexpected-error')).spec(
+  {
+    response: {
+      body: constantField(42),
     },
-  ).handler(
-    async () => ({
-      body: [
-        {
-          title: 'Item N',
-          description: 'Description',
-        },
-      ],
-    })
-  ),
-  _.POST($._('/items')).spec(
-    {
-      request: ofItem,
-      response: {
-        body: numberField(),
-        headers: {
-          title: stringField(),
-        },
+  }
+).handler(
+  async () => {
+    throw {
+      reason: 'Boom!',
+    }
+  }
+)
+
+_.GET($._('/items')).spec(
+  {
+    response: ofItems,
+  },
+).handler(
+  async () => ({
+    body: [
+      {
+        title: 'Item N',
+        description: 'Description',
       },
-    },
-  ).handler(
-    async () => ({
-      body: 42,
+    ],
+  })
+)
+
+_.POST($._('/items')).spec(
+  {
+    request: ofItem,
+    response: {
+      body: numberField(),
       headers: {
-        title: 'Foo',
+        title: stringField(),
       },
-    })
-  ),
-  _.GET($._('/items/')._('id', numberField())).spec(
-    {
-      response: ofItem,
     },
-  ).handler(
-    async (req) => ({
-      body:
-        {
-          title: `Item ${req.pathParams.id}`,
-          description: 'Description',
-        },
-    })
-  ),
-  _.PUT($._('/items/')._('id', numberField())).spec(
-    {
-      request: ofItem,
+  },
+).handler(
+  async () => ({
+    body: 42,
+    headers: {
+      title: 'Foo',
     },
-  ).handler(
-    async () => {
-      // Nothing
-    }
-  ),
-  _.PATCH($._('/items/')._('id', numberField())).spec(
-    {
-      request: {
-        body: objectField({
-          title: optional(stringField()),
-          description: optional(stringField()),
+  })
+)
+
+_.GET($._('/items/')._('id', numberField())).spec(
+  {
+    response: ofItem,
+  },
+).handler(
+  async (req) => ({
+    body:
+      {
+        title: `Item ${req.pathParams.id}`,
+        description: 'Description',
+      },
+  })
+)
+
+_.PUT($._('/items/')._('id', numberField())).spec(
+  {
+    request: ofItem,
+  },
+).handler(
+  async () => {
+    // Nothing
+  }
+)
+
+_.PATCH($._('/items/')._('id', numberField())).spec(
+  {
+    request: {
+      body: objectField({
+        title: optional(stringField()),
+        description: optional(stringField()),
+      }),
+    },
+  },
+).handler(
+  async () => {
+    // Nothing
+  }
+)
+
+_.DELETE($._('/items/')._('id', numberField())).spec({}).handler(
+  async () => {
+    // Nothing
+  }
+)
+
+_.GET($._('/with-complex-headers')).spec(
+  {
+    response: {
+      headers: {
+        one: stringField(),
+        many: headerArrayField(numberField()),
+        cookies: headerObjectField({
+          auth: stringField(),
+          username: stringField(),
+          //phone: optional(stringField()),
         }),
       },
     },
-  ).handler(
-    async () => {
-      // Nothing
-    }
-  ),
-  _.DELETE($._('/items/')._('id', numberField())).spec({}).handler(
-    async () => {
-      // Nothing
-    }
-  ),
-  _.GET($._('/with-complex-headers')).spec(
-    {
-      response: {
-        headers: {
-          one: stringField(),
-          many: headerArrayField(numberField()),
-          cookies: headerObjectField({
-            auth: stringField(),
-            username: stringField(),
-            //phone: optional(stringField()),
-          }),
-        },
+  },
+).handler(
+  async () => ({
+    headers: {
+      one: 'foo',
+      many: [42],
+      cookies: {
+        auth: 'Payload',
+        username: 'User',
       },
     },
-  ).handler(
-    async () => ({
-      headers: {
-        one: 'foo',
-        many: [42],
-        cookies: {
-          auth: 'Payload',
-          username: 'User',
-        },
-      },
-    })
-  ),
-]})
+  })
+)
+
+// TODO: disablable error on extra keys for object field
+const server = createServer({routes})
 
 let oldLog: any = null
 
