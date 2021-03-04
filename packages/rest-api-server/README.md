@@ -76,7 +76,7 @@ const itemSpec = {
 
 // 'routes' is a list that effectively will aggregate the routes
 // defined via a '_' helper object
-const [_, routes] = createRouteCollection()
+const _ = createRouteCollection()
 
 // As an alternative you may import '_' singleton object that is
 // not linked to any routes collection. In that case you would need
@@ -137,7 +137,7 @@ import http from 'http'
 
 const server = createServer({
   baseUrl: 'http://localhost:8080',
-  routes
+  routes: _.routes
 })
 
 expectType<http.Server & { serve: () => http.Server }, typeof server>(true)

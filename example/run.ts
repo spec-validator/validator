@@ -17,7 +17,7 @@ const ofItem = {
   body: itemSpec,
 }
 
-const [_, routes] = createRouteCollection()
+const _ = createRouteCollection()
 
 _.GET($._('/expected-error')).spec(
   {
@@ -118,4 +118,4 @@ _.PATCH($._('/items/')._('id', numberField())).spec(
   async () => undefined
 )
 
-createServer(withOpenApi({ routes })).serve()
+createServer(withOpenApi({ routes: _.routes })).serve()

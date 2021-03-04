@@ -7,9 +7,9 @@ import withDoc from './withDoc'
 
 test('fullRoute', () => {
 
-  const [_, routes] = createRouteCollection()
+  const _ = createRouteCollection()
 
-  routes.push(
+  _.routes.push(
     route(
       {
         request: {
@@ -91,7 +91,7 @@ test('fullRoute', () => {
 
   expect(genOpenApi(
     getServerConfigs({
-      routes,
+      routes: _.routes,
       info: {
         title: 'Test',
         version: '1.0.0',

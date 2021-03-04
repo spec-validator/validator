@@ -22,7 +22,7 @@ const ofItem = {
   body: itemSpec,
 }
 
-const [_, routes] = createRouteCollection()
+const _ = createRouteCollection()
 
 _.GET($._('/expected-error')).spec(
   {
@@ -40,7 +40,7 @@ _.GET($._('/expected-error')).spec(
   }
 )
 
-routes.push(route({
+_.routes.push(route({
   request: {
     method: constantField('GET'),
     pathParams: $._('/multi-response'),
@@ -174,7 +174,7 @@ _.GET($._('/with-complex-headers')).spec(
 )
 
 // TODO: disablable error on extra keys for object field
-const server = createServer({routes})
+const server = createServer({routes: _.routes})
 
 let oldLog: any = null
 

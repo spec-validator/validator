@@ -253,16 +253,17 @@ export const withMethod = <
 // We don't want to define the types explicitly because those definitions are quite large
 // - better to infer them
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const createRouteCollection = (routes: Route[] | undefined = []) => [({
+export const createRouteCollection = (routes: Route[] | undefined = []) => ({
+  routes,
   GET: withMethod('GET', 200, routes),
   HEAD: withMethod('HEAD', 200, routes),
   POST: withMethod('POST', 201, routes),
   PUT: withMethod('PUT', 204, routes),
   DELETE: withMethod('DELETE', 204, routes),
   PATCH: withMethod('PATCH', 204, routes),
-}), routes] as const
+}) as const
 
-export const _ = createRouteCollection(undefined)[0]
+export const _ = createRouteCollection(undefined)
 
 const jsonSerialization = new JsonSerialization()
 
