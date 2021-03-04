@@ -2,6 +2,7 @@
   "name": "@spec-validator/aws-api-gw-adapter",
   "version": "0.0.1",
   "dependencies": {
+    "@spec-validator/utils": "0.0.1",
     "@spec-validator/rest-api-server": "0.0.1"
   },
   "devDependencies": {

@@ -32,3 +32,7 @@ type Impossible<K extends keyof any> = {
 export type WithoutExtraProperties<T, U extends T = T> = U & Impossible<Exclude<keyof U, keyof T>>
 
 export type ConstructorArgs<T> = T extends new (...args: infer U) => any ? U : never
+
+export type FilterFlags<Base, Condition> = {
+  [Key in keyof Base]: Base[Key] extends Condition ? Key : never
+};
