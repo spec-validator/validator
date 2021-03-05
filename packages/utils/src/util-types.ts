@@ -33,6 +33,6 @@ export type WithoutExtraProperties<T, U extends T = T> = U & Impossible<Exclude<
 
 export type ConstructorArgs<T> = T extends new (...args: infer U) => any ? U : never
 
-export type FilterFlags<Base, Condition> = {
+export type FilterFlags<Base extends readonly any[], Condition> = Exclude<{
   [Key in keyof Base]: Base[Key] extends Condition ? Key : never
-};
+}[number], never>;
