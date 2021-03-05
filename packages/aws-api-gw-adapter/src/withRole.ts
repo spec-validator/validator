@@ -23,9 +23,10 @@ type Route = {
   foo: number
 }
 
-type Routes<Roles extends string[]> = (Route | Route & WithRole<Roles[number]>)[]
+const rolesOf = <T extends readonly Route[]>(routes: T): FilterFlags<T, WithRole<string>> =>
+  routes.filter(it => (it as any).role) as any
 
-const routes = [
+const foo = rolesOf([
   {
     foo: 11,
   },
@@ -40,6 +41,4 @@ const routes = [
     foo: 14,
     role: 'role 12',
   },
-] as const
-
-type FF = FilterFlags<typeof routes, WithRole<string>>
+] as const)
