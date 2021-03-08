@@ -19,9 +19,10 @@ export const aliasesOf = <T extends readonly Route[]>(...routes: T): FilterFlags
   routes.filter(it => (it as any).alias) as any
 
 export const getPathParamsKey = (route: SegmentField<unknown>): string =>
-  route.segments.map((it => it.field ? `${it.key}` : `${it.key}`)).join('')
+  route.segments.map((it => it.field ? `{${it.key}}` : `${it.key}`)).join('')
 
-export const getRouteKey = (route: Route): string => `${route.request.method}:${route.request.pathParams}`
+export const getRouteKey = (route: Route): string =>
+  `${route.request.method}:${getPathParamsKey(route.request.pathParams)}`
 
 export const toAwsRouteMap = <T extends readonly Route[]>(...routes: T): Record<string, Route> => {
   const mapping: Record<string, Route> = {}
