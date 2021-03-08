@@ -16,3 +16,26 @@ export const withAlias = <Alias extends string>(
 
 export const aliasesOf = <T extends readonly Route[]>(...routes: T): FilterFlags<T, WithAlias<string>> =>
   routes.filter(it => (it as any).alias) as any
+
+export const getRouteKey = (route: Route): string => {
+  // TODO
+}
+
+export const toAwsRouteMap = <T extends readonly Route[]>(...routes: T): Record<string, Route> => {
+  const mapping: Record<string, Route> = {}
+  routes.forEach(it => {
+    const key = getRouteKey(it)
+    if (mapping[key]) {
+      throw `AWS routing key ${key} is already registered`
+    }
+    mapping[key] = it
+  })
+  return mapping
+}
+
+
+/*
+export const detectRoutingConflicts = (routes: Route[]): void => {
+  // TODO
+}
+*/
