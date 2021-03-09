@@ -3,7 +3,11 @@
   "version": "0.0.1",
   "dependencies": {
     "@spec-validator/validator": "0.0.1",
-    "@spec-validator/rest-api-server": "0.0.1"
+    "@spec-validator/rest-api-server": "0.0.1",
+    "@aws-cdk/aws-apigateway": "^1.91.0",
+    "@aws-cdk/aws-dynamodb": "^1.91.0",
+    "@aws-cdk/aws-lambda": "^1.91.0",
+    "@aws-cdk/aws-lambda-nodejs": "^1.91.0"
   },
   "devDependencies": {
     "@spec-validator/test-utils": "0.0.1"
