@@ -60,6 +60,12 @@
       ],
       "@spec-validator/cli": [
         "cli/src/index.ts"
+      ],
+      "@spec-validator/cdk-auto-rest-api/*": [
+        "cdk-auto-rest-api/src/*"
+      ],
+      "@spec-validator/cdk-auto-rest-api": [
+        "cdk-auto-rest-api/src/index.ts"
       ]
     }
   }
