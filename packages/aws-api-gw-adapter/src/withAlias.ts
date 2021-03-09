@@ -1,22 +1,30 @@
+import { StringObjectSpec } from '@spec-validator/rest-api-server/fields/stringSpec'
 import { Route } from '@spec-validator/rest-api-server/route'
-import { FilterFlags } from '@spec-validator/utils/util-types'
+import { Any, FilterFlags, Optional } from '@spec-validator/utils/util-types'
 import { SegmentField } from '@spec-validator/validator/fields'
 
-export type WithAlias<Alias extends string> = {
-  alias: Alias
+export type WithAwsMeta<
+  Alias extends string,
+  DeserializedType extends Optional<Record<string, Any>> = undefined
+> = {
+  awsMeta:
+  DeserializedType extends Record<string, Any> ? {
+    alias: Alias
+    spec: StringObjectSpec<DeserializedType>
+  } : { alias: Alias}
 }
 
-export const withAlias = <Alias extends string>(
+export const withAwsMeta = <Alias extends string, DeserializedType extends Optional<Record<string, Any>> = undefined>(
   route: Route,
-  alias: Alias
-): Route & WithAlias<Alias> =>
+  awsMeta: WithAwsMeta<Alias, DeserializedType>['awsMeta']
+): Route & WithAwsMeta<Alias, DeserializedType> =>
     ({
       ...route,
-      alias,
+      awsMeta,
     })
 
-export const aliasesOf = <T extends readonly Route[]>(...routes: T): FilterFlags<T, WithAlias<string>> =>
-  routes.filter(it => (it as any).alias) as any
+export const awsMetasOf = <T extends readonly Route[]>(...routes: T): FilterFlags<T, WithAwsMeta<string>> =>
+  routes.filter(it => (it as any).awsMeta) as any
 
 export const getPathParamsKey = (route: SegmentField<unknown>): string =>
   route.segments.map((it => it.field ? `{${it.key}}` : `${it.key}`)).join('')
@@ -36,9 +44,3 @@ export const toAwsRouteMap = <T extends readonly Route[]>(...routes: T): Record<
   return mapping
 }
 
-
-/*
-export const detectRoutingConflicts = (routes: Route[]): void => {
-  // TODO
-}
-*/
