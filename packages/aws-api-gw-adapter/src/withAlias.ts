@@ -2,7 +2,6 @@ import { Route } from '@spec-validator/rest-api-server/route'
 //import { FilterFlags } from '@spec-validator/utils/util-types'
 import { SegmentField } from '@spec-validator/validator/fields'
 
-
 export const getPathParamsKey = (route: SegmentField<unknown>): string =>
   route.segments.map((it => it.field ? `{${it.key}}` : `${it.key}`)).join('')
 
