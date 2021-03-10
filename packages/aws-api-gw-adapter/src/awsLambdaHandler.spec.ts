@@ -67,7 +67,7 @@ describe('configureBaseUrl', () => {
 })
 
 test('entrypoint', async () => {
-  expect(await createAwsLambdaHandler({
+  const handler = createAwsLambdaHandler({
     routes: [
       _.POST($._('/items/')._('id', numberField())).spec(
         {
@@ -101,6 +101,9 @@ test('entrypoint', async () => {
         })
       ),
     ],
-  })(awsRequest)).toMatchSnapshot()
+  })
+
+  expect(handler.config).toMatchSnapshot()
+  expect(await handler(awsRequest)).toMatchSnapshot()
 
 })

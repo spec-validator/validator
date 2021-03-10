@@ -45,20 +45,15 @@ export const handle = createAwsLambdaHandler({
 Handler's type should be as follows:
 
 ```ts api-gw-app/src/index.ts
-expectType<typeof handle, (event: {
-  headers: Record<string, string>,
-  path: string,
-  queryStringParameters: Record<string, string>,
-  httpMethod: string,
-  body?: string,
-  requestContext: {
-    stage: string
-  }
-}) => Promise<{
-  body?: string,
-  headers?: Record<string, any>,
-  statusCode: number
-}>>(true)
+import { AwsReq } from '@spec-validator/aws-api-gw-adapter/awsLambdaHandler'
+import { Route } from '@spec-validator/rest-api-server'
+import { WildCardResponse } from '@spec-validator/rest-api-server/handler'
+
+expectType<typeof handle, ((event: AwsReq) => Promise<WildCardResponse>) & {
+  config: Partial<{
+      routes: Route[];
+  }>;
+}>(true)
 ```
 
 CDK part for the lambda above may look as follows:
