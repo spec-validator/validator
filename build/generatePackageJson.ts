@@ -52,7 +52,7 @@ export default (projectPath: string): Task => async () => {
       .split('\n')[0]
   }
 
-  newPackageJson.private = false
+  newPackageJson.private = packageJson.private || false
   newPackageJson.version = version
 
   const workspacePackages = new Set(getPackageNamesInBuildOrder())
