@@ -2,13 +2,18 @@ import fs from 'fs'
 
 import { task, series, parallel, option, argv } from 'just-task'
 
+import testDocs from '@spec-validator/doc-tester/runCodeBlocks'
+
+import runLint from '@spec-validator/qa/lint'
+import runFmt from '@spec-validator/qa/fmt'
+import runTest from '@spec-validator/qa/test'
+
 import { forAll as forAllPackages } from './buildOrder'
 import exec from './exec'
 import generatePackageJson from './generatePackageJson'
 import generateTsConfigJson from './generateTsConfigJson'
-import testDocs from '@spec-validator/doc-tester/runCodeBlocks'
 
-const INTERNAL_TPL_DIR = 'packages/private-build-scripts/internal-templates'
+const INTERNAL_TPL_DIR = `${__dirname}/private-build-scripts/internal-templates`
 
 task('new',
   // eslint-disable-next-line max-statements
@@ -45,26 +50,20 @@ task('build', series(
 
 task('test-docs', () => testDocs())
 
-const tsNode = (script: string, isSrv=false) =>
-  ['yarn', isSrv ? 'ts-node-dev' : 'ts-node', '-r', 'tsconfig-paths/register', script]
-
 task('test',
   async (): Promise<void> => {
     option('-u', { default: false } as any)
     option('-p', { default: undefined } as any)
-    const call = exec(...tsNode('packages/qa/src/test.ts'),
-      ...(argv().u ? ['-u'] : []),
-      ...(argv().p ? ['-p', argv().p] : []),
-    ) as unknown as (() => Promise<void>)
-    return await call()
+    runTest({
+      update: argv().u,
+      pattern: argv().p,
+    })
   }
 )
 
-task('lint', exec(...tsNode('packages/qa/src/lint.ts')))
+task('lint', () => runFmt())
 
-task('fmt', exec(...tsNode('packages/qa/src/fmt.ts')))
-
-task('start-demo', exec(...tsNode('example/run.ts', true)))
+task('fmt', () => runLint())
 
 task('clean', series(
   generateTsConfigJson(),
