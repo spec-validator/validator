@@ -4,7 +4,7 @@ import createHandler, {
   getServerConfigs, ServerConfig, WildCardRequest, WildCardResponse,
 } from '@spec-validator/rest-api-server/handler'
 
-type AwsReq = {
+export type AwsReq = {
   headers: Record<string, string>,
   path: string,
   queryStringParameters: Record<string, string>,
@@ -34,11 +34,17 @@ export const configureBaseUrl = (event: AwsReq): void => {
     `${proto}://${host}/${stage}` : `${proto}://${host}`
 }
 
-export const createAwsLambdaHandler = (config: Partial<ServerConfig>):
-  ((event: AwsReq) => Promise<WildCardResponse>) => {
+export type LambdaHandler<Config extends Partial<ServerConfig>> = ((event: AwsReq) => Promise<WildCardResponse>) & {
+  config: Partial<Config>
+}
+
+export const createAwsLambdaHandler = <Config extends Partial<ServerConfig>>(config: Config):
+  LambdaHandler<Config> => {
   const handle = createHandler(getServerConfigs(config))
-  return async (event: AwsReq): Promise<WildCardResponse> => {
+  const result = async (event: AwsReq): Promise<WildCardResponse> => {
     configureBaseUrl(event)
     return await handle(toWildCardRequest(event))
   }
+  result.config = config
+  return result
 }

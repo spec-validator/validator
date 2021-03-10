@@ -2,6 +2,118 @@
 
 exports[`entrypoint 1`] = `
 Object {
+  "routes": Array [
+    Object {
+      "handler": [Function],
+      "request": Object {
+        "body": Object {
+          "description": Object {
+            "getStringField": [Function],
+            "regex": /\\.\\*/,
+            "serialize": [Function],
+            "type": "@spec-validator/validator/fields/stringField",
+            "validate": [Function],
+          },
+          "title": Object {
+            "getStringField": [Function],
+            "regex": /\\.\\*/,
+            "serialize": [Function],
+            "type": "@spec-validator/validator/fields/stringField",
+            "validate": [Function],
+          },
+        },
+        "headers": Object {
+          "keyIn": Object {
+            "getStringField": [Function],
+            "regex": /\\.\\*/,
+            "serialize": [Function],
+            "type": "@spec-validator/validator/fields/stringField",
+            "validate": [Function],
+          },
+        },
+        "method": Object {
+          "constant": "POST",
+          "getStringField": [Function],
+          "regex": /POST/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+        "pathParams": SegmentField {
+          "field": Object {
+            "canBeFloat": false,
+            "regex": /\\\\d\\+/,
+            "serialize": [Function],
+            "signed": false,
+            "type": "@spec-validator/validator/fields/numberField",
+            "validate": [Function],
+          },
+          "key": "id",
+          "parent": SegmentField {
+            "field": undefined,
+            "key": "/items/",
+            "parent": SegmentField {
+              "field": undefined,
+              "key": "",
+              "parent": undefined,
+              "type": "@spec-validator/validator/fields/segmentField",
+            },
+            "type": "@spec-validator/validator/fields/segmentField",
+          },
+          "type": "@spec-validator/validator/fields/segmentField",
+        },
+        "queryParams": Object {
+          "qkey": Object {
+            "getStringField": [Function],
+            "regex": /\\.\\*/,
+            "serialize": [Function],
+            "type": "@spec-validator/validator/fields/stringField",
+            "validate": [Function],
+          },
+        },
+      },
+      "response": Object {
+        "body": Object {
+          "id": Object {
+            "canBeFloat": false,
+            "getStringField": [Function],
+            "regex": /\\\\d\\+/,
+            "serialize": [Function],
+            "signed": false,
+            "type": "@spec-validator/validator/fields/numberField",
+            "validate": [Function],
+          },
+          "key": Object {
+            "getStringField": [Function],
+            "regex": /\\.\\*/,
+            "serialize": [Function],
+            "type": "@spec-validator/validator/fields/stringField",
+            "validate": [Function],
+          },
+          "title": Object {
+            "getStringField": [Function],
+            "regex": /\\.\\*/,
+            "serialize": [Function],
+            "type": "@spec-validator/validator/fields/stringField",
+            "validate": [Function],
+          },
+        },
+        "statusCode": Object {
+          "constant": 201,
+          "getStringField": [Function],
+          "regex": /201/,
+          "serialize": [Function],
+          "type": "@spec-validator/validator/fields/constantField",
+          "validate": [Function],
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`entrypoint 2`] = `
+Object {
   "body": "{\\"id\\":42,\\"title\\":\\"Title\\",\\"key\\":\\"qvalue\\"}",
   "headers": Object {
     "content-type": "application/json",
