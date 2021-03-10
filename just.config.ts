@@ -8,7 +8,4 @@ import assert from 'assert'
 
 assert(doJustTaskDefinitions)
 
-const tsNode = (script: string, isSrv=false) =>
-  ['yarn', isSrv ? 'ts-node-dev' : 'ts-node', '-r', 'tsconfig-paths/register', script]
-
-task('start-demo', exec(...tsNode('example/run.ts', true)))
+task('start-demo', exec('yarn', 'ts-node', '-r', 'tsconfig-paths/register', 'example/run.ts'))
