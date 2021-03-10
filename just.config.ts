@@ -1,15 +1,14 @@
 import fs from 'fs'
 
 import { task, series, parallel, option, argv } from 'just-task'
-import { forAll as forAllPackages } from './build/buildOrder'
 
-import exec from './build/exec'
-import generatePackageJson from './build/generatePackageJson'
-import generateTsConfigJson from './build/generateTsConfigJson'
+import { forAll as forAllPackages } from '@spec-validator/private-build-scripts/buildOrder'
+import exec from '@spec-validator/private-build-scripts/exec'
+import generatePackageJson from '@spec-validator/private-build-scripts/generatePackageJson'
+import generateTsConfigJson from '@spec-validator/private-build-scripts/generateTsConfigJson'
+import testDocs from '@spec-validator/doc-tester/runCodeBlocks'
 
-import testDocs from './packages/doc-tester/src/runCodeBlocks'
-
-const INTERNAL_TPL_DIR = 'build/internal-templates'
+const INTERNAL_TPL_DIR = 'packages/private-build-scripts/internal-templates'
 
 task('new',
   // eslint-disable-next-line max-statements

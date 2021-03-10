@@ -1,4 +1,4 @@
-import { flatMap } from '../packages/utils/src/utils'
+import { flatMap } from '@spec-validator/utils/utils'
 import { Task } from 'just-task'
 import path from 'path'
 

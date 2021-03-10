@@ -1,7 +1,8 @@
 import { Task } from 'just-task'
 
+import { cached, flatMap } from '@spec-validator/utils/utils'
+
 import dfs from './dfs'
-import { cached, flatMap } from '../packages/utils/src/utils'
 import getOutput from './getOutput'
 
 type PackageName = string

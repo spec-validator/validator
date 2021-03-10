@@ -1,4 +1,5 @@
-import { flatMap, removePrefix } from '../packages/utils/src/utils'
+import { removePrefix, flatMap } from '@spec-validator/utils/utils'
+
 import glob from 'glob'
 import copyRec from './copyRec'
 
