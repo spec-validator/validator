@@ -1,6 +1,10 @@
 {
   "name": "@spec-validator/private-build-scripts",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "@spec-validator/doc-tester": "0.0.1",
+    "@spec-validator/cli": "0.0.1",
+    "@spec-validator/qa": "0.0.1"
+  },
   "devDependencies": {}
 }
