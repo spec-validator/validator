@@ -6,6 +6,18 @@ import { Command } from 'commander'
 
 import { exec, findJsProjectRoot} from '@spec-validator/cli'
 
+const run = (options: {
+  update?: boolean,
+  pattern?: string
+}): void => {
+  exec(
+    'jest', '--config', `${findJsProjectRoot(__dirname)}/configs/jest.conf.js`,
+    '--passWithNoTests', '--detectOpenHandles',
+    ...(options.update ? ['-u'] : []),
+    ...(options.pattern ? ['--coverage', 'false', options.pattern] : []),
+  )
+}
+
 const main = (): void => {
   const program = new Command()
 
@@ -17,13 +29,10 @@ const main = (): void => {
 
   const options = program.opts()
 
-  exec(
-    'jest', '--config', `${findJsProjectRoot(__dirname)}/configs/jest.conf.js`,
-    '--passWithNoTests', '--detectOpenHandles',
-    ...(options.update ? ['-u'] : []),
-    ...(options.pattern ? ['--coverage', 'false', options.pattern] : []),
-  )
+  run(options)
 }
+
+export default run
 
 if (require.main === module) {
   main()

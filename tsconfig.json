@@ -60,6 +60,12 @@
       ],
       "@spec-validator/cli": [
         "cli/src/index.ts"
+      ],
+      "@spec-validator/private-build-scripts/*": [
+        "private-build-scripts/src/*"
+      ],
+      "@spec-validator/private-build-scripts": [
+        "private-build-scripts/src/index.ts"
       ]
     }
   }

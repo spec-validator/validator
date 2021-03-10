@@ -1,4 +1,4 @@
-import fs from 'fs'
+import { readFileSync } from 'fs'
 import { execSync } from 'child_process'
 
 import discover from './discover'
@@ -26,7 +26,7 @@ const runCodeFile = (codeFile: CodeFile): void => {
 const main = (): void =>
   discover(process.cwd(), /^.*\.md$/, /node_modules/).map(file => ({
     code: extractCodeBlocks(
-      fs.readFileSync(file).toString().split('\n'),
+      readFileSync(file).toString().split('\n'),
       ['ts', 'typescript']
     ),
     file,
@@ -34,6 +34,7 @@ const main = (): void =>
 
 export default main
 
+/* istanbul ignore if */
 if (require.main === module) {
   main()
 }

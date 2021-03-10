@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ok 1`] = `
+Array [
+  Array [
+    "yarn ts-node -r tsconfig-paths/register",
+    Object {
+      "input": "
+
+const meaning = 42
+",
+    },
+  ],
+  Array [
+    "yarn ts-node -r tsconfig-paths/register",
+    Object {
+      "input": "
+
+const meaning = 42
+",
+    },
+  ],
+]
+`;

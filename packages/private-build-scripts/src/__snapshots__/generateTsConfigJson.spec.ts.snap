@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generatePackageJson 1`] = `
+Array [
+  Array [
+    "./pkg1/tsconfig.build.json",
+    Object {
+      "compilerOptions": Object {
+        "baseUrl": "./",
+        "composite": true,
+        "noEmit": false,
+        "outDir": "./dist",
+        "paths": Object {
+          "pkg2": Array [
+            "../../pkg2/src/index.ts",
+          ],
+          "pkg2/*": Array [
+            "../../pkg2/src/*",
+          ],
+        },
+        "rootDir": "./src",
+      },
+      "exclude": Array [
+        "src/**/*.spec.ts",
+        "src/**/*.test.ts",
+      ],
+      "extends": "../../tsconfig.json",
+      "include": Array [
+        "src/**/*.ts",
+      ],
+      "references": Array [
+        Object {
+          "path": "../../pkg2/tsconfig.build.json",
+        },
+      ],
+    },
+  ],
+  Array [
+    "./pkg2/tsconfig.build.json",
+    Object {
+      "compilerOptions": Object {
+        "baseUrl": "./",
+        "composite": true,
+        "noEmit": false,
+        "outDir": "./dist",
+        "paths": Object {},
+        "rootDir": "./src",
+      },
+      "exclude": Array [
+        "src/**/*.spec.ts",
+        "src/**/*.test.ts",
+      ],
+      "extends": "../../tsconfig.json",
+      "include": Array [
+        "src/**/*.ts",
+      ],
+      "references": Array [],
+    },
+  ],
+  Array [
+    "tsconfig.build.json",
+    Object {
+      "compilerOptions": Object {
+        "noEmit": true,
+      },
+      "extends": "./tsconfig.json",
+      "references": Array [
+        Object {
+          "path": "pkg1/tsconfig.build.json",
+        },
+        Object {
+          "path": "pkg2/tsconfig.build.json",
+        },
+      ],
+    },
+  ],
+]
+`;

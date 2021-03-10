@@ -1,8 +1,9 @@
 import { Task } from 'just-task'
 
+import { cached, flatMap } from '@spec-validator/utils/utils'
+
 import dfs from './dfs'
-import { cached, flatMap } from '../packages/utils/src/utils'
-import getOutput from './getOutput'
+import { getOutput } from '@spec-validator/cli'
 
 type PackageName = string
 
@@ -31,4 +32,3 @@ export const forAll = (...items: ((name: string) => Task)[]): Task[] => flatMap(
       it => item.bind(null, it))
   )
 )
-

@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sync 1`] = `
+Array [
+  Array [
+    "./project/README.md",
+    "./project/dist/README.md",
+  ],
+]
+`;
+
+exports[`sync 2`] = `
+Array [
+  Array [
+    "./project/file1",
+    "./project/dist/file1",
+  ],
+  Array [
+    "./project/file2",
+    "./project/dist/file2",
+  ],
+]
+`;
