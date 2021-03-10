@@ -17,6 +17,9 @@
     "url": "https://github.com/spec-validator/validator.git",
     "type": "git"
   },
+  "scripts": {
+    "just": "yarn ts-node -r tsconfig-paths/register ./node_modules/.bin/just"
+  },
   "devDependencies": {
     "@types/node": "^14.14.31",
     "@types/undertaker": "^1.2.6",
