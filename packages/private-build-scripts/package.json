@@ -4,7 +4,8 @@
   "dependencies": {
     "@spec-validator/doc-tester": "0.0.1",
     "@spec-validator/cli": "0.0.1",
-    "@spec-validator/qa": "0.0.1"
-  },
-  "devDependencies": {}
+    "@spec-validator/qa": "0.0.1",
+    "ts-node": "^9.1.1",
+    "plop": "^2.7.4"
+  }
 }

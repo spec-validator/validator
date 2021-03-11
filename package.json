@@ -24,8 +24,6 @@
     "@types/node": "^14.14.31",
     "@types/undertaker": "^1.2.6",
     "just-task": "^1.2.0",
-    "plop": "^2.7.4",
-    "ts-node": "^9.1.1",
     "ts-node-dev": "^1.1.6",
     "tsconfig-paths": "^3.9.0",
     "typescript": "4.1.5"
