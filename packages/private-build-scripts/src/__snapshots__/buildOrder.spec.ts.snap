@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getGraph 1`] = `
+Object {
+  "pkg1": Array [],
+  "pkg2": Array [
+    "pkg1",
+  ],
+  "pkg3": Array [
+    "pkg2",
+  ],
+  "pkg4": Array [
+    "pkg3",
+  ],
+}
+`;
+
+exports[`getPackageNamesInBuildOrder 1`] = `
+Array [
+  "pkg4",
+  "pkg3",
+  "pkg2",
+  "pkg1",
+]
+`;
+
+exports[`getProjectsPathsInBuildOrder 1`] = `
+Array [
+  "./pkg4",
+  "./pkg3",
+  "./pkg2",
+  "./pkg1",
+]
+`;
