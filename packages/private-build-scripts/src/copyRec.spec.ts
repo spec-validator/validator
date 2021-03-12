@@ -1,6 +1,5 @@
 import fs from 'fs'
 
-import { mocked } from 'ts-jest/utils'
 
 import copyRec from './copyRec'
 
@@ -8,29 +7,44 @@ jest.mock('fs', () => ({
   default: jest.fn(),
 }))
 
-const statSync = mocked(fs.statSync)
-const readdirSync = mocked(fs.readdirSync)
+beforeEach(() => {
+  fs.copyFileSync = jest.fn()
+  fs.mkdirSync = jest.fn()
+})
 
+afterEach(() => jest.clearAllMocks())
 
 test('file', () => {
-  statSync.mockReturnValue({
+  fs.statSync = () =>({
     isDirectory: () => false,
   } as any)
+
+  fs.copyFileSync = jest.fn()
+  fs.mkdirSync = jest.fn()
+
   copyRec('src', 'trg')
 
-  expect(fs.copyFileSync.call.length).toEqual(1)
-
-  expect(fs.mkdirSync.call.length).toEqual(0)
+  expect(fs.copyFileSync).toHaveBeenCalledTimes(1)
+  expect(fs.mkdirSync).toHaveBeenCalledTimes(0)
 })
 
 test('directory', () => {
-  statSync.mockReturnValue({
-    isDirectory: () => true,
+  let done = false
+
+  fs.statSync = () =>({
+    isDirectory: () => {
+      if (done) {
+        return false
+      } else {
+        done = true
+        return true
+      }
+    },
   } as any)
-  readdirSync.mockReturnValue(['child'] as any)
+  fs.readdirSync = () => ['child'] as any
+
   copyRec('src', 'trg')
 
-
-  expect(fs.copyFileSync.call.length).toEqual(0)
-  expect(fs.mkdirSync.call.length).toEqual(2)
+  expect(fs.copyFileSync).toHaveBeenCalledTimes(1)
+  expect(fs.mkdirSync).toHaveBeenCalledTimes(1)
 })
