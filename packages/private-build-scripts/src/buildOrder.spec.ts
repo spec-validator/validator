@@ -3,6 +3,7 @@ import {
   getGraph,
   getPackageNamesInBuildOrder,
   getProjectsPathsInBuildOrder,
+  forAll,
 } from './buildOrder'
 
 const WORKSPACE_INFO = {
@@ -47,3 +48,10 @@ test(
   'getProjectsPathsInBuildOrder',
   () => expect(getProjectsPathsInBuildOrder()).toMatchSnapshot()
 )
+
+test('forAll', async () => {
+  forAll(
+    (path: string) => exec('rm', '-f', `${path}/tsconfig.tsbuildinfo`),
+    (path: string) => {exec('rm', '-rf', `${path}/dist`)}
+  )
+})
