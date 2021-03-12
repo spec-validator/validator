@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path'
 
 import { mocked } from 'ts-jest/utils'
 
@@ -9,17 +8,29 @@ jest.mock('fs', () => ({
   default: jest.fn(),
 }))
 
-jest.mock('path', () => ({
-  default: jest.fn(),
-}))
+const statSync = mocked(fs.statSync)
+const readdirSync = mocked(fs.readdirSync)
 
-const fsMocked = mocked(fs)
-const pathMocked = mocked(path)
 
 test('file', () => {
+  statSync.mockReturnValue({
+    isDirectory: () => false,
+  } as any)
   copyRec('src', 'trg')
+
+  expect(fs.copyFileSync.call.length).toEqual(1)
+
+  expect(fs.mkdirSync.call.length).toEqual(0)
 })
 
 test('directory', () => {
+  statSync.mockReturnValue({
+    isDirectory: () => true,
+  } as any)
+  readdirSync.mockReturnValue(['child'] as any)
   copyRec('src', 'trg')
+
+
+  expect(fs.copyFileSync.call.length).toEqual(0)
+  expect(fs.mkdirSync.call.length).toEqual(2)
 })
