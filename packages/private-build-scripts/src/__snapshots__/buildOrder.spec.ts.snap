@@ -1,5 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`forAll 1`] = `
+Array [
+  "./pkg4 one",
+  "./pkg3 one",
+  "./pkg2 one",
+  "./pkg1 one",
+  "./pkg4 two",
+  "./pkg3 two",
+  "./pkg2 two",
+  "./pkg1 two",
+]
+`;
+
 exports[`getGraph 1`] = `
 Object {
   "pkg1": Array [],

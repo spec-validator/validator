@@ -50,8 +50,15 @@ test(
 )
 
 test('forAll', async () => {
-  forAll(
-    (path: string) => exec('rm', '-f', `${path}/tsconfig.tsbuildinfo`),
-    (path: string) => {exec('rm', '-rf', `${path}/dist`)}
+  const results: string[] = []
+  const tasks = forAll(
+    (path: string) => async () => results.push(`${path} one`),
+    (path: string) => async () => results.push(`${path} two`)
   )
+  for (let i=0; i<tasks.length; i++) {
+    const task = tasks[i] as any
+    const run = task()
+    await run()
+  }
+  expect(results).toMatchSnapshot()
 })
