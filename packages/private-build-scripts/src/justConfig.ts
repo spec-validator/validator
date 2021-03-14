@@ -1,19 +1,23 @@
 import fs from 'fs'
 
-import { task, series, parallel, option, argv } from 'just-task'
+import { task, series, parallel, option, argv, Task } from 'just-task'
 
 import testDocs from '@spec-validator/doc-tester/runCodeBlocks'
+
+import execSync from '@spec-validator/cli/exec'
 
 import runLint from '@spec-validator/qa/lint'
 import runFmt from '@spec-validator/qa/fmt'
 import runTest from '@spec-validator/qa/test'
 
 import { forAll as forAllPackages } from './buildOrder'
-import exec from './exec'
 import generatePackageJson from './generatePackageJson'
 import generateTsConfigJson from './generateTsConfigJson'
 
 const INTERNAL_TPL_DIR = `${__dirname}/private-build-scripts/internal-templates`
+
+export const exec = (...cmd: string[]): Task =>
+  async () => execSync(...cmd)
 
 task('new',
   // eslint-disable-next-line max-statements
