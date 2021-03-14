@@ -13,11 +13,11 @@ import { read } from './readAndWrite'
 const copyFile = util.promisify(fs.copyFile)
 
 export default (projectPath: string): Task => async () => {
+  copyFile(`${projectPath}/README.md`, `${projectPath}/dist/README.md`)
+
   const packageJson: Record<string, any>  = read(`${projectPath}/package.json`)
 
   const files: string[] = packageJson.files || []
-
-  copyFile(`${projectPath}/README.md`, `${projectPath}/dist/README.md`)
 
   flatMap(
     files.map(it => glob.sync(`${projectPath}/${it}`)),
