@@ -16,7 +16,7 @@ import generateTsConfigJson from './generateTsConfigJson'
 
 const INTERNAL_TPL_DIR = `${__dirname}/private-build-scripts/internal-templates`
 
-export const exec = (...cmd: string[]): Task =>
+export const exec = (...cmd: [cmd: string, ...args:string[]]): Task =>
   async () => execSync(...cmd)
 
 task('new',

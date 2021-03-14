@@ -26,7 +26,7 @@ const WORKSPACE_INFO = {
 }
 
 jest.mock('@spec-validator/cli', () => ({
-  exec: () => JSON.stringify(WORKSPACE_INFO),
+  getOutput: () => JSON.stringify(WORKSPACE_INFO),
   __esModule: true,
 }))
 
