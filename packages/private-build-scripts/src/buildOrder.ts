@@ -3,7 +3,7 @@ import { Task } from 'just-task'
 import { cached, flatMap } from '@spec-validator/utils/utils'
 
 import dfs from './dfs'
-import getOutput from './getOutput'
+import { exec } from '@spec-validator/cli'
 
 type PackageName = string
 
@@ -12,7 +12,7 @@ export const getWorkspaceInfo = (): Record<PackageName, {
   workspaceDependencies: PackageName[]
 }> => cached(
   'workspaceInfo',
-  () => JSON.parse(getOutput('yarn', 'workspaces', 'info').toString())
+  () => JSON.parse(exec('yarn', 'workspaces', 'info').toString())
 )
 
 export const getGraph = (): Record<string, string[]> => Object.fromEntries(Object.entries(

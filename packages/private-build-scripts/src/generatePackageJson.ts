@@ -3,8 +3,9 @@ import util from 'util'
 
 import { Task } from 'just-task'
 
+import { exec } from '@spec-validator/cli'
+
 import { getPackageNamesInBuildOrder } from './buildOrder'
-import getOutput from './getOutput'
 import { read, write } from './readAndWrite'
 import syncPackageFiles from './syncPackageFiles'
 
@@ -41,14 +42,14 @@ export default (projectPath: string): Task => async () => {
   let version: string | undefined = ''
 
   if (process.env.CI) {
-    version = getOutput('git', 'tag', '--points-at', 'HEAD').toString()
+    version = exec('git', 'tag', '--points-at', 'HEAD').toString()
       .split('\n')
       .find(it => it.match(/^([0-9]+)\.([0-9]+)\.([0-9]+)$/))
     if (!version) {
       throw 'Commit doesn\'t point at any semver tag - can\'t publish'
     }
   } else {
-    version = getOutput('git', 'describe').toString()
+    version = exec('git', 'describe').toString()
       .split('\n')[0]
   }
 
