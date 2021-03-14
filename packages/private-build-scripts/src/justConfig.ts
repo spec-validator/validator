@@ -12,6 +12,7 @@ import runTest from '@spec-validator/qa/test'
 
 import { forAll as forAllPackages } from './buildOrder'
 import generatePackageJson from './generatePackageJson'
+import syncPackageFiles from './syncPackageFiles'
 import generateTsConfigJson from './generateTsConfigJson'
 
 const INTERNAL_TPL_DIR = `${__dirname}/private-build-scripts/internal-templates`
@@ -49,7 +50,10 @@ task('new',
 task('build', series(
   generateTsConfigJson(),
   exec('yarn', 'tsc', '--build', 'tsconfig.build.json'),
-  parallel(...forAllPackages(generatePackageJson))
+  parallel(
+    parallel(...forAllPackages(generatePackageJson)),
+    parallel(...forAllPackages(syncPackageFiles))
+  )
 ))
 
 task('test-docs', () => testDocs())

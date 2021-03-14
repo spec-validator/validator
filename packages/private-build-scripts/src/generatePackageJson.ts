@@ -1,13 +1,9 @@
-import fs from 'fs'
-import util from 'util'
-
 import { Task } from 'just-task'
 
 import { getOutput } from '@spec-validator/cli'
 
 import { getPackageNamesInBuildOrder } from './buildOrder'
 import { read, write } from './readAndWrite'
-import syncPackageFiles from './syncPackageFiles'
 
 const EXCLUDE = new Set(['devDependencies', 'files'])
 const COPY_FROM_PARENT = [
@@ -19,7 +15,6 @@ const COPY_FROM_PARENT = [
   'homepage',
 ]
 
-const copyFile = util.promisify(fs.copyFile)
 
 // eslint-disable-next-line max-statements
 export default (projectPath: string): Task => async () => {
@@ -65,8 +60,4 @@ export default (projectPath: string): Task => async () => {
   }
 
   write(`${projectPath}/dist/package.json`, newPackageJson)
-
-  copyFile(`${projectPath}/README.md`, `${projectPath}/dist/README.md`)
-
-  syncPackageFiles(projectPath)
 }
