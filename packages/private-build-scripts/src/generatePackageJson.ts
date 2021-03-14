@@ -1,9 +1,8 @@
 import { Task } from 'just-task'
 
-import { getOutput } from '@spec-validator/cli'
-
 import { getPackageNamesInBuildOrder } from './buildOrder'
 import { read, write } from './readAndWrite'
+import getGitVersion from './getGitVersion'
 
 const EXCLUDE = new Set(['devDependencies', 'files'])
 const COPY_FROM_PARENT = [
@@ -34,19 +33,7 @@ export default (projectPath: string): Task => async () => {
     }
   })
 
-  let version: string | undefined = ''
-
-  if (process.env.CI) {
-    version = getOutput('git', 'tag', '--points-at', 'HEAD').toString()
-      .split('\n')
-      .find(it => it.match(/^([0-9]+)\.([0-9]+)\.([0-9]+)$/))
-    if (!version) {
-      throw 'Commit doesn\'t point at any semver tag - can\'t publish'
-    }
-  } else {
-    version = getOutput('git', 'describe').toString()
-      .split('\n')[0]
-  }
+  const version: string = getGitVersion()
 
   newPackageJson.private = packageJson.private || false
   newPackageJson.version = version
