@@ -1,8 +1,8 @@
-import { Task } from 'just-task'
 
 import { getPackageNamesInBuildOrder } from './buildOrder'
 import { read, write } from './readAndWrite'
 import getGitVersion from './getGitVersion'
+import { TaskFunction } from 'undertaker'
 
 const EXCLUDE = new Set(['devDependencies', 'files'])
 const COPY_FROM_PARENT = [
@@ -16,7 +16,7 @@ const COPY_FROM_PARENT = [
 
 
 // eslint-disable-next-line max-statements
-export default (projectPath: string): Task => async () => {
+export default (projectPath: string): TaskFunction => async () => {
   const parentConfig: Record<string, any> = read('package.json')
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
