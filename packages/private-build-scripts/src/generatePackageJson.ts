@@ -22,26 +22,20 @@ export default (projectPath: string): TaskFunction => async () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const packageJson: Record<string, any> = read(`${projectPath}/package.json`)
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const newPackageJson: Record<string, any> = Object.fromEntries(
-    Object.entries(packageJson).filter(it => !EXCLUDE.has(it[0]))
-  )
-
-  COPY_FROM_PARENT.filter(key => parentConfig[key]).forEach(key => {
-    newPackageJson[key] = parentConfig[key]
-  })
-
   const version: string = getGitVersion()
-
-  newPackageJson.private = packageJson.private || false
-  newPackageJson.version = version
-
   const workspacePackages = new Set(getPackageNamesInBuildOrder())
 
-  keys(newPackageJson.dependencies).filter(it => workspacePackages.has(it)).forEach(it => {
-    newPackageJson.dependencies[it] = version
+  write(`${projectPath}/dist/package.json`, {
+    ...Object.fromEntries([
+      ...Object.entries(packageJson).filter(it => !EXCLUDE.has(it[0])),
+      ...COPY_FROM_PARENT.filter(key => parentConfig[key]).map(key =>
+        [key, parentConfig[key]]
+      ),
+      ...keys(packageJson.dependencies).filter(it => workspacePackages.has(it)).map(it =>
+        [it, version]
+      ),
+    ]),
+    private: packageJson.private || false,
+    version,
   })
-
-  write(`${projectPath}/dist/package.json`, newPackageJson)
 }
