@@ -8,7 +8,6 @@ export const DIST = 'dist'
 
 const generateRootConfig = (): void => {
   const paths = getProjectsPathsInBuildOrder()
-
   write('tsconfig.build.json', {
     'extends': './tsconfig.json',
     'compilerOptions': {
