@@ -8,7 +8,7 @@ jest.mock('./getGitVersion', () => ({
 const write = jest.fn()
 
 jest.mock('./readAndWrite', () => ({
-  write: () => write(),
+  write: (path: string, data: any) => write(path, data),
   read: (path: string) => {
     if (path === 'package.json') {
       return {
@@ -38,7 +38,7 @@ jest.mock('./readAndWrite', () => ({
         'dependencies': {
           'pkg1': '0.0.1',
           'pkg2': '0.0.1',
-          '3rdpart': '6.6.6',
+          '3rd-party': '6.6.6',
         },
       }
     }
@@ -54,5 +54,5 @@ jest.mock('./buildOrder', () => ({
 test('generatePackageJson', async () => {
   const run = generatePackageJson('parent') as any
   await run()
-  expect(write.mock.calls[0][0]).toMatchSnapshot()
+  expect(write.mock.calls[0]).toMatchSnapshot()
 })

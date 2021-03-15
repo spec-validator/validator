@@ -1,3 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`generatePackageJson 1`] = `undefined`;
+exports[`generatePackageJson 1`] = `
+Array [
+  "parent/dist/package.json",
+  Object {
+    "author": Object {
+      "email": "gurunars@gmail.com",
+      "name": "Anton Berezin",
+      "url": "https://gurunars.com",
+    },
+    "bugs": Object {
+      "url": "https://github.com/spec-validator/validator/issues",
+    },
+    "dependencies": Object {
+      "3rd-party": "6.6.6",
+      "pkg1": "0.0.1",
+      "pkg2": "0.0.1",
+    },
+    "homepage": "https://github.com/spec-validator/validator",
+    "license": "Apache-2.0",
+    "name": "child-package",
+    "pkg1": "1.1.1",
+    "pkg2": "1.1.1",
+    "private": false,
+    "publishConfig": Object {
+      "registry": "https://registry.npmjs.org/",
+    },
+    "repository": Object {
+      "type": "git",
+      "url": "https://github.com/spec-validator/validator.git",
+    },
+    "version": "1.1.1",
+  },
+]
+`;
