@@ -1,9 +1,8 @@
 import { flatMap } from '@spec-validator/utils/utils'
 import { Task } from 'just-task'
-import path from 'path'
-
-import { getGraph, getProjectsPathsInBuildOrder, getWorkspaceInfo } from './buildOrder'
+import { getGraph, getProjectsPathsInBuildOrder } from './buildOrder'
 import { write } from './readAndWrite'
+import getRelativePath from './relPath'
 
 export const DIST = 'dist'
 
@@ -19,25 +18,6 @@ const generateRootConfig = (): void => {
       'path': `${it}/tsconfig.build.json`,
     })),
   })
-}
-
-const relativePath = (parent: string, child: string) => {
-  const count = path.posix.normalize(parent).split('/').length
-  const dots = []
-  for (let i=0; i< count; i++) {
-    dots.push('..')
-  }
-  dots.push(child)
-  return dots.join('/')
-}
-
-const getRelativePath = (parent: string, child?: string): string => {
-  const info = getWorkspaceInfo()
-  if (child) {
-    return relativePath(info[parent].location, info[child].location)
-  } else {
-    return info[parent].location
-  }
 }
 
 const generateProjectConfigs = (): void => {
