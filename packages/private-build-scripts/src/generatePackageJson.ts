@@ -19,8 +19,6 @@ const COPY_FROM_PARENT = [
 // eslint-disable-next-line max-statements
 export default (projectPath: string): TaskFunction => async () => {
   const parentConfig: Record<string, any> = read('package.json')
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const packageJson: Record<string, any> = read(`${projectPath}/package.json`)
   const version: string = getGitVersion()
   const workspacePackages = new Set(getPackageNamesInBuildOrder())
