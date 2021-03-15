@@ -5,6 +5,8 @@ import path from 'path'
 import { getGraph, getProjectsPathsInBuildOrder, getWorkspaceInfo } from './buildOrder'
 import { write } from './readAndWrite'
 
+export const DIST = 'dist'
+
 const generateRootConfig = (): void => {
   const paths = getProjectsPathsInBuildOrder()
 
@@ -48,7 +50,7 @@ const generateProjectConfigs = (): void => {
         'composite': true,
         'noEmit': false,
         'rootDir': './src',
-        'outDir': './dist',
+        'outDir': `./${DIST}`,
         'paths': Object.fromEntries(flatMap(children.map(child => {
           const rel = getRelativePath(parent, child)
           return [

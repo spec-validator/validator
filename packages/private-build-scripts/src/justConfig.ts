@@ -13,7 +13,7 @@ import runTest from '@spec-validator/qa/test'
 import { forAll as forAllPackages } from './buildOrder'
 import generatePackageJson from './generatePackageJson'
 import syncPackageFiles from './syncPackageFiles'
-import generateTsConfigJson from './generateTsConfigJson'
+import generateTsConfigJson, { DIST } from './generateTsConfigJson'
 
 const INTERNAL_TPL_DIR = `${__dirname}/private-build-scripts/internal-templates`
 
@@ -80,7 +80,7 @@ task('clean', series(
       (path: string) => exec('yarn', 'tsc', '--build', `${path}/tsconfig.build.json`, '--clean'),
       (path: string) => exec('rm', '-f', `${path}/tsconfig.build.tsbuildinfo`),
       (path: string) => exec('rm', '-f', `${path}/tsconfig.tsbuildinfo`),
-      (path: string) => exec('rm', '-rf', `${path}/dist`)
+      (path: string) => exec('rm', '-rf', `${path}/${DIST}`)
     ),
     exec('rm', '-f', 'tsconfig.build.tsbuildinfo'),
     exec('rm', '-f', 'tsconfig.tsbuildinfo')
@@ -98,7 +98,7 @@ task('publish', parallel(...forAllPackages(
     'yarn', 'publish',
     '--non-interactive',
     '--access', 'public',
-    `${path}/dist`,
+    `${path}/${DIST}`,
   )
 )))
 
