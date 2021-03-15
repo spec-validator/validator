@@ -6,22 +6,19 @@ import getRelativePath from './relPath'
 
 export const DIST = 'dist'
 
-const generateRootConfig = (): void => {
-  const paths = getProjectsPathsInBuildOrder()
+const generateRootConfig = (): void =>
   write('tsconfig.build.json', {
     'extends': './tsconfig.json',
     'compilerOptions': {
       'noEmit': true,
     },
-    'references': paths.map(it => ({
+    'references': getProjectsPathsInBuildOrder().map(it => ({
       'path': `${it}/tsconfig.build.json`,
     })),
   })
-}
 
-const generateProjectConfigs = (): void => {
-  const graph = getGraph()
-  Object.entries(graph).forEach(([parent, children]) => {
+const generateProjectConfigs = (): void =>
+  Object.entries(getGraph()).forEach(([parent, children]) => {
     write(`${getRelativePath(parent)}/tsconfig.build.json`, {
       'extends': '../../tsconfig.json',
       'compilerOptions': {
@@ -45,8 +42,6 @@ const generateProjectConfigs = (): void => {
       )),
     })
   })
-
-}
 
 export default (): Task => async () => {
   generateProjectConfigs()
