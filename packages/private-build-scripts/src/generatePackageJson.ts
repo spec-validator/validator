@@ -1,9 +1,9 @@
+import { TaskFunction } from 'undertaker'
+import { keys } from '@spec-validator/utils/utils'
 
 import { getPackageNamesInBuildOrder } from './buildOrder'
 import { read, write } from './readAndWrite'
 import getGitVersion from './getGitVersion'
-import { TaskFunction } from 'undertaker'
-import { keys } from '@spec-validator/utils/utils'
 
 const EXCLUDE = new Set(['devDependencies', 'files'])
 const COPY_FROM_PARENT = [
