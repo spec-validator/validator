@@ -15,8 +15,6 @@ const COPY_FROM_PARENT = [
   'homepage',
 ]
 
-
-// eslint-disable-next-line max-statements
 export default (projectPath: string): TaskFunction => async () => {
   const parentConfig: Record<string, any> = read('package.json')
   const packageJson: Record<string, any> = read(`${projectPath}/package.json`)
