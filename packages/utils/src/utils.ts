@@ -10,8 +10,11 @@ export const omit = <T, K extends keyof T>(full: T, keys: K[]): Omit<T, K> => {
   ) as Omit<T, K>
 }
 
-export const pick = <T, K extends keyof T>(full: T, keys: K[]): Pick<T, K> => {
-  const toPick = new Set(keys)
+export const keys = (item: unknown): string[] =>
+  typeof item === 'object' && item !== null ? Object.keys(item) : []
+
+export const pick = <T, K extends keyof T>(full: T, pickKeys: K[]): Pick<T, K> => {
+  const toPick = new Set(pickKeys)
   return Object.fromEntries(
     Object.entries(full).filter(it => toPick.has(it[0] as K))
   ) as Pick<T, K>

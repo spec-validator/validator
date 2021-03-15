@@ -3,6 +3,7 @@ import { getPackageNamesInBuildOrder } from './buildOrder'
 import { read, write } from './readAndWrite'
 import getGitVersion from './getGitVersion'
 import { TaskFunction } from 'undertaker'
+import { keys } from '@spec-validator/utils/utils'
 
 const EXCLUDE = new Set(['devDependencies', 'files'])
 const COPY_FROM_PARENT = [
@@ -27,10 +28,8 @@ export default (projectPath: string): TaskFunction => async () => {
     Object.entries(packageJson).filter(it => !EXCLUDE.has(it[0]))
   )
 
-  COPY_FROM_PARENT.forEach(key => {
-    if (parentConfig[key]) {
-      newPackageJson[key] = parentConfig[key]
-    }
+  COPY_FROM_PARENT.filter(key => parentConfig[key]).forEach(key => {
+    newPackageJson[key] = parentConfig[key]
   })
 
   const version: string = getGitVersion()
@@ -40,11 +39,9 @@ export default (projectPath: string): TaskFunction => async () => {
 
   const workspacePackages = new Set(getPackageNamesInBuildOrder())
 
-  if (newPackageJson.dependencies) {
-    Object.keys(newPackageJson.dependencies).filter(it => workspacePackages.has(it)).forEach(it => {
-      newPackageJson.dependencies[it] = version
-    })
-  }
+  keys(newPackageJson.dependencies).filter(it => workspacePackages.has(it)).forEach(it => {
+    newPackageJson.dependencies[it] = version
+  })
 
   write(`${projectPath}/dist/package.json`, newPackageJson)
 }
