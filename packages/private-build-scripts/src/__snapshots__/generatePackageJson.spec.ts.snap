@@ -14,14 +14,12 @@ Array [
     },
     "dependencies": Object {
       "3rd-party": "6.6.6",
-      "pkg1": "0.0.1",
-      "pkg2": "0.0.1",
+      "pkg1": "1.1.1",
+      "pkg2": "1.1.1",
     },
     "homepage": "https://github.com/spec-validator/validator",
     "license": "Apache-2.0",
     "name": "child-package",
-    "pkg1": "1.1.1",
-    "pkg2": "1.1.1",
     "private": false,
     "publishConfig": Object {
       "registry": "https://registry.npmjs.org/",

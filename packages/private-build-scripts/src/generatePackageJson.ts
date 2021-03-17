@@ -28,10 +28,15 @@ export default (projectPath: string): TaskFunction => async () => {
       ...COPY_FROM_PARENT.filter(key => parentConfig[key]).map(key =>
         [key, parentConfig[key]]
       ),
-      ...keys(packageJson.dependencies).filter(it => workspacePackages.has(it)).map(it =>
-        [it, version]
-      ),
     ]),
+    dependencies: {
+      ...packageJson.dependencies,
+      ...Object.fromEntries(
+        keys(packageJson.dependencies).filter(it => workspacePackages.has(it)).map(it =>
+          [it, version]
+        )
+      ),
+    },
     private: packageJson.private || false,
     version,
   })
