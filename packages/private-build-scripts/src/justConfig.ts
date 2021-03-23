@@ -71,9 +71,9 @@ task('test',
   }
 )
 
-task('lint', () => runFmt())
+task('lint', () => runLint())
 
-task('fmt', () => runLint())
+task('fmt', () => runFmt())
 
 task('clean', series(
   generateTsConfigJson(),

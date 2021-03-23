@@ -2,7 +2,11 @@
 
 /* istanbul ignore file */
 
-import main from './baseLint'
+import baseLint from './baseLint'
+
+const main = (): void => {
+  baseLint()
+}
 
 export default main
 
