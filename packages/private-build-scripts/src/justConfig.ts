@@ -50,14 +50,7 @@ task('new',
   }
 )
 
-task('build', series(
-  generateTsConfigJson(),
-  exec('yarn', 'tsc', '--build', 'tsconfig.build.json'),
-  parallel(
-    parallel(...forAllPackages((path: string) => generatePackageJson(path, getGitVersion()))),
-    parallel(...forAllPackages(syncPackageFiles))
-  ),
-))
+
 
 task('test-docs', () => testDocs())
 
@@ -76,8 +69,20 @@ task('lint', () => runLint())
 
 task('fmt', () => runFmt())
 
+const baseTsConfig = `${__dirname}/../../../tsconfig.json`
+const version = getGitVersion()
+
+task('build', series(
+  generateTsConfigJson(baseTsConfig),
+  exec('yarn', 'tsc', '--build', 'tsconfig.build.json'),
+  parallel(
+    parallel(...forAllPackages((path: string) => generatePackageJson(path, version))),
+    parallel(...forAllPackages(syncPackageFiles))
+  ),
+))
+
 task('clean', series(
-  generateTsConfigJson(),
+  generateTsConfigJson(baseTsConfig),
   parallel(
     ...forAllPackages(
       (path: string) => exec('yarn', 'tsc', '--build', `${path}/tsconfig.build.json`, '--clean'),
