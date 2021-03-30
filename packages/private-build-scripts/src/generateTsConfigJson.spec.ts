@@ -22,7 +22,7 @@ jest.mock('./buildOrder', () => ({
   __esModule: true,
 }))
 
-test('generatePackageJson', async () => {
+test('generateTsConfigJson', async () => {
   const run = generateTsConfigJson() as any
   await run()
   expect(write.mock.calls).toMatchSnapshot()
