@@ -49,16 +49,10 @@ test(
   () => expect(getProjectsPathsInBuildOrder()).toMatchSnapshot()
 )
 
-test('forAll', async () => {
+test('forAll', () => {
   const results: string[] = []
-  const tasks = forAll(
-    (path: string) => async () => results.push(`${path} one`),
-    (path: string) => async () => results.push(`${path} two`)
+  forAll(
+    path => { results.push(`${path} one`) },
   )
-  for (let i=0; i<tasks.length; i++) {
-    const task = tasks[i] as any
-    const run = task()
-    await run()
-  }
   expect(results).toMatchSnapshot()
 })

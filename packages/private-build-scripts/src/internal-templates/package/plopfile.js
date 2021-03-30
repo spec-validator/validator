@@ -1,8 +1,10 @@
 const fs = require('fs')
 
+const root = `${__dirname}/../../../../..`
+
 const item = (path) => ({
   type: 'add',
-  path: `../../../packages/{{name}}/${path}`,
+  path: `${root}/packages/{{name}}/${path}`,
   templateFile: path,
 })
 
@@ -18,7 +20,7 @@ module.exports = function (plop) {
       item('README.md'),
       item('package.json'),
       (answers) => {
-        const tsConfigPath = `${plop.getPlopfilePath()}/../../../tsconfig.json`
+        const tsConfigPath = `${root}/tsconfig.json`
         const tsConfig = JSON.parse(
           fs.readFileSync(tsConfigPath).toString()
         )
@@ -33,7 +35,7 @@ module.exports = function (plop) {
         )
       },
       (answers) => {
-        const readMePath = `${plop.getPlopfilePath()}/../../../README.md`
+        const readMePath = `${root}/README.md`
         const readMe = fs.readFileSync(readMePath).toString()
         const appendix = [
           '',

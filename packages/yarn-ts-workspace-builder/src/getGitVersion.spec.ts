@@ -8,7 +8,13 @@ jest.mock('@spec-validator/cli', () => ({
 }))
 
 beforeEach(() => {
+  delete process.env.PR
   delete process.env.CI
+})
+
+test('PR', () => {
+  process.env.PR = 'true'
+  expect(getGitVersion()).toMatch('0.0.1')
 })
 
 test('locally', () => {
@@ -19,6 +25,7 @@ test('locally', () => {
 describe('in CI', () => {
 
   beforeEach(() => {
+    delete process.env.PR
     process.env.CI = 'true'
   })
 

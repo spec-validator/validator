@@ -2,7 +2,7 @@
 
 import fs from 'fs'
 
-import { task, series, parallel, option, argv, Task } from 'just-task'
+import { task, series, option, argv, Task } from 'just-task'
 
 import testDocs from '@spec-validator/doc-tester/runCodeBlocks'
 
@@ -12,11 +12,10 @@ import runLint from '@spec-validator/qa/lint'
 import runFmt from '@spec-validator/qa/fmt'
 import runTest from '@spec-validator/qa/test'
 
-import { forAll as forAllPackages } from './buildOrder'
-import generatePackageJson from './generatePackageJson'
-import syncPackageFiles from './syncPackageFiles'
-import generateTsConfigJson, { DIST } from './generateTsConfigJson'
-import getGitVersion from './getGitVersion'
+import publish from '@spec-validator/yarn-ts-workspace-builder/commands/publish'
+import clean from '@spec-validator/yarn-ts-workspace-builder/commands/clean'
+import build from '@spec-validator/yarn-ts-workspace-builder/commands/build'
+import getGitVersion from '@spec-validator/yarn-ts-workspace-builder/getGitVersion'
 
 const INTERNAL_TPL_DIR = `${__dirname}/internal-templates`
 
@@ -70,45 +69,12 @@ task('lint', () => runLint())
 task('fmt', () => runFmt())
 
 const baseTsConfig = `${__dirname}/../../../tsconfig.json`
-const version = getGitVersion()
 
-task('build', series(
-  generateTsConfigJson(baseTsConfig),
-  exec('yarn', 'tsc', '--build', 'tsconfig.build.json'),
-  parallel(
-    parallel(...forAllPackages((path: string) => generatePackageJson(path, version))),
-    parallel(...forAllPackages(syncPackageFiles))
-  ),
-))
+task('build', () => build(baseTsConfig, getGitVersion()))
 
-task('clean', series(
-  generateTsConfigJson(baseTsConfig),
-  parallel(
-    ...forAllPackages(
-      (path: string) => exec('yarn', 'tsc', '--build', `${path}/tsconfig.build.json`, '--clean'),
-      (path: string) => exec('rm', '-f', `${path}/tsconfig.build.tsbuildinfo`),
-      (path: string) => exec('rm', '-f', `${path}/tsconfig.tsbuildinfo`),
-      (path: string) => exec('rm', '-rf', `${path}/${DIST}`)
-    ),
-    exec('rm', '-f', 'tsconfig.build.tsbuildinfo'),
-    exec('rm', '-f', 'tsconfig.tsbuildinfo')
-  ),
-  parallel(
-    ...forAllPackages(
-      (path: string) => exec('rm', '-f', `${path}/tsconfig.build.json`),
-    ),
-    exec('rm', '-f', 'tsconfig.build.json')
-  )
-))
+task('clean', () => clean(baseTsConfig))
 
-task('publish', parallel(...forAllPackages(
-  (path: string) => exec(
-    'yarn', 'publish',
-    '--non-interactive',
-    '--access', 'public',
-    `${path}/${DIST}`,
-  )
-)))
+task('publish', publish)
 
 task('all', series(
   exec('yarn', 'install'),

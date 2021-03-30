@@ -6,10 +6,6 @@ Array [
   "./pkg3 one",
   "./pkg2 one",
   "./pkg1 one",
-  "./pkg4 two",
-  "./pkg3 two",
-  "./pkg2 two",
-  "./pkg1 two",
 ]
 `;
 

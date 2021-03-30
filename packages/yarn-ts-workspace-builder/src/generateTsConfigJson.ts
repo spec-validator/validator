@@ -1,5 +1,4 @@
 import { flatMap } from '@spec-validator/utils/utils'
-import { Task } from 'just-task'
 import { getGraph, getProjectsPathsInBuildOrder } from './buildOrder'
 import { write } from './readAndWrite'
 import getRelativePath from './relPath'
@@ -44,7 +43,7 @@ const generateProjectConfigs = (baseTsConfig: string): void =>
     })
   })
 
-export default (baseTsConfig: string): Task => async () => {
+export default (baseTsConfig: string): void => {
   generateProjectConfigs(baseTsConfig)
   generateRootConfig(baseTsConfig)
 }

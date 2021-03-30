@@ -60,3 +60,9 @@ Please got through the [ideas' document](IDEAS.md) before diving into the API.
   A set of command-line tools to simplify working with QA of TypeScript based projects.
 
   `yarn add --dev @spec-validator/qa`
+
+- [@spec-validator/yarn-ts-workspace-builder](packages/yarn-ts-workspace-builder/README.md)
+
+  FILL ME
+
+  `yarn add --dev @spec-validator/yarn-ts-workspace-builder`
