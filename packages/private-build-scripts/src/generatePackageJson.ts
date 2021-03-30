@@ -3,7 +3,6 @@ import { keys } from '@spec-validator/utils/utils'
 
 import { getPackageNamesInBuildOrder } from './buildOrder'
 import { read, write } from './readAndWrite'
-import getGitVersion from './getGitVersion'
 import { DIST } from './generateTsConfigJson'
 
 const EXCLUDE = new Set(['devDependencies', 'files'])
@@ -16,10 +15,9 @@ const COPY_FROM_PARENT = [
   'homepage',
 ]
 
-export default (projectPath: string): TaskFunction => async () => {
+export default (projectPath: string, version: string): TaskFunction => async () => {
   const parentConfig: Record<string, any> = read('package.json')
   const packageJson: Record<string, any> = read(`${projectPath}/package.json`)
-  const version: string = getGitVersion()
   const workspacePackages = new Set(getPackageNamesInBuildOrder())
 
   write(`${projectPath}/${DIST}/package.json`, {

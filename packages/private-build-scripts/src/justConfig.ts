@@ -16,6 +16,7 @@ import { forAll as forAllPackages } from './buildOrder'
 import generatePackageJson from './generatePackageJson'
 import syncPackageFiles from './syncPackageFiles'
 import generateTsConfigJson, { DIST } from './generateTsConfigJson'
+import getGitVersion from './getGitVersion'
 
 const INTERNAL_TPL_DIR = `${__dirname}/private-build-scripts/internal-templates`
 
@@ -53,7 +54,7 @@ task('build', series(
   generateTsConfigJson(),
   exec('yarn', 'tsc', '--build', 'tsconfig.build.json'),
   parallel(
-    parallel(...forAllPackages(generatePackageJson)),
+    parallel(...forAllPackages((path: string) => generatePackageJson(path, getGitVersion()))),
     parallel(...forAllPackages(syncPackageFiles))
   ),
 ))

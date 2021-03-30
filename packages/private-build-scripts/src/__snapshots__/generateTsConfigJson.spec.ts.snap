@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`generatePackageJson 1`] = `
+exports[`generateTsConfigJson 1`] = `
 Array [
   Array [
     "./pkg1/tsconfig.build.json",

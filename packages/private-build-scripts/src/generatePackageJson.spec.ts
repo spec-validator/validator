@@ -1,10 +1,5 @@
 import generatePackageJson from './generatePackageJson'
 
-jest.mock('./getGitVersion', () => ({
-  default: () => '1.1.1',
-  __esModule: true,
-}))
-
 const write = jest.fn()
 
 jest.mock('./readAndWrite', () => ({
@@ -52,7 +47,7 @@ jest.mock('./buildOrder', () => ({
 }))
 
 test('generatePackageJson', async () => {
-  const run = generatePackageJson('parent') as any
+  const run = generatePackageJson('parent', '1.1.1') as any
   await run()
   expect(write.mock.calls[0]).toMatchSnapshot()
 })
