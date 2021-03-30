@@ -23,7 +23,6 @@ jest.mock('./buildOrder', () => ({
 }))
 
 test('generateTsConfigJson', async () => {
-  const run = generateTsConfigJson('./root/tsconfig.json') as any
-  await run()
+  generateTsConfigJson('./root/tsconfig.json')
   expect(write.mock.calls).toMatchSnapshot()
 })

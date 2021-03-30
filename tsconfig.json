@@ -66,6 +66,12 @@
       ],
       "@spec-validator/private-build-scripts": [
         "private-build-scripts/src/index.ts"
+      ],
+      "@spec-validator/yarn-ts-workspace-builder/*": [
+        "yarn-ts-workspace-builder/src/*"
+      ],
+      "@spec-validator/yarn-ts-workspace-builder": [
+        "yarn-ts-workspace-builder/src/index.ts"
       ]
     }
   }

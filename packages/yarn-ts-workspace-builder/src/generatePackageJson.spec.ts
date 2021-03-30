@@ -47,7 +47,6 @@ jest.mock('./buildOrder', () => ({
 }))
 
 test('generatePackageJson', async () => {
-  const run = generatePackageJson('parent', '1.1.1') as any
-  await run()
+  generatePackageJson('parent', '1.1.1')
   expect(write.mock.calls[0]).toMatchSnapshot()
 })

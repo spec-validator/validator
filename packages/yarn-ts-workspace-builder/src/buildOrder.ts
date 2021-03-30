@@ -1,6 +1,4 @@
-import { Task } from 'just-task'
-
-import { cached, flatMap } from '@spec-validator/utils/utils'
+import { cached } from '@spec-validator/utils/utils'
 
 import dfs from './dfs'
 import { getOutput } from '@spec-validator/cli'
@@ -26,9 +24,6 @@ export const getProjectsPathsInBuildOrder = (): string[] => {
   return getPackageNamesInBuildOrder().map(name => info[name].location)
 }
 
-export const forAll = (...items: ((name: string) => Task)[]): Task[] => flatMap(
-  items.map(item =>
-    getProjectsPathsInBuildOrder().map(
-      it => item.bind(null, it))
-  )
-)
+export const forAll = (run: (path: string) => void): void => getProjectsPathsInBuildOrder().forEach(path => {
+  run(path)
+})

@@ -27,8 +27,7 @@ jest.mock('./copyRec', () => ({
 }))
 
 test('sync', () => {
-  const run = syncPackageFiles('./project') as any
-  run()
+  syncPackageFiles('./project')
   expect(copyFileSync.mock.calls).toMatchSnapshot()
   expect(copyRec.mock.calls).toMatchSnapshot()
 })

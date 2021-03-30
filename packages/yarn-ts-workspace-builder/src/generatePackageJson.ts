@@ -1,4 +1,3 @@
-import { TaskFunction } from 'undertaker'
 import { keys } from '@spec-validator/utils/utils'
 
 import { getPackageNamesInBuildOrder } from './buildOrder'
@@ -15,7 +14,7 @@ const COPY_FROM_PARENT = [
   'homepage',
 ]
 
-export default (projectPath: string, version: string): TaskFunction => async () => {
+export default (projectPath: string, version: string): void => {
   const parentConfig: Record<string, any> = read('package.json')
   const packageJson: Record<string, any> = read(`${projectPath}/package.json`)
   const workspacePackages = new Set(getPackageNamesInBuildOrder())

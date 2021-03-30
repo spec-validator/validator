@@ -7,9 +7,8 @@ import copyRec from './copyRec'
 
 import { read } from './readAndWrite'
 import { DIST } from './generateTsConfigJson'
-import { TaskFunction } from 'undertaker'
 
-export default (projectPath: string): TaskFunction => async () => {
+export default (projectPath: string): void => {
   copyFileSync(`${projectPath}/README.md`, `${projectPath}/${DIST}/README.md`)
 
   const packageJson: Record<string, any>  = read(`${projectPath}/package.json`)
