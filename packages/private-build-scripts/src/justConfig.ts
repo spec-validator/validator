@@ -18,7 +18,7 @@ import syncPackageFiles from './syncPackageFiles'
 import generateTsConfigJson, { DIST } from './generateTsConfigJson'
 import getGitVersion from './getGitVersion'
 
-const INTERNAL_TPL_DIR = `${__dirname}/private-build-scripts/internal-templates`
+const INTERNAL_TPL_DIR = `${__dirname}/internal-templates`
 
 export const exec = (...cmd: [cmd: string, ...args:string[]]): Task =>
   async () => execSync(...cmd)
