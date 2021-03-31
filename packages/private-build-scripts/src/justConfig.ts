@@ -49,8 +49,6 @@ task('new',
   }
 )
 
-
-
 task('test-docs', () => testDocs())
 
 task('test',
