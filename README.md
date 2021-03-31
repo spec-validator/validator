@@ -63,6 +63,6 @@ Please got through the [ideas' document](IDEAS.md) before diving into the API.
 
 - [@spec-validator/yarn-ts-workspace-builder](packages/yarn-ts-workspace-builder/README.md)
 
-  FILL ME
+  A set of command-line tools to build TS code organized within yarn workspaces
 
   `yarn add --dev @spec-validator/yarn-ts-workspace-builder`
