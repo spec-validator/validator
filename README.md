@@ -53,7 +53,7 @@ Please got through the [ideas' document](IDEAS.md) before diving into the API.
 
   A tool to validate TypeScript snippets within Markdown files.
 
-  `yarn add --dev @spec-validator/open-api-endpoint`
+  `yarn add --dev @spec-validator/doc-tester`
 
 - [@spec-validator/qa](packages/qa/README.md)
 
