@@ -1,4 +1,4 @@
 import exec, { getOutput } from './exec'
-import findJsProjectRoot from './findJsProjectRoot'
+import findFolderWith from './findFolderWith'
 
-export { exec, findJsProjectRoot, getOutput }
+export { exec, findFolderWith, getOutput }

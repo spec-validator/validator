@@ -2,11 +2,11 @@
 
 /* istanbul ignore file */
 
-import { exec, findJsProjectRoot} from '@spec-validator/cli'
+import { exec, findFolderWith} from '@spec-validator/cli'
 
 export default (...extras: string[]): void => {
   exec(
-    'eslint', '--config', `${findJsProjectRoot(__dirname)}/configs/eslintrc.json`,
+    'eslint', '--config', `${findFolderWith('package.json', __dirname)}/configs/eslintrc.json`,
     '--ignore-path', '.gitignore', '\'./**/*.ts\'', ...extras
   )
 }

@@ -15,7 +15,6 @@ import runTest from '@spec-validator/qa/test'
 import publish from '@spec-validator/yarn-ts-workspace-builder/commands/publish'
 import clean from '@spec-validator/yarn-ts-workspace-builder/commands/clean'
 import build from '@spec-validator/yarn-ts-workspace-builder/commands/build'
-import getGitVersion from '@spec-validator/yarn-ts-workspace-builder/getGitVersion'
 
 const INTERNAL_TPL_DIR = `${__dirname}/internal-templates`
 
@@ -66,11 +65,9 @@ task('lint', () => runLint())
 
 task('fmt', () => runFmt())
 
-const baseTsConfig = `${__dirname}/../../../tsconfig.json`
+task('build', () => build())
 
-task('build', () => build(baseTsConfig, getGitVersion()))
-
-task('clean', () => clean(baseTsConfig))
+task('clean', () => clean())
 
 task('publish', publish)
 

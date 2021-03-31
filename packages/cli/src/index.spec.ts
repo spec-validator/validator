@@ -1,6 +1,6 @@
-import { exec, findJsProjectRoot } from '.'
+import { exec, findFolderWith } from '.'
 
 test('index', () => {
   expect(exec).toBeTruthy()
-  expect(findJsProjectRoot).toBeTruthy()
+  expect(findFolderWith).toBeTruthy()
 })

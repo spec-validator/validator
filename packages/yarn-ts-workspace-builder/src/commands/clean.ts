@@ -6,7 +6,7 @@ import { forAll as forAllPackages } from '../buildOrder'
 import generateTsConfigJson, { DIST } from '../generateTsConfigJson'
 
 const run = (
-  baseTsConfig: string
+  baseTsConfig?: string
 ): void => {
   generateTsConfigJson(baseTsConfig)
   forAllPackages(path => {

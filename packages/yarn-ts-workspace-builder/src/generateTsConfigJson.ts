@@ -1,7 +1,10 @@
+import path from 'path'
+
 import { flatMap } from '@spec-validator/utils/utils'
 import { getGraph, getProjectsPathsInBuildOrder } from './buildOrder'
 import { write } from './readAndWrite'
 import getRelativePath from './relPath'
+import { findFolderWith } from '@spec-validator/cli'
 
 export const DIST = 'dist'
 
@@ -43,7 +46,10 @@ const generateProjectConfigs = (baseTsConfig: string): void =>
     })
   })
 
-export default (baseTsConfig: string): void => {
+const getDefaultTsConfig = (): string => path.join(findFolderWith('.git', process.cwd()), 'tsconfig.json')
+
+export default (baseTsConfig?: string): void => {
+  baseTsConfig = baseTsConfig || getDefaultTsConfig()
   generateProjectConfigs(baseTsConfig)
   generateRootConfig(baseTsConfig)
 }

@@ -4,14 +4,14 @@
 
 import { Command } from 'commander'
 
-import { exec, findJsProjectRoot} from '@spec-validator/cli'
+import { exec, findFolderWith} from '@spec-validator/cli'
 
 const run = (options: {
   update?: boolean,
   pattern?: string
 }): void => {
   exec(
-    'jest', '--config', `${findJsProjectRoot(__dirname)}/configs/jest.conf.js`,
+    'jest', '--config', `${findFolderWith('package.json', __dirname)}/configs/jest.conf.js`,
     '--passWithNoTests', '--detectOpenHandles',
     ...(options.update ? ['-u'] : []),
     ...(options.pattern ? ['--coverage', 'false', options.pattern] : []),
