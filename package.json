@@ -28,11 +28,11 @@
     "test": "CMD=test yarn _qa",
 
     "_builder": "yarn _run packages/yarn-ts-workspace-builder/src/commands/${CMD}.ts",
-    "publish": "CMD=publish yarn _builder",
-    "build": "CMD=build yarn _builder",
-    "clean": "CMD=clean yarn _builder",
+    "ws-publish": "CMD=ws-publish yarn _builder",
+    "ws-build": "CMD=ws-build yarn _builder",
+    "ws-clean": "CMD=ws-clean yarn _builder",
 
-    "all": "yarn run-s clean lint test test-docs build",
+    "all": "yarn run-s ws-clean lint test test-docs ws-build",
 
     "new": "yarn _run packages/module-template/src/new.ts",
     "start-demo": "yarn _run example/run.ts"

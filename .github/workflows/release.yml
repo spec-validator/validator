@@ -33,11 +33,11 @@ jobs:
         run: yarn test-docs
 
       - name: Build
-        run: yarn build
+        run: yarn ws-build
 
       - name: Prepare NPM_TOKEN
         run: echo "//registry.npmjs.org/:_authToken=${{secrets.NPM_TOKEN}}" > ~/.npmrc
 
       - name: Publish
-        run: yarn publish
+        run: yarn ws-publish
 

@@ -29,4 +29,4 @@ jobs:
         run: yarn test-docs
 
       - name: Build
-        run: yarn build
+        run: yarn ws-build

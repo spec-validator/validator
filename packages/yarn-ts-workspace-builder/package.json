@@ -10,8 +10,8 @@
     "@types/glob": "^7.1.3"
   },
   "bin": {
-    "build": "./commands/build.js",
-    "clean": "./commands/clean.js",
-    "publish": "./commands/publish.js"
+    "ws-build": "./commands/ws-build.js",
+    "ws-clean": "./commands/ws-clean.js",
+    "ws-publish": "./commands/ws-publish.js"
   }
 }
