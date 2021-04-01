@@ -20,13 +20,13 @@ jobs:
         run: yarn install
 
       - name: Lint
-        run: yarn just lint
+        run: yarn lint
 
       - name: Test
-        run: yarn just test
+        run: yarn test
 
       - name: Test docs
-        run: yarn just test-docs
+        run: yarn test-docs
 
       - name: Build
-        run: yarn just build
+        run: yarn build
