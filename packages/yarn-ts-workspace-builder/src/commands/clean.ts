@@ -1,14 +1,10 @@
-import { Command } from 'commander'
-
 import { exec } from '@spec-validator/cli'
 
 import { forAll as forAllPackages } from '../buildOrder'
 import generateTsConfigJson, { DIST } from '../generateTsConfigJson'
 
-const run = (
-  baseTsConfig?: string
-): void => {
-  generateTsConfigJson(baseTsConfig)
+const main = (): void => {
+  generateTsConfigJson()
   forAllPackages(path => {
     exec('yarn', 'tsc', '--build', `${path}/tsconfig.build.json`, '--clean'),
     exec('rm', '-f', `${path}/tsconfig.build.tsbuildinfo`),
@@ -23,20 +19,7 @@ const run = (
   exec('rm', '-f', 'tsconfig.build.json')
 }
 
-export default run
-
-const main = (): void => {
-  const program = new Command()
-
-  program
-    .option('-c, --config <config>', 'base TS config', '')
-
-  program.parse(process.argv)
-
-  const options = program.opts()
-
-  run(options.config)
-}
+export default main
 
 if (require.main === module) {
   main()
