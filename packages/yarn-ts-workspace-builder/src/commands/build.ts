@@ -22,7 +22,7 @@ export default run
 const main = (): void => {
   const program = new Command()
 
-  program.option('-c, --config', 'base TS config', '')
+  program.option('-c, --config <config>', 'base TS config', '')
 
   program.parse(process.argv)
 
