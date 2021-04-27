@@ -8,7 +8,7 @@ const mapValue = (value) => value.replace('*', '$1')
 
 const getModuleNameMapper = () => {
   const config = JSON.parse(readTsConfig())
-  const baseUrl = (config.compilerOptions.baseUrl || './').replace('./', '<rootDir>/')
+  const baseUrl = (config.compilerOptions.baseUrl || '.').replace(/^\./, '<rootDir>')
   const result = {}
   Object.entries(config.compilerOptions.paths || {}).forEach(([key, value]) => {
     result[mapKey(key)] = baseUrl + '/' + mapValue(value[0])
@@ -16,21 +16,17 @@ const getModuleNameMapper = () => {
   return result
 }
 
-let pkgs, srcs
-
-if (fs.existsSync(`${process.cwd()}/packages`)) {
-  pkgs = '<rootDir>/packages'
-  srcs = `${pkgs}/**/src/**`
-} else {
-  pkgs = '<rootDir>'
-  srcs = `${pkgs}/src/**`
+const getSources = () => {
+  const config = JSON.parse(readTsConfig())
+  const sources = []
+  Object.values(config.compilerOptions.paths || {}).forEach((value) => {
+    sources.push(value[0])
+  })
+  return sources
 }
-
-const testsPattern = `${srcs}/*.spec.ts`
 
 module.exports = {
   rootDir: process.cwd(),
-  roots: [pkgs],
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
@@ -45,21 +41,17 @@ module.exports = {
     },
   },
 
-  modulePathIgnorePatterns: ['dist'],
+  modulePathIgnorePatterns: ['dist', 'node_modules'],
 
   testEnvironment: 'node',
-  testMatch: [testsPattern],
-  testURL: 'http://localhost/',
+  testMatch: ['**/*.spec.ts'],
 
   moduleNameMapper: getModuleNameMapper(),
 
   collectCoverage: true,
   coverageReporters: ['json', 'json-summary', 'lcov'],
   coverageDirectory: 'coverage',
-  collectCoverageFrom: [
-    `${srcs}/*.ts`,
-    `!${testsPattern}`,
-  ],
+  collectCoverageFrom: getSources(),
   coverageThreshold: {
     global: {
       branches: 90,

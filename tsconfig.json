@@ -4,74 +4,74 @@
     "typeRoots": [
       "./node_modules/@types"
     ],
-    "baseUrl": "./packages",
+    "baseUrl": ".",
     "noEmit": true,
     "paths": {
       "@spec-validator/doc-tester/*": [
-        "doc-tester/src/*"
+        "packages/doc-tester/src/*"
       ],
       "@spec-validator/doc-tester": [
-        "doc-tester/src/index.ts"
+        "packages/doc-tester/src/index.ts"
       ],
       "@spec-validator/test-utils/*": [
-        "test-utils/src/*"
+        "packages/test-utils/src/*"
       ],
       "@spec-validator/test-utils": [
-        "test-utils/src/index.ts"
+        "packages/test-utils/src/index.ts"
       ],
       "@spec-validator/utils/*": [
-        "utils/src/*"
+        "packages/utils/src/*"
       ],
       "@spec-validator/utils": [
-        "utils/src/index.ts"
+        "packages/utils/src/index.ts"
       ],
       "@spec-validator/validator/*": [
-        "validator/src/*"
+        "packages/validator/src/*"
       ],
       "@spec-validator/validator": [
-        "validator/src/index.ts"
+        "packages/validator/src/index.ts"
       ],
       "@spec-validator/rest-api-server/*": [
-        "rest-api-server/src/*"
+        "packages/rest-api-server/src/*"
       ],
       "@spec-validator/rest-api-server": [
-        "rest-api-server/src/index.ts"
+        "packages/rest-api-server/src/index.ts"
       ],
       "@spec-validator/open-api-endpoint/*": [
-        "open-api-endpoint/src/*"
+        "packages/open-api-endpoint/src/*"
       ],
       "@spec-validator/open-api-endpoint": [
-        "open-api-endpoint/src/index.ts"
+        "packages/open-api-endpoint/src/index.ts"
       ],
       "@spec-validator/aws-api-gw-adapter/*": [
-        "aws-api-gw-adapter/src/*"
+        "packages/aws-api-gw-adapter/src/*"
       ],
       "@spec-validator/aws-api-gw-adapter": [
-        "aws-api-gw-adapter/src/index.ts"
+        "packages/aws-api-gw-adapter/src/index.ts"
       ],
       "@spec-validator/qa/*": [
-        "qa/src/*"
+        "packages/qa/src/*"
       ],
       "@spec-validator/qa": [
-        "qa/src/index.ts"
+        "packages/qa/src/index.ts"
       ],
       "@spec-validator/cli/*": [
-        "cli/src/*"
+        "packages/cli/src/*"
       ],
       "@spec-validator/cli": [
-        "cli/src/index.ts"
+        "packages/cli/src/index.ts"
       ],
       "@spec-validator/private-build-scripts/*": [
-        "private-build-scripts/src/*"
+        "packages/private-build-scripts/src/*"
       ],
       "@spec-validator/private-build-scripts": [
-        "private-build-scripts/src/index.ts"
+        "packages/private-build-scripts/src/index.ts"
       ],
       "@spec-validator/yarn-ts-workspace-builder/*": [
-        "yarn-ts-workspace-builder/src/*"
+        "packages/yarn-ts-workspace-builder/src/*"
       ],
       "@spec-validator/yarn-ts-workspace-builder": [
-        "yarn-ts-workspace-builder/src/index.ts"
+        "packages/yarn-ts-workspace-builder/src/index.ts"
       ]
     }
   }
